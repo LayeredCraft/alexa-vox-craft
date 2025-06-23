@@ -25,7 +25,7 @@ public sealed class AlexaLambdaSerializer : ILambdaSerializer
         var streamLength = requestStream.Length;
         var obj = JsonSerializer.Deserialize<T>(requestStream, _options);
         
-        _logger.Information("Deserialized {RequestType} payload ({PayloadSize} bytes)", typeof(T).Name, streamLength);
+        _logger.Debug("Deserialized {RequestType} payload ({PayloadSize} bytes)", typeof(T).Name, streamLength);
         
         if (_logger.IsEnabled(LogLevel.Debug))
         {
@@ -48,6 +48,6 @@ public sealed class AlexaLambdaSerializer : ILambdaSerializer
         JsonSerializer.Serialize(responseStream, response, _options);
         var serializedSize = responseStream.Position - initialPosition;
         
-        _logger.Information("Serialized {ResponseType} payload ({PayloadSize} bytes)", typeof(T).Name, serializedSize);
+        _logger.Debug("Serialized {ResponseType} payload ({PayloadSize} bytes)", typeof(T).Name, serializedSize);
     }
 }

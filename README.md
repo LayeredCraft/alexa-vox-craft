@@ -191,34 +191,95 @@ public sealed class LaunchRequestHandler : IRequestHandler<LaunchRequest>
 
 # 📋 Logging & Diagnostics
 
-AlexaVoxCraft uses [Serilog](https://serilog.net/) for structured logging by default. You can configure logging output by adding the following to your `appsettings.json`:
+AlexaVoxCraft provides comprehensive structured logging through [LayeredCraft.StructuredLogging](https://www.nuget.org/packages/LayeredCraft.StructuredLogging/), which includes performance timing, scoped logging, and structured data capture. The framework uses [Serilog](https://serilog.net/) and automatically logs request processing, handler execution, and performance metrics.
+
+## Logging Configuration
+
+Configure logging in your `appsettings.json`:
 
 ```json
-"Serilog": {
-  "Using": [ "Serilog.Sinks.Console" ],
-  "WriteTo": [
-    {
-      "Name": "Console",
-      "Args": {
-      "formatter": "AlexaVoxCraft.Logging.Serialization.AlexaCompactJsonFormatter, AlexaVoxCraft.Logging"
+{
+  "Serilog": {
+    "Using": [ "Serilog.Sinks.Console" ],
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "formatter": "AlexaVoxCraft.Logging.Serialization.AlexaCompactJsonFormatter, AlexaVoxCraft.Logging"
+        }
       }
-    }
-  ],
-  "MinimumLevel": {
-    "Default": "Information",
-    "Override": {
-      "Microsoft": "Warning",
-      "Microsoft.AspNetCore": "Warning"
+    ],
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "Microsoft.AspNetCore": "Warning",
+        "System": "Warning"
+      }
     }
   }
 }
 ```
 
-> ℹ️ **Debugging Tip:** To enable logging of raw Alexa skill requests and responses during development, add the following line under `Override`. This is not recommended for production environments.
->
-> ```json
-> "AlexaVoxCraft.MediatR.Lambda.Serialization": "Debug"
-> ```
+## Debugging and Development
+
+### Enable AlexaVoxCraft Debug Logging
+
+To see detailed request processing, handler resolution, and performance metrics during development, add AlexaVoxCraft namespaces to the Override section:
+
+```json
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Override": {
+        "Microsoft": "Warning",
+        "Microsoft.AspNetCore": "Warning",
+        "System": "Warning",
+        "AlexaVoxCraft": "Debug"
+      }
+    }
+  }
+}
+```
+
+### Enable Raw Request/Response Logging
+
+To log raw Alexa JSON payloads (useful for debugging serialization issues):
+
+```json
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Override": {
+        "AlexaVoxCraft.MediatR.Lambda.Serialization": "Debug"
+      }
+    }
+  }
+}
+```
+
+> ⚠️ **Security Warning:** Raw request/response logging may include sensitive user data. Only enable this in development environments.
+
+## What Gets Logged
+
+AlexaVoxCraft automatically logs:
+
+- **Request Processing**: Request type, intent names, session IDs, application IDs
+- **Performance Metrics**: Handler execution time, serialization/deserialization duration
+- **Lambda Context**: Function name, request ID, remaining execution time
+- **Handler Resolution**: Which handlers are selected for requests
+- **Error Handling**: Exceptions with full context and stack traces
+- **APL Support**: Whether APL is supported and visual directives added
+
+## Production Logging Levels
+
+For production environments, the framework uses appropriate log levels:
+
+- **Information**: High-level milestones (Lambda execution started/completed)
+- **Debug**: Detailed operational information (request processing, handler resolution, performance metrics)
+- **Warning/Error**: Issues that need attention
+
+This ensures production logs remain clean while providing rich debugging information when needed.
 ### 🧾 Formatter Attribution
 
 > 🔧 The `AlexaCompactJsonFormatter` included in this library is adapted from [`Serilog.Formatting.Compact.CompactJsonFormatter`](https://github.com/serilog/serilog-formatting-compact).  

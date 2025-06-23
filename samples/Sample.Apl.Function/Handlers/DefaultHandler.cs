@@ -31,7 +31,7 @@ public class DefaultHandler : IDefaultRequestHandler
         
         using var scope = _logger.BeginScope("RequestType", requestType, "Locale", locale, "APLSupported", aplSupported);
         
-        _logger.Information("Handling APL request of type {RequestType} with APL support: {APLSupported}", requestType, aplSupported);
+        _logger.Debug("Handling APL request of type {RequestType} with APL support: {APLSupported}", requestType, aplSupported);
         
         using var _ = _logger.TimeOperation("APL response generation");
         var speechOutput = new StringBuilder("Hello world!");
@@ -116,13 +116,13 @@ public class DefaultHandler : IDefaultRequestHandler
         };
         if (input.RequestEnvelope.APLSupported())
         {
-            _logger.Information("APL is supported - adding visual directive to response");
+            _logger.Debug("APL is supported - adding visual directive to response");
             speechOutput.Clear();
             input.ResponseBuilder.AddDirective(directive);
         }
         else
         {
-            _logger.Information("APL is not supported - returning voice-only response");
+            _logger.Debug("APL is not supported - returning voice-only response");
         }
         
         var response = await input.ResponseBuilder
@@ -131,7 +131,7 @@ public class DefaultHandler : IDefaultRequestHandler
             .WithSimpleCard("APL Sample", speechOutput.ToString())
             .GetResponse(cancellationToken);
             
-        _logger.Information("Generated APL sample response with {SpeechLength} characters", speechOutput.Length);
+        _logger.Debug("Generated APL sample response with {SpeechLength} characters", speechOutput.Length);
         
         return response;
     }

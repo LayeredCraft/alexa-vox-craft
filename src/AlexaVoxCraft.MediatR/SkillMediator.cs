@@ -31,7 +31,7 @@ public class SkillMediator : ISkillMediator
         var skillId = request.Context.System.Application.ApplicationId;
         var requestType = request.Request.GetType().Name;
         
-        logger.Information("Mediating skill request {RequestType} for skill {SkillId}", requestType, skillId);
+        logger.Debug("Mediating skill request {RequestType} for skill {SkillId}", requestType, skillId);
         
         // Skill ID verification
         if (string.IsNullOrWhiteSpace(_serviceConfiguration.SkillId) ||
@@ -48,7 +48,7 @@ public class SkillMediator : ISkillMediator
             static t => (RequestHandlerWrapper)(Activator.CreateInstance(typeof(RequestHandlerWrapperImpl<>)
                 .MakeGenericType(t)) ?? throw new InvalidOperationException($"Could not create wrapper type for {t}")));
 
-        logger.Information("Successfully resolved handler for {RequestType}", requestType);
+        logger.Debug("Successfully resolved handler for {RequestType}", requestType);
 
         return handler.Handle(request, _serviceProvider, cancellationToken);
     }
