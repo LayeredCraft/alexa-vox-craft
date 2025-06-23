@@ -1,8 +1,8 @@
-﻿using AlexaVoxCraft.Model.Apl.Tests.Extensions;
-using AlexaVoxCraft.Model.Apl.Extensions.Backstack;
+﻿using AlexaVoxCraft.Model.Apl.Extensions.Backstack;
 using AlexaVoxCraft.Model.Apl.Extensions.DataStore;
 using AlexaVoxCraft.Model.Apl.Extensions.EntitySensing;
 using AlexaVoxCraft.Model.Apl.Extensions.SmartMotion;
+using AlexaVoxCraft.Model.Apl.Tests.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -1,10 +1,19 @@
 using AlexaVoxCraft.MediatR;
 using AlexaVoxCraft.Model.Response;
+using LayeredCraft.StructuredLogging;
+using Microsoft.Extensions.Logging;
 
 namespace Sample.Skill.Function.Handlers;
 
 public class DefaultHandler : IDefaultRequestHandler
 {
+    private readonly ILogger<DefaultHandler> _logger;
+
+    public DefaultHandler(ILogger<DefaultHandler> logger)
+    {
+        _logger = logger;
+    }
+
     public Task<bool> CanHandle(IHandlerInput input, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(true);
@@ -12,7 +21,22 @@ public class DefaultHandler : IDefaultRequestHandler
 
     public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken = default)
     {
-        return await input.ResponseBuilder.Speak("Hello world!").WithShouldEndSession(true)
+        var requestType = input.RequestEnvelope.Request.Type;
+        var locale = input.RequestEnvelope.Request.Locale;
+        
+        using var scope = _logger.BeginScope("RequestType", requestType, "Locale", locale);
+        
+        _logger.Information("Handling default request of type {RequestType} in locale {Locale}", requestType, locale);
+        
+        using var _ = _logger.TimeOperation("Default response generation");
+        
+        var response = await input.ResponseBuilder
+            .Speak("Hello world!")
+            .WithShouldEndSession(true)
             .GetResponse(cancellationToken);
+            
+        _logger.Information("Generated default response with speech output");
+        
+        return response;
     }
 }

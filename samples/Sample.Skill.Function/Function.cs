@@ -5,7 +5,6 @@ using AlexaVoxCraft.MediatR.Lambda.Extensions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 
 namespace Sample.Skill.Function;
 

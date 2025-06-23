@@ -205,6 +205,7 @@ public static class ServiceRegistrar
         services.TryAddTransient<IHandlerInput, DefaultHandlerInput>();
         services.AddScoped<IAttributesManager, AttributesManager>();
         services.AddScoped<IResponseBuilder, DefaultResponseBuilder>();
+        services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(PerformanceLoggingBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestInterceptorBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(ResponseInterceptorBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestExceptionProcessBehavior));

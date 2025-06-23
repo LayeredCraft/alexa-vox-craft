@@ -1,5 +1,4 @@
-﻿using AlexaVoxCraft.Logging.Serialization;
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+﻿using AlexaVoxCraft.MediatR.Lambda.Abstractions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.MediatR.Lambda.Extensions;
 using AlexaVoxCraft.MediatR.Lambda.Serialization;
@@ -7,6 +6,7 @@ using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Serialization;
 using Amazon.Lambda.Core;
+using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -72,9 +72,36 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
     {
         using var serviceScope = _serviceProvider.CreateScope();
         var provider = serviceScope.ServiceProvider;
-        CreateContext(request);
-        var handlerAsync = provider.GetRequiredService<HandlerDelegate<TRequest, TResponse>>();
+        var logger = provider.GetRequiredService<ILogger<AlexaSkillFunction<TRequest, TResponse>>>();
+        
+        var applicationId = request.Context.System.Application.ApplicationId;
+        var requestId = lambdaContext.AwsRequestId;
+        var remainingTime = lambdaContext.RemainingTime;
+        
+        using var scope = logger.BeginScope<string, string, string, TimeSpan>(
+            "ApplicationId", applicationId,
+            "LambdaRequestId", requestId,
+            "FunctionName", lambdaContext.FunctionName,
+            "RemainingTime", remainingTime);
 
-        return await handlerAsync(request, lambdaContext);
+        logger.Information("Lambda execution started for skill {ApplicationId} (Request: {LambdaRequestId}, Remaining: {RemainingTime}ms)", 
+            applicationId, requestId, remainingTime.TotalMilliseconds);
+
+        using var timer = logger.TimeOperation("Lambda handler execution");
+
+        try
+        {
+            CreateContext(request);
+            var handlerAsync = provider.GetRequiredService<HandlerDelegate<TRequest, TResponse>>();
+            var response = await handlerAsync(request, lambdaContext);
+            
+            logger.Information("Lambda execution completed successfully for skill {ApplicationId}", applicationId);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Lambda execution failed for skill {ApplicationId}", applicationId);
+            throw;
+        }
     }
 }

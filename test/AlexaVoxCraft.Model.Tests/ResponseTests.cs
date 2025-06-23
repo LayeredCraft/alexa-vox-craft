@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using AlexaVoxCraft.Model;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Response.Directive.Templates;

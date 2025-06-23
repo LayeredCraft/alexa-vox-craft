@@ -6,7 +6,6 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Serilog.Formatting.Compact;
 
 namespace AlexaVoxCraft.MediatR.Lambda;
 

@@ -1,5 +1,4 @@
-﻿using AlexaVoxCraft.Model;
-using AlexaVoxCraft.Model.ConnectionTasks;
+﻿using AlexaVoxCraft.Model.ConnectionTasks;
 using AlexaVoxCraft.Model.ConnectionTasks.Inputs;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;

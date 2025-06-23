@@ -1,7 +1,7 @@
 using System.Text.Json;
-using AlexaVoxCraft.Logging.Extensions;
 using AlexaVoxCraft.Model.Serialization;
 using Amazon.Lambda.Core;
+using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.Logging;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -20,7 +20,13 @@ public sealed class AlexaLambdaSerializer : ILambdaSerializer
 
     public T? Deserialize<T>(Stream requestStream)
     {
+        using var _ = _logger.TimeOperation("Request deserialization");
+        
+        var streamLength = requestStream.Length;
         var obj = JsonSerializer.Deserialize<T>(requestStream, _options);
+        
+        _logger.Information("Deserialized {RequestType} payload ({PayloadSize} bytes)", typeof(T).Name, streamLength);
+        
         if (_logger.IsEnabled(LogLevel.Debug))
         {
             _logger.Debug("📥 Raw JSON Input: {@RawRequest}", obj);
@@ -31,11 +37,17 @@ public sealed class AlexaLambdaSerializer : ILambdaSerializer
 
     public void Serialize<T>(T response, Stream responseStream)
     {
+        using var _ = _logger.TimeOperation("Response serialization");
+        
         if (_logger.IsEnabled(LogLevel.Debug))
         {
             _logger.Debug("📤 Serialized JSON Output: {@RawResponse}", response);
         }
 
+        var initialPosition = responseStream.Position;
         JsonSerializer.Serialize(responseStream, response, _options);
+        var serializedSize = responseStream.Position - initialPosition;
+        
+        _logger.Information("Serialized {ResponseType} payload ({PayloadSize} bytes)", typeof(T).Name, serializedSize);
     }
 }
