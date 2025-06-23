@@ -1,5 +1,4 @@
-﻿using AlexaVoxCraft.Model;
-using AlexaVoxCraft.Model.Request;
+﻿using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response.Directive;
 using Xunit;
 

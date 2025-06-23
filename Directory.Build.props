@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <VersionPrefix>1.0.1</VersionPrefix>
+        <VersionPrefix>2.0.0-beta</VersionPrefix>
         <!-- SPDX license identifier for Apache 2.0 -->
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 
@@ -9,6 +9,21 @@
         <RepositoryType>git</RepositoryType>
         <Authors>Nick Cipollina</Authors>
         <PackageProjectUrl>https://github.com/LayeredCraft/alexa-vox-craft</PackageProjectUrl>
+        
+        <!-- NuGet.org specific -->
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <IsPackable>true</IsPackable>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
 </Project>

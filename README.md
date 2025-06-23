@@ -32,6 +32,108 @@
 
 ---
 
+## 📁 Project Structure
+
+```
+AlexaVoxCraft/
+├── 📂 src/                              # Core library packages
+│   ├── 📦 AlexaVoxCraft.Model/          # Base Alexa skill models & serialization
+│   │   ├── Cards/                       # Card types (Simple, Standard, LinkAccount)
+│   │   ├── Converters/                  # JSON converters & polymorphic handling
+│   │   ├── Directives/                  # Audio, video, dialog directives
+│   │   ├── Helpers/                     # Enum utilities & response builders
+│   │   ├── Interfaces/                  # Core abstractions
+│   │   ├── Request/                     # Request types (Launch, Intent, Session, etc.)
+│   │   ├── Response/                    # Response models & builders
+│   │   ├── Ssml/                        # Complete SSML element support
+│   │   └── UI/                          # Display templates & visual cards
+│   │
+│   ├── 📦 AlexaVoxCraft.Model.Apl/      # APL (Alexa Presentation Language) support
+│   │   ├── AlexaComponents/             # 40+ pre-built Alexa components
+│   │   ├── Audio/                       # Audio documents & sound effects
+│   │   ├── Commands/                    # 25+ APL commands (Animate, Scroll, etc.)
+│   │   ├── Components/                  # Core APL components (Container, Text, etc.)
+│   │   ├── Converters/                  # APL-specific JSON converters
+│   │   ├── DataSources/                 # Dynamic data binding
+│   │   ├── Extensions/                  # BackStack, DataStore, SmartMotion
+│   │   ├── Filters/                     # Image & vector graphic filters
+│   │   └── VectorGraphics/              # AVG (Alexa Vector Graphics) support
+│   │
+│   ├── 📦 AlexaVoxCraft.MediatR/        # MediatR integration & request handling
+│   │   ├── Attributes/                  # Session & persistent attributes
+│   │   ├── Behaviors/                   # Pipeline behaviors & interceptors
+│   │   ├── Handlers/                    # Request handler abstractions
+│   │   ├── Interfaces/                  # Handler & routing interfaces
+│   │   └── Services/                    # DI registration & service discovery
+│   │
+│   ├── 📦 AlexaVoxCraft.MediatR.Lambda/ # AWS Lambda hosting & runtime
+│   │   ├── Context/                     # Skill context management
+│   │   ├── Extensions/                  # Host builder extensions
+│   │   ├── Functions/                   # Lambda function base classes
+│   │   ├── Handlers/                    # Lambda-specific handlers
+│   │   └── Serialization/               # Custom Lambda serializers
+│   │
+│   └── 📦 AlexaVoxCraft.Logging/        # Alexa-specific logging for AWS
+│       └── Serialization/               # CloudWatch-compatible JSON formatter
+│
+├── 📂 samples/                          # Working example projects
+│   ├── 📱 Sample.Skill.Function/        # Basic Alexa skill demonstration
+│   │   ├── Handlers/                    # Request handlers (Launch, Intent)
+│   │   ├── Function.cs                  # Main Lambda function
+│   │   ├── Program.cs                   # Entry point
+│   │   └── appsettings.json             # Configuration
+│   │
+│   └── 📱 Sample.Apl.Function/          # APL skill with visual interfaces
+│       ├── Handlers/                    # APL-enabled request handlers
+│       ├── Function.cs                  # APL skill function
+│       └── Program.cs                   # Entry point
+│
+├── 📂 test/                             # Comprehensive test coverage
+│   ├── 🧪 AlexaVoxCraft.Model.Tests/    # Core model & serialization tests
+│   │   ├── Examples/                    # 50+ JSON test files
+│   │   ├── Cards/                       # Card serialization tests
+│   │   ├── Converters/                  # JSON converter validation
+│   │   ├── Directives/                  # Directive handling tests
+│   │   ├── Request/                     # Request parsing tests
+│   │   ├── Response/                    # Response building tests
+│   │   └── Ssml/                        # SSML element tests
+│   │
+│   └── 🧪 AlexaVoxCraft.Model.Apl.Tests/ # APL functionality tests
+│       ├── Examples/                    # 80+ APL JSON examples
+│       ├── AlexaComponents/             # Alexa component tests
+│       ├── Audio/                       # Audio document tests
+│       ├── Commands/                    # APL command tests
+│       ├── Components/                  # Core component tests
+│       ├── Extensions/                  # Extension tests (DataStore, etc.)
+│       └── VectorGraphics/              # AVG parsing tests
+│
+├── 📂 .github/                          # DevOps & automation
+│   ├── workflows/                       # CI/CD pipelines
+│   │   ├── build.yaml                   # Main build & release pipeline
+│   │   └── pr-build.yaml                # PR validation pipeline
+│   └── dependabot.yml                   # Dependency management
+│
+├── 📂 licenses/                         # Third-party license files
+├── 📄 AlexaVoxCraft.sln                 # Visual Studio solution
+├── 📄 Directory.Build.props             # Shared MSBuild properties
+├── 📄 README.md                         # This file
+├── 📄 LICENSE                           # Apache 2.0 license
+├── 📄 NOTICE                            # Legal attributions
+└── 🖼️ icon.png                          # Package icon
+```
+
+### Package Breakdown
+
+| Package | Purpose | Key Features |
+|---------|---------|--------------|
+| **AlexaVoxCraft.Model** | Core Alexa models | Request/response types, SSML, cards, directives, System.Text.Json serialization |
+| **AlexaVoxCraft.Model.Apl** | APL support | 40+ components, commands, audio, vector graphics, extensions (DataStore, SmartMotion) |
+| **AlexaVoxCraft.MediatR** | Request handling | Handler routing, pipeline behaviors, attributes management, DI integration |
+| **AlexaVoxCraft.MediatR.Lambda** | Lambda hosting | AWS Lambda functions, context management, custom serialization, hosting extensions |
+| **AlexaVoxCraft.Logging** | Alexa-specific logging | AWS CloudWatch-compatible JSON formatter, built on LayeredCraft.StructuredLogging |
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Install Required Packages

@@ -4,11 +4,20 @@ using AlexaVoxCraft.Model.Apl;
 using AlexaVoxCraft.Model.Apl.Commands;
 using AlexaVoxCraft.Model.Apl.Components;
 using AlexaVoxCraft.Model.Response;
+using LayeredCraft.StructuredLogging;
+using Microsoft.Extensions.Logging;
 
 namespace Sample.Apl.Function.Handlers;
 
 public class DefaultHandler : IDefaultRequestHandler
 {
+    private readonly ILogger<DefaultHandler> _logger;
+
+    public DefaultHandler(ILogger<DefaultHandler> logger)
+    {
+        _logger = logger;
+    }
+
     public Task<bool> CanHandle(IHandlerInput input, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(true);
@@ -16,6 +25,15 @@ public class DefaultHandler : IDefaultRequestHandler
 
     public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken = default)
     {
+        var requestType = input.RequestEnvelope.Request.Type;
+        var locale = input.RequestEnvelope.Request.Locale;
+        var aplSupported = input.RequestEnvelope.APLSupported();
+        
+        using var scope = _logger.BeginScope("RequestType", requestType, "Locale", locale, "APLSupported", aplSupported);
+        
+        _logger.Information("Handling APL request of type {RequestType} with APL support: {APLSupported}", requestType, aplSupported);
+        
+        using var _ = _logger.TimeOperation("APL response generation");
         var speechOutput = new StringBuilder("Hello world!");
         var document = new APLDocument(APLDocumentVersion.V2023_2)
         {
@@ -98,15 +116,23 @@ public class DefaultHandler : IDefaultRequestHandler
         };
         if (input.RequestEnvelope.APLSupported())
         {
+            _logger.Information("APL is supported - adding visual directive to response");
             speechOutput.Clear();
-
-
             input.ResponseBuilder.AddDirective(directive);
         }
-        return await input.ResponseBuilder
+        else
+        {
+            _logger.Information("APL is not supported - returning voice-only response");
+        }
+        
+        var response = await input.ResponseBuilder
             .Speak(speechOutput.ToString())
             .Reprompt(speechOutput.ToString())
             .WithSimpleCard("APL Sample", speechOutput.ToString())
             .GetResponse(cancellationToken);
+            
+        _logger.Information("Generated APL sample response with {SpeechLength} characters", speechOutput.Length);
+        
+        return response;
     }
 }

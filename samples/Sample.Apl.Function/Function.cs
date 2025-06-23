@@ -4,7 +4,6 @@ using AlexaVoxCraft.MediatR.Lambda.Extensions;
 using AlexaVoxCraft.Model.Apl;
 using AlexaVoxCraft.Model.Response;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 
 namespace Sample.Apl.Function;
 

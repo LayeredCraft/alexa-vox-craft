@@ -1,11 +1,10 @@
-﻿using AlexaVoxCraft.Logging.Extensions;
-using AlexaVoxCraft.MediatR;
+﻿using AlexaVoxCraft.MediatR;
 using AlexaVoxCraft.MediatR.Lambda.Abstractions;
-using AlexaVoxCraft.MediatR.Lambda.Extensions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
 using Amazon.Lambda.Core;
+using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.Logging;
 
 namespace Sample.Skill.Function;
