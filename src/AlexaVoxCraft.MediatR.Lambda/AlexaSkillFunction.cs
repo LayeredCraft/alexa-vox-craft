@@ -84,8 +84,7 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
             "FunctionName", lambdaContext.FunctionName,
             "RemainingTime", remainingTime);
 
-        logger.Information("Lambda execution started for skill {ApplicationId} (Request: {LambdaRequestId}, Remaining: {RemainingTime}ms)", 
-            applicationId, requestId, remainingTime.TotalMilliseconds);
+        logger.Information("Lambda execution started for skill {ApplicationId}", applicationId);
 
         using var timer = logger.TimeOperation("Lambda handler execution");
 

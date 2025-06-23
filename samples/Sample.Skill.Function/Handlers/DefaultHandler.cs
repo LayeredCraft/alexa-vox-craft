@@ -26,7 +26,7 @@ public class DefaultHandler : IDefaultRequestHandler
         
         using var scope = _logger.BeginScope("RequestType", requestType, "Locale", locale);
         
-        _logger.Information("Handling default request of type {RequestType} in locale {Locale}", requestType, locale);
+        _logger.Debug("Handling default request of type {RequestType} in locale {Locale}", requestType, locale);
         
         using var _ = _logger.TimeOperation("Default response generation");
         
@@ -35,7 +35,7 @@ public class DefaultHandler : IDefaultRequestHandler
             .WithShouldEndSession(true)
             .GetResponse(cancellationToken);
             
-        _logger.Information("Generated default response with speech output");
+        _logger.Debug("Generated default response with speech output");
         
         return response;
     }

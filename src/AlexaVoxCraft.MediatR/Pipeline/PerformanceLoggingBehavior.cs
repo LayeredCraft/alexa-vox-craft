@@ -35,7 +35,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
             "ApplicationId", applicationId,
             "RequestId", requestId);
 
-        _logger.Information("Processing Alexa skill request {RequestType} {IntentName}", requestType, intentName);
+        _logger.Debug("Processing Alexa skill request {RequestType} {IntentName}", requestType, intentName);
 
         using var timer = _logger.TimeOperation("Skill request processing");
 
@@ -43,7 +43,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
         {
             var response = await next().ConfigureAwait(false);
             
-            _logger.Information("Successfully processed Alexa skill request {RequestType} {IntentName}", 
+            _logger.Debug("Successfully processed Alexa skill request {RequestType} {IntentName}", 
                 requestType, intentName);
 
             return response;
