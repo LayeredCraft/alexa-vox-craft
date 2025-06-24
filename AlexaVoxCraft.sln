@@ -43,6 +43,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Apl.Function", "samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaVoxCraft.Logging", "src\AlexaVoxCraft.Logging\AlexaVoxCraft.Logging.csproj", "{55152115-5321-4861-B2C6-D46251E902FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaVoxCraft.Logging.Tests", "test\AlexaVoxCraft.Logging.Tests\AlexaVoxCraft.Logging.Tests.csproj", "{3AD9D4BA-8D4F-40C6-B5E3-0C8DC9EB9ABB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaVoxCraft.MediatR.Lambda.Tests", "test\AlexaVoxCraft.MediatR.Lambda.Tests\AlexaVoxCraft.MediatR.Lambda.Tests.csproj", "{DBA4C29E-50DA-455F-B403-B721243A10A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaVoxCraft.MediatR.Tests", "test\AlexaVoxCraft.MediatR.Tests\AlexaVoxCraft.MediatR.Tests.csproj", "{CED7E118-84FE-449D-ACFD-18BEAB55B998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +67,9 @@ Global
 		{EF036596-6667-4979-AE3A-18D63A354F45} = {C2B189AA-0578-45AF-9E85-C77A5DB87DF8}
 		{7879F742-49FA-48B5-88B9-875008E71F9B} = {7756AA98-6912-4579-AB67-979A9FD0EC05}
 		{55152115-5321-4861-B2C6-D46251E902FF} = {085EBC44-290A-4CD7-80FA-DDB0D62DF3B1}
+		{3AD9D4BA-8D4F-40C6-B5E3-0C8DC9EB9ABB} = {C2B189AA-0578-45AF-9E85-C77A5DB87DF8}
+		{DBA4C29E-50DA-455F-B403-B721243A10A6} = {C2B189AA-0578-45AF-9E85-C77A5DB87DF8}
+		{CED7E118-84FE-449D-ACFD-18BEAB55B998} = {C2B189AA-0578-45AF-9E85-C77A5DB87DF8}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CF7334AB-47AA-4CEE-8D3B-A79142D7E0D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -97,5 +106,17 @@ Global
 		{55152115-5321-4861-B2C6-D46251E902FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55152115-5321-4861-B2C6-D46251E902FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55152115-5321-4861-B2C6-D46251E902FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AD9D4BA-8D4F-40C6-B5E3-0C8DC9EB9ABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AD9D4BA-8D4F-40C6-B5E3-0C8DC9EB9ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AD9D4BA-8D4F-40C6-B5E3-0C8DC9EB9ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AD9D4BA-8D4F-40C6-B5E3-0C8DC9EB9ABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBA4C29E-50DA-455F-B403-B721243A10A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBA4C29E-50DA-455F-B403-B721243A10A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBA4C29E-50DA-455F-B403-B721243A10A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA4C29E-50DA-455F-B403-B721243A10A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CED7E118-84FE-449D-ACFD-18BEAB55B998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CED7E118-84FE-449D-ACFD-18BEAB55B998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CED7E118-84FE-449D-ACFD-18BEAB55B998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CED7E118-84FE-449D-ACFD-18BEAB55B998}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

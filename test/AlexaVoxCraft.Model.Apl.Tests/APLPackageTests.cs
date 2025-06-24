@@ -1,5 +1,4 @@
 ﻿using AlexaVoxCraft.Model.Apl.Package;
-using Xunit;
 
 namespace AlexaVoxCraft.Model.Apl.Tests;
 
