@@ -50,7 +50,7 @@ public static class LambdaHostExtensions
         }
         finally
         {
-            Log.CloseAndFlush();
+            await Log.CloseAndFlushAsync();
         }
     }
 }

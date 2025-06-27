@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.0.0.5" />
+        <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.0.0.6" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.6" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.6" />
