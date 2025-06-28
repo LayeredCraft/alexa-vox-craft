@@ -25,6 +25,7 @@
         <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.0.0.6" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Serilog.Sinks.TestCorrelator" Version="4.0.0" />
     </ItemGroup>
 
     <ItemGroup>
