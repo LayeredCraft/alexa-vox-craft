@@ -2,24 +2,19 @@ using AwesomeAssertions;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.Response;
 using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.TestKit.Attributes;
 using AutoFixture.Xunit3;
-using NSubstitute;
 
 namespace AlexaVoxCraft.MediatR.Tests;
 
 public class DefaultHandlerInputTests : TestBase
 {
     [Theory]
-    [AutoData]
-    public void Constructor_WithValidInputs_CreatesInstance(SkillRequest skillRequest,
-        IAttributesManager attributesManager, IResponseBuilder responseBuilder, [Frozen] SkillRequestFactory factory)
+    [MediatRAutoData]
+    public void Constructor_WithValidInputs_CreatesInstance([Frozen] SkillRequest skillRequest,
+        [Frozen] IAttributesManager attributesManager, [Frozen] IResponseBuilder responseBuilder,
+        DefaultHandlerInput handlerInput)
     {
-        // Arrange
-        factory.Invoke().Returns(skillRequest);
-
-        // Act
-        var handlerInput = new DefaultHandlerInput(factory, attributesManager, responseBuilder);
-
         // Assert
         handlerInput.RequestEnvelope.Should().Be(skillRequest);
         handlerInput.AttributesManager.Should().Be(attributesManager);
@@ -27,7 +22,7 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRAutoData]
     public void Constructor_WithNullFactory_ThrowsArgumentNullException(IAttributesManager attributesManager,
         IResponseBuilder responseBuilder)
     {
@@ -39,13 +34,10 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [AutoData]
-    public void Constructor_WithNullAttributesManager_ThrowsArgumentNullException(SkillRequest skillRequest,
-        IResponseBuilder responseBuilder)
+    [MediatRAutoData]
+    public void Constructor_WithNullAttributesManager_ThrowsArgumentNullException(
+        [Frozen] IResponseBuilder responseBuilder, [Frozen] SkillRequestFactory factory)
     {
-        // Arrange
-        SkillRequestFactory factory = () => skillRequest;
-
         // Act & Assert
         var exception = Record.Exception(() => new DefaultHandlerInput(factory, null!, responseBuilder));
 
@@ -54,13 +46,10 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [AutoData]
-    public void Constructor_WithNullResponseBuilder_ThrowsArgumentNullException(SkillRequest skillRequest,
-        IAttributesManager attributesManager)
+    [MediatRAutoData]
+    public void Constructor_WithNullResponseBuilder_ThrowsArgumentNullException([Frozen] SkillRequestFactory factory,
+        [Frozen] IAttributesManager attributesManager)
     {
-        // Arrange
-        SkillRequestFactory factory = () => skillRequest;
-
         // Act & Assert
         var exception = Record.Exception(() => new DefaultHandlerInput(factory, attributesManager, null!));
 
@@ -69,7 +58,7 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRAutoData]
     public void Constructor_WithFactoryReturningNull_ThrowsArgumentNullException(IAttributesManager attributesManager,
         IResponseBuilder responseBuilder)
     {
@@ -84,14 +73,10 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [AutoData]
-    public void RequestEnvelope_ReturnsFactoryResult(SkillRequest skillRequest, IAttributesManager attributesManager,
-        IResponseBuilder responseBuilder)
+    [MediatRAutoData]
+    public void RequestEnvelope_ReturnsFactoryResult([Frozen] SkillRequest skillRequest,
+        DefaultHandlerInput handlerInput)
     {
-        // Arrange
-        SkillRequestFactory factory = () => skillRequest;
-        var handlerInput = new DefaultHandlerInput(factory, attributesManager, responseBuilder);
-
         // Act
         var result = handlerInput.RequestEnvelope;
 
@@ -100,14 +85,10 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [AutoData]
-    public void AttributesManager_ReturnsProvidedInstance(SkillRequest skillRequest,
-        IAttributesManager attributesManager, IResponseBuilder responseBuilder)
+    [MediatRAutoData]
+    public void AttributesManager_ReturnsProvidedInstance([Frozen] IAttributesManager attributesManager,
+        DefaultHandlerInput handlerInput)
     {
-        // Arrange
-        SkillRequestFactory factory = () => skillRequest;
-        var handlerInput = new DefaultHandlerInput(factory, attributesManager, responseBuilder);
-
         // Act
         var result = handlerInput.AttributesManager;
 
@@ -116,14 +97,10 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [AutoData]
-    public void ResponseBuilder_ReturnsProvidedInstance(SkillRequest skillRequest, IAttributesManager attributesManager,
-        IResponseBuilder responseBuilder)
+    [MediatRAutoData]
+    public void ResponseBuilder_ReturnsProvidedInstance([Frozen] IResponseBuilder responseBuilder,
+        DefaultHandlerInput handlerInput)
     {
-        // Arrange
-        SkillRequestFactory factory = () => skillRequest;
-        var handlerInput = new DefaultHandlerInput(factory, attributesManager, responseBuilder);
-
         // Act
         var result = handlerInput.ResponseBuilder;
 

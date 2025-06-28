@@ -18,7 +18,9 @@ public class MediatRAutoDataAttribute() : AutoDataAttribute(CreateFixture)
         fixture.Customize(new AutoNSubstituteCustomization { ConfigureMembers = true });
         
         // Add specimen builders for SkillRequest and related types
+        fixture.Customizations.Add(new RequestSpecimenBuilder());
         fixture.Customizations.Add(new SkillRequestSpecimenBuilder());
+        fixture.Customizations.Add(new SkillRequestFactorySpecimenBuilder());
         return fixture;
     }
 }

@@ -25,19 +25,11 @@ public class SkillRequestSpecimenBuilder(IRequestSpecification requestSpecificat
         var system = new AlexaSystem { Application = application };
         var skillContext = new Context { System = system };
         var session = new Session { Attributes = new Dictionary<string, object>() };
-        
-        var launchRequest = new LaunchRequest
-        {
-            Type = "LaunchRequest",
-            RequestId = Guid.NewGuid().ToString(),
-            Timestamp = DateTime.UtcNow,
-            Locale = "en-US"
-        };
 
         var skillRequest = new SkillRequest 
         { 
             Context = skillContext,
-            Request = launchRequest,
+            Request = (Request)context.Resolve(typeof(Request)),
             Session = session
         };
         

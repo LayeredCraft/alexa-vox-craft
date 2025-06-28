@@ -23,6 +23,9 @@ public class SkillRequestFactorySpecimenBuilder(IRequestSpecification requestSpe
             return new NoSpecimen();
 
         // Return a factory that creates a valid SkillRequest
-        return Substitute.For<SkillRequestFactory>();
+        var skillRequestFactory = Substitute.For<SkillRequestFactory>();
+        var skillRequest = (SkillRequest)context.Resolve(typeof(SkillRequest));
+        skillRequestFactory.Invoke().Returns(skillRequest);
+        return skillRequestFactory;
     }
 }
