@@ -1,34 +1,30 @@
 using System.Reflection;
-using Xunit;
-using Xunit.Abstractions;
-using Xunit.Sdk;
-[assembly: TestFramework("AlexaVoxCraft.Model.Apl.Tests.GlobalTestFramework", "AlexaVoxCraft.Model.Apl.Tests")]
+using Xunit.v3;
+
+[assembly: TestFramework(typeof(AlexaVoxCraft.Model.Apl.Tests.GlobalTestFramework))]
 
 namespace AlexaVoxCraft.Model.Apl.Tests;
 
-public class GlobalTestFramework : LongLivedMarshalByRefObject, ITestFramework
+public class GlobalTestFramework : ITestFramework
 {
     private readonly XunitTestFramework _framework;
 
-    public GlobalTestFramework(IMessageSink messageSink)
+    public GlobalTestFramework()
     {
         // ✅ Your global setup logic here
         GlobalTestInitializer.EnsureInitialized(); // 👈 Your static setup
         
         // ✅ Delegate to built-in framework
-        _framework = new XunitTestFramework(messageSink);
+        _framework = new XunitTestFramework();
     }
 
-    public ISourceInformationProvider SourceInformationProvider
-    {
-        get => _framework.SourceInformationProvider;
-        set => _framework.SourceInformationProvider = value;
-    }
+    public string TestFrameworkDisplayName => _framework.TestFrameworkDisplayName;
 
-    public ITestFrameworkDiscoverer GetDiscoverer(IAssemblyInfo assembly) => _framework.GetDiscoverer(assembly);
-    public ITestFrameworkExecutor GetExecutor(AssemblyName assemblyName) => _framework.GetExecutor(assemblyName);
+    public ITestFrameworkDiscoverer GetDiscoverer(Assembly assembly) => _framework.GetDiscoverer(assembly);
+    
+    public ITestFrameworkExecutor GetExecutor(Assembly assembly) => _framework.GetExecutor(assembly);
 
-    public void Dispose() => _framework.Dispose();
+    public void SetTestPipelineStartup(ITestPipelineStartup testPipelineStartup) => _framework.SetTestPipelineStartup(testPipelineStartup);
 }
 
 public static class GlobalTestInitializer

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AlexaVoxCraft.Model.Apl.Components;
-using Xunit;
+﻿using AlexaVoxCraft.Model.Apl.Components;
 
 namespace AlexaVoxCraft.Model.Apl.Tests;
 

@@ -1,8 +1,6 @@
 ﻿using AlexaVoxCraft.Model.Apl.DataStore;
 using AlexaVoxCraft.Model.Apl.DataStore.PackageManager;
 using AlexaVoxCraft.Model.Request;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace AlexaVoxCraft.Model.Apl.Tests;
 
