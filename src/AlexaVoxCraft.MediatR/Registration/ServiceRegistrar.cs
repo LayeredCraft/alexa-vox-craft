@@ -203,8 +203,8 @@ public static class ServiceRegistrar
         services.TryAdd(new ServiceDescriptor(typeof(ISkillMediator), typeof(SkillMediator),
             ServiceLifetime.Transient));
         services.TryAddTransient<IHandlerInput, DefaultHandlerInput>();
-        services.AddScoped<IAttributesManager, AttributesManager>();
-        services.AddScoped<IResponseBuilder, DefaultResponseBuilder>();
+        services.TryAddScoped<IAttributesManager, AttributesManager>();
+        services.TryAddScoped<IResponseBuilder, DefaultResponseBuilder>();
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(PerformanceLoggingBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestInterceptorBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(ResponseInterceptorBehavior));
