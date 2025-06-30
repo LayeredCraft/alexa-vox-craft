@@ -1,6 +1,6 @@
 using AwesomeAssertions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
-using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.TestKit.Attributes;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests.Context;
 
@@ -15,7 +15,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void SkillContext_SetAndGet_WorksCorrectly(SkillContextAccessor accessor, SkillContext context)
     {
         accessor.SkillContext = context;
@@ -24,7 +24,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void SkillContext_SetToNull_ClearsContext(SkillContextAccessor accessor, SkillContext context)
     {
         accessor.SkillContext = context;
@@ -34,7 +34,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void SkillContext_OverwriteExisting_UpdatesContext(SkillContextAccessor accessor, SkillContext firstContext,
         SkillContext secondContext)
     {
@@ -46,7 +46,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task SkillContext_ThreadSafety_IsolatesContextsBetweenTasks(SkillContextAccessor accessor,
         SkillContext context1, SkillContext context2)
     {
@@ -71,7 +71,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task SkillContext_AsyncLocal_MaintainsContextAcrossAsyncOperations(SkillContextAccessor accessor,
         SkillContext context)
     {
@@ -83,7 +83,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task SkillContext_NestedAsyncOperations_UpdatesContext(SkillContextAccessor accessor,
         SkillContext outerContext, SkillContext innerContext)
     {
@@ -104,7 +104,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task SkillContext_ConcurrentAccess_IsolatesContexts(SkillContextAccessor accessor,
         SkillContext[] contexts)
     {
@@ -125,7 +125,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void SkillContext_MultipleAccessors_ShareSameStorage(SkillContextAccessor accessor1,
         SkillContextAccessor accessor2, SkillContext context1, SkillContext context2)
     {
@@ -145,7 +145,7 @@ public class SkillContextAccessorTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task SkillContext_ParentChildTasks_ShareContext(SkillContextAccessor accessor, SkillContext context)
     {
         accessor.SkillContext = context;

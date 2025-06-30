@@ -1,4 +1,3 @@
-using System.Reflection;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.TestKit.RequestSpecifications;
 using AutoFixture.Kernel;

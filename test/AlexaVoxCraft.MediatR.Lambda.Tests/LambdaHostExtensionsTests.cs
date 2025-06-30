@@ -1,11 +1,10 @@
 using AwesomeAssertions;
-using AlexaVoxCraft.MediatR.Lambda;
 using AlexaVoxCraft.MediatR.Lambda.Abstractions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
+using AlexaVoxCraft.TestKit.Attributes;
 using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using Serilog;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests;
@@ -108,7 +107,7 @@ public class LambdaHostExtensionsTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task RunAlexaSkill_HandlerBuilder_CreatesValidHandler(
         SkillRequest skillRequest,
         ILambdaContext lambdaContext)

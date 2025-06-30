@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AlexaVoxCraft.Logging.Serialization;
+using AlexaVoxCraft.TestKit.Attributes;
 using AwesomeAssertions;
 using Serilog.Events;
 using Serilog.Formatting.Json;
@@ -42,7 +43,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithValidLogEvent_WritesJsonToOutput(LogEvent basicLogEvent)
     {
         var output = new StringWriter();
@@ -55,7 +56,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithBasicEvent_ProducesValidJson(LogEvent basicLogEvent)
     {
         var output = new StringWriter();
@@ -68,7 +69,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithInformationLevel_DoesNotIncludeLevelField(LogEvent informationLogEvent)
     {
         var output = new StringWriter();
@@ -80,7 +81,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithNonInformationLevel_IncludesLevelField(LogEvent warningLogEvent)
     {
         var output = new StringWriter();
@@ -92,7 +93,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithMessageTemplate_IncludesMessageTemplateField(LogEvent templateLogEvent)
     {
         var output = new StringWriter();
@@ -104,7 +105,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithTimestamp_IncludesTimestampField(LogEvent timestampLogEvent)
     {
         var output = new StringWriter();
@@ -116,7 +117,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithException_IncludesExceptionField(LogEvent exceptionLogEvent)
     {
         var output = new StringWriter();
@@ -130,7 +131,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithProperties_IncludesPropertiesCorrectly(LogEvent propertiesLogEvent)
     {
         var output = new StringWriter();
@@ -169,7 +170,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithComplexObjectProperty_SerializesCorrectly(LogEvent complexLogEvent)
     {
         var output = new StringWriter();
@@ -184,7 +185,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithRenderings_IncludesRenderingsField(LogEvent renderingLogEvent)
     {
         var output = new StringWriter();
@@ -197,7 +198,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithTraceId_IncludesTraceIdField(LogEvent traceIdLogEvent)
     {
         var output = new StringWriter();
@@ -209,7 +210,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithSpanId_IncludesSpanIdField(LogEvent spanIdLogEvent)
     {
         var output = new StringWriter();
@@ -221,7 +222,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithNullOutput_ThrowsArgumentNullException(LogEvent basicLogEvent)
     {
         var exception = Record.Exception(() => _formatter.Format(basicLogEvent, null!));
@@ -240,7 +241,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void FormatEvent_StaticMethod_ProducesValidJson(LogEvent basicLogEvent, JsonValueFormatter valueFormatter)
     {
         var output = new StringWriter();
@@ -253,7 +254,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_OutputIsSingleLine_NoInternalNewlines(LogEvent multilineLogEvent)
     {
         var output = new StringWriter();
@@ -269,7 +270,7 @@ public class AlexaCompactJsonFormatterTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [LoggingAutoData]
     public void Format_WithRandomProperties_ProducesValidJson(LogEvent propertiesLogEvent)
     {
         var output = new StringWriter();

@@ -5,7 +5,6 @@ using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Converters;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Tests.Examples;
-using Xunit;
 
 namespace AlexaVoxCraft.Model.Tests;
 

@@ -3,7 +3,6 @@ using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Response.Directive.Templates;
 using AlexaVoxCraft.Model.Response.Ssml;
-using Xunit;
 
 namespace AlexaVoxCraft.Model.Tests;
 

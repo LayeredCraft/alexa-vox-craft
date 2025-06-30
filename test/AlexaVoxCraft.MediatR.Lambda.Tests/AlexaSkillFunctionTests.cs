@@ -1,15 +1,14 @@
 using AwesomeAssertions;
-using AlexaVoxCraft.MediatR.Lambda;
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.MediatR.Lambda.Abstractions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
+using AlexaVoxCraft.TestKit.Attributes;
 using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests;
 
@@ -70,7 +69,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void CreateContext_WithValidRequest_CallsFactory(SkillRequest launchRequest)
     {
         var function = new TestAlexaSkillFunction();
@@ -82,7 +81,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_WithMissingHandler_ThrowsException(
         SkillRequest skillRequest, 
         ILambdaContext lambdaContext)
@@ -97,7 +96,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_WithNullRequest_ThrowsException(ILambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunction();
@@ -109,7 +108,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_WithNullLambdaContext_ThrowsException(SkillRequest skillRequest)
     {
         var function = new TestAlexaSkillFunction();
@@ -121,7 +120,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_WithValidHandler_ReturnsResponse(
         SkillRequest skillRequest, 
         ILambdaContext lambdaContext)
@@ -135,7 +134,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_WithHandlerException_PropagatesException(
         SkillRequest skillRequest, 
         ILambdaContext lambdaContext)
@@ -162,7 +161,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void CreateContext_WithLaunchRequest_CreatesLaunchRequest(SkillRequest launchRequest)
     {
         // Verify our specimen builder creates a launch request based on parameter name
@@ -170,7 +169,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void CreateContext_WithIntentRequest_CreatesIntentRequest(SkillRequest intentRequest)
     {
         // Verify our specimen builder creates an intent request based on parameter name
@@ -178,7 +177,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void CreateContext_WithHelpIntentRequest_CreatesHelpIntent(SkillRequest helpIntentRequest)
     {
         // Verify our specimen builder creates a help intent based on parameter name
@@ -190,7 +189,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void CreateContext_WithSessionEndRequest_CreatesSessionEndedRequest(SkillRequest sessionEndRequest)
     {
         // Verify our specimen builder creates a session ended request based on parameter name
@@ -198,7 +197,7 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void CreateContext_WithAudioPlayerRequest_CreatesAudioPlayerRequest(SkillRequest audioPlayerRequest)
     {
         // Verify our specimen builder creates an audio player request based on parameter name

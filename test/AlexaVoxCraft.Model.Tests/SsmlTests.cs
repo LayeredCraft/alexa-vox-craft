@@ -1,6 +1,5 @@
 ﻿using System.Xml.Linq;
 using AlexaVoxCraft.Model.Response.Ssml;
-using Xunit;
 
 namespace AlexaVoxCraft.Model.Tests;
 

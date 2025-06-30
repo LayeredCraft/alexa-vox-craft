@@ -1,6 +1,7 @@
 using AwesomeAssertions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.TestKit.Attributes;
 using NSubstitute;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests.Context;
@@ -8,7 +9,7 @@ namespace AlexaVoxCraft.MediatR.Lambda.Tests.Context;
 public class DefaultSkillContextFactoryTests : TestBase
 {
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Constructor_WithValidAccessor_InitializesCorrectly(ISkillContextAccessor accessor)
     {
         var factory = new DefaultSkillContextFactory(accessor);
@@ -17,7 +18,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Create_WithValidRequest_ReturnsDefaultSkillContext(
         ISkillContextAccessor accessor,
         SkillRequest skillRequest)
@@ -32,7 +33,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Create_SetsContextInAccessor(
         ISkillContextAccessor accessor,
         SkillRequest skillRequest)
@@ -45,7 +46,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Create_WithNullAccessor_DoesNotThrow(SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(null!);
@@ -56,7 +57,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Create_WithNullAccessor_ReturnsValidContext(SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(null!);
@@ -91,7 +92,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Dispose_WithValidAccessor_ClearsContextInAccessor(
         ISkillContextAccessor accessor,
         SkillRequest skillRequest)
@@ -105,7 +106,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Dispose_WithNullAccessor_DoesNotThrow(SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(null!);
@@ -117,7 +118,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Dispose_WithNullContext_DoesNotThrow(ISkillContextAccessor accessor)
     {
         var factory = new DefaultSkillContextFactory(accessor);
@@ -128,7 +129,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void CreateAndDispose_Lifecycle_WorksCorrectly(
         ISkillContextAccessor accessor,
         SkillRequest skillRequest)
@@ -150,7 +151,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Create_MultipleCalls_EachSetsContextInAccessor(
         ISkillContextAccessor accessor,
         SkillRequest skillRequest1,
@@ -168,7 +169,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Create_PreservesRequestData(SkillRequest skillRequest)
     {
         var accessor = CreateSubstitute<ISkillContextAccessor>();
@@ -182,7 +183,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Dispose_MultipleCallsWithSameContext_OnlySetNullOnce(
         ISkillContextAccessor accessor,
         SkillRequest skillRequest)
@@ -198,7 +199,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     }
 
     [Theory]
-    [AutoData]
+    [MediatRLambdaAutoData]
     public void Create_WithDifferentRequestTypes_HandlesAllCorrectly(
         ISkillContextAccessor accessor,
         SkillRequest launchRequest,

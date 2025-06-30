@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Directive;
-using Xunit;
 
 namespace AlexaVoxCraft.Model.Tests;
 
