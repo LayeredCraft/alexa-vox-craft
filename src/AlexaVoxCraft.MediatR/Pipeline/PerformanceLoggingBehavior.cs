@@ -14,7 +14,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
 
     public PerformanceLoggingBehavior(ILogger<PerformanceLoggingBehavior> logger)
     {
-        _logger = logger;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken, RequestHandlerDelegate next)

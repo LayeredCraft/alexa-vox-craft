@@ -1,6 +1,5 @@
 ﻿using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Response.Directive.Templates;
-using Xunit;
 
 namespace AlexaVoxCraft.Model.Tests;
 

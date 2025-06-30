@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.0.0.5" />
+      <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.0.0.6" />
       <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
     </ItemGroup>
 

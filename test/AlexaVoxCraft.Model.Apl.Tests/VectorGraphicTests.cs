@@ -1,5 +1,4 @@
 ﻿using AlexaVoxCraft.Model.Apl.VectorGraphics;
-using Xunit;
 
 namespace AlexaVoxCraft.Model.Apl.Tests;
 
