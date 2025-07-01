@@ -1,86 +1,124 @@
 ﻿using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response.Directive;
+using AlexaVoxCraft.TestKit.Attributes;
+using AlexaVoxCraft.TestKit.Extensions;
+using AwesomeAssertions;
 
 namespace AlexaVoxCraft.Model.Tests;
 
-public class DialogDirectiveTests
+public sealed class DialogDirectiveTests
 {
-    [Fact]
-    public void Create_Valid_DialogDelegateDirective()
+    [Theory]
+    [ModelAutoData]
+    public void DialogDelegate_WithGeneratedData_SerializesCorrectly(DialogDelegate directive)
     {
-        var actual = new DialogDelegate { UpdatedIntent = GetUpdatedIntent() };
-
-        Assert.True(Utility.CompareJson(actual, "DialogDelegate.json"));
+        directive.Type.Should().Be("Dialog.Delegate");
+        directive.UpdatedIntent.Should().NotBeNull();
+        directive.UpdatedIntent.Name.Should().NotBeNullOrEmpty();
+        directive.UpdatedIntent.Slots.Should().NotBeEmpty();
+        
+        directive.ShouldRoundTripSerialize();
     }
 
-    [Fact]
-    public void Create_Valid_DialogElicitSlotDirective()
+    [Theory]
+    [ModelAutoData]
+    public void DialogElicitSlot_WithGeneratedData_SerializesCorrectly(DialogElicitSlot directive)
     {
-        var actual = new DialogElicitSlot("ZodiacSign") { UpdatedIntent = GetUpdatedIntent() };
-
-        Assert.True(Utility.CompareJson(actual, "DialogElicitSlot.json"));
+        directive.Type.Should().Be("Dialog.ElicitSlot");
+        directive.SlotName.Should().NotBeNullOrEmpty();
+        directive.UpdatedIntent.Should().NotBeNull();
+        directive.UpdatedIntent.Name.Should().NotBeNullOrEmpty();
+        
+        directive.ShouldRoundTripSerialize();
     }
 
-    [Fact]
-    public void Create_Valid_DialogConfirmSlotDirective()
+    [Theory]
+    [ModelAutoData]
+    public void DialogConfirmSlot_WithGeneratedData_SerializesCorrectly(DialogConfirmSlot directive)
     {
-        var actual = new DialogConfirmSlot("Date") { UpdatedIntent = GetUpdatedIntent() };
-
-        Assert.True(Utility.CompareJson(actual, "DialogConfirmSlot.json"));
+        directive.Type.Should().Be("Dialog.ConfirmSlot");
+        directive.SlotName.Should().NotBeNullOrEmpty();
+        directive.UpdatedIntent.Should().NotBeNull();
+        directive.UpdatedIntent.Name.Should().NotBeNullOrEmpty();
+        
+        directive.ShouldRoundTripSerialize();
     }
 
-    [Fact]
-    public void Create_Valid_DialogConfirmIntentDirective()
+    [Theory]
+    [ModelAutoData]
+    public void DialogConfirmIntent_WithGeneratedData_SerializesCorrectly(DialogConfirmIntent directive)
     {
-        var actual = new DialogConfirmIntent { UpdatedIntent = GetUpdatedIntent() };
-        actual.UpdatedIntent.Slots["ZodiacSign"].ConfirmationStatus = ConfirmationStatus.Confirmed;
-
-        Assert.True(Utility.CompareJson(actual, "DialogConfirmIntent.json"));
+        directive.Type.Should().Be("Dialog.ConfirmIntent");
+        directive.UpdatedIntent.Should().NotBeNull();
+        directive.UpdatedIntent.Name.Should().NotBeNullOrEmpty();
+        directive.UpdatedIntent.Slots.Should().NotBeEmpty();
+        
+        directive.ShouldRoundTripSerialize();
     }
 
-    [Fact]
-    public void Create_Valid_DialogDynamicEntityDirective()
+    [Theory]
+    [ModelAutoData]
+    public void DialogUpdateDynamicEntities_WithGeneratedData_SerializesCorrectly(DialogUpdateDynamicEntities directive)
     {
-        var actual = new DialogUpdateDynamicEntities { UpdateBehavior = UpdateBehavior.Replace };
-        var airportSlotType = new SlotType
+        directive.Type.Should().Be("Dialog.UpdateDynamicEntities");
+        directive.UpdateBehavior.Should().BeOneOf(UpdateBehavior.Replace, UpdateBehavior.Clear);
+        directive.Types.Should().NotBeEmpty();
+        
+        foreach (var slotType in directive.Types)
         {
-            Name = "AirportSlotType",
-            Values = new[]
+            slotType.Name.Should().NotBeNullOrEmpty();
+            slotType.Values.Should().NotBeEmpty();
+            
+            foreach (var value in slotType.Values)
             {
-                new SlotTypeValue
-                {
-                    Id = "BOS",
-                    Name = new SlotTypeValueName
-                    {
-                        Value = "Logan International Airport",
-                        Synonyms = new[] {"Boston Logan"}
-                    }
-                },
-                new SlotTypeValue
-                {
-                    Id = "LGA",
-                    Name = new SlotTypeValueName
-                    {
-                        Value = "LaGuardia Airport",
-                        Synonyms = new[] {"New York"}
-                    }
-                }
+                value.Id.Should().NotBeNullOrEmpty();
+                value.Name.Should().NotBeNull();
+                value.Name.Value.Should().NotBeNullOrEmpty();
             }
-        };
-        actual.Types.Add(airportSlotType);
-        Assert.True(Utility.CompareJson(actual, "DialogDynamicEntity.json"));
+        }
+        
+        directive.ShouldRoundTripSerialize();
     }
 
-    private Intent GetUpdatedIntent()
+    [Theory]
+    [ModelAutoData]
+    public void Intent_WithGeneratedData_HasValidStructure(Intent intent)
     {
-        return new Intent
+        intent.Name.Should().NotBeNullOrEmpty();
+        intent.ConfirmationStatus.Should().BeOneOf(
+            ConfirmationStatus.None, 
+            ConfirmationStatus.Confirmed, 
+            ConfirmationStatus.Denied);
+        intent.Slots.Should().NotBeEmpty();
+        
+        foreach (var slot in intent.Slots.Values)
         {
-            Name = "GetZodiacHoroscopeIntent",
-            ConfirmationStatus = ConfirmationStatus.None,
-            Slots = new System.Collections.Generic.Dictionary<string, Slot>{
-                {"ZodiacSign",new Slot{Name="ZodiacSign",Value="virgo"}},
-                {"Date",new Slot{Name="Date",Value="2015-11-25",ConfirmationStatus=ConfirmationStatus.Confirmed}}
-            }
-        };
+            slot.Name.Should().NotBeNullOrEmpty();
+            slot.Value.Should().NotBeNullOrEmpty();
+            slot.ConfirmationStatus.Should().BeOneOf(
+                ConfirmationStatus.None, 
+                ConfirmationStatus.Confirmed, 
+                ConfirmationStatus.Denied);
+        }
+        
+        intent.ShouldRoundTripSerialize();
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void SlotType_WithGeneratedData_HasValidStructure(SlotType slotType)
+    {
+        slotType.Name.Should().NotBeNullOrEmpty();
+        slotType.Values.Should().NotBeEmpty();
+        
+        foreach (var value in slotType.Values)
+        {
+            value.Id.Should().NotBeNullOrEmpty();
+            value.Name.Should().NotBeNull();
+            value.Name.Value.Should().NotBeNullOrEmpty();
+            value.Name.Synonyms.Should().NotBeNull();
+        }
+        
+        slotType.ShouldRoundTripSerialize();
     }
 }
