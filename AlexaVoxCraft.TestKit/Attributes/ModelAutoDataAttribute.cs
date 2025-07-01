@@ -13,6 +13,7 @@ public class ModelAutoDataAttribute() : AutoDataAttribute(CreateFixture)
         // Add specimen builders for Model types
         fixture.Customizations.Add(new CardSpecimenBuilder());
         fixture.Customizations.Add(new DialogDirectiveSpecimenBuilder());
+        fixture.Customizations.Add(new SsmlSpecimenBuilder());
         
         // Register URI generator for card images
         fixture.Register(() => new Uri($"https://example.com/{Guid.NewGuid()}"));

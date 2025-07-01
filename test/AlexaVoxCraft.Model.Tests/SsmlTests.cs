@@ -1,9 +1,11 @@
 ﻿using System.Xml.Linq;
 using AlexaVoxCraft.Model.Response.Ssml;
+using AlexaVoxCraft.TestKit.Attributes;
+using AwesomeAssertions;
 
 namespace AlexaVoxCraft.Model.Tests;
 
-public class SsmlTests
+public sealed class SsmlTests
 {
     [Fact]
     public void Ssml_Error_With_No_Text()
@@ -274,6 +276,201 @@ public class SsmlTests
         actual.Elements.Add(new PlainText("Christina wins this round!"));
         xmlHost.Elements.Add(actual);
         Assert.Equal(expected,xmlHost.ToXml());
+    }
+
+    // AutoFixture-based tests
+    [Theory]
+    [ModelAutoData]
+    public void Speech_WithGeneratedData_GeneratesValidXml(Speech speech)
+    {
+        speech.Elements.Should().NotBeEmpty();
+        
+        var xml = speech.ToXml();
+        xml.Should().NotBeNullOrEmpty();
+        xml.Should().StartWith("<speak");
+        xml.Should().EndWith("</speak>");
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void PlainText_WithGeneratedData_HasValidContent(PlainText plainText)
+    {
+        var xml = plainText.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().NotBeNullOrEmpty();
+        xml.Should().NotContain("<");
+        xml.Should().NotContain(">");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Break_WithGeneratedData_GeneratesValidXml(Break breakElement)
+    {
+        var xml = breakElement.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<break");
+        xml.Should().EndWith(" />");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void SayAs_WithGeneratedData_HasValidAttributes(SayAs sayAs)
+    {
+        var xml = sayAs.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<say-as");
+        xml.Should().Contain("interpret-as=");
+        xml.Should().EndWith("</say-as>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Word_WithGeneratedData_HasValidRole(Word word)
+    {
+        var xml = word.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<w");
+        xml.Should().Contain("role=");
+        xml.Should().EndWith("</w>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Sub_WithGeneratedData_HasValidAlias(Sub sub)
+    {
+        var xml = sub.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<sub");
+        xml.Should().Contain("alias=");
+        xml.Should().EndWith("</sub>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Prosody_WithGeneratedData_HasValidAttributes(Prosody prosody)
+    {
+        prosody.Elements.Should().NotBeEmpty();
+        
+        var xml = prosody.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<prosody");
+        xml.Should().EndWith("</prosody>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Emphasis_WithGeneratedData_HasValidLevel(Emphasis emphasis)
+    {
+        var xml = emphasis.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<emphasis");
+        xml.Should().Contain("level=");
+        xml.Should().EndWith("</emphasis>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Phoneme_WithGeneratedData_HasValidAttributes(Phoneme phoneme)
+    {
+        var xml = phoneme.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<phoneme");
+        xml.Should().Contain("alphabet=");
+        xml.Should().Contain("ph=");
+        xml.Should().EndWith("</phoneme>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Audio_WithGeneratedData_HasValidSrc(Audio audio)
+    {
+        var xml = audio.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<audio");
+        xml.Should().Contain("src=");
+        xml.Should().EndWith("</audio>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Voice_WithGeneratedData_HasValidName(Voice voice)
+    {
+        var xml = voice.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<voice");
+        xml.Should().Contain("name=");
+        xml.Should().EndWith("</voice>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void Lang_WithGeneratedData_HasValidLanguage(Lang lang)
+    {
+        var xml = lang.ToXml().ToString(SaveOptions.DisableFormatting);
+        xml.Should().StartWith("<lang");
+        xml.Should().Contain("xml:lang=");
+        xml.Should().EndWith("</lang>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void AmazonEffect_WithGeneratedData_GeneratesValidXml(AmazonEffect effect)
+    {
+        var speech = new Speech();
+        speech.Elements.Add(effect);
+        
+        var xml = speech.ToXml();
+        xml.Should().Contain("<amazon:effect");
+        xml.Should().Contain("</amazon:effect>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void AmazonDomain_WithGeneratedData_HasValidDomain(AmazonDomain domain)
+    {
+        domain.Elements.Should().NotBeEmpty();
+        
+        var speech = new Speech();
+        speech.Elements.Add(domain);
+        
+        var xml = speech.ToXml();
+        xml.Should().Contain("<amazon:domain");
+        xml.Should().Contain("name=");
+        xml.Should().Contain("</amazon:domain>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void AmazonEmotion_WithGeneratedData_HasValidAttributes(AmazonEmotion emotion)
+    {
+        emotion.Elements.Should().NotBeEmpty();
+        
+        var speech = new Speech();
+        speech.Elements.Add(emotion);
+        
+        var xml = speech.ToXml();
+        xml.Should().Contain("<amazon:emotion");
+        xml.Should().Contain("name=");
+        xml.Should().Contain("intensity=");
+        xml.Should().Contain("</amazon:emotion>");
+        
+    }
+
+    [Theory]
+    [ModelAutoData]
+    public void AlexaName_WithGeneratedData_HasValidPersonId(AlexaName alexaName)
+    {
+        var speech = new Speech();
+        speech.Elements.Add(alexaName);
+        
+        var xml = speech.ToXml();
+        xml.Should().Contain("<alexa:name");
+        xml.Should().Contain("personId=");
+        xml.Should().Contain("amzn1.ask.person.");
+        
     }
 
     private void CompareXml(string expected, ISsml ssml)
