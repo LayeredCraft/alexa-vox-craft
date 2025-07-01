@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <LangVersion>default</LangVersion>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
