@@ -9,13 +9,12 @@ public static class JsonTestExtensions
     public static void ShouldRoundTripSerialize<T>(this T actual)
     {
         // Serialize to JSON
-        var json = JsonSerializer.Serialize(actual, AlexaJsonOptions.DefaultOptions);
+        var originalJson = JsonSerializer.Serialize(actual, AlexaJsonOptions.DefaultOptions);
         
         // Deserialize back to object
-        var deserialized = JsonSerializer.Deserialize<T>(json, AlexaJsonOptions.DefaultOptions);
+        var deserialized = JsonSerializer.Deserialize<T>(originalJson, AlexaJsonOptions.DefaultOptions);
         
         // Verify they match
-        var originalJson = JsonSerializer.Serialize(actual, AlexaJsonOptions.DefaultOptions);
         var deserializedJson = JsonSerializer.Serialize(deserialized, AlexaJsonOptions.DefaultOptions);
         
         deserializedJson.Should().Be(originalJson);
