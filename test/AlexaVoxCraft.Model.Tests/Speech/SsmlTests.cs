@@ -387,7 +387,8 @@ public sealed class SsmlTests
         var xml = audio.ToXml().ToString(SaveOptions.DisableFormatting);
         xml.Should().StartWith("<audio");
         xml.Should().Contain("src=");
-        xml.Should().EndWith("</audio>");
+        // Audio can end with either "</audio>" (with children) or "/>" (self-closing, no children)
+        xml.Should().Match(x => x.EndsWith("</audio>") || x.EndsWith("/>"));
         
     }
 
