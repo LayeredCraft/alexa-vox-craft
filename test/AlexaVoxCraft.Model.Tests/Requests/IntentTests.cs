@@ -1,8 +1,8 @@
 ﻿using AlexaVoxCraft.Model.Request;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Requests;
 
-public class IntentTests
+public sealed class IntentTests
 {
 	//Multiple asserts in these tests only because they combine to test a single output state
 	//https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/understanding-the-structure-of-the-built-in-intent-library#property-values-passed-as-slot-values

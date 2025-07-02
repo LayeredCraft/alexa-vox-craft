@@ -14,6 +14,8 @@ public class ModelAutoDataAttribute() : AutoDataAttribute(CreateFixture)
         fixture.Customizations.Add(new CardSpecimenBuilder());
         fixture.Customizations.Add(new DialogDirectiveSpecimenBuilder());
         fixture.Customizations.Add(new SsmlSpecimenBuilder());
+        fixture.Customizations.Add(new AudioPlayerDirectiveSpecimenBuilder());
+        fixture.Customizations.Add(new VideoAppDirectiveSpecimenBuilder());
         
         // Register URI generator for card images
         fixture.Register(() => new Uri($"https://example.com/{Guid.NewGuid()}"));

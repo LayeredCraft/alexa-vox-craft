@@ -4,7 +4,7 @@ using AutoFixture.Kernel;
 
 namespace AlexaVoxCraft.TestKit.SpecimenBuilders;
 
-public class CardSpecimenBuilder : ISpecimenBuilder
+public sealed class CardSpecimenBuilder : ISpecimenBuilder
 {
     public object Create(object request, ISpecimenContext context)
     {
@@ -60,9 +60,9 @@ public class CardSpecimenBuilder : ISpecimenBuilder
             RequestedPermission.AddressCountryAndPostalCode
         };
         
-        var permissionCount = context.Create<int>() % 3 + 1; // 1-3 permissions
+        var permissionCount = Random.Shared.Next(1, 4); // 1-3 permissions
         var selectedPermissions = availablePermissions
-            .OrderBy(_ => context.Create<int>())
+            .OrderBy(_ => Random.Shared.Next())
             .Take(permissionCount);
         
         foreach (var permission in selectedPermissions)
@@ -90,8 +90,8 @@ public class CardSpecimenBuilder : ISpecimenBuilder
     private static string GenerateTitle(ISpecimenContext context)
     {
         var words = new[] { "Welcome", "Hello", "Greetings", "Today", "Weather", "News", "Update" };
-        var wordCount = context.Create<int>() % 3 + 1; // 1-3 words
-        var selectedWords = words.OrderBy(_ => context.Create<int>()).Take(wordCount);
+        var wordCount = Random.Shared.Next(1, 4); // 1-3 words
+        var selectedWords = words.OrderBy(_ => Random.Shared.Next()).Take(wordCount);
         var title = string.Join(" ", selectedWords);
         
         // Ensure title doesn't exceed Alexa's 50 character limit
@@ -109,8 +109,8 @@ public class CardSpecimenBuilder : ISpecimenBuilder
             "Have a great day!"
         };
         
-        var sentenceCount = context.Create<int>() % 3 + 1; // 1-3 sentences
-        var selectedSentences = sentences.OrderBy(_ => context.Create<int>()).Take(sentenceCount);
+        var sentenceCount = Random.Shared.Next(1, 4); // 1-3 sentences
+        var selectedSentences = sentences.OrderBy(_ => Random.Shared.Next()).Take(sentenceCount);
         var content = string.Join(" ", selectedSentences);
         
         // Ensure content doesn't exceed reasonable limits

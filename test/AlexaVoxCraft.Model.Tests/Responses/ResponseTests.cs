@@ -3,10 +3,11 @@ using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Response.Directive.Templates;
 using AlexaVoxCraft.Model.Response.Ssml;
+using AlexaVoxCraft.Model.Tests.Infrastructure;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Responses;
 
-public class ResponseTests
+public sealed class ResponseTests
 {
     private const string ExamplesPath = @"Examples";
 
@@ -47,28 +48,6 @@ public class ResponseTests
         Assert.True(Utility.CompareJson(skillResponse, "Response.json"));
     }
 
-    [Fact]
-    public void Creates_VideoAppDirective()
-    {
-        var videoItem = new VideoItem("https://www.example.com/video/sample-video-1.mp4")
-        {
-            Metadata = new VideoItemMetadata
-            {
-                Title = "Title for Sample Video",
-                Subtitle = "Secondary Title for Sample Video"
-            }
-        };
-        var actual = new VideoAppDirective { VideoItem = videoItem };
-
-        Assert.True(Utility.CompareJson(actual, "VideoAppDirectiveWithMetadata.json"));
-    }
-
-    [Fact]
-    public void Create_VideoAppDirective_FromSource()
-    {
-        var actual = new VideoAppDirective("https://www.example.com/video/sample-video-1.mp4");
-        Assert.True(Utility.CompareJson(actual, "VideoAppDirective.json"));
-    }
 
     [Fact]
     public void Create_HintDirective()
@@ -101,73 +80,6 @@ public class ResponseTests
         Assert.True(actualDoc.RootElement.JsonElementDeepEquals(expectedDoc.RootElement));
     }
 
-    [Fact]
-    public void AudioPlayerGeneratesCorrectJson()
-    {
-        var directive = new AudioPlayerPlayDirective
-        {
-            PlayBehavior = PlayBehavior.Enqueue,
-            AudioItem = new AudioItem
-            {
-                Stream = new AudioItemStream
-                {
-                    Url = "https://url-of-the-stream-to-play",
-                    Token = "opaque token representing this stream",
-                    ExpectedPreviousToken = "opaque token representing the previous stream"
-                }
-            }
-        };
-        Assert.True(Utility.CompareJson(directive, "AudioPlayerWithoutMetadata.json"));
-    }
-
-    [Fact]
-    public void AudioPlayerWithMetadataGeneratesCorrectJson()
-    {
-        var directive = new AudioPlayerPlayDirective
-        {
-            PlayBehavior = PlayBehavior.Enqueue,
-            AudioItem = new AudioItem
-            {
-                Stream = new AudioItemStream
-                {
-                    Url = "https://url-of-the-stream-to-play",
-                    Token = "opaque token representing this stream",
-                    ExpectedPreviousToken = "opaque token representing the previous stream"
-                },
-                Metadata = new AudioItemMetadata
-                {
-                    Title = "title of the track to display",
-                    Subtitle = "subtitle of the track to display",
-                    Art = new AudioItemSources
-                    {
-                        Sources = new[] { new AudioItemSource("https://url-of-the-album-art-image.png") }.ToList()
-                    },
-                    BackgroundImage = new AudioItemSources { Sources = new[] { new AudioItemSource("https://url-of-the-background-image.png") }.ToList() }
-                }
-            }
-        };
-        Assert.True(Utility.CompareJson(directive, "AudioPlayerWithMetadata.json"));
-    }
-
-    [Fact]
-    public void AudioPlayerWithMetadataDeserializesCorrectly()
-    {
-        var audioPlayer = Utility.ExampleFileContent<AudioPlayerPlayDirective>("AudioPlayerWithMetadata.json");
-        Assert.Equal("title of the track to display", audioPlayer.AudioItem.Metadata.Title);
-        Assert.Equal("subtitle of the track to display", audioPlayer.AudioItem.Metadata.Subtitle);
-        Assert.Single(audioPlayer.AudioItem.Metadata.Art.Sources);
-        Assert.Single(audioPlayer.AudioItem.Metadata.BackgroundImage.Sources);
-        Assert.Equal("https://url-of-the-album-art-image.png", audioPlayer.AudioItem.Metadata.Art.Sources.First().Url);
-        Assert.Equal("https://url-of-the-background-image.png", audioPlayer.AudioItem.Metadata.BackgroundImage.Sources.First().Url);
-    }
-
-    [Fact]
-    public void AudioPlayerIgnoresMetadataWhenNull()
-    {
-        var audioPlayer = Utility.ExampleFileContent<AudioPlayerPlayDirective>("AudioPlayerWithoutMetadata.json");
-        Assert.Null(audioPlayer.AudioItem.Metadata);
-        Assert.Equal("https://url-of-the-stream-to-play", audioPlayer.AudioItem.Stream.Url);
-    }
 
     [Fact]
     public void RepromptStringGeneratesPlainTextOutput()
@@ -181,7 +93,7 @@ public class ResponseTests
     [Fact]
     public void RepromptSsmlGeneratesPlainTextOutput()
     {
-        var speech = new Speech(new PlainText("text"));
+        var speech = new Response.Ssml.Speech(new PlainText("text"));
         var result = new Reprompt(speech);
         Assert.IsType<SsmlOutputSpeech>(result.OutputSpeech);
         var ssmlText = (SsmlOutputSpeech)result.OutputSpeech;
@@ -330,47 +242,6 @@ public class ResponseTests
         Assert.Equal(PlayBehavior.ReplaceEnqueued, outputSpeech.PlayBehavior);
     }
 
-    [Fact]
-    public void DeserializesExampleAudioPlayerWithMetadataJson()
-    {
-        var deserialized = Utility.ExampleFileContent<IDirective>("AudioPlayerWithMetadata.json");
-
-        Assert.Equal(typeof(AudioPlayerPlayDirective), deserialized.GetType());
-
-        var directive = (AudioPlayerPlayDirective)deserialized;
-
-        Assert.Equal("AudioPlayer.Play", directive.Type);
-        Assert.Equal(PlayBehavior.Enqueue, directive.PlayBehavior);
-
-        var stream = directive.AudioItem.Stream;
-
-        Assert.Equal("https://url-of-the-stream-to-play", stream.Url);
-        Assert.Equal("opaque token representing this stream", stream.Token);
-        Assert.Equal("opaque token representing the previous stream", stream.ExpectedPreviousToken);
-        Assert.Equal(0, stream.OffsetInMilliseconds);
-
-        var metadata = directive.AudioItem.Metadata;
-
-        Assert.Equal("title of the track to display", metadata.Title);
-        Assert.Equal("subtitle of the track to display", metadata.Subtitle);
-        Assert.Single(metadata.Art.Sources);
-        Assert.Equal("https://url-of-the-album-art-image.png", metadata.Art.Sources.First().Url);
-        Assert.Single(metadata.BackgroundImage.Sources);
-        Assert.Equal("https://url-of-the-background-image.png", metadata.BackgroundImage.Sources.First().Url);
-    }
-
-    [Fact]
-    public void DeserializesExampleClearQueueDirectiveJson()
-    {
-        var deserialized = Utility.ExampleFileContent<IDirective>("ClearQueueDirective.json");
-
-        Assert.Equal(typeof(ClearQueueDirective), deserialized.GetType());
-
-        var directive = (ClearQueueDirective)deserialized;
-
-        Assert.Equal("AudioPlayer.ClearQueue", directive.Type);
-        Assert.Equal(ClearBehavior.ClearAll, directive.ClearBehavior);
-    }
 
     [Fact]
     public void DeserializesExampleDialogConfirmIntentJson()
@@ -488,32 +359,6 @@ public class ResponseTests
         Assert.Equal("test hint", directive.Hint.Text);
     }
 
-    [Fact]
-    public void DeserializesExampleStopDirectiveJson()
-    {
-        var deserialized = Utility.ExampleFileContent<IDirective>("StopDirective.json");
-
-        Assert.Equal(typeof(StopDirective), deserialized.GetType());
-
-        var directive = (StopDirective)deserialized;
-
-        Assert.Equal("AudioPlayer.Stop", directive.Type);
-    }
-
-    [Fact]
-    public void DeserializesExampleDirectiveVideoAppDirectiveWithMetadata()
-    {
-        var deserialized = Utility.ExampleFileContent<IDirective>("VideoAppDirectiveWithMetadata.json");
-
-        Assert.Equal(typeof(VideoAppDirective), deserialized.GetType());
-
-        var directive = (VideoAppDirective)deserialized;
-
-        Assert.Equal("VideoApp.Launch", directive.Type);
-        Assert.Equal("https://www.example.com/video/sample-video-1.mp4", directive.VideoItem.Source);
-        Assert.Equal("Title for Sample Video", directive.VideoItem.Metadata.Title);
-        Assert.Equal("Secondary Title for Sample Video", directive.VideoItem.Metadata.Subtitle);
-    }
 
     [Fact]
     public void DeserializesExampleResponseJson()
@@ -562,7 +407,7 @@ public class ResponseTests
     [Fact]
     public void SsmlTextConstructorSetsText()
     {
-        var output = new Speech(new PlainText("testing output")).ToXml();
+        var output = new Response.Ssml.Speech(new PlainText("testing output")).ToXml();
         var ssmlText = new SsmlOutputSpeech(output);
         Assert.Equal(output, ssmlText.Ssml);
     }
@@ -605,44 +450,6 @@ public class ResponseTests
         Assert.True(tell.Response.ShouldEndSession);
     }
 
-    [Fact]
-    public void DirectiveShouldEndSessionOverrideSupport()
-    {
-        var tell = ResponseBuilder.Tell("this should end the session");
-        Assert.True(tell.Response.ShouldEndSession);
-
-        tell.Response.Directives.Add(new VideoAppDirective("https://example.com/test.mp4"));
-        Assert.Null(tell.Response.ShouldEndSession);
-    }
-
-    [Fact]
-    public void MultipleShouldEndDirectivesWithCommonRequirement()
-    {
-        var tell = ResponseBuilder.Tell("this should end the session");
-        Assert.True(tell.Response.ShouldEndSession);
-
-        tell.Response.Directives.Add(new VideoAppDirective("https://example.com/test.mp4"));
-        tell.Response.Directives.Add(new VideoAppDirective("https://example.com/test.mp4"));
-        Assert.Null(tell.Response.ShouldEndSession);
-    }
-
-    [Fact]
-    public void ContradictingEndSessionOverrideDefaultsToExplicit()
-    {
-        var tell = ResponseBuilder.Tell("this should end the session");
-        Assert.True(tell.Response.ShouldEndSession);
-
-        //As VideoApp needs a null EndSession and FakeDirective needs false - reverts to explicit
-        tell.Response.Directives.Add(new VideoAppDirective("https://example.com/test.mp4"));
-        tell.Response.Directives.Add(new FakeDirective());
-        Assert.True(tell.Response.ShouldEndSession);
-    }
-
-    private class FakeDirective : IEndSessionDirective
-    {
-        public string Type => "fake";
-        public bool? ShouldEndSession => false;
-    }
 
     [Fact]
     public void HandlesExampleAskForPermissionsConsentDirective()

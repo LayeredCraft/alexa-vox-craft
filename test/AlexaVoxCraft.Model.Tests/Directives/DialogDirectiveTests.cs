@@ -4,7 +4,7 @@ using AlexaVoxCraft.TestKit.Attributes;
 using AlexaVoxCraft.TestKit.Extensions;
 using AwesomeAssertions;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Directives;
 
 public sealed class DialogDirectiveTests
 {

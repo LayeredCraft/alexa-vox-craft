@@ -3,14 +3,14 @@ using AlexaVoxCraft.Model.Response.Ssml;
 using AlexaVoxCraft.TestKit.Attributes;
 using AwesomeAssertions;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Speech;
 
 public sealed class SsmlTests
 {
     [Fact]
     public void Ssml_Error_With_No_Text()
     {
-        var ssml = new Speech();
+        var ssml = new Response.Ssml.Speech();
 
         Assert.Throws<InvalidOperationException>(() => ssml.ToXml());
     }
@@ -19,7 +19,7 @@ public sealed class SsmlTests
     public void Ssml_Generates_Speak_And_Elements()
     {
         const string expected = "<speak>hello</speak>";
-        var ssml = new Speech();
+        var ssml = new Response.Ssml.Speech();
 
         ssml.Elements.Add(new PlainText("hello"));
         var actual = ssml.ToXml();
@@ -185,7 +185,7 @@ public sealed class SsmlTests
         var effect = new AmazonEffect("Hello World");
 
         //Can't use Comparexml because this tag has meant a change to the speech element ToXml method
-        var xmlHost = new Speech();
+        var xmlHost = new Response.Ssml.Speech();
         xmlHost.Elements.Add(effect);
         var actual = xmlHost.ToXml();
 
@@ -199,7 +199,7 @@ public sealed class SsmlTests
         const string speech2 = "the most awesome game ever";
         const string speech3 = "what do you want to do?";
 
-        var expected = new Speech
+        var expected = new Response.Ssml.Speech
         {
             Elements = new List<ISsml>
             {
@@ -219,7 +219,7 @@ public sealed class SsmlTests
             }
         };
 
-        var actual = new Speech(
+        var actual = new Response.Ssml.Speech(
             new Paragraph(
                 new PlainText(speech1),
                 new Prosody(new Sentence(speech2)) { Rate = ProsodyRate.Fast },
@@ -247,7 +247,7 @@ public sealed class SsmlTests
 
         var alexaName = new AlexaName("amzn1.ask.person.ABCDEF");
 
-        var xmlHost = new Speech();
+        var xmlHost = new Response.Ssml.Speech();
         xmlHost.Elements.Add(alexaName);
         var actual = xmlHost.ToXml();
 
@@ -259,7 +259,7 @@ public sealed class SsmlTests
     {
         const string expected = @"<speak><amazon:domain name=""news"">A miniature manuscript</amazon:domain></speak>";
 
-        var xmlHost = new Speech();
+        var xmlHost = new Response.Ssml.Speech();
         var actual = new AmazonDomain(DomainName.News);
         actual.Elements.Add(new PlainText("A miniature manuscript"));
         xmlHost.Elements.Add(actual);
@@ -271,7 +271,7 @@ public sealed class SsmlTests
     {
         const string expected = @"<speak><amazon:emotion name=""excited"" intensity=""medium"">Christina wins this round!</amazon:emotion></speak>";
 
-        var xmlHost = new Speech();
+        var xmlHost = new Response.Ssml.Speech();
         var actual = new AmazonEmotion(EmotionName.Excited, EmotionIntensity.Medium);
         actual.Elements.Add(new PlainText("Christina wins this round!"));
         xmlHost.Elements.Add(actual);
@@ -281,7 +281,7 @@ public sealed class SsmlTests
     // AutoFixture-based tests
     [Theory]
     [ModelAutoData]
-    public void Speech_WithGeneratedData_GeneratesValidXml(Speech speech)
+    public void Speech_WithGeneratedData_GeneratesValidXml(Response.Ssml.Speech speech)
     {
         speech.Elements.Should().NotBeEmpty();
         
@@ -417,7 +417,7 @@ public sealed class SsmlTests
     [ModelAutoData]
     public void AmazonEffect_WithGeneratedData_GeneratesValidXml(AmazonEffect effect)
     {
-        var speech = new Speech();
+        var speech = new Response.Ssml.Speech();
         speech.Elements.Add(effect);
         
         var xml = speech.ToXml();
@@ -432,7 +432,7 @@ public sealed class SsmlTests
     {
         domain.Elements.Should().NotBeEmpty();
         
-        var speech = new Speech();
+        var speech = new Response.Ssml.Speech();
         speech.Elements.Add(domain);
         
         var xml = speech.ToXml();
@@ -448,7 +448,7 @@ public sealed class SsmlTests
     {
         emotion.Elements.Should().NotBeEmpty();
         
-        var speech = new Speech();
+        var speech = new Response.Ssml.Speech();
         speech.Elements.Add(emotion);
         
         var xml = speech.ToXml();
@@ -463,7 +463,7 @@ public sealed class SsmlTests
     [ModelAutoData]
     public void AlexaName_WithGeneratedData_HasValidPersonId(AlexaName alexaName)
     {
-        var speech = new Speech();
+        var speech = new Response.Ssml.Speech();
         speech.Elements.Add(alexaName);
         
         var xml = speech.ToXml();

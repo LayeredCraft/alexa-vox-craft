@@ -3,9 +3,9 @@ using AlexaVoxCraft.TestKit.Attributes;
 using AlexaVoxCraft.TestKit.Extensions;
 using AwesomeAssertions;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Responses;
 
-public class CardTests
+public sealed class CardTests
 {
     [Theory]
     [ModelAutoData]
