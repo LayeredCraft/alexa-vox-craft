@@ -3,7 +3,7 @@ using AlexaVoxCraft.Model.Serialization;
 using JsonElement = System.Text.Json.JsonElement;
 using JsonValueKind = System.Text.Json.JsonValueKind;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Infrastructure;
 
 public static class Utility
 {

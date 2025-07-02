@@ -3,10 +3,11 @@ using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Serialization;
 using AlexaVoxCraft.Model.Tests.Extensions;
+using AlexaVoxCraft.Model.Tests.Infrastructure;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Requests;
 
-public class RequestTests
+public sealed class RequestTests
 {
     private const string ExamplesPath = "Examples";
     private const string IntentRequestFile = "IntentRequest.json";

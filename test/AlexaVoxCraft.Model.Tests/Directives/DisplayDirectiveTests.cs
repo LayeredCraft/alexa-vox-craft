@@ -1,9 +1,10 @@
 ﻿using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Response.Directive.Templates;
+using AlexaVoxCraft.Model.Tests.Infrastructure;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Directives;
 
-public class RenderTemplateTests
+public sealed class RenderTemplateTests
 {
     private const string ExamplesPath = "Examples";
     private const string ImageSource = "https://example.com/resources/card-images/mount-saint-helen-small.png";

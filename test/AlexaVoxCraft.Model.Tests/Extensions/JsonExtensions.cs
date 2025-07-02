@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using AlexaVoxCraft.Model.Tests.Infrastructure;
 using Xunit.Sdk;
 
 namespace AlexaVoxCraft.Model.Tests.Extensions;

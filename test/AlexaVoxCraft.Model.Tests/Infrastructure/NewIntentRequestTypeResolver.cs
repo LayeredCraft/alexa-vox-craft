@@ -1,6 +1,6 @@
 ﻿using AlexaVoxCraft.Model.Request.Type;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Infrastructure;
 
 public class NewIntentRequestTypeResolver : IRequestTypeResolver
 {

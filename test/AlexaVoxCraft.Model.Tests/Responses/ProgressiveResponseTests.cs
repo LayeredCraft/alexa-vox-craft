@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Directive;
+using AlexaVoxCraft.Model.Tests.Infrastructure;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.Responses;
 
-public class ProgressiveResponseTests
+public sealed class ProgressiveResponseTests
 {
     [Fact]
     public void VoicePlayerCreatesCorrectJson()

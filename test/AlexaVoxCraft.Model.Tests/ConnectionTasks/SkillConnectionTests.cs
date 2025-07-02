@@ -5,10 +5,11 @@ using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Converters;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Tests.Examples;
+using AlexaVoxCraft.Model.Tests.Infrastructure;
 
-namespace AlexaVoxCraft.Model.Tests;
+namespace AlexaVoxCraft.Model.Tests.ConnectionTasks;
 
-public class SkillConnectionTests
+public sealed class SkillConnectionTests
 {
     [Fact]
     public void StartConnectionDirectiveSerializesCorrectly()

@@ -77,19 +77,58 @@ dotnet pack
 
 ### Lambda Development
 ```bash
-# Build Lambda-ready packages (from sample directories)
-dotnet publish -c Release --runtime linux-x64 --self-contained false
+# Install AWS Lambda Tools (one time setup)
+dotnet new tool-manifest --force
+dotnet tool install Amazon.Lambda.Tools
+dotnet restore
+
+# Create Lambda deployment package using aws-lambda-tools-defaults.json configuration
+dotnet lambda package
 
 # Test Lambda functions locally (requires AWS Lambda Mock Test Tool)
 dotnet run
 ```
 
+Use `aws-lambda-tools-defaults.json` in skill projects to configure Lambda packaging:
+```json
+{
+  "Information": [
+    "This file provides default values for the deployment wizard inside Visual Studio and the AWS Lambda commands added to the .NET Core CLI.",
+    "To learn more about the Lambda commands with the .NET Core CLI execute the following command at the command line in the project root directory.",
+    "dotnet lambda help",
+    "All the command line options for the Lambda command can be specified in this file."
+  ],
+  "profile": "",
+  "region": "",
+  "configuration": "Release",
+  "function-runtime": "provided.al2023",
+  "function-memory-size": 512,
+  "function-timeout": 30,
+  "function-handler": "bootstrap",
+  "msbuild-parameters": "--self-contained true"
+}
+```
+
 ## Testing Architecture
 
-- **xUnit**: Primary testing framework
-- **JSON Examples**: Extensive test data files in `/test/` directories
-- **Serialization Tests**: Validation of System.Text.Json converters
+- **xUnit v3 with Microsoft.Testing.Platform**: Primary testing framework (use `dotnet run` not `dotnet test`)
+- **AutoFixture**: Property-based testing with generated test data via TestKit
+- **AwesomeAssertions**: Fluent assertion library (same API as FluentAssertions but different package)
+- **TestKit Infrastructure**: Centralized testing utilities and specimen builders
+- **JSON Examples**: Extensive test data files for deserialization validation
+- **Serialization Tests**: Round-trip validation of System.Text.Json converters
 - **APL Component Tests**: Comprehensive APL document and component validation
+
+### TestKit Components
+- **ModelAutoDataAttribute**: AutoFixture configuration for Model tests
+- **CardSpecimenBuilder**: Generates realistic card objects with Alexa constraints
+- **JsonTestExtensions**: Round-trip serialization validation utilities
+- **TestLoggerCustomization**: Structured logging testing with proper freezing behavior
+
+### Testing Notes
+- Use `AwesomeAssertions` package, NOT `FluentAssertions` (same API, different package)
+- Run tests with `dotnet run` due to Microsoft.Testing.Platform integration
+- Use `[Theory]` with `[ModelAutoData]` for property-based testing with generated data
 
 ## Logging Configuration
 
@@ -155,3 +194,51 @@ public class MyExceptionHandler : IExceptionHandler
 - **Session Management**: Context and state management for multi-turn conversations
 - **Connection Tasks**: Support for complex multi-step interactions
 - **AWS Integration**: Lambda runtime support with custom serialization
+
+# Custom Instructions for Claude
+
+## Code Style and Conventions
+- NEVER add code comments unless explicitly requested
+- Follow existing C# coding conventions and patterns in the codebase
+- Use existing libraries and utilities - check imports and package.json/csproj before adding new dependencies
+- When creating new components, examine existing similar components for patterns
+- Prefer sealed classes when possible for better performance and design clarity
+
+## Testing Guidelines
+- Always use AutoFixture with TestKit for new Model tests
+- Use `AwesomeAssertions` for assertions (same API as FluentAssertions)
+- Create property-based tests with `[Theory]` and `[ModelAutoData]`
+- Validate both object constraints AND round-trip serialization
+- Use `dotnet run` instead of `dotnet test` for Microsoft.Testing.Platform projects
+
+## Random Number Generation Guidelines
+- **Application Code**: Use `Random.Shared.Next()` for performance
+- **Test Specimen Builders**: Use `context.Create<int>()` for determinism and reproducible tests
+- **Test Determinism**: Configure AutoFixture with seeds when needed for consistent CI/CD results
+- **Property-Based Testing**: Prefer controlled randomness over true randomness for reliable test outcomes
+
+## Git and Development Workflow
+- Always use descriptive commit messages following conventional commit style
+- Include `🤖 Generated with [Claude Code](https://claude.ai/code)` and `Co-Authored-By: Claude <noreply@anthropic.com>` in commits
+- Create branches with descriptive names (e.g., `feature/migrate-model-tests-autofixture`)
+- When creating PRs, include comprehensive summary of changes and test coverage improvements
+
+## Security and Best Practices
+- Never expose or log secrets and keys
+- Never commit secrets to the repository
+- Always follow security best practices for Alexa skill development
+- Validate input constraints according to Alexa specifications
+
+## Testing Migration Strategy
+- When migrating existing tests to AutoFixture:
+  1. Preserve JSON deserialization tests that validate converters
+  2. Replace static object creation tests with property-based AutoFixture tests
+  3. Add constraint validation for Alexa-specific business rules
+  4. Ensure round-trip serialization testing
+  5. Create appropriate specimen builders in TestKit
+
+## Model Testing Patterns
+- Use CardSpecimenBuilder for card types
+- Generate realistic test data that meets Alexa constraints
+- Validate both object structure AND serialization behavior
+- Test edge cases and constraint violations
