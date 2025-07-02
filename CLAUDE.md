@@ -211,6 +211,12 @@ public class MyExceptionHandler : IExceptionHandler
 - Validate both object constraints AND round-trip serialization
 - Use `dotnet run` instead of `dotnet test` for Microsoft.Testing.Platform projects
 
+## Random Number Generation Guidelines
+- **Application Code**: Use `Random.Shared.Next()` for performance
+- **Test Specimen Builders**: Use `context.Create<int>()` for determinism and reproducible tests
+- **Test Determinism**: Configure AutoFixture with seeds when needed for consistent CI/CD results
+- **Property-Based Testing**: Prefer controlled randomness over true randomness for reliable test outcomes
+
 ## Git and Development Workflow
 - Always use descriptive commit messages following conventional commit style
 - Include `🤖 Generated with [Claude Code](https://claude.ai/code)` and `Co-Authored-By: Claude <noreply@anthropic.com>` in commits

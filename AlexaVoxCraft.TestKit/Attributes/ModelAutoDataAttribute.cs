@@ -10,6 +10,13 @@ public class ModelAutoDataAttribute() : AutoDataAttribute(CreateFixture)
     {
         var fixture = new Fixture();
         
+        // Configure seeded RNG for deterministic tests
+        // Use environment variable AUTOFIXTURE_SEED for CI reproducibility, fallback to fixed seed
+        var seed = Environment.GetEnvironmentVariable("AUTOFIXTURE_SEED") != null 
+            ? int.Parse(Environment.GetEnvironmentVariable("AUTOFIXTURE_SEED")!) 
+            : 12345; // Fixed seed for local development
+        fixture.Register(() => new Random(seed));
+        
         // Add specimen builders for Model types
         fixture.Customizations.Add(new CardSpecimenBuilder());
         fixture.Customizations.Add(new DialogDirectiveSpecimenBuilder());

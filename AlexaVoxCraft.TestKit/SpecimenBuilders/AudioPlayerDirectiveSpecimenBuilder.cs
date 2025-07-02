@@ -25,7 +25,7 @@ public sealed class AudioPlayerDirectiveSpecimenBuilder : ISpecimenBuilder
     private static AudioPlayerPlayDirective CreateAudioPlayerPlayDirective(ISpecimenContext context)
     {
         var playBehaviors = new[] { PlayBehavior.ReplaceAll, PlayBehavior.Enqueue, PlayBehavior.ReplaceEnqueued };
-        var playBehavior = playBehaviors[Random.Shared.Next(playBehaviors.Length)];
+        var playBehavior = playBehaviors[context.Create<int>() % playBehaviors.Length];
 
         return new AudioPlayerPlayDirective
         {
@@ -37,7 +37,7 @@ public sealed class AudioPlayerDirectiveSpecimenBuilder : ISpecimenBuilder
     private static ClearQueueDirective CreateClearQueueDirective(ISpecimenContext context)
     {
         var clearBehaviors = new[] { ClearBehavior.ClearAll, ClearBehavior.ClearEnqueued };
-        var clearBehavior = clearBehaviors[Random.Shared.Next(clearBehaviors.Length)];
+        var clearBehavior = clearBehaviors[context.Create<int>() % clearBehaviors.Length];
 
         return new ClearQueueDirective
         {
@@ -58,7 +58,7 @@ public sealed class AudioPlayerDirectiveSpecimenBuilder : ISpecimenBuilder
         };
 
         // Randomly add metadata (50% chance)
-        if (Random.Shared.Next(2) == 0)
+        if (context.Create<bool>())
         {
             audioItem.Metadata = context.Create<AudioItemMetadata>();
         }
@@ -92,10 +92,10 @@ public sealed class AudioPlayerDirectiveSpecimenBuilder : ISpecimenBuilder
             null // Sometimes no previous token
         };
 
-        var url = urls[Random.Shared.Next(urls.Length)];
-        var token = tokens[Random.Shared.Next(tokens.Length)];
-        var previousToken = previousTokens[Random.Shared.Next(previousTokens.Length)];
-        var offset = Random.Shared.Next(60000); // 0-60 seconds in milliseconds
+        var url = urls[context.Create<int>() % urls.Length];
+        var token = tokens[context.Create<int>() % tokens.Length];
+        var previousToken = previousTokens[context.Create<int>() % previousTokens.Length];
+        var offset = context.Create<int>() % 60000; // 0-60 seconds in milliseconds
 
         return new AudioItemStream
         {
@@ -124,8 +124,8 @@ public sealed class AudioPlayerDirectiveSpecimenBuilder : ISpecimenBuilder
             "From the Latest Album"
         };
 
-        var title = titles[Random.Shared.Next(titles.Length)];
-        var subtitle = subtitles[Random.Shared.Next(subtitles.Length)];
+        var title = titles[context.Create<int>() % titles.Length];
+        var subtitle = subtitles[context.Create<int>() % subtitles.Length];
 
         return new AudioItemMetadata
         {
@@ -138,7 +138,7 @@ public sealed class AudioPlayerDirectiveSpecimenBuilder : ISpecimenBuilder
 
     private static AudioItemSources CreateAudioItemSources(ISpecimenContext context)
     {
-        var sourceCount = Random.Shared.Next(1, 4); // 1-3 sources
+        var sourceCount = context.Create<int>() % 3 + 1; // 1-3 sources
         var sources = new List<AudioItemSource>();
 
         for (int i = 0; i < sourceCount; i++)
@@ -162,7 +162,7 @@ public sealed class AudioPlayerDirectiveSpecimenBuilder : ISpecimenBuilder
             "https://example.com/images/background.jpg"
         };
 
-        var url = imageUrls[Random.Shared.Next(imageUrls.Length)];
+        var url = imageUrls[context.Create<int>() % imageUrls.Length];
 
         return new AudioItemSource(url);
     }

@@ -57,7 +57,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
     private static DialogElicitSlot CreateDialogElicitSlot(ISpecimenContext context)
     {
         var slotNames = new[] { "ZodiacSign", "Date", "Time", "Location", "Number" };
-        var slotName = slotNames[Random.Shared.Next(slotNames.Length)];
+        var slotName = slotNames[context.Create<int>() % slotNames.Length];
         
         return new DialogElicitSlot(slotName)
         {
@@ -68,7 +68,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
     private static DialogConfirmSlot CreateDialogConfirmSlot(ISpecimenContext context)
     {
         var slotNames = new[] { "Date", "Time", "Location", "Amount", "Confirmation" };
-        var slotName = slotNames[Random.Shared.Next(slotNames.Length)];
+        var slotName = slotNames[context.Create<int>() % slotNames.Length];
         
         return new DialogConfirmSlot(slotName)
         {
@@ -87,14 +87,14 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
     private static DialogUpdateDynamicEntities CreateDialogUpdateDynamicEntities(ISpecimenContext context)
     {
         var updateBehaviors = new[] { UpdateBehavior.Replace, UpdateBehavior.Clear };
-        var updateBehavior = updateBehaviors[Random.Shared.Next(updateBehaviors.Length)];
+        var updateBehavior = updateBehaviors[context.Create<int>() % updateBehaviors.Length];
         
         var directive = new DialogUpdateDynamicEntities
         {
             UpdateBehavior = updateBehavior
         };
         
-        var typeCount = Random.Shared.Next(1, 4); // 1-3 slot types
+        var typeCount = context.Create<int>() % 3 + 1; // 1-3 slot types
         for (int i = 0; i < typeCount; i++)
         {
             directive.Types.Add(CreateSlotType(context));
@@ -111,12 +111,12 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
             "WeatherIntent", "PlayMusicIntent"
         };
         
-        var intentName = intentNames[Random.Shared.Next(intentNames.Length)];
+        var intentName = intentNames[context.Create<int>() % intentNames.Length];
         var confirmationStatuses = new[]
         {
             ConfirmationStatus.None, ConfirmationStatus.Confirmed, ConfirmationStatus.Denied
         };
-        var confirmationStatus = confirmationStatuses[Random.Shared.Next(confirmationStatuses.Length)];
+        var confirmationStatus = confirmationStatuses[context.Create<int>() % confirmationStatuses.Length];
         
         var intent = new Intent
         {
@@ -125,7 +125,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
             Slots = new Dictionary<string, Slot>()
         };
         
-        var slotCount = Random.Shared.Next(1, 4); // 1-3 slots
+        var slotCount = context.Create<int>() % 3 + 1; // 1-3 slots
         var slotNames = new[] { "ZodiacSign", "Date", "Time", "Location", "Number" };
         
         for (int i = 0; i < slotCount && i < slotNames.Length; i++)
@@ -139,7 +139,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
     private static Slot CreateSlot(ISpecimenContext context, string slotName = null)
     {
         var slotNames = new[] { "ZodiacSign", "Date", "Time", "Location", "Number" };
-        var name = slotName ?? slotNames[Random.Shared.Next(slotNames.Length)];
+        var name = slotName ?? slotNames[context.Create<int>() % slotNames.Length];
         
         var values = new Dictionary<string, string[]>
         {
@@ -151,14 +151,14 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
         };
         
         var value = values.ContainsKey(name) 
-            ? values[name][Random.Shared.Next(values[name].Length)]
-            : $"value_{Random.Shared.Next(100)}";
+            ? values[name][context.Create<int>() % values[name].Length]
+            : $"value_{context.Create<int>() % 100}";
         
         var confirmationStatuses = new[]
         {
             ConfirmationStatus.None, ConfirmationStatus.Confirmed, ConfirmationStatus.Denied
         };
-        var confirmationStatus = confirmationStatuses[Random.Shared.Next(confirmationStatuses.Length)];
+        var confirmationStatus = confirmationStatuses[context.Create<int>() % confirmationStatuses.Length];
         
         return new Slot
         {
@@ -171,7 +171,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
     private static SlotType CreateSlotType(ISpecimenContext context)
     {
         var typeNames = new[] { "AirportSlotType", "CitySlotType", "FoodSlotType" };
-        var typeName = typeNames[Random.Shared.Next(typeNames.Length)];
+        var typeName = typeNames[context.Create<int>() % typeNames.Length];
         
         var slotType = new SlotType
         {
@@ -179,7 +179,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
             Values = new SlotTypeValue[0]
         };
         
-        var valueCount = Random.Shared.Next(1, 4); // 1-3 values
+        var valueCount = context.Create<int>() % 3 + 1; // 1-3 values
         var values = new List<SlotTypeValue>();
         
         for (int i = 0; i < valueCount; i++)
@@ -194,7 +194,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
     private static SlotTypeValue CreateSlotTypeValue(ISpecimenContext context)
     {
         var ids = new[] { "BOS", "LGA", "JFK", "LAX", "SEA" };
-        var id = ids[Random.Shared.Next(ids.Length)];
+        var id = ids[context.Create<int>() % ids.Length];
         
         return new SlotTypeValue
         {
@@ -210,7 +210,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
             "Logan International Airport", "LaGuardia Airport", "JFK Airport",
             "Los Angeles International", "Seattle-Tacoma International"
         };
-        var value = values[Random.Shared.Next(values.Length)];
+        var value = values[context.Create<int>() % values.Length];
         
         var synonyms = new[]
         {
@@ -220,7 +220,7 @@ public sealed class DialogDirectiveSpecimenBuilder : ISpecimenBuilder
             new[] { "LAX" },
             new[] { "Sea-Tac" }
         };
-        var synonym = synonyms[Random.Shared.Next(synonyms.Length)];
+        var synonym = synonyms[context.Create<int>() % synonyms.Length];
         
         return new SlotTypeValueName
         {

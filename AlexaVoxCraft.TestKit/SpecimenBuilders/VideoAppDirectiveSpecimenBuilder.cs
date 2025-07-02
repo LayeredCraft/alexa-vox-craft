@@ -35,12 +35,12 @@ public sealed class VideoAppDirectiveSpecimenBuilder : ISpecimenBuilder
             "https://example.com/streams/live-video.m3u8"
         };
 
-        var url = videoUrls[Random.Shared.Next(videoUrls.Length)];
+        var url = videoUrls[context.Create<int>() % videoUrls.Length];
 
         var videoItem = new VideoItem(url);
 
         // Randomly add metadata (70% chance)
-        if (Random.Shared.Next(10) < 7)
+        if (context.Create<int>() % 10 < 7)
         {
             videoItem.Metadata = context.Create<VideoItemMetadata>();
         }
@@ -68,8 +68,8 @@ public sealed class VideoAppDirectiveSpecimenBuilder : ISpecimenBuilder
             "Learn Something New"
         };
 
-        var title = titles[Random.Shared.Next(titles.Length)];
-        var subtitle = subtitles[Random.Shared.Next(subtitles.Length)];
+        var title = titles[context.Create<int>() % titles.Length];
+        var subtitle = subtitles[context.Create<int>() % subtitles.Length];
 
         return new VideoItemMetadata
         {
