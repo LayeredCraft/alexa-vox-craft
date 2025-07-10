@@ -8,6 +8,12 @@ on:
       - release/*
     tags:
       - v*
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'ROADMAP.md'
+      - 'mkdocs.yml'
+      - 'requirements.txt'
 permissions: write-all
 jobs:
   build:

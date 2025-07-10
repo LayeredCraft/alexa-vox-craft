@@ -1,0 +1,100 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* Custom styles for AlexaVoxCraft documentation */
+
+/* Improve code block styling */
+pre {
+  border-radius: 6px;
+  border: 1px solid #e1e4e8;
+}
+
+/* Better table styling */
+table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+}
+
+table th,
+table td {
+  border: 1px solid #e1e4e8;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+}
+
+/* Improve navigation styling */
+.header-nav {
+  margin-top: 1em;
+}
+
+.header-nav a {
+  margin-right: 1em;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.header-nav a:hover {
+  text-decoration: underline;
+}
+
+/* Badge styling for version, build status, etc. */
+.badges {
+  margin: 1em 0;
+}
+
+.badges img {
+  margin-right: 0.5em;
+}
+
+/* Better spacing for documentation sections */
+.main-content h2 {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 0.5em;
+}
+
+.main-content h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Improve blockquote styling */
+blockquote {
+  border-left: 4px solid #0366d6;
+  padding-left: 1em;
+  margin-left: 0;
+  color: #6a737d;
+}
+
+/* Custom alert boxes */
+.alert {
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 6px;
+  border-left: 4px solid;
+}
+
+.alert-info {
+  background-color: #f0f8ff;
+  border-left-color: #0366d6;
+}
+
+.alert-warning {
+  background-color: #fffbf0;
+  border-left-color: #f9c513;
+}
+
+.alert-success {
+  background-color: #f0fff4;
+  border-left-color: #28a745;
+}
