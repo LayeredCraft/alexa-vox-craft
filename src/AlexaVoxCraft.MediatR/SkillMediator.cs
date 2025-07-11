@@ -10,18 +10,29 @@ using Microsoft.Extensions.Options;
 
 namespace AlexaVoxCraft.MediatR;
 
+/// <summary>
+/// Default implementation of <see cref="ISkillMediator"/> that routes Alexa skill requests
+/// to appropriate handlers with built-in skill ID verification, caching, and structured logging.
+/// </summary>
 public class SkillMediator : ISkillMediator
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly SkillServiceConfiguration _serviceConfiguration;
     private static readonly ConcurrentDictionary<Type, RequestHandlerWrapper> RequestHandlers = new();
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SkillMediator"/> class.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider for resolving dependencies.</param>
+    /// <param name="serviceConfiguration">The skill service configuration containing skill ID and other settings.</param>
+    /// <exception cref="ArgumentNullException">Thrown when serviceProvider or serviceConfiguration is null.</exception>
     public SkillMediator(IServiceProvider serviceProvider, IOptions<SkillServiceConfiguration> serviceConfiguration)
     {
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         _serviceConfiguration = serviceConfiguration.Value ?? throw new ArgumentNullException(nameof(serviceConfiguration));
     }
 
+    /// <inheritdoc />
     public Task<SkillResponse> Send(SkillRequest request, CancellationToken cancellationToken = default)
     {
         var logger = _serviceProvider.GetRequiredService<ILogger<SkillMediator>>();
