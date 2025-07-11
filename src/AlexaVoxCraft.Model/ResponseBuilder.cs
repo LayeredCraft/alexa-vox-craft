@@ -4,14 +4,32 @@ using AlexaVoxCraft.Model.Response.Directive;
 
 namespace AlexaVoxCraft.Model;
 
+/// <summary>
+/// Provides static factory methods for building common Alexa skill responses.
+/// This class offers a convenient fluent API for creating responses with speech output,
+/// cards, directives, and session management. It supports both simple responses (Tell)
+/// and conversational responses (Ask) with various combinations of output types.
+/// </summary>
 public class ResponseBuilder
 {
     #region Tell Responses
+    /// <summary>
+    /// Creates a response that speaks the provided output and ends the session.
+    /// Use this for final responses where the user interaction is complete.
+    /// </summary>
+    /// <param name="speechResponse">The speech output to send to the user.</param>
+    /// <returns>A skill response that speaks the output and ends the session.</returns>
     public static SkillResponse Tell(IOutputSpeech speechResponse)
     {
         return BuildResponse(speechResponse, true, null, null, null);
     }
 
+    /// <summary>
+    /// Creates a response that speaks the provided text and ends the session.
+    /// The text will be converted to plain text speech output.
+    /// </summary>
+    /// <param name="speechResponse">The text to speak to the user.</param>
+    /// <returns>A skill response that speaks the text and ends the session.</returns>
     public static SkillResponse Tell(string speechResponse)
     {
         return Tell(new PlainTextOutputSpeech { Text = speechResponse });
@@ -176,11 +194,25 @@ public class ResponseBuilder
     #endregion
 
     #region Ask Responses
+    /// <summary>
+    /// Creates a response that asks the user for input by speaking the provided output
+    /// and keeping the session open. Includes a reprompt in case the user doesn't respond.
+    /// </summary>
+    /// <param name="speechResponse">The speech output to send to the user.</param>
+    /// <param name="reprompt">The reprompt to use if the user doesn't respond.</param>
+    /// <returns>A skill response that asks for user input and keeps the session open.</returns>
     public static SkillResponse Ask(IOutputSpeech speechResponse, Reprompt reprompt)
     {
         return BuildResponse(speechResponse, false, null, reprompt, null);
     }
 
+    /// <summary>
+    /// Creates a response that asks the user for input by speaking the provided text
+    /// and keeping the session open. Includes a reprompt in case the user doesn't respond.
+    /// </summary>
+    /// <param name="speechResponse">The text to speak to the user.</param>
+    /// <param name="reprompt">The reprompt to use if the user doesn't respond.</param>
+    /// <returns>A skill response that asks for user input and keeps the session open.</returns>
     public static SkillResponse Ask(string speechResponse, Reprompt reprompt)
     {
         return Ask(new PlainTextOutputSpeech {Text = speechResponse}, reprompt);

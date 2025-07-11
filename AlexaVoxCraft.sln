@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{07C12036-28B
 		.gitignore = .gitignore
 		.github\workflows\build.yaml = .github\workflows\build.yaml
 		.github\workflows\pr-build.yaml = .github\workflows\pr-build.yaml
+		.github\workflows\docs.yml = .github\workflows\docs.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{7756AA98-6912-4579-AB67-979A9FD0EC05}"
@@ -53,6 +54,37 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaVoxCraft.MediatR.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaVoxCraft.TestKit", "AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj", "{26BF328D-12FC-44BB-B48E-55D97750CA32}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{1039EB74-CB70-468D-B14B-3401F4C2582C}"
+	ProjectSection(SolutionItems) = preProject
+		docs\index.md = docs\index.md
+		mkdocs.yml = mkdocs.yml
+		requirements.txt = requirements.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{8F9F8CE9-B458-4866-929E-9DAAEFF0D2A8}"
+	ProjectSection(SolutionItems) = preProject
+		docs\assets\icon.png = docs\assets\icon.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "css", "css", "{172D355B-01D2-4989-995D-550FB8629FD1}"
+	ProjectSection(SolutionItems) = preProject
+		docs\assets\css\style.scss = docs\assets\css\style.scss
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{7A5BB185-C3B3-40C1-9B72-FE5017E1BF13}"
+	ProjectSection(SolutionItems) = preProject
+		docs\components\lambda-hosting.md = docs\components\lambda-hosting.md
+		docs\components\apl-integration.md = docs\components\apl-integration.md
+		docs\components\request-handling.md = docs\components\request-handling.md
+		docs\components\pipeline-behaviors.md = docs\components\pipeline-behaviors.md
+		docs\components\session-management.md = docs\components\session-management.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{7CFD232D-67DA-4E70-BF89-C019CF445235}"
+	ProjectSection(SolutionItems) = preProject
+		docs\examples\index.md = docs\examples\index.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +107,10 @@ Global
 		{DBA4C29E-50DA-455F-B403-B721243A10A6} = {C2B189AA-0578-45AF-9E85-C77A5DB87DF8}
 		{CED7E118-84FE-449D-ACFD-18BEAB55B998} = {C2B189AA-0578-45AF-9E85-C77A5DB87DF8}
 		{26BF328D-12FC-44BB-B48E-55D97750CA32} = {C2B189AA-0578-45AF-9E85-C77A5DB87DF8}
+		{8F9F8CE9-B458-4866-929E-9DAAEFF0D2A8} = {1039EB74-CB70-468D-B14B-3401F4C2582C}
+		{172D355B-01D2-4989-995D-550FB8629FD1} = {8F9F8CE9-B458-4866-929E-9DAAEFF0D2A8}
+		{7A5BB185-C3B3-40C1-9B72-FE5017E1BF13} = {1039EB74-CB70-468D-B14B-3401F4C2582C}
+		{7CFD232D-67DA-4E70-BF89-C019CF445235} = {1039EB74-CB70-468D-B14B-3401F4C2582C}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CF7334AB-47AA-4CEE-8D3B-A79142D7E0D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
