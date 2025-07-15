@@ -20,7 +20,6 @@ AlexaVoxCraft is a modular C# .NET library for building Amazon Alexa skills usin
 - **AlexaVoxCraft.Model.Apl**: Comprehensive APL components and document support
 - **AlexaVoxCraft.MediatR**: Core MediatR integration for request handling patterns
 - **AlexaVoxCraft.MediatR.Lambda**: AWS Lambda hosting with middleware
-- **AlexaVoxCraft.Logging**: Alexa-specific logging components with AWS CloudWatch compatibility
 
 ### Request Handling Pattern
 
@@ -132,10 +131,10 @@ Use `aws-lambda-tools-defaults.json` in skill projects to configure Lambda packa
 
 ## Logging Configuration
 
-**AlexaVoxCraft.Logging** now builds on **LayeredCraft.StructuredLogging** for general logging functionality and provides Alexa-specific components:
-- `AlexaCompactJsonFormatter`: AWS CloudWatch-compatible JSON formatter 
+For structured logging with AWS CloudWatch compatibility, use **LayeredCraft.Logging.CompactJsonFormatter**:
+- `CompactJsonFormatter`: AWS CloudWatch-compatible JSON formatter 
 - Renames reserved fields: `@t` → `_t`, `@l` → `_l`, `@m` → `_m`
-- For structured logging extensions, use `LayeredCraft.StructuredLogging.Extensions`
+- For additional structured logging features, use `LayeredCraft.StructuredLogging.Extensions`
 
 Enable request/response logging in development:
 ```json

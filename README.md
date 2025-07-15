@@ -19,7 +19,6 @@
 | **AlexaVoxCraft.Model.Apl**      | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.Apl.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.Apl)           | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.Apl.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.Apl/)           |
 | **AlexaVoxCraft.MediatR.Lambda** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/) |
 | **AlexaVoxCraft.MediatR**        | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR)               | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR/)               |
-| **AlexaVoxCraft.Logging**        | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Logging.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Logging)               | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Logging.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Logging/)               |
 
 [![Build Status](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml/badge.svg)](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml)
 
@@ -34,8 +33,8 @@ dotnet add package AlexaVoxCraft.MediatR.Lambda
 # APL visual interface support (optional)
 dotnet add package AlexaVoxCraft.Model.Apl
 
-# Structured logging for Alexa skills (optional)
-dotnet add package AlexaVoxCraft.Logging
+# CloudWatch-compatible JSON logging (optional)
+dotnet add package LayeredCraft.Logging.CompactJsonFormatter
 ```
 
 ### Create a Basic Skill
@@ -103,7 +102,6 @@ AlexaVoxCraft/
 │   ├── 📦 AlexaVoxCraft.Model.Apl/      # APL (Alexa Presentation Language) support
 │   ├── 📦 AlexaVoxCraft.MediatR/        # MediatR integration & request handling
 │   ├── 📦 AlexaVoxCraft.MediatR.Lambda/ # AWS Lambda hosting & runtime
-│   └── 📦 AlexaVoxCraft.Logging/        # Alexa-specific logging for AWS
 │
 ├── 📂 samples/                          # Working example projects
 │   ├── 📱 Sample.Skill.Function/        # Basic Alexa skill demonstration
@@ -114,7 +112,6 @@ AlexaVoxCraft/
 │   ├── 🧪 AlexaVoxCraft.Model.Apl.Tests/ # APL functionality tests
 │   ├── 🧪 AlexaVoxCraft.MediatR.Tests/  # MediatR integration tests
 │   ├── 🧪 AlexaVoxCraft.MediatR.Lambda.Tests/ # Lambda hosting tests
-│   └── 🧪 AlexaVoxCraft.Logging.Tests/  # Logging functionality tests
 │
 ├── 📂 AlexaVoxCraft.TestKit/            # Testing utilities & AutoFixture support
 ├── 📂 docs/                             # Documentation source
@@ -139,7 +136,6 @@ Skills use the MediatR pattern where:
 | **AlexaVoxCraft.Model.Apl** | APL support | 40+ components, commands, audio, vector graphics, extensions (DataStore, SmartMotion) |
 | **AlexaVoxCraft.MediatR** | Request handling | Handler routing, pipeline behaviors, attributes management, DI integration |
 | **AlexaVoxCraft.MediatR.Lambda** | Lambda hosting | AWS Lambda functions, context management, custom serialization, hosting extensions |
-| **AlexaVoxCraft.Logging** | Alexa-specific logging | AWS CloudWatch-compatible JSON formatter, built on LayeredCraft.StructuredLogging |
 
 ## 🧪 Testing
 
@@ -181,7 +177,6 @@ PRs are welcome! Please submit issues and ideas to help make this toolkit even b
 >
 > - Core Alexa skill models (`AlexaVoxCraft.Model`) based on [timheuer/alexa-skills-dotnet](https://github.com/timheuer/alexa-skills-dotnet)
 > - APL support (`AlexaVoxCraft.Model.Apl`) based on [stoiveyp/Alexa.NET.APL](https://github.com/stoiveyp/Alexa.NET.APL)
-> - `AlexaCompactJsonFormatter` adapted from [Serilog.Formatting.Compact](https://github.com/serilog/serilog-formatting-compact)
 
 ## 📜 License
 

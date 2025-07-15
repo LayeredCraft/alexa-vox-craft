@@ -1,4 +1,4 @@
-using AlexaVoxCraft.Logging.Serialization;
+using LayeredCraft.Logging.CompactJsonFormatter;
 using AlexaVoxCraft.MediatR.Lambda.Serialization;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
@@ -23,7 +23,7 @@ public static class LambdaHostExtensions
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
-                .WriteTo.Console(new AlexaCompactJsonFormatter())
+                .WriteTo.Console(new CompactJsonFormatter())
                 .Destructure.With(new SystemTextDestructuringPolicy())
                 .CreateBootstrapLogger();
 
