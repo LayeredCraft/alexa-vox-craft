@@ -22,12 +22,12 @@
     <ItemGroup>
         <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.13.1" />
         <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4"/>
+        <PackageReference Include="LayeredCraft.Logging.CompactJsonFormatter" Version="1.0.0.2" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AlexaVoxCraft.Logging\AlexaVoxCraft.Logging.csproj" />
         <ProjectReference Include="..\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
     </ItemGroup>
 

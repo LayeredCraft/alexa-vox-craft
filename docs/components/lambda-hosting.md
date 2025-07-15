@@ -268,7 +268,7 @@ public class ActivitySourceRequestHandlerDecorator<TRequest> : IRequestHandler<T
       {
         "Name": "Console",
         "Args": {
-          "formatter": "AlexaVoxCraft.Logging.Serialization.AlexaCompactJsonFormatter, AlexaVoxCraft.Logging"
+          "formatter": "LayeredCraft.Logging.CompactJsonFormatter.CompactJsonFormatter, LayeredCraft.Logging.CompactJsonFormatter"
         }
       }
     ],
@@ -409,7 +409,7 @@ Runtime: provided.al2023
     {
       "Name": "Console",
       "Args": {
-        "formatter": "AlexaVoxCraft.Logging.Serialization.AlexaCompactJsonFormatter, AlexaVoxCraft.Logging"
+        "formatter": "LayeredCraft.Logging.CompactJsonFormatter.CompactJsonFormatter, LayeredCraft.Logging.CompactJsonFormatter"
       }
     }
   ]
