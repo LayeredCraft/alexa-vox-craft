@@ -10,6 +10,8 @@ public static class AlexaJsonOptions
     private static readonly List<Action<JsonTypeInfo>> AdditionalModifiers = [];
     
     private static readonly List<JsonConverter> AdditionalConverters = [];
+    
+    private static readonly List<IJsonTypeInfoResolver> AdditionalResolvers = [];
 
     public static JsonSerializerOptions DefaultOptions
     {
@@ -24,9 +26,14 @@ public static class AlexaJsonOptions
                 resolver.Modifiers.Add(modifier);
             }
 
+            // Combine all resolvers: source generation contexts first, then custom resolver
+            var allResolvers = new List<IJsonTypeInfoResolver> { AlexaJsonContext.Default };
+            allResolvers.AddRange(AdditionalResolvers);
+            allResolvers.Add(resolver);
+            
             var options = new JsonSerializerOptions
             {
-                TypeInfoResolver = resolver
+                TypeInfoResolver = JsonTypeInfoResolver.Combine(allResolvers.ToArray())
             };
             
             options.Converters.Add(new ObjectConverter());
@@ -55,5 +62,10 @@ public static class AlexaJsonOptions
                 modifier(ti);
             }
         });
+    }
+    
+    public static void RegisterTypeInfoResolver(IJsonTypeInfoResolver resolver)
+    {
+        AdditionalResolvers.Add(resolver);
     }
 }

@@ -6,7 +6,9 @@ using AlexaVoxCraft.Model.Apl.DataStore;
 using AlexaVoxCraft.Model.Apl.DataStore.PackageManager;
 using AlexaVoxCraft.Model.Apl.Gestures;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Apl.Serialization;
 using AlexaVoxCraft.Model.Apl.VectorGraphics;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl;
 
@@ -14,6 +16,10 @@ public static class APLSupport
 {
     public static void Add()
     {
+        // Register APL JSON source generation for optimal performance
+        AlexaJsonOptions.RegisterTypeInfoResolver(AplJsonContext.Default);
+        
+        // Keep essential non-serialization setup calls
         RenderDocumentDirective.AddSupport();
         ExecuteCommandsDirective.AddSupport();
         SendIndexListDataDirective.AddSupport();
@@ -29,110 +35,11 @@ public static class APLSupport
         InstallationErrorHandler.AddToRequestConverter();
         DataStoreErrorHandler.AddToRequestConverter();
         FixedDecimalJsonConverter.AddSupport();
-        // Add support for models
-        Parameter.RegisterTypeInfo<Parameter>();
-        CommandDefinition.RegisterTypeInfo<CommandDefinition>();
-        Select.AddSupport();
-        InsertItem.RegisterTypeInfo<InsertItem>();
-        AudioLayout.AddSupport();
-        Audio.Audio.AddSupport();
-        APLAMultiChildComponent.AddSupport();
-        Sequencer.AddSupport();
-        Selector.AddSupport();
-        DynamicIndexList.RegisterTypeInfo<DynamicIndexList>();
-        DynamicTokenList.RegisterTypeInfo<DynamicTokenList>();
-        Mixer.AddSupport();
-        Style.RegisterTypeInfo<Style>();
-        AVG.AddSupport();
-        APLDocument.RegisterTypeInfo<APLDocument>();
-        APLKeyboardHandler.AddSupport();
-        Import.RegisterTypeInfo<Import>();
-        Sequential.AddSupport();
-        Parallel.AddSupport();
-        APLDocumentBase.RegisterTypeInfo<APLDocumentBase>();
-        APLTDocument.AddSupport();
-        Layout.AddSupport();
-        APLDocumentEnvironment.AddSupport();
-        APLComponentBase.RegisterTypeInfo<APLComponentBase>();
-        APLComponent.RegisterTypeInfo<APLComponent>();
-        Container.RegisterTypeInfo<Container>();
-        Image.RegisterTypeInfo<Image>();
-        TextBase.RegisterTypeInfo<TextBase>();
-        Text.RegisterTypeInfo<Text>();
-        OpenURL.RegisterTypeInfo<OpenURL>();
-        ActionableComponent.RegisterTypeInfo<ActionableComponent>();
-        ScrollView.RegisterTypeInfo<ScrollView>();
-        AnimateItem.RegisterTypeInfo<AnimateItem>();
+        
+        // Register custom type modifiers for types that need special serialization behavior
         Binding.RegisterTypeInfo<Binding>();
-        Video.RegisterTypeInfo<Video>();
-        VideoSource.RegisterTypeInfo<VideoSource>();
-        TimeText.RegisterTypeInfo<TimeText>();
-        TouchComponent.RegisterTypeInfo<TouchComponent>();
-        TouchWrapper.RegisterTypeInfo<TouchWrapper>();
-        DoublePress.RegisterTypeInfo<DoublePress>();
-        LongPress.RegisterTypeInfo<LongPress>();
-        SwipeAway.RegisterTypeInfo<SwipeAway>();
-        Tap.RegisterTypeInfo<Tap>();
-        APLAction.RegisterTypeInfo<APLAction>();
-        AlexaIconButton.RegisterTypeInfo<AlexaIconButton>();
-        AlexaListItem.RegisterTypeInfo<AlexaListItem>();
-        AlexaPaginatedListItem.RegisterTypeInfo<AlexaPaginatedListItem>();
-        AlexaImageListItem.RegisterTypeInfo<AlexaImageListItem>();
-        AlexaRating.RegisterTypeInfo<AlexaRating>();
-        ResponsiveTemplate.RegisterTypeInfo<ResponsiveTemplate>();
-        AlexaImageListBase.RegisterTypeInfo<AlexaImageListBase>();
-        AlexaImageList.RegisterTypeInfo<AlexaImageList>();
-        AlexaLists.RegisterTypeInfo<AlexaLists>();
-        AlexaPaginatedList.RegisterTypeInfo<AlexaPaginatedList>();
-        TickHandler.RegisterTypeInfo<TickHandler>();
-        Frame.RegisterTypeInfo<Frame>();
-        AlexaProgressBarBase.RegisterTypeInfo<AlexaProgressBar>();
-        AlexaProgressBar.RegisterTypeInfo<AlexaProgressBar>();
-        AlexaProgressBarRadial.RegisterTypeInfo<AlexaProgressBarRadial>();
-        AlexaProgressDots.RegisterTypeInfo<AlexaProgressDots>();
-        AlexaSliderBase.RegisterTypeInfo<AlexaSlider>();
-        AlexaSlider.RegisterTypeInfo<AlexaSlider>();
-        AlexaSliderRadial.RegisterTypeInfo<AlexaSliderRadial>();
-        AlexaDetail.RegisterTypeInfo<AlexaDetail>();
-        IngredientListItem.RegisterTypeInfo<IngredientListItem>();
-        AlexaGridList.RegisterTypeInfo<AlexaGridList>();
-        EditText.RegisterTypeInfo<EditText>();
-        AlexaSwipeToAction.RegisterTypeInfo<AlexaSwipeToAction>();
-        AlexaRadioButton.RegisterTypeInfo<AlexaRadioButton>();
-        AlexaCheckbox.RegisterTypeInfo<AlexaCheckbox>();
-        AlexaSwitch.RegisterTypeInfo<AlexaSwitch>();
-        GridSequence.RegisterTypeInfo<GridSequence>();
-        Pager.RegisterTypeInfo<Pager>();
-        APLPageMoveHandler.RegisterTypeInfo<APLPageMoveHandler>();
-        AlexaIcon.RegisterTypeInfo<AlexaIcon>();
-        AlexaCard.RegisterTypeInfo<AlexaCard>();
-        AlexaImageCaption.RegisterTypeInfo<AlexaImageCaption>();
-        AlexaPhoto.RegisterTypeInfo<AlexaPhoto>();
-        AlexaTextWrapping.RegisterTypeInfo<AlexaTextWrapping>();
-        CommandsTarget.RegisterTypeInfo<CommandsTarget>();
-        AlexaFooter.RegisterTypeInfo<AlexaFooter>();
-        ExecuteCommandsDirective.RegisterTypeInfo<ExecuteCommandsDirective>();
-        ListDataDirective.RegisterTypeInfo<ListDataDirective>();
-        SendIndexListDataDirective.RegisterTypeInfo<SendIndexListDataDirective>();
-        SendTokenListDataDirective.RegisterTypeInfo<SendTokenListDataDirective>();
-        AVGItem.RegisterTypeInfo<AVGItem>();
-        AVGPath.RegisterTypeInfo<AVGPath>();
-        AVGGroup.RegisterTypeInfo<AVGGroup>();
-        AVGText.RegisterTypeInfo<AVGText>();
-        AlexaHeader.RegisterTypeInfo<AlexaHeader>();
-        AlexaImage.RegisterTypeInfo<AlexaImage>();
-        VisibilityChangeHandler.RegisterTypeInfo<VisibilityChangeHandler>();
-        PlayMedia.RegisterTypeInfo<PlayMedia>();
-        AlexaBackground.RegisterTypeInfo<AlexaBackground>();
-        AlexaButton.RegisterTypeInfo<AlexaButton>();
-        AlexaDivider.RegisterTypeInfo<AlexaDivider>();
-        AlexaHeadline.RegisterTypeInfo<AlexaHeadline>();
-        AlexaOrdinal.RegisterTypeInfo<AlexaOrdinal>();
-        AlexaPageCounter.RegisterTypeInfo<AlexaPageCounter>();
-        AlexaTextList.RegisterTypeInfo<AlexaTextList>();
-        AlexaTextListItem.RegisterTypeInfo<AlexaTextListItem>();
-        AlexaTransportControls.RegisterTypeInfo<AlexaTransportControls>();
-        Sequence.RegisterTypeInfo<Sequence>();
-        VectorGraphic.RegisterTypeInfo<VectorGraphic>();
+        
+        // NOTE: Most RegisterTypeInfo<T>() calls have been replaced by AplJsonContext.Default
+        // which provides source generation for all ~100+ APL types for better performance
     }
 }

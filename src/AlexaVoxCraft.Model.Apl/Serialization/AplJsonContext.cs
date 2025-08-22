@@ -146,6 +146,8 @@ namespace AlexaVoxCraft.Model.Apl.Serialization;
 [JsonSerializable(typeof(VideoSource))]
 [JsonSerializable(typeof(TextTrack))]
 [JsonSerializable(typeof(TimeText))]
+[JsonSerializable(typeof(Binding))]
+[JsonSerializable(typeof(VisibilityChangeHandler))]
 // APL Enum types for proper serialization
 [JsonSerializable(typeof(ContentDirection))]
 [JsonSerializable(typeof(LayoutDirection))]
@@ -169,6 +171,7 @@ namespace AlexaVoxCraft.Model.Apl.Serialization;
 [JsonSerializable(typeof(RepeatMode))]
 [JsonSerializable(typeof(ItemAlignment))]
 [JsonSerializable(typeof(HighlightMode))]
+[JsonSerializable(typeof(ParameterType))]
 public partial class AplJsonContext : JsonSerializerContext
 {
 }
