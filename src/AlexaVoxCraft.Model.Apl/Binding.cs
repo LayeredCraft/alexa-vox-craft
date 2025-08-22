@@ -19,7 +19,7 @@ public class Binding : IJsonSerializable<Binding>
     public APLValue<IList<APLCommand>>? Commands { get; set; }
 
     [JsonConstructor]
-    internal Binding()
+    private Binding()
     {
     }
 
