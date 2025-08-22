@@ -10,10 +10,10 @@ public class Sentence:IParagraphSsml
 
     public Sentence(params ISentenceSsml[] elements)
     {
-        Elements = elements.ToList();
+        Elements = [.. elements];
     }
 
-    public List<ISentenceSsml> Elements { get; set; } = new List<ISentenceSsml>();
+    public List<ISentenceSsml> Elements { get; set; } = [];
 
     public XNode ToXml()
     {

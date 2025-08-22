@@ -6,7 +6,7 @@ public class Lang:ICommonSsml
 {
     public string LanguageCode { get; set; }
 
-    public List<ISsml> Elements { get; set; } = new List<ISsml>();
+    public List<ISsml> Elements { get; set; } = [];
 
     public Lang(string languageCode)
     {
@@ -16,7 +16,7 @@ public class Lang:ICommonSsml
     public Lang(string languageCode, params ISsml[] elements)
     {
         LanguageCode = languageCode ?? throw new ArgumentNullException(nameof(languageCode));
-        Elements = elements.ToList();
+        Elements = [.. elements];
     }
 
     public XNode ToXml()

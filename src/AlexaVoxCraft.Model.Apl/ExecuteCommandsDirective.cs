@@ -29,7 +29,7 @@ public class ExecuteCommandsDirective : IDirective, IJsonSerializable<ExecuteCom
     public ExecuteCommandsDirective(string token, IEnumerable<APLCommand> commands) :
         this(token)
     {
-        Commands = commands.ToList();
+        Commands = [.. commands];
     }
 
     public ExecuteCommandsDirective(string token, params APLCommand[] commands) :

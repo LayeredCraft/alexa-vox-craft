@@ -8,16 +8,13 @@ public class RequestConverter : JsonConverter<Request>
 {
     private static readonly List<IRequestTypeResolver> RequestTypeResolvers =
     [
-        ..new IRequestTypeResolver[]
-        {
-            new DefaultRequestTypeResolver(),
-            new AudioPlayerRequestTypeResolver(),
-            new PlaybackRequestTypeResolver(),
-            new TemplateEventRequestTypeResolver(),
-            new SkillEventRequestTypeResolver(),
-            new SkillConnectionRequestTypeResolver(),
-            new ConnectionResponseTypeResolver()
-        }
+        new DefaultRequestTypeResolver(),
+        new AudioPlayerRequestTypeResolver(),
+        new PlaybackRequestTypeResolver(),
+        new TemplateEventRequestTypeResolver(),
+        new SkillEventRequestTypeResolver(),
+        new SkillConnectionRequestTypeResolver(),
+        new ConnectionResponseTypeResolver()
     ];
 
     public static void RegisterRequestTypeResolver<TResolver>() where TResolver : IRequestTypeResolver, new()

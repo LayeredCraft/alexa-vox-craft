@@ -4,13 +4,13 @@ namespace AlexaVoxCraft.Model.Response.Ssml;
 
 public class Paragraph : ISsml
 {
-    public List<IParagraphSsml> Elements {get;set;} = new List<IParagraphSsml>();
+    public List<IParagraphSsml> Elements {get;set;} = [];
 
     public Paragraph() { }
 
     public Paragraph(params IParagraphSsml[] elements)
     {
-        Elements = elements.ToList();
+        Elements = [.. elements];
     }
 
     public XNode ToXml()

@@ -161,7 +161,7 @@ public class ResponseBuilder
 
     public static SkillResponse TellWithAskForPermissionsConsentCard(IOutputSpeech speechResponse, IEnumerable<string> permissions)
     {
-        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = permissions.ToList()};
+        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = [.. permissions]};
         return BuildResponse(speechResponse, true, null, null, card);
     }
 
@@ -177,7 +177,7 @@ public class ResponseBuilder
 
     public static SkillResponse TellWithAskForPermissionsConsentCard(IOutputSpeech speechResponse, IEnumerable<string> permissions, Session sessionAttributes)
     {
-        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = permissions.ToList()};
+        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = [.. permissions]};
         return BuildResponse(speechResponse, true, sessionAttributes, null, card);
     }
 

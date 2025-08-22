@@ -12,14 +12,14 @@ public class Prosody:ICommonSsml
 
     public Prosody(params ISsml[] elements)
     {
-        Elements = elements.ToList();
+        Elements = [.. elements];
     }
 
-    public List<ISsml> Elements { get; set; } = new List<ISsml>();
+    public List<ISsml> Elements { get; set; } = [];
 
     public XNode ToXml()
     {
-        List<XObject> attributes = new List<XObject>();
+        List<XObject> attributes = [];
 
         if(!string.IsNullOrWhiteSpace(Rate))
         {

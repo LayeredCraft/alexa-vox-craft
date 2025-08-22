@@ -5,13 +5,13 @@ namespace AlexaVoxCraft.Model.Response.Ssml;
 public class Audio:ISsml
 {
     public string Source { get; set; }
-    public List<ISsml> Elements { get; set; } = new List<ISsml>();
+    public List<ISsml> Elements { get; set; } = [];
 
     public Audio() { }
 
     public Audio(params ISsml[] elements)
     {
-        Elements = elements.ToList();
+        Elements = [.. elements];
     }
 
     public Audio(string source)
@@ -26,6 +26,6 @@ public class Audio:ISsml
 
     public XNode ToXml()
     {
-        return new XElement("audio", new XObject[]{new XAttribute("src",Source)}.Concat(Elements.Select(e => e.ToXml())));
+        return new XElement("audio", [new XAttribute("src",Source), .. Elements.Select(e => e.ToXml())]);
     }
 }
