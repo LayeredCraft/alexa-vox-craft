@@ -17,36 +17,31 @@ public static class ServiceRegistrar
 
         services.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<>), assembliesToScan, true);
         
-        var defaultHandlers = assembliesToScan.SelectMany(a => a.DefinedTypes)
-            .Where(x => x.CanBeCastTo(typeof(IDefaultRequestHandler)) && x.IsConcrete()).ToList();
-
-        foreach (var defaultHandler in defaultHandlers)
+        // Process all assembly types once to avoid multiple enumerations
+        var allTypes = assembliesToScan.SelectMany(a => a.DefinedTypes).ToArray();
+        
+        // Register default handlers
+        foreach (var defaultHandler in allTypes.Where(x => x.CanBeCastTo(typeof(IDefaultRequestHandler)) && x.IsConcrete()))
         {
             services.TryAddTransient(typeof(IDefaultRequestHandler), defaultHandler);
         }
 
-        var persistenceAdapters = assembliesToScan.SelectMany(a => a.DefinedTypes)
-            .Where(x => x.CanBeCastTo(typeof(IPersistenceAdapter)) && x.IsConcrete()).ToList();
-
-        foreach (var persistenceAdapter in persistenceAdapters)
+        // Register persistence adapters
+        foreach (var persistenceAdapter in allTypes.Where(x => x.CanBeCastTo(typeof(IPersistenceAdapter)) && x.IsConcrete()))
         {
             services.TryAddSingleton(typeof(IPersistenceAdapter), persistenceAdapter);
         }
         
-        var pipelineInterfaceTypes = new[]
-        {
+        // Register pipeline behaviors
+        Type[] pipelineInterfaceTypes = [
             typeof(IExceptionHandler),
             typeof(IRequestInterceptor),
             typeof(IResponseInterceptor)
-        };
+        ];
 
         foreach (var interfaceType in pipelineInterfaceTypes)
         {
-            var concretions = assembliesToScan.SelectMany(a => a.DefinedTypes)
-                .Where(t => t.CanBeCastTo(interfaceType) && t.IsConcrete())
-                .ToList();
-
-            foreach (var concreteType in concretions)
+            foreach (var concreteType in allTypes.Where(t => t.CanBeCastTo(interfaceType) && t.IsConcrete()))
             {
                 services.AddTransient(interfaceType, concreteType);
             }
@@ -58,37 +53,39 @@ public static class ServiceRegistrar
     {
         var concretions = new List<Type>();
         var interfaces = new List<Type>();
+        
         foreach (var type in assembliesToScan.SelectMany(a => a.DefinedTypes).Where(t => !t.IsOpenGeneric()))
         {
-            var interfaceTypes = type.FindInterfacesThatClose(openRequestInterface).ToArray();
-            if (!interfaceTypes.Any()) continue;
-
-            if (type.IsConcrete())
-            {
-                concretions.Add(type);
-            }
-
+            var interfaceTypes = type.FindInterfacesThatClose(openRequestInterface);
+            var hasInterfaces = false;
+            
             foreach (var interfaceType in interfaceTypes)
             {
+                hasInterfaces = true;
                 interfaces.Fill(interfaceType);
+            }
+
+            if (hasInterfaces && type.IsConcrete())
+            {
+                concretions.Add(type);
             }
         }
 
         foreach (var @interface in interfaces)
         {
-            var exactMatches = concretions.Where(x => x.CanBeCastTo(@interface)).ToList();
             if (addIfAlreadyExists)
             {
-                foreach (var type in exactMatches)
+                foreach (var type in concretions.Where(x => x.CanBeCastTo(@interface)))
                 {
                     services.AddTransient(@interface, type);
                 }
             }
             else
             {
-                if (exactMatches.Count > 1)
+                var exactMatches = concretions.Where(x => x.CanBeCastTo(@interface)).ToArray();
+                if (exactMatches.Length > 1)
                 {
-                    exactMatches.RemoveAll(m => !IsMatchingWithInterface(m, @interface));
+                    exactMatches = exactMatches.Where(m => IsMatchingWithInterface(m, @interface)).ToArray();
                 }
 
                 foreach (var type in exactMatches)
