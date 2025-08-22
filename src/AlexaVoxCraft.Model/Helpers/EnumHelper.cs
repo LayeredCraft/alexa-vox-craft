@@ -43,7 +43,7 @@ public static class EnumHelper
         {
             var enumType = typeof(TEnum);
             var name = Enum.GetName(enumType, enumValue);
-            if (name == null) return string.Empty;
+            if (name is null) return string.Empty;
 
             var enumMember = enumType.GetField(name)?.GetCustomAttribute<EnumMemberAttribute>();
             return enumMember?.Value ?? name;

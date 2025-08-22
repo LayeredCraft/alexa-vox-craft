@@ -37,7 +37,7 @@ public class Reprompt
         ti =>
         {
             var prop = ti.Properties.FirstOrDefault(p => p.Name == "directives");
-            if (prop != null)
+            if (prop is not null)
             {
                 prop.ShouldSerialize = (obj, _) =>
                 {

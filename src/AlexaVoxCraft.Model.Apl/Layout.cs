@@ -35,7 +35,7 @@ public class Layout
 
     public Layout AsMain(string dataSourceKey = "payload")
     {
-        if (Parameters == null)
+        if (Parameters is null)
         {
             Parameters = [];
         }

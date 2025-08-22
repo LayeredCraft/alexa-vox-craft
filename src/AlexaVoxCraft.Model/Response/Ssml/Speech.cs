@@ -37,6 +37,6 @@ public class Speech
 		}
 
 		var endOfSpeakTag = xmlString.IndexOf('>');
-		return "<speak>" + xmlString.Substring(endOfSpeakTag + 1);
+		return $"<speak>{xmlString[(endOfSpeakTag + 1)..]}";
 	}
 }
