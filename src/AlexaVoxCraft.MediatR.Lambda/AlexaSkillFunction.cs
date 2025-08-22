@@ -57,7 +57,8 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
             configuration.ReadFrom.Configuration(context.Configuration)
                 .ReadFrom.Services(services)
                 .Destructure.With(new SystemTextDestructuringPolicy())
-                .Enrich.FromLogContext();
+                .Enrich.FromLogContext()
+                .Enrich.WithActivityId();
         });
         Init(builder);
         return builder;
