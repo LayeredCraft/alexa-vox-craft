@@ -64,8 +64,9 @@ public static class AlexaJsonOptions
             ReadCommentHandling = JsonCommentHandling.Skip
         };
 
+        // Add all converters after JSON options are configured
         options.Converters.Add(new ObjectConverter());
-
+        
         // Add all registered converters thread-safely  
         foreach (var converter in _converters)
         {
