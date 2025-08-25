@@ -12,7 +12,7 @@ public static class AlexaJsonOptions
     private static readonly List<JsonConverter> AdditionalConverters = [];
 
     // Cached options for performance - invalidated when modifiers/converters are added
-    private static JsonSerializerOptions? _cachedOptions;
+    private static volatile JsonSerializerOptions? _cachedOptions;
     private static readonly object _lock = new();
 
     public static JsonSerializerOptions DefaultOptions
