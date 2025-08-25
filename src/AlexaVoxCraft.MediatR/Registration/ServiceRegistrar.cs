@@ -17,33 +17,33 @@ public static class ServiceRegistrar
 
         services.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<>), assembliesToScan, true);
         
-        // Process all assembly types once to avoid multiple enumerations
-        var allTypes = assembliesToScan.SelectMany(a => a.DefinedTypes).ToArray();
-        
-        // Register default handlers
-        foreach (var defaultHandler in allTypes.Where(x => x.CanBeCastTo(typeof(IDefaultRequestHandler)) && x.IsConcrete()))
+        // Single-pass enumeration with grouped filtering to minimize memory usage
+        foreach (var type in assembliesToScan.SelectMany(a => a.DefinedTypes).Where(t => t.IsConcrete()))
         {
-            services.TryAddTransient(typeof(IDefaultRequestHandler), defaultHandler);
-        }
-
-        // Register persistence adapters
-        foreach (var persistenceAdapter in allTypes.Where(x => x.CanBeCastTo(typeof(IPersistenceAdapter)) && x.IsConcrete()))
-        {
-            services.TryAddSingleton(typeof(IPersistenceAdapter), persistenceAdapter);
-        }
-        
-        // Register pipeline behaviors
-        Type[] pipelineInterfaceTypes = [
-            typeof(IExceptionHandler),
-            typeof(IRequestInterceptor),
-            typeof(IResponseInterceptor)
-        ];
-
-        foreach (var interfaceType in pipelineInterfaceTypes)
-        {
-            foreach (var concreteType in allTypes.Where(t => t.CanBeCastTo(interfaceType) && t.IsConcrete()))
+            // Register default handlers
+            if (type.CanBeCastTo(typeof(IDefaultRequestHandler)))
             {
-                services.AddTransient(interfaceType, concreteType);
+                services.TryAddTransient(typeof(IDefaultRequestHandler), type);
+            }
+            
+            // Register persistence adapters
+            if (type.CanBeCastTo(typeof(IPersistenceAdapter)))
+            {
+                services.TryAddSingleton(typeof(IPersistenceAdapter), type);
+            }
+            
+            // Register pipeline behaviors
+            if (type.CanBeCastTo(typeof(IExceptionHandler)))
+            {
+                services.AddTransient(typeof(IExceptionHandler), type);
+            }
+            if (type.CanBeCastTo(typeof(IRequestInterceptor)))
+            {
+                services.AddTransient(typeof(IRequestInterceptor), type);
+            }
+            if (type.CanBeCastTo(typeof(IResponseInterceptor)))
+            {
+                services.AddTransient(typeof(IResponseInterceptor), type);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Immutable;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
@@ -6,78 +7,66 @@ namespace AlexaVoxCraft.Model.Serialization;
 
 public static class AlexaJsonOptions
 {
-    // This allows external packages to register their own JsonTypeInfo modifiers
-    private static readonly List<Action<JsonTypeInfo>> AdditionalModifiers = [];
-    
-    private static readonly List<JsonConverter> AdditionalConverters = [];
+    // Thread-safe immutable collections for modifiers and converters
+    private static ImmutableList<Action<JsonTypeInfo>> _modifiers = ImmutableList<Action<JsonTypeInfo>>.Empty;
+    private static ImmutableList<JsonConverter> _converters = ImmutableList<JsonConverter>.Empty;
 
-    // Cached options for performance - invalidated when modifiers/converters are added
-    private static volatile JsonSerializerOptions? _cachedOptions;
-    private static readonly object _lock = new();
+    // Thread-safe lazy initialization for options
+    private static Lazy<JsonSerializerOptions> _lazyOptions = new(CreateOptions);
 
-    public static JsonSerializerOptions DefaultOptions
+    public static JsonSerializerOptions DefaultOptions => _lazyOptions.Value;
+
+    private static JsonSerializerOptions CreateOptions()
     {
-        get
+        var resolver = new AlexaTypeResolver();
+        resolver.Modifiers.Add(Modifiers.SetNumberHandlingModifier);
+
+        // Add all registered modifiers thread-safely
+        foreach (var modifier in _modifiers)
         {
-            if (_cachedOptions is not null)
-            {
-                return _cachedOptions;
-            }
-
-            lock (_lock)
-            {
-                if (_cachedOptions is not null)
-                {
-                    return _cachedOptions;
-                }
-
-                var resolver = new AlexaTypeResolver();
-                resolver.Modifiers.Add(Modifiers.SetNumberHandlingModifier);
-
-                foreach (var modifier in AdditionalModifiers)
-                {
-                    resolver.Modifiers.Add(modifier);
-                }
-
-                var options = new JsonSerializerOptions
-                {
-                    TypeInfoResolver = resolver,
-                    ReadCommentHandling = JsonCommentHandling.Skip
-                };
-                
-                options.Converters.Add(new ObjectConverter());
-                
-                foreach (var converter in AdditionalConverters)
-                {
-                    options.Converters.Add(converter);
-                }
-                
-                _cachedOptions = options;
-                return options;
-            }
+            resolver.Modifiers.Add(modifier);
         }
+
+        var options = new JsonSerializerOptions
+        {
+            TypeInfoResolver = resolver,
+            ReadCommentHandling = JsonCommentHandling.Skip
+        };
+
+        options.Converters.Add(new ObjectConverter());
+
+        // Add all registered converters thread-safely  
+        foreach (var converter in _converters)
+        {
+            options.Converters.Add(converter);
+        }
+
+        return options;
     }
     
     public static void RegisterConverter<T>(JsonConverter<T> converter) where T : notnull
     {
-        lock (_lock)
-        {
-            AdditionalConverters.Add(converter);
-            _cachedOptions = null; // Invalidate cache
-        }
+        // Atomically update the converters collection
+        ImmutableInterlocked.Update(ref _converters, list => list.Add(converter));
+        
+        // Invalidate cache by creating new Lazy instance
+        Interlocked.Exchange(ref _lazyOptions, new Lazy<JsonSerializerOptions>(CreateOptions));
     }
 
     public static void RegisterTypeModifier<T>(Action<JsonTypeInfo> modifier)
     {
-        lock (_lock)
+        // Atomically update the modifiers collection
+        var wrappedModifier = new Action<JsonTypeInfo>(ti =>
         {
-            AdditionalModifiers.Add(ti => {
-                if (ti.Type == typeof(T))
-                {
-                    modifier(ti);
-                }
-            });
-            _cachedOptions = null; // Invalidate cache
-        }
+            if (ti.Type == typeof(T))
+            {
+                modifier(ti);
+            }
+        });
+        
+        ImmutableInterlocked.Update(ref _modifiers, list => list.Add(wrappedModifier));
+        
+        // Invalidate cache by creating new Lazy instance
+        Interlocked.Exchange(ref _lazyOptions, new Lazy<JsonSerializerOptions>(CreateOptions));
     }
 }
