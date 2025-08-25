@@ -82,10 +82,14 @@ public static class ServiceRegistrar
             }
             else
             {
-                var exactMatches = concretions.Where(x => x.CanBeCastTo(@interface)).ToArray();
-                if (exactMatches.Length > 1)
+                // Single enumeration with compound predicate to avoid intermediate allocation
+                var candidateTypes = concretions.Where(x => x.CanBeCastTo(@interface));
+                var exactMatches = candidateTypes.ToList();
+                
+                // Apply additional filtering only if multiple matches exist
+                if (exactMatches.Count > 1)
                 {
-                    exactMatches = exactMatches.Where(m => IsMatchingWithInterface(m, @interface)).ToArray();
+                    exactMatches = exactMatches.Where(m => IsMatchingWithInterface(m, @interface)).ToList();
                 }
 
                 foreach (var type in exactMatches)
