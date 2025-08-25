@@ -28,7 +28,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		icon.png = icon.png
 		ROADMAP.md = ROADMAP.md
 		CLAUDE.md = CLAUDE.md
-		PERFORMANCE_OPTIMIZATION_PLAN.md = PERFORMANCE_OPTIMIZATION_PLAN.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaVoxCraft.MediatR.Lambda", "src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj", "{B35A9218-4C94-4506-AE28-DA7A908A7FF6}"
