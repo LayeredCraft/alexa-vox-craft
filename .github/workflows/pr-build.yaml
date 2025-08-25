@@ -7,10 +7,12 @@ on:
 permissions: write-all
 jobs:
   build:
-    uses: LayeredCraft/devops-templates/.github/workflows/pr-build.yaml@v5.0
+    uses: LayeredCraft/devops-templates/.github/workflows/pr-build.yaml@v6.1
     with:
       solution: AlexaVoxCraft.sln
       hasTests: true
+      useMtpRunner: true
+      testDirectory: "test"
       dotnetVersion: |
         8.0.x
         9.0.x

@@ -15,7 +15,7 @@ public class Layout
 
     public Layout(IEnumerable<APLComponent> items)
     {
-        Items = items.ToList();
+        Items = [.. items];
     }
 
     [JsonPropertyName("bind")]
@@ -35,9 +35,9 @@ public class Layout
 
     public Layout AsMain(string dataSourceKey = "payload")
     {
-        if (Parameters == null)
+        if (Parameters is null)
         {
-            Parameters = new List<Parameter>();
+            Parameters = [];
         }
 
         if (Parameters.All(p => string.Equals(p.Name, dataSourceKey, StringComparison.OrdinalIgnoreCase)))

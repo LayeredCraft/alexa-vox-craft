@@ -11,10 +11,10 @@ public class Speech
 
 	public Speech(params ISsml[] elements)
 	{
-		Elements = elements.ToList();
+		Elements = [.. elements];
 	}
 
-	public List<ISsml> Elements { get; set; } = new List<ISsml>();
+	public List<ISsml> Elements { get; set; } = [];
 
 
 	public string ToXml()
@@ -37,6 +37,6 @@ public class Speech
 		}
 
 		var endOfSpeakTag = xmlString.IndexOf('>');
-		return "<speak>" + xmlString.Substring(endOfSpeakTag + 1);
+		return $"<speak>{xmlString[(endOfSpeakTag + 1)..]}";
 	}
 }

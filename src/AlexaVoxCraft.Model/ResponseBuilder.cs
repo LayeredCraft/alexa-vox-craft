@@ -161,7 +161,7 @@ public class ResponseBuilder
 
     public static SkillResponse TellWithAskForPermissionsConsentCard(IOutputSpeech speechResponse, IEnumerable<string> permissions)
     {
-        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = permissions.ToList()};
+        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = [.. permissions]};
         return BuildResponse(speechResponse, true, null, null, card);
     }
 
@@ -177,7 +177,7 @@ public class ResponseBuilder
 
     public static SkillResponse TellWithAskForPermissionsConsentCard(IOutputSpeech speechResponse, IEnumerable<string> permissions, Session sessionAttributes)
     {
-        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = permissions.ToList()};
+        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = [.. permissions]};
         return BuildResponse(speechResponse, true, sessionAttributes, null, card);
     }
 
@@ -388,7 +388,7 @@ public class ResponseBuilder
     private static SkillResponse BuildResponse(IOutputSpeech outputSpeech, bool shouldEndSession, Session sessionAttributes, Reprompt reprompt, ICard card)
     {
         SkillResponse response = new SkillResponse {Version = "1.0"};
-        if (sessionAttributes != null) response.SessionAttributes = sessionAttributes.Attributes;
+        if (sessionAttributes is not null) response.SessionAttributes = sessionAttributes.Attributes;
 
         ResponseBody body = new ResponseBody
         {
@@ -396,8 +396,8 @@ public class ResponseBuilder
             OutputSpeech = outputSpeech
         };
 
-        if (reprompt != null) body.Reprompt = reprompt;
-        if (card != null) body.Card = card;
+        if (reprompt is not null) body.Reprompt = reprompt;
+        if (card is not null) body.Card = card;
 
         response.Response = body;
 

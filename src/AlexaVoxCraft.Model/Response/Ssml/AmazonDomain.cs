@@ -6,7 +6,7 @@ public class AmazonDomain : ICommonSsml
 {
     public string Name { get; set; }
 
-    public List<ISsml> Elements { get; set; } = new List<ISsml>();
+    public List<ISsml> Elements { get; set; } = [];
 
     public AmazonDomain(string name)
     {
@@ -16,7 +16,7 @@ public class AmazonDomain : ICommonSsml
     public AmazonDomain(string name, params ISsml[] elements)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
-        Elements = elements.ToList();
+        Elements = [.. elements];
     }
 
     public XNode ToXml()

@@ -133,7 +133,7 @@ public class DefaultResponseBuilder : IResponseBuilder
             Stream = stream
         };
 
-        if (audioItemMetadata != null)
+        if (audioItemMetadata is not null)
         {
             audioItem.Metadata = audioItemMetadata;
         }
@@ -163,7 +163,7 @@ public class DefaultResponseBuilder : IResponseBuilder
     public IResponseBuilder AddConfirmIntentDirective(Intent? updatedIntent = null)
     {
         var confirmIntentDirective = new DialogConfirmIntent();
-        if (updatedIntent != null)
+        if (updatedIntent is not null)
         {
             confirmIntentDirective.UpdatedIntent = updatedIntent;
         }
@@ -174,7 +174,7 @@ public class DefaultResponseBuilder : IResponseBuilder
     public IResponseBuilder AddConfirmSlotDirective(string slotToConfirm, Intent? updatedIntent = null)
     {
         var confirmSlotDirective = new DialogConfirmSlot(slotToConfirm);
-        if (updatedIntent != null)
+        if (updatedIntent is not null)
         {
             confirmSlotDirective.UpdatedIntent = updatedIntent;
         }
@@ -186,7 +186,7 @@ public class DefaultResponseBuilder : IResponseBuilder
     {
         var delegateDirective = new DialogDelegate();
 
-        if (updatedIntent != null)
+        if (updatedIntent is not null)
         {
             delegateDirective.UpdatedIntent = updatedIntent;
         }
@@ -207,7 +207,7 @@ public class DefaultResponseBuilder : IResponseBuilder
     {
         var elicitSlotDirective = new DialogElicitSlot(slotToElicit);
 
-        if (updatedIntent != null)
+        if (updatedIntent is not null)
         {
             elicitSlotDirective.UpdatedIntent = updatedIntent;
         }

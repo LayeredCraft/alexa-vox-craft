@@ -8,7 +8,7 @@ public class AmazonEmotion : ICommonSsml
 
     public string Intensity { get; set; }
 
-    public List<ISsml> Elements { get; set; } = new List<ISsml>();
+    public List<ISsml> Elements { get; set; } = [];
 
     public AmazonEmotion(string name, string intensity)
     {
@@ -20,7 +20,7 @@ public class AmazonEmotion : ICommonSsml
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Intensity = intensity ?? throw new ArgumentNullException(nameof(intensity));
-        Elements = elements.ToList();
+        Elements = [.. elements];
     }
 
     public XNode ToXml()

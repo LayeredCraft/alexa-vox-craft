@@ -6,7 +6,7 @@ public class Voice:ICommonSsml
 {
     public string Name { get; set; }
 
-    public List<ISsml> Elements { get; set; } = new List<ISsml>();
+    public List<ISsml> Elements { get; set; } = [];
 
     public Voice(string name)
     {
@@ -16,7 +16,7 @@ public class Voice:ICommonSsml
     public Voice(string name, params ISsml[] elements)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
-        Elements = elements.ToList();
+        Elements = [.. elements];
     }
 
     public XNode ToXml()

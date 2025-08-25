@@ -17,38 +17,33 @@ public static class ServiceRegistrar
 
         services.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<>), assembliesToScan, true);
         
-        var defaultHandlers = assembliesToScan.SelectMany(a => a.DefinedTypes)
-            .Where(x => x.CanBeCastTo(typeof(IDefaultRequestHandler)) && x.IsConcrete()).ToList();
-
-        foreach (var defaultHandler in defaultHandlers)
+        // Single-pass enumeration with grouped filtering to minimize memory usage
+        foreach (var type in assembliesToScan.SelectMany(a => a.DefinedTypes).Where(t => t.IsConcrete()))
         {
-            services.TryAddTransient(typeof(IDefaultRequestHandler), defaultHandler);
-        }
-
-        var persistenceAdapters = assembliesToScan.SelectMany(a => a.DefinedTypes)
-            .Where(x => x.CanBeCastTo(typeof(IPersistenceAdapter)) && x.IsConcrete()).ToList();
-
-        foreach (var persistenceAdapter in persistenceAdapters)
-        {
-            services.TryAddSingleton(typeof(IPersistenceAdapter), persistenceAdapter);
-        }
-        
-        var pipelineInterfaceTypes = new[]
-        {
-            typeof(IExceptionHandler),
-            typeof(IRequestInterceptor),
-            typeof(IResponseInterceptor)
-        };
-
-        foreach (var interfaceType in pipelineInterfaceTypes)
-        {
-            var concretions = assembliesToScan.SelectMany(a => a.DefinedTypes)
-                .Where(t => t.CanBeCastTo(interfaceType) && t.IsConcrete())
-                .ToList();
-
-            foreach (var concreteType in concretions)
+            // Register default handlers
+            if (type.CanBeCastTo(typeof(IDefaultRequestHandler)))
             {
-                services.AddTransient(interfaceType, concreteType);
+                services.TryAddTransient(typeof(IDefaultRequestHandler), type);
+            }
+            
+            // Register persistence adapters
+            if (type.CanBeCastTo(typeof(IPersistenceAdapter)))
+            {
+                services.TryAddSingleton(typeof(IPersistenceAdapter), type);
+            }
+            
+            // Register pipeline behaviors
+            if (type.CanBeCastTo(typeof(IExceptionHandler)))
+            {
+                services.AddTransient(typeof(IExceptionHandler), type);
+            }
+            if (type.CanBeCastTo(typeof(IRequestInterceptor)))
+            {
+                services.AddTransient(typeof(IRequestInterceptor), type);
+            }
+            if (type.CanBeCastTo(typeof(IResponseInterceptor)))
+            {
+                services.AddTransient(typeof(IResponseInterceptor), type);
             }
         }
     }
@@ -58,37 +53,43 @@ public static class ServiceRegistrar
     {
         var concretions = new List<Type>();
         var interfaces = new List<Type>();
+        
         foreach (var type in assembliesToScan.SelectMany(a => a.DefinedTypes).Where(t => !t.IsOpenGeneric()))
         {
-            var interfaceTypes = type.FindInterfacesThatClose(openRequestInterface).ToArray();
-            if (!interfaceTypes.Any()) continue;
-
-            if (type.IsConcrete())
-            {
-                concretions.Add(type);
-            }
-
+            var interfaceTypes = type.FindInterfacesThatClose(openRequestInterface);
+            var hasInterfaces = false;
+            
             foreach (var interfaceType in interfaceTypes)
             {
+                hasInterfaces = true;
                 interfaces.Fill(interfaceType);
+            }
+
+            if (hasInterfaces && type.IsConcrete())
+            {
+                concretions.Add(type);
             }
         }
 
         foreach (var @interface in interfaces)
         {
-            var exactMatches = concretions.Where(x => x.CanBeCastTo(@interface)).ToList();
             if (addIfAlreadyExists)
             {
-                foreach (var type in exactMatches)
+                foreach (var type in concretions.Where(x => x.CanBeCastTo(@interface)))
                 {
                     services.AddTransient(@interface, type);
                 }
             }
             else
             {
+                // Single enumeration with compound predicate to avoid intermediate allocation
+                var candidateTypes = concretions.Where(x => x.CanBeCastTo(@interface));
+                var exactMatches = candidateTypes.ToList();
+                
+                // Apply additional filtering only if multiple matches exist
                 if (exactMatches.Count > 1)
                 {
-                    exactMatches.RemoveAll(m => !IsMatchingWithInterface(m, @interface));
+                    exactMatches = exactMatches.Where(m => IsMatchingWithInterface(m, @interface)).ToList();
                 }
 
                 foreach (var type in exactMatches)

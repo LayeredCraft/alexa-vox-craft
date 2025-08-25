@@ -27,6 +27,6 @@ public class APLValue<T> : APLValue
 
     public static implicit operator APLValue<T>?(T value)
     {
-        return value == null ? null : new APLValue<T>(value);
+        return value is null ? null : new(value);
     }
 }
