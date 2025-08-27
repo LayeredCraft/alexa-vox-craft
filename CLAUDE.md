@@ -241,3 +241,90 @@ public class MyExceptionHandler : IExceptionHandler
 - Generate realistic test data that meets Alexa constraints
 - Validate both object structure AND serialization behavior
 - Test edge cases and constraint violations
+
+## OpenTelemetry Implementation TODO
+
+### Phase 1: Core Telemetry Infrastructure ✅
+- [x] Create feature branch `feature/add-opentelemetry-instrumentation`
+- [x] Add `AlexaVoxCraftTelemetry` static class to MediatR package
+- [x] Add telemetry constants classes (no magic strings)
+- [x] Verify all code compiles and tests pass
+- [x] Commit: "Add core OpenTelemetry telemetry infrastructure"
+
+### Phase 2: Pipeline Behavior Instrumentation
+- [ ] Replace `PerformanceLoggingBehavior` with `OpenTelemetryPipelineBehavior`
+- [ ] Add `alexa.request` spans with semantic attributes
+- [ ] Record core metrics (requests, latency, errors, slot resolutions)
+- [ ] Update/add unit tests for new behavior
+- [ ] Commit: "Replace performance logging with OpenTelemetry pipeline behavior"
+
+### Phase 3: Lambda Function Instrumentation
+- [ ] Enhance `AlexaSkillFunction.FunctionHandlerAsync()` with spans
+- [ ] Add cold start detection and tracking
+- [ ] Add Lambda-level context and error handling
+- [ ] Update related unit tests
+- [ ] Commit: "Add OpenTelemetry instrumentation to Lambda function layer"
+
+### Phase 4: Serialization Instrumentation
+- [ ] Instrument `AlexaLambdaSerializer` with serialization spans
+- [ ] Track payload sizes and serialization performance
+- [ ] Add unit tests for serialization telemetry
+- [ ] Commit: "Add serialization telemetry to AlexaLambdaSerializer"
+
+### Phase 5: Handler Wrapper Instrumentation
+- [ ] Enhance `RequestHandlerWrapperImpl` with handler spans
+- [ ] Track handler resolution and execution time
+- [ ] Add semantic attributes for handler identification
+- [ ] Update unit tests
+- [ ] Commit: "Add handler-level OpenTelemetry spans and metrics"
+
+### Phase 6: Observability Package
+- [ ] Create new `AlexaVoxCraft.Observability` package
+- [ ] Add OTEL registration extension methods
+- [ ] Add package dependencies on OpenTelemetry packages
+- [ ] Create unit tests for extension methods
+- [ ] Commit: "Add AlexaVoxCraft.Observability opt-in package"
+
+### Phase 7: Sample Integration
+- [ ] Update sample projects to demonstrate OTEL integration
+- [ ] Add configuration examples for ADOT/CloudWatch
+- [ ] Test end-to-end telemetry flow
+- [ ] Commit: "Update samples with OpenTelemetry integration examples"
+
+### Phase 8: Documentation & PR
+- [ ] Update CLAUDE.md with telemetry usage instructions
+- [ ] Create comprehensive pull request
+- [ ] Include performance impact analysis
+- [ ] Add migration guide for existing users
+
+## OpenTelemetry Usage (After Implementation)
+
+### Basic Setup
+```csharp
+// In your skill's Program.cs
+services.AddOpenTelemetry()
+    .WithTracing(b => b.AddAlexaVoxCraft())
+    .WithMetrics(b => b.AddAlexaVoxCraft());
+```
+
+### Key Metrics
+- `alexa.requests` - Request counter by type/intent/locale
+- `alexa.latency` - End-to-end request processing time
+- `alexa.handler.duration` - Handler execution time
+- `alexa.errors` - Error counter by type
+- `alexa.cold_starts` - Lambda cold start tracking
+- `alexa.response.speech.characters` - SSML response length
+
+### Key Spans
+- `alexa.lambda.execution` - Overall Lambda execution
+- `alexa.request` - Request processing pipeline
+- `alexa.handler` - Individual handler execution
+- `alexa.serialization.request/response` - Serialization performance
+- `alexa.apl.render` - APL document processing
+
+### Semantic Attributes
+All telemetry follows OpenTelemetry semantic conventions with Alexa-specific extensions:
+- `rpc.system=alexa`, `rpc.method={IntentName|RequestType}`
+- `alexa.request.type`, `alexa.intent.name`, `alexa.locale`
+- `alexa.session.new`, `alexa.device.has_screen`
+- `alexa.dialog.state`, `alexa.slot.resolution.status`
