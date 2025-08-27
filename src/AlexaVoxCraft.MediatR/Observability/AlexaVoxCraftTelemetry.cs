@@ -37,4 +37,43 @@ public static class AlexaVoxCraftTelemetry
 
     private static int _coldStart = 1;
     public static bool IsColdStart() => Interlocked.Exchange(ref _coldStart, 0) == 1;
+
+    public static TimerScope TimeLatency() => new TimerScope(Latency);
+    public static TimerScope TimeHandler() => new TimerScope(HandlerDuration);
+    public static TimerScope TimeSerialization() => new TimerScope(SerializationDuration);
+    public static TimerScope TimeAplRender() => new TimerScope(AplRenderDuration);
+
+    public readonly struct TimerScope : IDisposable
+    {
+        private readonly Histogram<double> _h;
+        private readonly long _start;
+        private readonly KeyValuePair<string, object?>[]? _tags;
+
+        public TimerScope(Histogram<double> h)
+        {
+            _h = h;
+            _start = Stopwatch.GetTimestamp();
+            _tags = null;
+        }
+
+        public TimerScope(Histogram<double> h, params KeyValuePair<string, object?>[] tags)
+        {
+            _h = h;
+            _start = Stopwatch.GetTimestamp();
+            _tags = tags;
+        }
+
+        public void Dispose()
+        {
+            var ms = (Stopwatch.GetTimestamp() - _start) * 1000.0 / Stopwatch.Frequency;
+            if (_tags != null && _tags.Length > 0)
+            {
+                _h.Record(ms, _tags);
+            }
+            else
+            {
+                _h.Record(ms);
+            }
+        }
+    }
 }
