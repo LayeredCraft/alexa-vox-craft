@@ -6,6 +6,9 @@ public static class AlexaSemanticAttributes
     public const string RpcService = "rpc.service";
     public const string RpcMethod = "rpc.method";
     
+    public const string FaasColdStart = "faas.coldstart";
+    public const string ColdStart = "cold_start";
+    
     public const string RequestType = "alexa.request.type";
     public const string IntentName = "alexa.intent.name";
     public const string SessionNew = "alexa.session.new";
@@ -24,6 +27,8 @@ public static class AlexaSemanticAttributes
     
     public const string ErrorType = "alexa.error.type";
     public const string ExceptionType = "exception.type";
+    public const string ExceptionMessage = "exception.message";
+    public const string ExceptionStackTrace = "exception.stacktrace";
     
     public const string ResponseHasCard = "alexa.response.has_card";
     public const string ResponseHasApl = "alexa.response.has_apl";
@@ -35,4 +40,7 @@ public static class AlexaSemanticAttributes
     
     public const string SlotName = "alexa.slot.name";
     public const string SlotResolutionStatus = "alexa.slot.resolution.status";
+    
+    public const string SpeechCharacters = "speech_chars";
+    public const string RepromptCharacters = "reprompt_chars";
 }

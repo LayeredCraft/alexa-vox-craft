@@ -29,6 +29,9 @@ dotnet add package AlexaVoxCraft.Model.Apl
 
 # Structured logging for Alexa skills
 dotnet add package AlexaVoxCraft.Logging
+
+# OpenTelemetry observability (optional)
+dotnet add package AlexaVoxCraft.Observability
 ```
 
 ## Quick Start - Building a Trivia Skill
@@ -135,6 +138,16 @@ Cross-cutting concerns for skill management with:
 - User authentication and authorization
 - Error handling and recovery
 - Performance monitoring
+
+### [OpenTelemetry Observability](components/observability.md)
+
+Comprehensive observability for production skills with:
+
+- Standards-compliant OpenTelemetry instrumentation
+- Request processing spans with semantic attributes
+- Performance metrics and cold start tracking
+- Privacy-safe session correlation
+- Zero-configuration, opt-in telemetry
 
 ## Documentation
 

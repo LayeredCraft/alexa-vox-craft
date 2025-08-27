@@ -29,9 +29,9 @@ public static class AlexaVoxCraftTelemetry
     public static readonly Histogram<double> SerializationDuration = 
         Meter.CreateHistogram<double>(AlexaMetricNames.SerializationDuration, "ms");
     public static readonly Histogram<long> ResponseSize = 
-        Meter.CreateHistogram<long>(AlexaMetricNames.ResponseSize);
+        Meter.CreateHistogram<long>(AlexaMetricNames.ResponseSize, unit: "By");
     public static readonly Histogram<long> SpeechCharacters = 
-        Meter.CreateHistogram<long>(AlexaMetricNames.SpeechCharacters);
+        Meter.CreateHistogram<long>(AlexaMetricNames.SpeechCharacters, unit: "{character}");
     public static readonly Histogram<double> AplRenderDuration = 
         Meter.CreateHistogram<double>(AlexaMetricNames.AplRenderDuration, "ms");
 

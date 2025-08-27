@@ -47,6 +47,11 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
         span?.SetTag(AlexaSemanticAttributes.DeviceHasScreen, hasScreen ? AlexaSemanticValues.True : AlexaSemanticValues.False);
         span?.SetTag(AlexaSemanticAttributes.RequestId, requestId);
         
+        if (isColdStart)
+        {
+            span?.SetTag(AlexaSemanticAttributes.FaasColdStart, AlexaSemanticValues.True);
+        }
+        
         if (intentName != null)
         {
             span?.SetTag(AlexaSemanticAttributes.IntentName, intentName);
@@ -84,7 +89,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
             new(AlexaSemanticAttributes.IntentName, intentName ?? "none"),
             new(AlexaSemanticAttributes.Locale, locale),
             new(AlexaSemanticAttributes.DeviceHasScreen, hasScreen ? AlexaSemanticValues.True : AlexaSemanticValues.False),
-            new("cold_start", isColdStart ? AlexaSemanticValues.True : AlexaSemanticValues.False));
+            new(AlexaSemanticAttributes.ColdStart, isColdStart ? AlexaSemanticValues.True : AlexaSemanticValues.False));
 
         if (isColdStart)
         {
@@ -108,7 +113,14 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
         }
         catch (Exception ex)
         {
-            span?.AddException(ex);
+            span?.AddEvent(new ActivityEvent(AlexaEventNames.Exception,
+                DateTimeOffset.UtcNow,
+                new ActivityTagsCollection
+                {
+                    [AlexaSemanticAttributes.ExceptionType] = ex.GetType().FullName!,
+                    [AlexaSemanticAttributes.ExceptionMessage] = ex.Message,
+                    [AlexaSemanticAttributes.ExceptionStackTrace] = ex.StackTrace ?? ""
+                }));
             span?.SetStatus(ActivityStatusCode.Error, ex.Message);
             
             var errorType = ClassifyError(ex);
@@ -134,7 +146,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
     {
         using var sha256 = System.Security.Cryptography.SHA256.Create();
         var hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(sessionId));
-        return Convert.ToHexString(hash)[..16]; // First 16 chars for brevity
+        return Convert.ToHexString(hash)[..32]; // First 32 chars for better entropy
     }
 
     private static void ProcessSlotResolutions(Activity? span, AlexaVoxCraft.Model.Request.Type.Request request)
@@ -196,8 +208,8 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
                 [AlexaSemanticAttributes.ResponseHasCard] = hasCard ? AlexaSemanticValues.True : AlexaSemanticValues.False,
                 [AlexaSemanticAttributes.ResponseHasApl] = hasApl ? AlexaSemanticValues.True : AlexaSemanticValues.False,
                 [AlexaSemanticAttributes.ResponseShouldEndSession] = shouldEndSession ? AlexaSemanticValues.True : AlexaSemanticValues.False,
-                ["speech_chars"] = speechText?.Length ?? 0,
-                ["reprompt_chars"] = repromptText?.Length ?? 0
+                [AlexaSemanticAttributes.SpeechCharacters] = speechText?.Length ?? 0,
+                [AlexaSemanticAttributes.RepromptCharacters] = repromptText?.Length ?? 0
             }));
     }
 

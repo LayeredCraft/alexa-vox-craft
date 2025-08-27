@@ -20,6 +20,7 @@ AlexaVoxCraft is a modular C# .NET library for building Amazon Alexa skills usin
 - **AlexaVoxCraft.Model.Apl**: Comprehensive APL components and document support
 - **AlexaVoxCraft.MediatR**: Core MediatR integration for request handling patterns
 - **AlexaVoxCraft.MediatR.Lambda**: AWS Lambda hosting with middleware
+- **AlexaVoxCraft.Observability**: Opt-in OpenTelemetry instrumentation package
 
 ### Request Handling Pattern
 
@@ -141,6 +142,7 @@ Enable request/response logging in development:
 "AlexaVoxCraft.MediatR.Lambda.Serialization": "Debug"
 ```
 
+
 ## Key Patterns
 
 ### Request Handlers
@@ -180,7 +182,7 @@ public class MyExceptionHandler : IExceptionHandler
 
 ## Project Structure
 
-- `/src/`: Library source code (5 NuGet packages)
+- `/src/`: Library source code (6 NuGet packages)
 - `/samples/`: Working example skills (basic and APL)
 - `/test/`: Unit tests with extensive JSON example files
 - **Multi-targeting**: Supports .NET 8.0 and .NET 9.0
@@ -193,6 +195,7 @@ public class MyExceptionHandler : IExceptionHandler
 - **Session Management**: Context and state management for multi-turn conversations
 - **Connection Tasks**: Support for complex multi-step interactions
 - **AWS Integration**: Lambda runtime support with custom serialization
+- **OpenTelemetry Integration**: Comprehensive observability with opt-in telemetry package
 
 # Custom Instructions for Claude
 
@@ -282,12 +285,12 @@ public class MyExceptionHandler : IExceptionHandler
 - [ ] Update unit tests
 - [ ] Commit: "Add handler-level OpenTelemetry spans and metrics"
 
-### Phase 6: Observability Package
-- [ ] Create new `AlexaVoxCraft.Observability` package
-- [ ] Add OTEL registration extension methods
-- [ ] Add package dependencies on OpenTelemetry packages
-- [ ] Create unit tests for extension methods
-- [ ] Commit: "Add AlexaVoxCraft.Observability opt-in package"
+### Phase 6: Observability Package ✅
+- [x] Create new `AlexaVoxCraft.Observability` package
+- [x] Add OTEL registration extension methods (`AddAlexaVoxCraftInstrumentation`)
+- [x] Add package dependencies on OpenTelemetry packages
+- [x] Add to solution and verify compilation
+- [x] Commit: "Add AlexaVoxCraft.Observability package for OpenTelemetry instrumentation"
 
 ### Phase 7: Sample Integration
 - [ ] Update sample projects to demonstrate OTEL integration
