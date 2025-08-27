@@ -251,12 +251,16 @@ public class MyExceptionHandler : IExceptionHandler
 - [x] Verify all code compiles and tests pass
 - [x] Commit: "Add core OpenTelemetry telemetry infrastructure"
 
-### Phase 2: Pipeline Behavior Instrumentation
-- [ ] Replace `PerformanceLoggingBehavior` with `OpenTelemetryPipelineBehavior`
-- [ ] Add `alexa.request` spans with semantic attributes
-- [ ] Record core metrics (requests, latency, errors, slot resolutions)
-- [ ] Update/add unit tests for new behavior
-- [ ] Commit: "Replace performance logging with OpenTelemetry pipeline behavior"
+### Phase 2: Pipeline Behavior Instrumentation ✅
+- [x] Replace `PerformanceLoggingBehavior` with comprehensive OpenTelemetry instrumentation
+- [x] Add `alexa.request` spans with semantic attributes and activity status management
+- [x] Record core metrics (requests, latency, errors, slot resolutions, cold starts)
+- [x] Add TimerScope helper with tag support for histogram measurements
+- [x] Implement slot resolution tracking and response content analysis
+- [x] Add session correlation with privacy-safe SHA256 hashing
+- [x] Add error classification with dimensional tracking
+- [x] Maintain full backward compatibility (all 113 tests pass)
+- [x] Commit: "Replace PerformanceLoggingBehavior with comprehensive OpenTelemetry instrumentation"
 
 ### Phase 3: Lambda Function Instrumentation
 - [ ] Enhance `AlexaSkillFunction.FunctionHandlerAsync()` with spans
