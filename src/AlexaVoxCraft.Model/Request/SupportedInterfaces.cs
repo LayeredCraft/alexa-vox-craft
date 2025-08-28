@@ -5,4 +5,5 @@ public static class SupportedInterfaces
     public const string Display = "Display";
     public const string AudioPlayer = "AudioPlayer";
     public const string VideoApp = "VideoApp";
+    public const string AlexaPresentationApl = "Alexa.Presentation.APL";
 }

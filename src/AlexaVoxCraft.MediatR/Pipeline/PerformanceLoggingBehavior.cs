@@ -146,7 +146,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
     {
         using var sha256 = System.Security.Cryptography.SHA256.Create();
         var hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(sessionId));
-        return Convert.ToHexString(hash)[..32]; // First 32 chars for better entropy
+        return Convert.ToHexString(hash)[..32]; // First 32 chars for brevity while maintaining sufficient entropy
     }
 
     private static void ProcessSlotResolutions(Activity? span, AlexaVoxCraft.Model.Request.Type.Request request)
@@ -178,6 +178,9 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
             return AlexaSemanticValues.SlotResolutionNoMatch;
 
         var authority = slot.Resolution.Authorities[0];
+        if (authority.Status is null)
+            return AlexaSemanticValues.SlotResolutionError;
+            
         return authority.Status.Code switch
         {
             "ER_SUCCESS_MATCH" => AlexaSemanticValues.SlotResolutionMatch,
