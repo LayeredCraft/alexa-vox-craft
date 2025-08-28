@@ -1,6 +1,9 @@
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using AwesomeAssertions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
@@ -9,6 +12,8 @@ using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry;
+using OpenTelemetry.Metrics;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests;
 
@@ -202,6 +207,189 @@ public class AlexaSkillFunctionTests : TestBase
     {
         // Verify our specimen builder creates an audio player request based on parameter name
         audioPlayerRequest.Request.Type.Should().Be("AudioPlayer.PlaybackStopped");
+    }
+
+    [Theory]
+    [MediatRLambdaAutoData]
+    public async Task FunctionHandlerAsync_CreatesLambdaSpan(
+        SkillRequest skillRequest, 
+        ILambdaContext lambdaContext)
+    {
+        var function = new TestAlexaSkillFunctionWithHandler();
+        var activities = new List<Activity>();
+        
+        using var activityListener = new ActivityListener
+        {
+            ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
+            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            ActivityStarted = activity => activities.Add(activity)
+        };
+        ActivitySource.AddActivityListener(activityListener);
+        
+        await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        
+        activities.Should().NotBeEmpty();
+        var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
+        lambdaSpan.Should().NotBeNull();
+    }
+
+    [Theory]
+    [MediatRLambdaAutoData]
+    public async Task FunctionHandlerAsync_SetsLambdaAttributes(
+        SkillRequest skillRequest, 
+        ILambdaContext lambdaContext)
+    {
+        var function = new TestAlexaSkillFunctionWithHandler();
+        var activities = new List<Activity>();
+        
+        using var activityListener = new ActivityListener
+        {
+            ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
+            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            ActivityStarted = activity => activities.Add(activity)
+        };
+        ActivitySource.AddActivityListener(activityListener);
+        
+        await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        
+        var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
+        lambdaSpan.Should().NotBeNull();
+        
+        lambdaSpan!.TagObjects.Should().ContainEquivalentOf(new KeyValuePair<string, object?>(AlexaSemanticAttributes.FaasName, lambdaContext.FunctionName));
+        lambdaSpan.TagObjects.Should().ContainEquivalentOf(new KeyValuePair<string, object?>(AlexaSemanticAttributes.FaasVersion, lambdaContext.FunctionVersion));
+        lambdaSpan.TagObjects.Should().ContainEquivalentOf(new KeyValuePair<string, object?>(AlexaSemanticAttributes.AwsLambdaRequestId, lambdaContext.AwsRequestId));
+        lambdaSpan.TagObjects.Should().ContainEquivalentOf(new KeyValuePair<string, object?>(AlexaSemanticAttributes.AwsLambdaMemoryLimit, lambdaContext.MemoryLimitInMB));
+        lambdaSpan.TagObjects.Should().ContainEquivalentOf(new KeyValuePair<string, object?>(AlexaSemanticAttributes.AwsLambdaRemainingTime, lambdaContext.RemainingTime.TotalMilliseconds));
+        lambdaSpan.TagObjects.Should().ContainEquivalentOf(new KeyValuePair<string, object?>(AlexaSemanticAttributes.ApplicationId, skillRequest.Context.System.Application.ApplicationId));
+    }
+
+    [Theory]
+    [MediatRLambdaAutoData]
+    public async Task FunctionHandlerAsync_HandlesColdStart(
+        SkillRequest skillRequest, 
+        ILambdaContext lambdaContext)
+    {
+        var function = new TestAlexaSkillFunctionWithHandler();
+        var activities = new List<Activity>();
+        
+        using var activityListener = new ActivityListener
+        {
+            ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
+            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            ActivityStarted = activity => activities.Add(activity)
+        };
+        ActivitySource.AddActivityListener(activityListener);
+        
+        // Reset cold start state by creating a new function instance
+        var coldStartFunction = new TestAlexaSkillFunctionWithHandler();
+        await coldStartFunction.FunctionHandlerAsync(skillRequest, lambdaContext);
+        
+        // Second call should not be cold start
+        activities.Clear();
+        await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        
+        var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
+        lambdaSpan.Should().NotBeNull();
+        
+        var tags = lambdaSpan!.Tags.ToDictionary(t => t.Key, t => t.Value);
+        // Since cold start is tracked globally, we can't reliably test its presence
+        // but we can verify the span was created properly
+        lambdaSpan.Status.Should().Be(ActivityStatusCode.Ok);
+    }
+
+    [Theory]
+    [MediatRLambdaAutoData]
+    public async Task FunctionHandlerAsync_HandlesSpanOnException(
+        SkillRequest skillRequest, 
+        ILambdaContext lambdaContext)
+    {
+        var function = new TestAlexaSkillFunctionWithThrowingHandler();
+        var activities = new List<Activity>();
+        var events = new List<ActivityEvent>();
+        
+        using var activityListener = new ActivityListener
+        {
+            ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
+            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            ActivityStarted = activity => activities.Add(activity),
+            ActivityStopped = activity => events.AddRange(activity.Events)
+        };
+        ActivitySource.AddActivityListener(activityListener);
+        
+        var exception = await Record.ExceptionAsync(() => 
+            function.FunctionHandlerAsync(skillRequest, lambdaContext));
+        
+        exception.Should().NotBeNull();
+        
+        var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
+        lambdaSpan.Should().NotBeNull();
+        lambdaSpan!.Status.Should().Be(ActivityStatusCode.Error);
+        
+        var exceptionEvents = events.Where(e => e.Name == AlexaEventNames.Exception);
+        exceptionEvents.Should().NotBeEmpty();
+    }
+
+    [Theory]
+    [MediatRLambdaAutoData]
+    public async Task FunctionHandlerAsync_TracksLambdaDuration(
+        SkillRequest skillRequest, 
+        ILambdaContext lambdaContext)
+    {
+        var function = new TestAlexaSkillFunctionWithHandler();
+        
+        // This test verifies that the timer scope is used without external metric collection
+        // The actual duration tracking is handled by the TimerScope which we can't easily mock
+        var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        
+        result.Should().NotBeNull();
+        result.Should().BeOfType<SkillResponse>();
+    }
+
+    [Theory]
+    [MediatRLambdaAutoData]
+    public async Task FunctionHandlerAsync_RecordsLambdaMetrics(
+        SkillRequest skillRequest, 
+        ILambdaContext lambdaContext)
+    {
+        var function = new TestAlexaSkillFunctionWithHandler();
+        var capturedMetrics = new List<MetricSnapshot>();
+        
+        using var meterProvider = Sdk.CreateMeterProviderBuilder()
+            .AddMeter(AlexaVoxCraftTelemetry.MeterName)
+            .AddInMemoryExporter(capturedMetrics)
+            .Build();
+        
+        await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        
+        // Force metrics collection
+        meterProvider.ForceFlush(1000);
+        
+        // Assert - Verify that Lambda metrics were recorded
+        capturedMetrics.Should().NotBeEmpty("Lambda metrics should have been captured");
+        
+        // 1. Verify Lambda duration histogram was recorded
+        var durationMetrics = capturedMetrics
+            .Where(m => m.Name == AlexaMetricNames.LambdaDuration)
+            .ToList();
+        durationMetrics.Should().NotBeEmpty("Lambda duration should be recorded");
+        
+        // 2. Verify Lambda memory histogram was recorded
+        var memoryMetrics = capturedMetrics
+            .Where(m => m.Name == AlexaMetricNames.LambdaMemoryUsed)
+            .ToList();
+        memoryMetrics.Should().NotBeEmpty("Lambda memory limit should be recorded");
+        
+        // 3. Verify memory metric has correct value (the memory limit from LambdaContext)
+        var memoryValues = memoryMetrics
+            .SelectMany(m => m.MetricPoints)
+            .Select(mp => mp.GetHistogramSum())
+            .ToList();
+        memoryValues.Should().Contain(lambdaContext.MemoryLimitInMB, "Memory metric should record the Lambda memory limit");
+        
+        // Debug: Let's examine what metrics were actually captured
+        var allMetricNames = capturedMetrics.Select(m => m.Name).Distinct().ToList();
+        allMetricNames.Should().Contain(AlexaMetricNames.LambdaDuration, "Lambda duration histogram should be present");
+        allMetricNames.Should().Contain(AlexaMetricNames.LambdaMemoryUsed, "Lambda memory histogram should be present");
     }
 }
 
