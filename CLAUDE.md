@@ -277,11 +277,14 @@ public class MyExceptionHandler : IExceptionHandler
 - [x] Remove unused `FaasExecution` constant for code cleanliness
 - [x] Commit: "Add comprehensive OpenTelemetry instrumentation to Lambda function layer"
 
-### Phase 4: Serialization Instrumentation
-- [ ] Instrument `AlexaLambdaSerializer` with serialization spans
-- [ ] Track payload sizes and serialization performance
-- [ ] Add unit tests for serialization telemetry
-- [ ] Commit: "Add serialization telemetry to AlexaLambdaSerializer"
+### Phase 4: Serialization Instrumentation ✅
+- [x] Instrument `AlexaLambdaSerializer` with serialization spans
+- [x] Track payload sizes and serialization performance
+- [x] Add semantic attributes for direction, payload size, and type information
+- [x] Record payload size metrics with proper directional tags
+- [x] Add direction-specific timer helper methods
+- [x] Maintain full backward compatibility (491 total tests passing)
+- [x] Commit: "Implement Serialization Telemetry in AlexaLambdaSerializer (#63)"
 
 ### Phase 5: Handler Wrapper Instrumentation
 - [ ] Enhance `RequestHandlerWrapperImpl` with handler spans
@@ -323,9 +326,13 @@ services.AddOpenTelemetry()
 - `alexa.requests` - Request counter by type/intent/locale
 - `alexa.latency` - End-to-end request processing time
 - `alexa.handler.duration` - Handler execution time
+- `alexa.serialization.duration` - Serialization time by direction (request/response)
+- `alexa.payload.size` - Payload sizes in bytes by direction and type
 - `alexa.errors` - Error counter by type
 - `alexa.cold_starts` - Lambda cold start tracking
 - `alexa.response.speech.characters` - SSML response length
+- `alexa.lambda.duration` - Lambda execution time
+- `alexa.lambda.memory_used` - Lambda memory usage
 
 ### Key Spans
 - `alexa.lambda.execution` - Overall Lambda execution
@@ -340,3 +347,6 @@ All telemetry follows OpenTelemetry semantic conventions with Alexa-specific ext
 - `alexa.request.type`, `alexa.intent.name`, `alexa.locale`
 - `alexa.session.new`, `alexa.device.has_screen`
 - `alexa.dialog.state`, `alexa.slot.resolution.status`
+- `alexa.serialization.direction` - "request" or "response"
+- `alexa.payload.size` - Payload size in bytes
+- `code.namespace`, `code.function` - Type information for serialized objects
