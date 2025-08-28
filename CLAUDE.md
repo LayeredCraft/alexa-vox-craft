@@ -286,12 +286,15 @@ public class MyExceptionHandler : IExceptionHandler
 - [x] Maintain full backward compatibility (491 total tests passing)
 - [x] Commit: "Implement Serialization Telemetry in AlexaLambdaSerializer (#63)"
 
-### Phase 5: Handler Wrapper Instrumentation
-- [ ] Enhance `RequestHandlerWrapperImpl` with handler spans
-- [ ] Track handler resolution and execution time
-- [ ] Add semantic attributes for handler identification
-- [ ] Update unit tests
-- [ ] Commit: "Add handler-level OpenTelemetry spans and metrics"
+### Phase 5: Handler Wrapper Instrumentation ✅
+- [x] Enhance `RequestHandlerWrapperImpl` with handler spans
+- [x] Track handler resolution and execution time with separate spans
+- [x] Add semantic attributes for handler identification and execution order
+- [x] Add metrics for resolution attempts, executions, and durations
+- [x] Handle both regular handlers and default handler scenarios
+- [x] Implement comprehensive error handling with proper span status
+- [x] Maintain full backward compatibility (342 total tests passing)
+- [x] Commit: "Implement Handler-Level OpenTelemetry Instrumentation (#64)"
 
 ### Phase 6: Observability Package ✅
 - [x] Create new `AlexaVoxCraft.Observability` package
@@ -325,7 +328,10 @@ services.AddOpenTelemetry()
 ### Key Metrics
 - `alexa.requests` - Request counter by type/intent/locale
 - `alexa.latency` - End-to-end request processing time
-- `alexa.handler.duration` - Handler execution time
+- `alexa.handler.duration` - Handler execution time by type and default status
+- `alexa.handler.resolution.duration` - Handler CanHandle() resolution time
+- `alexa.handler.executions` - Counter of successful handler executions by type
+- `alexa.handler.resolution.attempts` - Counter of handler resolution attempts by type
 - `alexa.serialization.duration` - Serialization time by direction (request/response)
 - `alexa.payload.size` - Payload sizes in bytes by direction and type
 - `alexa.errors` - Error counter by type
@@ -337,7 +343,8 @@ services.AddOpenTelemetry()
 ### Key Spans
 - `alexa.lambda.execution` - Overall Lambda execution
 - `alexa.request` - Request processing pipeline
-- `alexa.handler` - Individual handler execution
+- `alexa.handler.resolution` - Handler CanHandle() resolution evaluation
+- `alexa.handler` - Individual handler execution (Handle() method)
 - `alexa.serialization.request/response` - Serialization performance
 - `alexa.apl.render` - APL document processing
 
@@ -347,6 +354,10 @@ All telemetry follows OpenTelemetry semantic conventions with Alexa-specific ext
 - `alexa.request.type`, `alexa.intent.name`, `alexa.locale`
 - `alexa.session.new`, `alexa.device.has_screen`
 - `alexa.dialog.state`, `alexa.slot.resolution.status`
+- `alexa.handler.type` - Handler class name for identification
+- `alexa.handler.can_handle` - Handler resolution result (true/false)
+- `alexa.handler.execution_order` - Handler evaluation order in resolution loop
+- `alexa.handler.is_default` - Whether this is the default handler
 - `alexa.serialization.direction` - "request" or "response"
 - `alexa.payload.size` - Payload size in bytes
 - `code.namespace`, `code.function` - Type information for serialized objects
