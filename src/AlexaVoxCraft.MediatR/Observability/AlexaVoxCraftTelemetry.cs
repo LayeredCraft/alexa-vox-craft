@@ -38,13 +38,18 @@ public static class AlexaVoxCraftTelemetry
         Meter.CreateHistogram<double>(AlexaMetricNames.LambdaDuration, "ms");
     public static readonly Histogram<long> LambdaMemoryUsed = 
         Meter.CreateHistogram<long>(AlexaMetricNames.LambdaMemoryUsed, "MB");
+    public static readonly Histogram<long> PayloadSize = 
+        Meter.CreateHistogram<long>(AlexaMetricNames.PayloadSize, unit: "By");
 
     private static int _coldStart = 1;
     public static bool IsColdStart() => Interlocked.Exchange(ref _coldStart, 0) == 1;
 
     public static TimerScope TimeLatency() => new TimerScope(Latency);
     public static TimerScope TimeHandler() => new TimerScope(HandlerDuration);
-    public static TimerScope TimeSerialization() => new TimerScope(SerializationDuration);
+    public static TimerScope TimeRequestSerialization() => new TimerScope(SerializationDuration, 
+        new KeyValuePair<string, object?>(AlexaSemanticAttributes.SerializationDirection, AlexaSemanticValues.SerializationDirectionRequest));
+    public static TimerScope TimeResponseSerialization() => new TimerScope(SerializationDuration, 
+        new KeyValuePair<string, object?>(AlexaSemanticAttributes.SerializationDirection, AlexaSemanticValues.SerializationDirectionResponse));
     public static TimerScope TimeAplRender() => new TimerScope(AplRenderDuration);
     public static TimerScope TimeLambda() => new TimerScope(LambdaDuration);
 
