@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Diagnostics.Metrics;
 using AwesomeAssertions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.MediatR.Lambda.Abstractions;
@@ -17,6 +16,7 @@ using OpenTelemetry.Metrics;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests;
 
+[Collection("DiagnosticsConfig Tests")]
 public class AlexaSkillFunctionTests : TestBase
 {
     [Fact]
