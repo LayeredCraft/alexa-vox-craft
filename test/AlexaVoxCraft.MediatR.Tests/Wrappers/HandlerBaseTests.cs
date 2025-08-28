@@ -3,7 +3,6 @@ using AlexaVoxCraft.TestKit.Attributes;
 using AwesomeAssertions;
 using AutoFixture.Xunit3;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 
 namespace AlexaVoxCraft.MediatR.Tests.Wrappers;
 

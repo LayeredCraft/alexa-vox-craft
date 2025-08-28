@@ -15,4 +15,6 @@ public static class AlexaMetricNames
     public const string SpeechCharacters = "alexa.response.speech.characters";
     public const string AplRenderDuration = "alexa.apl.render.duration";
     public const string PayloadSize = "alexa.payload.size";
+    public const string LambdaDuration = "alexa.lambda.duration";
+    public const string LambdaMemoryUsed = "alexa.lambda.memory_used";
 }

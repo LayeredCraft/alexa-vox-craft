@@ -1,5 +1,4 @@
 using AlexaVoxCraft.MediatR.Observability;
-using AlexaVoxCraft.Observability.TelemetryProviders;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Metrics;
 

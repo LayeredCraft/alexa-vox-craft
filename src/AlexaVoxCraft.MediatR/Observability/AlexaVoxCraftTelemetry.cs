@@ -34,6 +34,10 @@ public static class AlexaVoxCraftTelemetry
         Meter.CreateHistogram<long>(AlexaMetricNames.SpeechCharacters, unit: "{character}");
     public static readonly Histogram<double> AplRenderDuration = 
         Meter.CreateHistogram<double>(AlexaMetricNames.AplRenderDuration, "ms");
+    public static readonly Histogram<double> LambdaDuration = 
+        Meter.CreateHistogram<double>(AlexaMetricNames.LambdaDuration, "ms");
+    public static readonly Histogram<long> LambdaMemoryUsed = 
+        Meter.CreateHistogram<long>(AlexaMetricNames.LambdaMemoryUsed, "MB");
 
     private static int _coldStart = 1;
     public static bool IsColdStart() => Interlocked.Exchange(ref _coldStart, 0) == 1;
@@ -42,6 +46,7 @@ public static class AlexaVoxCraftTelemetry
     public static TimerScope TimeHandler() => new TimerScope(HandlerDuration);
     public static TimerScope TimeSerialization() => new TimerScope(SerializationDuration);
     public static TimerScope TimeAplRender() => new TimerScope(AplRenderDuration);
+    public static TimerScope TimeLambda() => new TimerScope(LambdaDuration);
 
     public readonly struct TimerScope : IDisposable
     {
