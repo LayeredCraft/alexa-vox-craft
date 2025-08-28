@@ -1,7 +1,9 @@
-﻿using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+﻿using System.Diagnostics;
+using AlexaVoxCraft.MediatR.Lambda.Abstractions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.MediatR.Lambda.Extensions;
 using AlexaVoxCraft.MediatR.Lambda.Serialization;
+using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Serialization;
@@ -111,13 +113,35 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
     /// <returns>A task that represents the asynchronous operation. The task result contains the skill response.</returns>
     public virtual async Task<TResponse> FunctionHandlerAsync(TRequest request, ILambdaContext lambdaContext)
     {
-        using var serviceScope = _serviceProvider.CreateScope();
-        var provider = serviceScope.ServiceProvider;
-        var logger = provider.GetRequiredService<ILogger<AlexaSkillFunction<TRequest, TResponse>>>();
-        
         var applicationId = request.Context.System.Application.ApplicationId;
         var requestId = lambdaContext.AwsRequestId;
         var remainingTime = lambdaContext.RemainingTime;
+        var isColdStart = AlexaVoxCraftTelemetry.IsColdStart();
+        
+        using var span = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.LambdaExecution, ActivityKind.Server);
+        
+        span?.SetTag(AlexaSemanticAttributes.FaasName, lambdaContext.FunctionName);
+        span?.SetTag(AlexaSemanticAttributes.FaasVersion, lambdaContext.FunctionVersion);
+        span?.SetTag(AlexaSemanticAttributes.AwsLambdaRequestId, requestId);
+        span?.SetTag(AlexaSemanticAttributes.AwsLambdaMemoryLimit, lambdaContext.MemoryLimitInMB);
+        span?.SetTag(AlexaSemanticAttributes.AwsLambdaRemainingTime, remainingTime.TotalMilliseconds);
+        span?.SetTag(AlexaSemanticAttributes.ApplicationId, applicationId);
+        
+        if (isColdStart)
+        {
+            span?.SetTag(AlexaSemanticAttributes.FaasColdStart, AlexaSemanticValues.True);
+        }
+        
+        using var lambdaTimer = AlexaVoxCraftTelemetry.TimeLambda();
+        
+        // Record Lambda memory limit as a metric for capacity planning and optimization
+        AlexaVoxCraftTelemetry.LambdaMemoryUsed.Record(lambdaContext.MemoryLimitInMB,
+            new(AlexaSemanticAttributes.FaasName, lambdaContext.FunctionName),
+            new(AlexaSemanticAttributes.ApplicationId, applicationId));
+        
+        using var serviceScope = _serviceProvider.CreateScope();
+        var provider = serviceScope.ServiceProvider;
+        var logger = provider.GetRequiredService<ILogger<AlexaSkillFunction<TRequest, TResponse>>>();
         
         using var scope = logger.BeginScope<string, string, string, TimeSpan>(
             "ApplicationId", applicationId,
@@ -135,11 +159,22 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
             var handlerAsync = provider.GetRequiredService<HandlerDelegate<TRequest, TResponse>>();
             var response = await handlerAsync(request, lambdaContext);
             
+            span?.SetStatus(ActivityStatusCode.Ok);
             logger.Information("Lambda execution completed successfully for skill {ApplicationId}", applicationId);
             return response;
         }
         catch (Exception ex)
         {
+            span?.AddEvent(new ActivityEvent(AlexaEventNames.Exception,
+                DateTimeOffset.UtcNow,
+                new ActivityTagsCollection
+                {
+                    [AlexaSemanticAttributes.ExceptionType] = ex.GetType().FullName!,
+                    [AlexaSemanticAttributes.ExceptionMessage] = ex.Message,
+                    [AlexaSemanticAttributes.ExceptionStackTrace] = ex.StackTrace ?? ""
+                }));
+            span?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            
             logger.Error(ex, "Lambda execution failed for skill {ApplicationId}", applicationId);
             throw;
         }

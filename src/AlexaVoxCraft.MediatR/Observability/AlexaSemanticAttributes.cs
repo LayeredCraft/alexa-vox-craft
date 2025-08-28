@@ -43,4 +43,10 @@ public static class AlexaSemanticAttributes
     
     public const string SpeechCharacters = "speech_chars";
     public const string RepromptCharacters = "reprompt_chars";
+    
+    public const string FaasName = "faas.name";
+    public const string FaasVersion = "faas.version";
+    public const string AwsLambdaRequestId = "aws.lambda.request_id";
+    public const string AwsLambdaMemoryLimit = "aws.lambda.memory_limit";
+    public const string AwsLambdaRemainingTime = "aws.lambda.remaining_time";
 }

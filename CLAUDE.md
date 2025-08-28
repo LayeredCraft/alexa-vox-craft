@@ -266,12 +266,16 @@ public class MyExceptionHandler : IExceptionHandler
 - [x] Address Copilot feedback: entropy comment, APL constant, authority.Status null check
 - [x] Commit: "Replace PerformanceLoggingBehavior with comprehensive OpenTelemetry instrumentation"
 
-### Phase 3: Lambda Function Instrumentation
-- [ ] Enhance `AlexaSkillFunction.FunctionHandlerAsync()` with spans
-- [ ] Add cold start detection and tracking
-- [ ] Add Lambda-level context and error handling
-- [ ] Update related unit tests
-- [ ] Commit: "Add OpenTelemetry instrumentation to Lambda function layer"
+### Phase 3: Lambda Function Instrumentation ✅
+- [x] Enhance `AlexaSkillFunction.FunctionHandlerAsync()` with spans
+- [x] Add cold start detection and tracking
+- [x] Add Lambda-level context and error handling
+- [x] Add 6 new semantic attribute constants for Lambda context
+- [x] Add Lambda metrics (duration and memory) with helper methods
+- [x] Add comprehensive unit tests (6 new tests covering spans, attributes, metrics)
+- [x] Maintain full backward compatibility (73/73 tests passing)
+- [x] Remove unused `FaasExecution` constant for code cleanliness
+- [x] Commit: "Add comprehensive OpenTelemetry instrumentation to Lambda function layer"
 
 ### Phase 4: Serialization Instrumentation
 - [ ] Instrument `AlexaLambdaSerializer` with serialization spans
