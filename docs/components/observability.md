@@ -63,13 +63,23 @@ public class Function : AlexaSkillFunction<SkillRequest, SkillResponse>
 ## What Gets Instrumented
 
 ### Spans
+- **alexa.lambda.execution**: Overall Lambda execution span with cold start detection
 - **alexa.request**: Main request processing span with comprehensive semantic attributes
+- **alexa.serialization.request**: Request deserialization span with payload size tracking
+- **alexa.serialization.response**: Response serialization span with payload size tracking
+- **alexa.handler**: Individual handler execution spans
+- **alexa.apl.render**: APL document rendering spans
 - Activity events for slot resolutions, response building, and exceptions
 - Standard OpenTelemetry exception handling with proper status codes
 
 ### Metrics  
 - **alexa.requests**: Counter of skill requests by type, intent, locale, device capabilities
 - **alexa.latency**: Histogram of request processing time with dimensional tags
+- **alexa.handler.duration**: Histogram of handler execution time
+- **alexa.serialization.duration**: Histogram of serialization time by direction (request/response)
+- **alexa.payload.size**: Histogram of payload sizes in bytes by direction and type
+- **alexa.lambda.duration**: Histogram of Lambda execution time
+- **alexa.lambda.memory_used**: Histogram of Lambda memory usage in MB
 - **alexa.cold_starts**: Counter of Lambda cold starts with `faas.coldstart` attribute
 - **alexa.errors**: Counter of errors by classification and context
 - **alexa.slot_resolutions**: Counter of slot resolution attempts by status
@@ -98,6 +108,10 @@ All telemetry follows OpenTelemetry semantic conventions:
 - `alexa.device.has_screen`: Device visual capability
 - `alexa.dialog.state`: Dialog management state
 - `alexa.slot.resolution.status`: Slot resolution results
+- `alexa.serialization.direction`: "request" or "response" for serialization operations
+- `alexa.payload.size`: Payload size in bytes
+- `code.namespace`: Type namespace for serialized objects
+- `code.function`: Type name (e.g., "SkillRequest", "SkillResponse")
 
 ## Key Benefits
 

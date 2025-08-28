@@ -44,6 +44,9 @@ public static class AlexaSemanticAttributes
     public const string SpeechCharacters = "speech_chars";
     public const string RepromptCharacters = "reprompt_chars";
     
+    public const string SerializationDirection = "alexa.serialization.direction";
+    public const string PayloadSize = "alexa.payload.size";
+    
     public const string FaasName = "faas.name";
     public const string FaasVersion = "faas.version";
     public const string AwsLambdaRequestId = "aws.lambda.request_id";

@@ -17,6 +17,9 @@ public static class AlexaSemanticValues
     public const string SlotResolutionNoMatch = "no_match";
     public const string SlotResolutionError = "error";
     
+    public const string SerializationDirectionRequest = "request";
+    public const string SerializationDirectionResponse = "response";
+    
     public const string LaunchRequest = "LaunchRequest";
     public const string IntentRequest = "IntentRequest";
     public const string SessionEndedRequest = "SessionEndedRequest";
