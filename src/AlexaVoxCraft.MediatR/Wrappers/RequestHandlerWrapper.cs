@@ -96,6 +96,7 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                 // Track default handler resolution attempt
                 AlexaVoxCraftTelemetry.HandlerResolutionAttempts.Add(1,
                     new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerType, defaultHandlerType),
+                    new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerExecutionOrder, executionOrder),
                     new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerIsDefault, true));
 
                 // Instrument default handler CanHandle() call
@@ -103,6 +104,7 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                 using var defaultResolutionTimer = AlexaVoxCraftTelemetry.TimeHandlerResolution();
                 
                 defaultResolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerType, defaultHandlerType);
+                defaultResolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerExecutionOrder, executionOrder);
                 defaultResolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerIsDefault, true);
 
                 bool canHandleDefault;
