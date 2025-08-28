@@ -26,6 +26,12 @@ public static class AlexaVoxCraftTelemetry
         Meter.CreateHistogram<double>(AlexaMetricNames.Latency, unit: "ms");
     public static readonly Histogram<double> HandlerDuration = 
         Meter.CreateHistogram<double>(AlexaMetricNames.HandlerDuration, "ms");
+    public static readonly Histogram<double> HandlerResolutionDuration = 
+        Meter.CreateHistogram<double>(AlexaMetricNames.HandlerResolutionDuration, "ms");
+    public static readonly Counter<long> HandlerExecutions = 
+        Meter.CreateCounter<long>(AlexaMetricNames.HandlerExecutions);
+    public static readonly Counter<long> HandlerResolutionAttempts = 
+        Meter.CreateCounter<long>(AlexaMetricNames.HandlerResolutionAttempts);
     public static readonly Histogram<double> SerializationDuration = 
         Meter.CreateHistogram<double>(AlexaMetricNames.SerializationDuration, "ms");
     public static readonly Histogram<long> ResponseSize = 
@@ -46,6 +52,11 @@ public static class AlexaVoxCraftTelemetry
 
     public static TimerScope TimeLatency() => new TimerScope(Latency);
     public static TimerScope TimeHandler() => new TimerScope(HandlerDuration);
+    public static TimerScope TimeHandlerResolution() => new TimerScope(HandlerResolutionDuration);
+    public static TimerScope TimeHandlerExecution(string handlerType, bool isDefault = false) => 
+        new TimerScope(HandlerDuration, 
+            new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerType, handlerType),
+            new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerIsDefault, isDefault));
     public static TimerScope TimeRequestSerialization() => new TimerScope(SerializationDuration, 
         new KeyValuePair<string, object?>(AlexaSemanticAttributes.SerializationDirection, AlexaSemanticValues.SerializationDirectionRequest));
     public static TimerScope TimeResponseSerialization() => new TimerScope(SerializationDuration, 

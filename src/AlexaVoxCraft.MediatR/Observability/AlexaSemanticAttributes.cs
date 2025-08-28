@@ -22,6 +22,9 @@ public static class AlexaSemanticAttributes
     public const string UserId = "alexa.user.id";
     
     public const string HandlerType = "alexa.handler.type";
+    public const string HandlerCanHandle = "alexa.handler.can_handle";
+    public const string HandlerExecutionOrder = "alexa.handler.execution_order";
+    public const string HandlerIsDefault = "alexa.handler.is_default";
     public const string CodeNamespace = "code.namespace";
     public const string CodeFunction = "code.function";
     
