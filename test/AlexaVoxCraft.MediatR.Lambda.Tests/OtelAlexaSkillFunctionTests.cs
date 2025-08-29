@@ -67,7 +67,7 @@
 //         // Verify activity was created
 //         var activity = _capturedActivities.Should().ContainSingle().Subject;
 //         activity.OperationName.Should().Be(AlexaSpanNames.LambdaExecution);
-//         activity.Kind.Should().Be(ActivityKind.Server);
+//         activity.Kind.Should().Be(ActivityKind.Internal);
 //         activity.Status.Should().Be(ActivityStatusCode.Ok);
 //         
 //         // Verify FaaS semantic attributes
