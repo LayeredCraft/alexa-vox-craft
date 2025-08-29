@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using AlexaVoxCraft.MediatR.Observability;
-using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.MediatR.Wrappers;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;

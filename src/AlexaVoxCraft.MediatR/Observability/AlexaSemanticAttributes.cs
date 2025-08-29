@@ -16,11 +16,9 @@ public static class AlexaSemanticAttributes
     public const string Locale = "alexa.locale";
     public const string DeviceHasScreen = "alexa.device.has_screen";
     public const string DialogState = "alexa.dialog.state";
-    public const string SkillId = "alexa.skill.id";
     public const string ApplicationId = "alexa.application.id";
     public const string RequestId = "alexa.request.id";
-    public const string UserId = "alexa.user.id";
-    
+
     public const string HandlerType = "alexa.handler.type";
     public const string HandlerCanHandle = "alexa.handler.can_handle";
     public const string HandlerExecutionOrder = "alexa.handler.execution_order";
@@ -37,10 +35,7 @@ public static class AlexaSemanticAttributes
     public const string ResponseHasApl = "alexa.response.has_apl";
     public const string ResponseHasReprompt = "alexa.response.has_reprompt";
     public const string ResponseShouldEndSession = "alexa.response.should_end_session";
-    
-    public const string AplDocumentType = "alexa.apl.document.type";
-    public const string AplComponentCount = "alexa.apl.component.count";
-    
+
     public const string SlotName = "alexa.slot.name";
     public const string SlotResolutionStatus = "alexa.slot.resolution.status";
     

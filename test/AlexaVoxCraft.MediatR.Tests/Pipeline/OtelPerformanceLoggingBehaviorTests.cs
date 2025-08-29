@@ -2,7 +2,6 @@ using System.Diagnostics;
 using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.Model.Request;
-using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.TestKit.Attributes;
 using AutoFixture.Xunit3;

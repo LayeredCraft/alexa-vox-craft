@@ -19,8 +19,6 @@ public static class AlexaVoxCraftTelemetry
         Meter.CreateCounter<long>(AlexaMetricNames.ColdStarts);
     public static readonly Counter<long> SlotResolutions = 
         Meter.CreateCounter<long>(AlexaMetricNames.SlotResolutions);
-    public static readonly Counter<long> SkillVerificationFailures = 
-        Meter.CreateCounter<long>(AlexaMetricNames.SkillVerificationFailures);
 
     public static readonly Histogram<double> Latency = 
         Meter.CreateHistogram<double>(AlexaMetricNames.Latency, unit: "ms");
@@ -34,8 +32,7 @@ public static class AlexaVoxCraftTelemetry
         Meter.CreateCounter<long>(AlexaMetricNames.HandlerResolutionAttempts);
     public static readonly Histogram<double> SerializationDuration = 
         Meter.CreateHistogram<double>(AlexaMetricNames.SerializationDuration, "ms");
-    public static readonly Histogram<long> ResponseSize = 
-        Meter.CreateHistogram<long>(AlexaMetricNames.ResponseSize, unit: "By");
+
     public static readonly Histogram<long> SpeechCharacters = 
         Meter.CreateHistogram<long>(AlexaMetricNames.SpeechCharacters, unit: "{character}");
     public static readonly Histogram<double> AplRenderDuration = 
@@ -50,19 +47,17 @@ public static class AlexaVoxCraftTelemetry
     private static int _coldStart = 1;
     public static bool IsColdStart() => Interlocked.Exchange(ref _coldStart, 0) == 1;
 
-    public static TimerScope TimeLatency() => new TimerScope(Latency);
-    public static TimerScope TimeHandler() => new TimerScope(HandlerDuration);
-    public static TimerScope TimeHandlerResolution() => new TimerScope(HandlerResolutionDuration);
+    public static TimerScope TimeHandlerResolution() => new(HandlerResolutionDuration);
     public static TimerScope TimeHandlerExecution(string handlerType, bool isDefault = false) => 
-        new TimerScope(HandlerDuration, 
+        new(HandlerDuration, 
             new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerType, handlerType),
             new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerIsDefault, isDefault));
-    public static TimerScope TimeRequestSerialization() => new TimerScope(SerializationDuration, 
+    public static TimerScope TimeRequestSerialization() => new(SerializationDuration, 
         new KeyValuePair<string, object?>(AlexaSemanticAttributes.SerializationDirection, AlexaSemanticValues.SerializationDirectionRequest));
-    public static TimerScope TimeResponseSerialization() => new TimerScope(SerializationDuration, 
+    public static TimerScope TimeResponseSerialization() => new(SerializationDuration, 
         new KeyValuePair<string, object?>(AlexaSemanticAttributes.SerializationDirection, AlexaSemanticValues.SerializationDirectionResponse));
-    public static TimerScope TimeAplRender() => new TimerScope(AplRenderDuration);
-    public static TimerScope TimeLambda() => new TimerScope(LambdaDuration);
+
+    public static TimerScope TimeLambda() => new(LambdaDuration);
 
     public readonly struct TimerScope : IDisposable
     {
