@@ -1,9 +1,7 @@
-using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using AwesomeAssertions;
 using AlexaVoxCraft.MediatR.Lambda.Serialization;
-using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Serialization;
@@ -13,6 +11,7 @@ using LayeredCraft.StructuredLogging.Testing;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests.Serialization;
 
+[Collection("DiagnosticsConfig Tests")]
 public class AlexaLambdaSerializerTests : TestBase
 {
     private readonly TestLogger<AlexaLambdaSerializer> _testLogger;

@@ -8,6 +8,4 @@ public static class AlexaSpanNames
     public const string HandlerResolution = "alexa.handler.resolution";
     public const string SerializationRequest = "alexa.serialization.request";
     public const string SerializationResponse = "alexa.serialization.response";
-    public const string AplRender = "alexa.apl.render";
-    public const string Mediation = "alexa.mediation";
 }

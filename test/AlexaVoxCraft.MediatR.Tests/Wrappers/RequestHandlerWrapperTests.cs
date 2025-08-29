@@ -11,6 +11,7 @@ using NSubstitute;
 
 namespace AlexaVoxCraft.MediatR.Tests.Wrappers;
 
+[Collection("DiagnosticsConfig Tests")]
 public class RequestHandlerWrapperTests : TestBase
 {
     [Theory]
