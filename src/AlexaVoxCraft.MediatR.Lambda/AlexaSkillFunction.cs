@@ -118,7 +118,7 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
         var remainingTime = lambdaContext.RemainingTime;
         var isColdStart = AlexaVoxCraftTelemetry.IsColdStart();
         
-        using var span = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.LambdaExecution, ActivityKind.Server);
+        using var span = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.LambdaExecution, ActivityKind.Internal);
         
         span?.SetTag(AlexaSemanticAttributes.FaasName, lambdaContext.FunctionName);
         span?.SetTag(AlexaSemanticAttributes.FaasVersion, lambdaContext.FunctionVersion);

@@ -36,7 +36,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
         var hasScreen = HasScreen(input.RequestEnvelope.Context.System.Device?.SupportedInterfaces);
         var dialogState = (request as IntentRequest)?.DialogState;
 
-        using var span = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.Request, ActivityKind.Server);
+        using var span = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.Request, ActivityKind.Internal);
         
         span?.SetTag(AlexaSemanticAttributes.RpcSystem, AlexaSemanticValues.RpcSystemAlexa);
         span?.SetTag(AlexaSemanticAttributes.RpcService, applicationId);
