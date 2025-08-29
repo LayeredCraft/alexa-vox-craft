@@ -97,4 +97,8 @@ public static class AlexaVoxCraftTelemetry
             }
         }
     }
+    internal static void ResetForTesting()
+    {
+        Volatile.Write(ref _coldStart, 1);
+    }
 }
