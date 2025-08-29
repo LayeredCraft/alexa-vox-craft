@@ -10,6 +10,7 @@ using NSubstitute;
 
 namespace AlexaVoxCraft.MediatR.Tests.Pipeline;
 
+[Collection("DiagnosticsConfig Tests")]
 public class PerformanceLoggingBehaviorTests : TestBase
 {
     [Theory]

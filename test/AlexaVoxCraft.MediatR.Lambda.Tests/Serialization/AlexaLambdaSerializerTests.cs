@@ -13,6 +13,7 @@ using LayeredCraft.StructuredLogging.Testing;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests.Serialization;
 
+[Collection("DiagnosticsConfig Tests")]
 public class AlexaLambdaSerializerTests : TestBase
 {
     private readonly TestLogger<AlexaLambdaSerializer> _testLogger;

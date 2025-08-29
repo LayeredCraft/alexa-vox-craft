@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests;
 
+[Collection("DiagnosticsConfig Tests")]
 public class AlexaSkillFunctionTests : TestBase
 {
     [Fact]
