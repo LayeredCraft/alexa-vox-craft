@@ -294,7 +294,7 @@ public class AlexaSkillFunctionTests : TestBase
         lambdaSpan.Should().NotBeNull();
         lambdaSpan!.Status.Should().Be(ActivityStatusCode.Error);
         
-        var exceptionEvents = events.Where(e => e.Name == AlexaEventNames.Exception);
+        var exceptionEvents = events.Where(e => e.Name == "exception");
         exceptionEvents.Should().NotBeEmpty();
     }
 

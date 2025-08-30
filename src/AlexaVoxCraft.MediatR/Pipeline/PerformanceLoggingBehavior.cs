@@ -113,14 +113,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
         }
         catch (Exception ex)
         {
-            span?.AddEvent(new ActivityEvent(AlexaEventNames.Exception,
-                DateTimeOffset.UtcNow,
-                new ActivityTagsCollection
-                {
-                    [AlexaSemanticAttributes.ExceptionType] = ex.GetType().FullName!,
-                    [AlexaSemanticAttributes.ExceptionMessage] = ex.Message,
-                    [AlexaSemanticAttributes.ExceptionStackTrace] = ex.StackTrace ?? ""
-                }));
+            span?.AddException(ex);
             span?.SetStatus(ActivityStatusCode.Error, ex.Message);
             
             var errorType = ClassifyError(ex);

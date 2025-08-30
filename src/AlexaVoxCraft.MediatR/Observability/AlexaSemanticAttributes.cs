@@ -27,9 +27,6 @@ public static class AlexaSemanticAttributes
     public const string CodeFunction = "code.function";
     
     public const string ErrorType = "alexa.error.type";
-    public const string ExceptionType = "exception.type";
-    public const string ExceptionMessage = "exception.message";
-    public const string ExceptionStackTrace = "exception.stacktrace";
     
     public const string ResponseHasCard = "alexa.response.has_card";
     public const string ResponseHasApl = "alexa.response.has_apl";
