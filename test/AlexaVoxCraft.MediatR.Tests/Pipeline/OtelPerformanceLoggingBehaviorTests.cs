@@ -122,12 +122,12 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         activity.Status.Should().Be(ActivityStatusCode.Error);
         activity.StatusDescription.Should().Be(exception.Message);
 
-        // Assert exception event was recorded
-        var exceptionEvent = activity.Events.Should().ContainSingle(e => e.Name == AlexaEventNames.Exception).Subject;
+        // Assert exception event was recorded using standard OpenTelemetry AddException
+        var exceptionEvent = activity.Events.Should().ContainSingle(e => e.Name == "exception").Subject;
         exceptionEvent.Tags.Should().ContainEquivalentOf(
-            new KeyValuePair<string, object?>(AlexaSemanticAttributes.ExceptionType, typeof(ArgumentException).FullName!));
+            new KeyValuePair<string, object?>("exception.type", typeof(ArgumentException).FullName!));
         exceptionEvent.Tags.Should().ContainEquivalentOf(
-            new KeyValuePair<string, object?>(AlexaSemanticAttributes.ExceptionMessage, exception.Message));
+            new KeyValuePair<string, object?>("exception.message", exception.Message));
 
         // Assert error metrics
         var errorMetrics = _capturedMetrics
