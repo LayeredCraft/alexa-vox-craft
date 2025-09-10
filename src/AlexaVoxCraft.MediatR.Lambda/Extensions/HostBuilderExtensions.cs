@@ -28,9 +28,9 @@ public static class HostBuilderExtensions
     {
         var handler = ActivatorUtilities.CreateInstance<THandler>(requestedServices);
 
-        return async (request, context) =>
+        return async (request, context, cancellationToken) =>
         {
-            var response = await handler.HandleAsync(request, context);
+            var response = await handler.HandleAsync(request, context, cancellationToken);
             return response;
         };
     }

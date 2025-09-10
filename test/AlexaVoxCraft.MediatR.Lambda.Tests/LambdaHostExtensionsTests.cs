@@ -32,11 +32,11 @@ public class LambdaHostExtensionsTests : TestBase
     {
         var customHandlerCalled = false;
         
-        Func<TestRunAlexaSkillFunction, IServiceProvider, Func<SkillRequest, ILambdaContext, Task<SkillResponse>>> handlerBuilder =
+        Func<TestRunAlexaSkillFunction, IServiceProvider, Func<SkillRequest, ILambdaContext, CancellationToken, Task<SkillResponse>>> handlerBuilder =
             (function, services) =>
             {
                 customHandlerCalled = true;
-                return async (request, context) =>
+                return async (request, context, cancellationToken) =>
                 {
                     await Task.CompletedTask;
                     return new SkillResponse();
@@ -116,7 +116,7 @@ public class LambdaHostExtensionsTests : TestBase
         var services = function.ServiceProvider;
         
         // Test that default handler works
-        var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
         
         result.Should().NotBeNull();
         result.Should().BeOfType<SkillResponse>();
@@ -169,8 +169,8 @@ public class TestRunAlexaSkillFunctionWithHandler : AlexaSkillFunction<SkillRequ
     {
         builder.ConfigureServices((context, services) =>
         {
-            services.AddSingleton<HandlerDelegate<SkillRequest, SkillResponse>>(
-                (_, _) => Task.FromResult(new SkillResponse()));
+            services.AddSingleton<HandlerDelegate<SkillRequest, SkillResponse>>((_, _, _) =>
+                Task.FromResult(new SkillResponse()));
         });
         base.Init(builder);
     }

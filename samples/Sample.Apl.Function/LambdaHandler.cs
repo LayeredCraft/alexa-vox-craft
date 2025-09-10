@@ -20,7 +20,7 @@ public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context)
+    public async Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context, CancellationToken cancellationToken)
     {
         _logger.Debug("Received request of type {RequestType}", propertyValue: request.Request.GetType().Name);
         if (request.Request is IntentRequest intent)
@@ -30,7 +30,7 @@ public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
 
         try
         {
-            var response = await _mediator.Send(request);
+            var response = await _mediator.Send(request, cancellationToken);
             return response;
         }
         catch (Exception ex)
