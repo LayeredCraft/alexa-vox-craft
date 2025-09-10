@@ -30,6 +30,25 @@ public class SkillServiceConfiguration
     /// </summary>
     /// <value>The service lifetime. Defaults to <see cref="ServiceLifetime.Transient"/>.</value>
     public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Transient;
+
+    /// <summary>
+    /// Gets or sets the timeout buffer in milliseconds for cancellation token handling in Lambda functions.
+    /// This buffer is subtracted from the Lambda's remaining execution time to allow for
+    /// graceful shutdown and telemetry flushing before the Lambda times out.
+    /// </summary>
+    /// <value>The timeout buffer in milliseconds. Defaults to 250.</value>
+    /// <remarks>
+    /// When a Lambda function approaches its timeout limit, this buffer ensures that:
+    /// <list type="bullet">
+    /// <item><description>OpenTelemetry spans and metrics can be properly flushed</description></item>
+    /// <item><description>Logging can complete gracefully</description></item>
+    /// <item><description>Resources can be properly disposed</description></item>
+    /// <item><description>The function doesn't get forcefully terminated mid-operation</description></item>
+    /// </list>
+    /// A smaller buffer reduces the safety margin but maximizes execution time.
+    /// A larger buffer provides more safety but reduces available execution time.
+    /// </remarks>
+    public int CancellationTimeoutBufferMilliseconds { get; set; } = 250;
     
     /// <summary>
     /// Gets the list of assemblies to scan for request handlers and other skill components.

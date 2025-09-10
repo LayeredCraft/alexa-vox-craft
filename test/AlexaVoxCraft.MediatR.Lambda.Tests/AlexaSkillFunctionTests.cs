@@ -92,7 +92,7 @@ public class AlexaSkillFunctionTests : TestBase
         var function = new TestAlexaSkillFunction();
 
         var exception = await Record.ExceptionAsync(() => 
-            function.FunctionHandlerAsync(skillRequest, lambdaContext));
+            function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
         exception.Should().BeOfType<InvalidOperationException>();
@@ -105,7 +105,7 @@ public class AlexaSkillFunctionTests : TestBase
         var function = new TestAlexaSkillFunction();
 
         var exception = await Record.ExceptionAsync(() => 
-            function.FunctionHandlerAsync(null!, lambdaContext));
+            function.FunctionHandlerAsync(null!, lambdaContext, TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
     }
@@ -117,7 +117,7 @@ public class AlexaSkillFunctionTests : TestBase
         var function = new TestAlexaSkillFunction();
 
         var exception = await Record.ExceptionAsync(() => 
-            function.FunctionHandlerAsync(skillRequest, null!));
+            function.FunctionHandlerAsync(skillRequest, null!, TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
     }
@@ -130,7 +130,7 @@ public class AlexaSkillFunctionTests : TestBase
     {
         var function = new TestAlexaSkillFunctionWithHandler();
         
-        var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
         
         result.Should().NotBeNull();
         result.Should().BeOfType<SkillResponse>();
@@ -145,7 +145,7 @@ public class AlexaSkillFunctionTests : TestBase
         var function = new TestAlexaSkillFunctionWithThrowingHandler();
 
         var thrownException = await Record.ExceptionAsync(() => 
-            function.FunctionHandlerAsync(skillRequest, lambdaContext));
+            function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken));
 
         thrownException.Should().BeOfType<InvalidOperationException>();
         thrownException.Message.Should().Be("Handler exception");
@@ -224,7 +224,7 @@ public class AlexaSkillFunctionTests : TestBase
         };
         ActivitySource.AddActivityListener(activityListener);
         
-        await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
         
         activities.Should().NotBeEmpty();
         var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
@@ -251,11 +251,11 @@ public class AlexaSkillFunctionTests : TestBase
         
         // Reset cold start state by creating a new function instance
         var coldStartFunction = new TestAlexaSkillFunctionWithHandler();
-        await coldStartFunction.FunctionHandlerAsync(skillRequest, lambdaContext);
+        await coldStartFunction.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
         
         // Second call should not be cold start
         activities.Clear();
-        await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
         
         var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
         lambdaSpan.Should().NotBeNull();
@@ -286,7 +286,7 @@ public class AlexaSkillFunctionTests : TestBase
         ActivitySource.AddActivityListener(activityListener);
         
         var exception = await Record.ExceptionAsync(() => 
-            function.FunctionHandlerAsync(skillRequest, lambdaContext));
+            function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken));
         
         exception.Should().NotBeNull();
         
@@ -308,7 +308,7 @@ public class AlexaSkillFunctionTests : TestBase
         
         // This test verifies that the timer scope is used without external metric collection
         // The actual duration tracking is handled by the TimerScope which we can't easily mock
-        var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext);
+        var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
         
         result.Should().NotBeNull();
         result.Should().BeOfType<SkillResponse>();
@@ -356,7 +356,7 @@ public class TestAlexaSkillFunctionWithHandler : AlexaSkillFunction<SkillRequest
         builder.ConfigureServices(services =>
         {
             services.AddSingleton<HandlerDelegate<SkillRequest, SkillResponse>>(
-                (request, context) => Task.FromResult(new SkillResponse()));
+                (request, context, cancellationToken) => Task.FromResult(new SkillResponse()));
         });
         base.Init(builder);
     }
@@ -372,7 +372,7 @@ public class TestAlexaSkillFunctionWithThrowingHandler : AlexaSkillFunction<Skil
         builder.ConfigureServices(services =>
         {
             services.AddSingleton<HandlerDelegate<SkillRequest, SkillResponse>>(
-                (request, context) => Task.FromException<SkillResponse>(new InvalidOperationException("Handler exception")));
+                (request, context, cancellationToken) => Task.FromException<SkillResponse>(new InvalidOperationException("Handler exception")));
         });
         base.Init(builder);
     }

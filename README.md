@@ -168,6 +168,79 @@ public class GlobalExceptionHandler : IExceptionHandler
 }
 ```
 
+## 📋 Version 4.0.0+ Breaking Changes
+
+### Cancellation Token Support
+
+Version 4.0.0 introduces cancellation token support for Lambda functions. This is a **breaking change** that requires updates to your existing lambda handlers.
+
+#### Required Changes
+
+**1. Update Lambda Handlers**
+
+Lambda handlers must now accept and pass the cancellation token:
+
+```csharp
+// ❌ Before (v3.x)
+public class LambdaHandler : ILambdaHandler<SkillRequest, SkillResponse>
+{
+    public async Task<SkillResponse> HandleAsync(SkillRequest input, ILambdaContext context)
+    {
+        return await _skillMediator.Send(input);
+    }
+}
+
+// ✅ After (v4.0+)
+public class LambdaHandler : ILambdaHandler<SkillRequest, SkillResponse>
+{
+    public async Task<SkillResponse> HandleAsync(SkillRequest input, ILambdaContext context, CancellationToken cancellationToken)
+    {
+        return await _skillMediator.Send(input, cancellationToken);
+    }
+}
+```
+
+**2. Update AlexaSkillFunction Override**
+
+If you override `FunctionHandlerAsync` in your skill function class, you must update the signature:
+
+```csharp
+// ❌ Before (v3.x)
+public class MySkillFunction : AlexaSkillFunction<SkillRequest, SkillResponse>
+{
+    public override async Task<SkillResponse> FunctionHandlerAsync(SkillRequest input, ILambdaContext context)
+    {
+        // Custom logic here
+        return await base.FunctionHandlerAsync(input, context);
+    }
+}
+
+// ✅ After (v4.0+)
+public class MySkillFunction : AlexaSkillFunction<SkillRequest, SkillResponse>
+{
+    public override async Task<SkillResponse> FunctionHandlerAsync(SkillRequest input, ILambdaContext context, CancellationToken cancellationToken)
+    {
+        // Custom logic here
+        return await base.FunctionHandlerAsync(input, context, cancellationToken);
+    }
+}
+```
+
+#### Configuration Options
+
+You can now configure the cancellation timeout buffer in your `appsettings.json`:
+
+```json
+{
+  "SkillConfiguration": {
+    "SkillId": "amzn1.ask.skill.your-skill-id",
+    "CancellationTimeoutBufferMilliseconds": 500
+  }
+}
+```
+
+The timeout buffer (default: 250ms) is subtracted from Lambda's remaining execution time to allow graceful shutdown and telemetry flushing.
+
 ## 🤝 Contributing
 
 PRs are welcome! Please submit issues and ideas to help make this toolkit even better.

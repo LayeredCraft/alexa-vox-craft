@@ -110,8 +110,9 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
     /// </summary>
     /// <param name="request">The incoming Alexa skill request.</param>
     /// <param name="lambdaContext">The AWS Lambda execution context.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the skill response.</returns>
-    public virtual async Task<TResponse> FunctionHandlerAsync(TRequest request, ILambdaContext lambdaContext)
+    public virtual async Task<TResponse> FunctionHandlerAsync(TRequest request, ILambdaContext lambdaContext, CancellationToken cancellationToken)
     {
         var applicationId = request.Context.System.Application.ApplicationId;
         var requestId = lambdaContext.AwsRequestId;
@@ -157,11 +158,17 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
         {
             CreateContext(request);
             var handlerAsync = provider.GetRequiredService<HandlerDelegate<TRequest, TResponse>>();
-            var response = await handlerAsync(request, lambdaContext);
+            var response = await handlerAsync(request, lambdaContext, cancellationToken);
             
             span?.SetStatus(ActivityStatusCode.Ok);
             logger.Information("Lambda execution completed successfully for skill {ApplicationId}", applicationId);
             return response;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            span?.SetStatus(ActivityStatusCode.Error, "Operation canceled");
+            logger.Warning("Lambda execution canceled for skill {ApplicationId}", applicationId);
+            throw;
         }
         catch (Exception ex)
         {
