@@ -375,7 +375,7 @@ public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context)
+    public async Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context, CancellationToken cancellationToken)
     { 
         using var activity = Activity.StartActivity($"{nameof(LambdaHandler)}.{nameof(HandleAsync)}");
         
@@ -389,7 +389,7 @@ public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
 
         try
         {
-            var response = await _mediator.Send(request);
+            var response = await _mediator.Send(request, cancellationToken);
             activity?.SetStatus(ActivityStatusCode.Ok);
             return response;
         }

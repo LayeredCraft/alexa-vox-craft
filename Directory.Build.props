@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <VersionPrefix>3.2.1</VersionPrefix>
+        <VersionPrefix>4.0.0-preview</VersionPrefix>
         <!-- SPDX license identifier for Apache 2.0 -->
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 

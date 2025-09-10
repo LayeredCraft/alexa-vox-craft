@@ -172,7 +172,7 @@ public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context)
+    public async Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context, CancellationToken cancellationToken)
     { 
         using var activity = DiagnosticsConfig.Source.StartActivityWithTags(
             $"{nameof(LambdaHandler)}.{nameof(HandleAsync)}", new()
@@ -192,7 +192,7 @@ public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
 
         try
         {
-            var response = await _mediator.Send(request);
+            var response = await _mediator.Send(request, cancellationToken);
             activity?.SetStatus(ActivityStatusCode.Ok);
             return response;
         }
@@ -279,6 +279,10 @@ public class ActivitySourceRequestHandlerDecorator<TRequest> : IRequestHandler<T
         "Microsoft.AspNetCore": "Warning"
       }
     }
+  },
+  "SkillConfiguration": {
+    "SkillId": "amzn1.ask.skill.your-skill-id",
+    "CancellationTimeoutBufferMilliseconds": 500
   },
   "DynamoDbSettings": {
     "TableMaps": {

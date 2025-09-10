@@ -1,16 +1,19 @@
 using LayeredCraft.Logging.CompactJsonFormatter;
+using AlexaVoxCraft.MediatR.DI;
 using AlexaVoxCraft.MediatR.Lambda.Serialization;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace AlexaVoxCraft.MediatR.Lambda;
 
 public static class LambdaHostExtensions
 {
+
     public static async Task<int> RunAlexaSkill<T, TRequest, TResponse>(
         Func<T, IServiceProvider, Func<TRequest, ILambdaContext, CancellationToken, Task<TResponse>>>? handlerBuilder = null,
         Func<IServiceProvider, ILambdaSerializer>? serializerFactory = null
@@ -40,7 +43,9 @@ public static class LambdaHostExtensions
             // Lambda bootstrap still expects a 2-arg handler; wrap it to inject the token.
             async Task<TResponse> BootstrapHandler(TRequest req, ILambdaContext ctx)
             {
-                var buffer = TimeSpan.FromMilliseconds(250);
+                // Get timeout buffer from configuration
+                var bufferMs = services.GetRequiredService<IOptions<SkillServiceConfiguration>>().Value.CancellationTimeoutBufferMilliseconds;
+                var buffer = TimeSpan.FromMilliseconds(bufferMs);
                 var timeLeft = ctx.RemainingTime > buffer ? ctx.RemainingTime - buffer : TimeSpan.Zero;
 
                 using var cts = new CancellationTokenSource(timeLeft);
