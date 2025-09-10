@@ -35,6 +35,10 @@ public static class LambdaHostExtensions
             var function = new T();
             var services = function.ServiceProvider;
 
+            // Cache timeout buffer from configuration (resolve once during initialization)
+            var timeoutBuffer = TimeSpan.FromMilliseconds(
+                services.GetRequiredService<IOptions<SkillServiceConfiguration>>().Value.CancellationTimeoutBufferMilliseconds);
+
             // Build the token-aware handler (caller may supply one, otherwise use the function's)
             Func<TRequest, ILambdaContext, CancellationToken, Task<TResponse>> handler =
                 handlerBuilder?.Invoke(function, services)
@@ -43,10 +47,8 @@ public static class LambdaHostExtensions
             // Lambda bootstrap still expects a 2-arg handler; wrap it to inject the token.
             async Task<TResponse> BootstrapHandler(TRequest req, ILambdaContext ctx)
             {
-                // Get timeout buffer from configuration
-                var bufferMs = services.GetRequiredService<IOptions<SkillServiceConfiguration>>().Value.CancellationTimeoutBufferMilliseconds;
-                var buffer = TimeSpan.FromMilliseconds(bufferMs);
-                var timeLeft = ctx.RemainingTime > buffer ? ctx.RemainingTime - buffer : TimeSpan.Zero;
+                // Use cached timeout buffer
+                var timeLeft = ctx.RemainingTime > timeoutBuffer ? ctx.RemainingTime - timeoutBuffer : TimeSpan.Zero;
 
                 using var cts = new CancellationTokenSource(timeLeft);
 
