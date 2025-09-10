@@ -304,16 +304,16 @@ public class MyExceptionHandler : IExceptionHandler
 - [x] Commit: "Add AlexaVoxCraft.Observability package for OpenTelemetry instrumentation"
 
 ### Phase 7: Sample Integration
-- [ ] Update sample projects to demonstrate OTEL integration
-- [ ] Add configuration examples for ADOT/CloudWatch
-- [ ] Test end-to-end telemetry flow
-- [ ] Commit: "Update samples with OpenTelemetry integration examples"
+- [x] Update sample projects to demonstrate OTEL integration
+- [x] Add configuration examples for ADOT/CloudWatch
+- [x] Test end-to-end telemetry flow
+- [x] Commit: "Update samples with OpenTelemetry integration examples"
 
 ### Phase 8: Documentation & PR
-- [ ] Update CLAUDE.md with telemetry usage instructions
-- [ ] Create comprehensive pull request
-- [ ] Include performance impact analysis
-- [ ] Add migration guide for existing users
+- [x] Update CLAUDE.md with telemetry usage instructions
+- [x] Create comprehensive pull request
+- [x] Include performance impact analysis
+- [x] Add migration guide for existing users
 
 ## OpenTelemetry Usage (After Implementation)
 
@@ -361,76 +361,3 @@ All telemetry follows OpenTelemetry semantic conventions with Alexa-specific ext
 - `alexa.serialization.direction` - "request" or "response"
 - `alexa.payload.size` - Payload size in bytes
 - `code.namespace`, `code.function` - Type information for serialized objects
-
-## Cancellation Token Implementation Plan ✅ COMPLETED
-
-### Analysis Summary
-After reviewing ChatGPT's suggestion and the current codebase, discovered that **the MediatR layer already fully supports cancellation tokens**:
-- `RequestHandlerWrapper.Handle()` accepts `CancellationToken` 
-- `IPipelineBehavior.Handle()` uses `CancellationToken`
-- All MediatR request handlers receive cancellation tokens
-
-**Only missing piece**: Threading the cancellation token from Lambda entry point to existing MediatR layer.
-
-### Phase 1: Update Lambda Layer Interfaces (Breaking Changes)
-- [ ] **Update `HandlerDelegate`**: Add `CancellationToken` as 3rd parameter
-  - Change: `Task<TResponse> HandlerDelegate<in TRequest, TResponse>(TRequest request, ILambdaContext context, CancellationToken cancellationToken)`
-  - File: `src/AlexaVoxCraft.MediatR.Lambda/Abstractions/HandlerDelegate.cs`
-
-- [ ] **Update `ILambdaHandler`**: Add `CancellationToken` to `HandleAsync`
-  - Change: `Task<TResponse> HandleAsync(TRequest request, ILambdaContext context, CancellationToken cancellationToken)`
-  - File: `src/AlexaVoxCraft.MediatR.Lambda/Abstractions/ILambdaHandler.cs`
-
-### Phase 2: Thread Token Through Architecture
-- [ ] **Update `AlexaSkillFunction.FunctionHandlerAsync()`**: 
-  - Add `CancellationToken` parameter to method signature
-  - Pass token to `HandlerDelegate` call
-  - **CRITICAL**: Preserve all existing OpenTelemetry instrumentation
-  - File: `src/AlexaVoxCraft.MediatR.Lambda/AlexaSkillFunction.cs:114`
-
-- [ ] **Update `HostBuilderExtensions.CreateDelegate()`**:
-  - Pass cancellation token to `ILambdaHandler.HandleAsync()` call
-  - File: `src/AlexaVoxCraft.MediatR.Lambda/Extensions/HostBuilderExtensions.cs:31-35`
-
-- [ ] **Update `LambdaHostExtensions.RunAlexaSkill()`**:
-  - Create `CancellationTokenSource` from `RemainingTime - 250ms buffer`
-  - Wrap handler calls with cancellation token injection using bootstrap wrapper
-  - **CRITICAL**: Preserve existing delegate architecture and logging
-  - File: `src/AlexaVoxCraft.MediatR.Lambda/LambdaHostExtensions.cs:35`
-
-### Phase 3: Connect to Existing MediatR Layer
-- [ ] **Update sample `LambdaHandler`**: Pass token to `ISkillMediator.Send(request, cancellationToken)`
-  - **Key insight**: `ISkillMediator.Send()` already accepts cancellation tokens!
-  - File: `samples/Sample.Skill.Function/LambdaHandler.cs:33`
-
-### Phase 4: Update Tests & Samples
-- [ ] **Update all test mocks** to include cancellation token parameters
-  - Search for `HandlerDelegate` and `ILambdaHandler` usage in test files
-  - Update TestKit specimen builders to support new signatures
-  
-- [ ] **Update sample implementations** to demonstrate cancellation token usage
-  - Update both basic skill and APL skill samples
-  - Add examples of proper cancellation token handling
-
-- [ ] **Verify comprehensive test coverage** for cancellation scenarios
-  - Test timeout scenarios with `OperationCanceledException`
-  - Test proper token propagation through pipeline
-  - Test OpenTelemetry instrumentation with cancellation
-
-### Key Advantages:
-- **Minimal Breaking Changes**: Only adds cancellation token parameters where missing
-- **Leverages Existing Architecture**: MediatR layer already supports tokens perfectly  
-- **Preserves OpenTelemetry**: All existing telemetry instrumentation stays intact
-- **Surgical Approach**: Changes only what's necessary to connect Lambda → MediatR layers
-- **Maintains Performance**: No architectural rewrites or performance regressions
-
-### Migration Impact:
-- **Library Users**: Must update `ILambdaHandler` implementations to accept cancellation token
-- **Sample Code**: Will be updated to demonstrate best practices  
-- **Existing Skills**: Will compile with warnings until updated (breaking change requiring major version)
-
-### Implementation Notes:
-- Use 250ms buffer before `RemainingTime` for graceful shutdown and telemetry flushing
-- Proper `OperationCanceledException` handling with span status updates
-- Maintain all existing logging scopes and structured logging
-- Preserve comprehensive OpenTelemetry instrumentation from recent implementation
