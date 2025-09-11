@@ -109,6 +109,94 @@ Use `aws-lambda-tools-defaults.json` in skill projects to configure Lambda packa
 }
 ```
 
+## Release and Versioning
+
+This project uses automated versioning and publishing through GitHub Actions with the LayeredCraft devops templates.
+
+### Versioning Strategy
+
+**Version Source**: `Directory.Build.props` contains the `<VersionPrefix>` property:
+- Stable releases: `4.0.0`, `4.1.0`, `5.0.0`
+- Preview releases: `4.1.0-preview`, `5.0.0-beta`
+
+**Final Version Format**: GitHub Actions appends the run number to create unique versions:
+- Example: `VersionPrefix: 4.0.0` → Published as `4.0.0.73` (where 73 is the GitHub run number)
+- Example: `VersionPrefix: 4.1.0-preview` → Published as `4.1.0-preview.85`
+
+### Release Process
+
+#### Creating a Stable Release
+1. Update `Directory.Build.props`: Remove `-preview` or `-beta` suffix
+   ```xml
+   <VersionPrefix>4.0.0</VersionPrefix>  <!-- Was: 4.0.0-preview -->
+   ```
+2. Commit and push to `main` branch
+3. GitHub Actions automatically handles the rest
+
+#### Creating a Preview Release  
+1. Update `Directory.Build.props`: Add or keep `-preview` suffix
+   ```xml
+   <VersionPrefix>4.1.0-preview</VersionPrefix>
+   ```
+2. Commit and push to `main` branch
+3. NuGet packages published with preview designation
+
+### CI/CD Pipeline
+
+**Reusable Workflow**: `LayeredCraft/devops-templates/.github/workflows/package-build.yaml@v6.1`
+
+**Build Triggers**:
+- Push to branches: `main`, `beta`, `release/*`
+- Push to tags: `v*`
+- Manual workflow dispatch
+
+**Automated Actions on Release**:
+1. Build solution in Release configuration
+2. Run all tests (using Microsoft.Testing.Platform with `dotnet run`)
+3. Pack NuGet packages with version `{VersionPrefix}.{RunNumber}`
+4. Publish to NuGet.org (automatically skips duplicates)
+5. Create Git tag: `v{version}.{run_number}` (e.g., `v4.0.0.73`)
+6. Generate GitHub release with auto-generated release notes
+
+### Package Configuration
+
+All packages inherit settings from `Directory.Build.props`:
+- **License**: Apache-2.0 (SPDX identifier)
+- **Repository**: GitHub URL with SourceLink integration  
+- **Symbols**: Automatic `.snupkg` symbol packages for debugging
+- **Metadata**: Author, project URL, repository type
+
+### Branch Strategy
+
+- **`main`**: Primary development branch, triggers automatic releases
+- **`beta`**: Beta releases (if used)
+- **`release/*`**: Maintenance releases for specific versions
+- **Feature branches**: No automatic publishing (safe for development)
+
+### Version History Examples
+
+Recent releases follow this pattern:
+```
+v4.0.0-preview.72  ← Preview release
+v3.2.1.71          ← Stable release  
+v3.2.0.70          ← Stable release
+v3.2.0-preview.69  ← Preview release
+```
+
+### Breaking Changes and Semantic Versioning
+
+- **Major version** (4.0.0): Breaking changes requiring code updates
+- **Minor version** (4.1.0): New features, backward compatible
+- **Patch version**: Not used (handled by run numbers)
+- **Preview suffix**: Pre-release versions for testing
+
+### NuGet Publishing Notes
+
+- Packages are published to NuGet.org automatically
+- Duplicate uploads are skipped (no manual intervention needed)
+- All 6 packages in the solution are published together with same version
+- Symbol packages enable step-through debugging of library code
+
 ## Testing Architecture
 
 - **xUnit v3 with Microsoft.Testing.Platform**: Primary testing framework (use `dotnet run` not `dotnet test`)
