@@ -17,9 +17,9 @@
 |----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **AlexaVoxCraft.Model**          | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model)                   | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model/)                   |
 | **AlexaVoxCraft.Model.Apl**      | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.Apl.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.Apl)           | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.Apl.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.Apl/)           |
-| **AlexaVoxCraft.MediatR.Lambda** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/) |
 | **AlexaVoxCraft.MediatR**        | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR)               | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR/)               |
-| **AlexaVoxCraft.Observability**        | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability)               | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability/)               |
+| **AlexaVoxCraft.MediatR.Lambda** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/) |
+| **AlexaVoxCraft.Observability**  | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability)   | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability/)   |
 
 [![Build Status](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml/badge.svg)](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml)
 
@@ -33,6 +33,9 @@ dotnet add package AlexaVoxCraft.MediatR.Lambda
 
 # APL visual interface support (optional)
 dotnet add package AlexaVoxCraft.Model.Apl
+
+# OpenTelemetry observability (optional)
+dotnet add package AlexaVoxCraft.Observability
 
 # CloudWatch-compatible JSON logging (optional)
 dotnet add package LayeredCraft.Logging.CompactJsonFormatter
@@ -103,6 +106,7 @@ AlexaVoxCraft/
 │   ├── 📦 AlexaVoxCraft.Model.Apl/      # APL (Alexa Presentation Language) support
 │   ├── 📦 AlexaVoxCraft.MediatR/        # MediatR integration & request handling
 │   ├── 📦 AlexaVoxCraft.MediatR.Lambda/ # AWS Lambda hosting & runtime
+│   └── 📦 AlexaVoxCraft.Observability/  # OpenTelemetry instrumentation & telemetry
 │
 ├── 📂 samples/                          # Working example projects
 │   ├── 📱 Sample.Skill.Function/        # Basic Alexa skill demonstration
@@ -112,11 +116,10 @@ AlexaVoxCraft/
 │   ├── 🧪 AlexaVoxCraft.Model.Tests/    # Core model & serialization tests
 │   ├── 🧪 AlexaVoxCraft.Model.Apl.Tests/ # APL functionality tests
 │   ├── 🧪 AlexaVoxCraft.MediatR.Tests/  # MediatR integration tests
-│   ├── 🧪 AlexaVoxCraft.MediatR.Lambda.Tests/ # Lambda hosting tests
+│   └── 🧪 AlexaVoxCraft.MediatR.Lambda.Tests/ # Lambda hosting tests
 │
 ├── 📂 AlexaVoxCraft.TestKit/            # Testing utilities & AutoFixture support
-├── 📂 docs/                             # Documentation source
-└── 📂 samples/                          # Example implementations
+└── 📂 docs/                             # Documentation source
 ```
 
 ## 🛠 Core Concepts
@@ -137,6 +140,7 @@ Skills use the MediatR pattern where:
 | **AlexaVoxCraft.Model.Apl** | APL support | 40+ components, commands, audio, vector graphics, extensions (DataStore, SmartMotion) |
 | **AlexaVoxCraft.MediatR** | Request handling | Handler routing, pipeline behaviors, attributes management, DI integration |
 | **AlexaVoxCraft.MediatR.Lambda** | Lambda hosting | AWS Lambda functions, context management, custom serialization, hosting extensions |
+| **AlexaVoxCraft.Observability** | OpenTelemetry integration | Opt-in telemetry, metrics, spans, semantic attributes, ADOT/CloudWatch support |
 
 ## 🧪 Testing
 
