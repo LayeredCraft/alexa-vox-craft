@@ -5,6 +5,9 @@ using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
 using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.Logging;
+#if !NET9_0_OR_GREATER
+using OpenTelemetry.Trace;
+#endif
 
 namespace AlexaVoxCraft.MediatR.Pipeline;
 
@@ -113,7 +116,11 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
         }
         catch (Exception ex)
         {
+#if NET9_0_OR_GREATER
             span?.AddException(ex);
+#else
+            span?.RecordException(ex);
+#endif
             span?.SetStatus(ActivityStatusCode.Error, ex.Message);
             
             var errorType = ClassifyError(ex);
