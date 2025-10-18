@@ -30,6 +30,13 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddSkillMediator(this IServiceCollection services, SkillServiceConfiguration settings)
     {
+        // If the caller prefers generated code AND the generator emitted it,
+        // use the generated path. Otherwise, fall back to scanning.
+        if (settings.PreferGenerated && AlexaVoxCraftServiceCollection.IsAvailable)
+        {
+            // Generated file provides the real registrations.
+            return services.AddAlexaVoxCraftGenerated();
+        }
         
         if (settings.AssembliesToRegister.Count == 0)
             throw new ArgumentException("No assemblies found to scan. Supply at least one assembly to scan for handlers.");
