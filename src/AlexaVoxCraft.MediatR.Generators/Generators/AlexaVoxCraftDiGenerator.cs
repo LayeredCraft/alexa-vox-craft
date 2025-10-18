@@ -29,7 +29,7 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
         {
             var source = RegistrationEmitter.EmitServiceRegistrations(m);
             var src = SourceText.From(source, System.Text.Encoding.UTF8);
-            spc.AddSource("AlexaVoxCraft.ServiceCollection.g.cs", src);
+            spc.AddSource("__AlexaVoxCraft_Generated.g.cs", src);
         });
     }
 }

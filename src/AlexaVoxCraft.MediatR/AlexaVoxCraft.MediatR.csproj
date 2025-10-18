@@ -22,10 +22,17 @@
     <ItemGroup>
         <ProjectReference Include="..\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
                           OutputItemType="Analyzer"
-                          ReferenceOutputAssembly="false"
-                          SetTargetFramework="TargetFramework=netstandard2.0" />
+                          ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj"/>
     </ItemGroup>
+
+    <Target Name="IncludeAnalyzerInPackage" BeforeTargets="Pack" DependsOnTargets="ResolveReferences">
+        <ItemGroup>
+            <_AnalyzerDll Include="@(ProjectReferenceWithTargetFramework->'%(TargetPath)')"
+                          Condition="'%(ProjectReferenceWithTargetFramework.OutputItemType)'=='Analyzer'" />
+            <None Include="@(_AnalyzerDll)" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        </ItemGroup>
+    </Target>
 
     <ItemGroup>
         <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.1.2.10"/>
