@@ -54,24 +54,7 @@ public class SkillServiceConfiguration
     /// Gets the list of assemblies to scan for request handlers and other skill components.
     /// </summary>
     internal List<Assembly> AssembliesToRegister { get; } = new();
-    
-    /// <summary>
-    /// Prefer source-generated DI registrations over runtime scanning.
-    /// If generated code isn't present, the runtime automatically falls back to scanning.
-    /// Exposed as a settable property so it can be toggled via configuration.
-    /// </summary>
-    public bool PreferGenerated { get; set; }
-    
-    /// <summary>
-    /// Use source-generated DI registrations instead of runtime assembly scanning.
-    /// Falls back to scanning if generated code isn't present.
-    /// </summary>
-    public SkillServiceConfiguration UseGeneratedRegistrations()
-    {
-        PreferGenerated = true;
-        return this;
-    }
-    
+
     /// <summary>
     /// Registers request handlers and services from the assembly containing the specified type.
     /// </summary>

@@ -17,8 +17,7 @@ public class Function : AlexaSkillFunction<SkillRequest, SkillResponse>
             .UseHandler<LambdaHandler, SkillRequest, SkillResponse>()
             .ConfigureServices((context, services) =>
             {
-                services.AddSkillMediator(context.Configuration,
-                    cfg => { cfg.UseGeneratedRegistrations(); });
+                services.AddAlexaSkillMediator(context.Configuration);
             });
     }
 }

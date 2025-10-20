@@ -30,13 +30,7 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddSkillMediator(this IServiceCollection services, SkillServiceConfiguration settings)
     {
-        // Prefer source-generated, zero-reflection path:
-        if (settings.PreferGenerated && AlexaVoxCraftRegistrar.TryApply(services))
-        {
-            return services;
-        }
-
-        // Fallback: runtime scanning
+        // Runtime scanning
         if (settings.AssembliesToRegister.Count == 0)
             throw new ArgumentException("No assemblies found to scan. Supply at least one assembly to scan for handlers.");
 

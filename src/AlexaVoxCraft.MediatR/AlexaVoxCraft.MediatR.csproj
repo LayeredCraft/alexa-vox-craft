@@ -13,6 +13,8 @@
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+
+        <AlexaVoxCraftGeneratorEnabled>false</AlexaVoxCraftGeneratorEnabled>
     </PropertyGroup>
     <ItemGroup>
         <None Include="..\..\icon.png" Pack="true" PackagePath="" Visible="False"/>
@@ -36,6 +38,7 @@
 
     <ItemGroup>
         <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.1.2.10"/>
+        <PackageReference Include="OpenTelemetry.Api" Version="1.13.1"/>
     </ItemGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="AlexaVoxCraft.MediatR.Tests"/>
@@ -45,7 +48,6 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2"/>
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2"/>
-        <PackageReference Include="OpenTelemetry.Api" Version="1.13.1"/>
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.10"/>
