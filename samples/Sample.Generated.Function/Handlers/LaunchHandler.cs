@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Sample.Generated.Function.Handlers;
 
-public sealed class LaunchHandler : IRequestHandler<LaunchRequest>
+public sealed class LaunchHandler : BaseHandler<LaunchRequest>
 {
     private readonly ILogger<LaunchHandler> _logger;
 
@@ -20,7 +20,7 @@ public sealed class LaunchHandler : IRequestHandler<LaunchRequest>
         return Task.FromResult(input.RequestEnvelope.Request is LaunchRequest);
     }
 
-    public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken = default)
+    public override async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken = default)
     {
         var requestType = input.RequestEnvelope.Request.Type;
         var locale = input.RequestEnvelope.Request.Locale;

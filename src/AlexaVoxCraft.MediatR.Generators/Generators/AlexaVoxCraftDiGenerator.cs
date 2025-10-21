@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Immutable;
 using System.Linq;
-using AlexaVoxCraft.MediatR.Generators.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.Text;
 
 namespace AlexaVoxCraft.MediatR.Generators.Generators;
@@ -12,128 +12,150 @@ namespace AlexaVoxCraft.MediatR.Generators.Generators;
 [Generator(LanguageNames.CSharp)]
 public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
 {
-    private const string AttributeName = "AlexaVoxCraft.MediatR.Annotations.AlexaVoxCraftRegistrationAttribute";
-    private const string PartialClassName = "AlexaVoxCraftRegistration";
-    private const string PartialMethodName = "AddAlexaSkillMediator";
+    private const string TargetMethodName = "AddSkillMediator";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // Check if generator is enabled (defaults to true if property not set)
         var enabledProvider = context.AnalyzerConfigOptionsProvider
             .Select(static (provider, _) =>
             {
                 if (provider.GlobalOptions.TryGetValue("build_property.alexavoxcraftgeneratorenabled", out var value))
                 {
                     return !("false".Equals(value, StringComparison.OrdinalIgnoreCase)
-                          || "0".Equals(value, StringComparison.OrdinalIgnoreCase)
-                          || "no".Equals(value, StringComparison.OrdinalIgnoreCase));
+                             || "0".Equals(value, StringComparison.OrdinalIgnoreCase)
+                             || "no".Equals(value, StringComparison.OrdinalIgnoreCase));
                 }
+
                 return true;
             });
 
-        // Discover partial class candidates
-        var partialClassProvider = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                static (node, _) => IsPartialClassCandidate(node),
-                static (ctx, _) => GetPartialClassInfo(ctx))
-            .Where(static info => info is not null);
+        var interceptorsValueProvider = context.AnalyzerConfigOptionsProvider
+            .Select(static (provider, _) =>
+            {
+                provider.GlobalOptions.TryGetValue("build_property.interceptorsnamespaces", out var v1);
+                provider.GlobalOptions.TryGetValue("build_property.interceptorspreviewnamespaces",
+                    out var v2); // older name
+                // Return both; we’ll check both later
+                return (v1 ?? string.Empty, v2 ?? string.Empty);
+            });
 
-        // Collect all declared type symbols for service discovery
+        var interceptorsEnabledProvider = interceptorsValueProvider
+            .Select(static (vals, _) =>
+            {
+                var (v1, v2) = vals;
+
+                static bool HasNs(string s) =>
+                    s.Split(';', ',')
+                        .Select(x => x.Trim())
+                        .Any(x => x.Equals("AlexaVoxCraft.Generated", StringComparison.Ordinal));
+
+                return HasNs(v1 ?? string.Empty) || HasNs(v2 ?? string.Empty);
+            });
+
+        var callSiteProvider = context.SyntaxProvider
+            .CreateSyntaxProvider(
+                static (node, _) => IsAddSkillMediatorInvocation(node),
+                static (ctx, _) => GetCallSiteLocation(ctx))
+            .Where(static loc => loc.HasValue)
+            .Select(static (loc, _) => loc!.Value);
+        
         var allTypes = context.SyntaxProvider
             .CreateSyntaxProvider(
                 static (node, _) => node is TypeDeclarationSyntax,
-                static (ctx, _) =>
-                    ctx.SemanticModel.GetDeclaredSymbol((TypeDeclarationSyntax)ctx.Node) as INamedTypeSymbol)
-            .Where(static s => s is not null)!;
-
-        // Combine everything
-        var combined = partialClassProvider
+                static (ctx, _) => ctx.SemanticModel.GetDeclaredSymbol((TypeDeclarationSyntax)ctx.Node))
+            .Where(static s => s is not null)
+            .Select(static (s, _) => s!);  // upcast + null-forgiving
+        
+        var combined = callSiteProvider
             .Collect()
             .Combine(allTypes.Collect())
-            .Combine(enabledProvider);
+            .Combine(enabledProvider)
+            .Combine(interceptorsEnabledProvider)
+            .Combine(interceptorsValueProvider);
 
-        // Emit generated source code
         context.RegisterSourceOutput(combined, static (spc, tuple) =>
         {
-            var ((partials, symbols), enabled) = tuple;
+            var ((((callSites, symbols), enabled), interceptorsEnabled), (interceptorsNs, interceptorsPreviewNs)) =
+                tuple;
 
             if (!enabled)
+                return; // hard off-switch
+
+            if (!interceptorsEnabled)
+            {
+                var shown = string.IsNullOrWhiteSpace(interceptorsNs) ? interceptorsPreviewNs : interceptorsNs;
+                spc.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.InterceptorsDisabled, Location.None, shown ?? "<null>"));
                 return;
+            }
 
-            // Find the partial class to implement
-            var partialInfo = partials.FirstOrDefault();
-            if (partialInfo is null)
+            if (callSites.Length == 0)
+            {
+                spc.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.NoCallSites, Location.None));
                 return;
+            }
 
-            // Build the registration model
-            var model = SymbolDiscovery.BuildModel(symbols);
+            // Build the model and report any diagnostics from symbol discovery
+            var (model, discoveryDiagnostics) = SymbolDiscovery.BuildModel(symbols);
+            foreach (var diagnostic in discoveryDiagnostics)
+            {
+                spc.ReportDiagnostic(diagnostic);
+            }
 
-            // Emit the partial implementation
-            var source = RegistrationEmitter.EmitPartialMethod(partialInfo.Value, model);
-            var src = SourceText.From(source, System.Text.Encoding.UTF8);
-            spc.AddSource($"{partialInfo.Value.ClassName}.g.cs", src);
+            // Emit the interceptor
+            var interceptorSource = InterceptorEmitter.EmitInterceptors(callSites.ToImmutableArray(), model);
+            spc.AddSource("__AlexaVoxCraft_Interceptors.g.cs",
+                SourceText.From(interceptorSource, System.Text.Encoding.UTF8));
         });
     }
 
-    private static bool IsPartialClassCandidate(SyntaxNode node)
-    {
-        if (node is not ClassDeclarationSyntax classDecl)
-            return false;
+    private static bool IsAddSkillMediatorInvocation(SyntaxNode node) =>
+        node is InvocationExpressionSyntax
+        {
+            Expression: MemberAccessExpressionSyntax
+            {
+                Name.Identifier.ValueText: TargetMethodName
+            }
+        };
 
-        return classDecl.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword))
-            && classDecl.Modifiers.Any(m => m.IsKind(SyntaxKind.PublicKeyword))
-            && classDecl.Modifiers.Any(m => m.IsKind(SyntaxKind.StaticKeyword));
+    private static InterceptorLocation? GetCallSiteLocation(GeneratorSyntaxContext ctx)
+    {
+        var invocation = (InvocationExpressionSyntax)ctx.Node;
+
+        var op = ctx.SemanticModel.GetOperation(invocation) as IInvocationOperation;
+        if (op is null) return null;
+
+        var method = op.TargetMethod;
+        if (method.Name != TargetMethodName) return null;
+
+        // Map extension call to the underlying static method for identity checks
+        var normalized = method.MethodKind == MethodKind.ReducedExtension
+            ? method.ReducedFrom ?? method
+            : method;
+
+        var isOurType = normalized.ContainingType?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+                        == "global::AlexaVoxCraft.MediatR.DI.ServiceCollectionExtensions";
+
+        if (!isOurType) return null;
+
+        // Hash-based interceptable location
+#pragma warning disable RSEXPERIMENTAL002
+        var il = ctx.SemanticModel.GetInterceptableLocation(invocation, default);
+#pragma warning restore RSEXPERIMENTAL002
+        // Treat default/empty as “unavailable”
+        if (il is null)
+            return null;
+
+        return new InterceptorLocation(il.Data);
     }
 
-    private static PartialClassInfo? GetPartialClassInfo(GeneratorSyntaxContext ctx)
-    {
-        var classDecl = (ClassDeclarationSyntax)ctx.Node;
-        var symbol = ctx.SemanticModel.GetDeclaredSymbol(classDecl);
-
-        if (symbol is null)
-            return null;
-
-        // Check for attribute or naming convention
-        bool hasAttribute = symbol.GetAttributes()
-            .Any(a => a.AttributeClass?.ToDisplayString() == AttributeName);
-
-        bool matchesConvention = symbol.Name == PartialClassName;
-
-        if (!hasAttribute && !matchesConvention)
-            return null;
-
-        // Verify the partial method exists with correct signature
-        // Should have: IServiceCollection, IConfiguration, Action<SkillServiceConfiguration>?, string
-        var method = symbol.GetMembers(PartialMethodName)
-            .OfType<IMethodSymbol>()
-            .FirstOrDefault(m => m.IsPartialDefinition
-                              && m.IsStatic
-                              && m.IsExtensionMethod
-                              && m.Parameters.Length >= 2
-                              && m.Parameters[0].Type.ToDisplayString() == "Microsoft.Extensions.DependencyInjection.IServiceCollection"
-                              && m.Parameters[1].Type.ToDisplayString() == "Microsoft.Extensions.Configuration.IConfiguration");
-
-        if (method is null)
-            return null;
-
-        return new PartialClassInfo(
-            symbol.ContainingNamespace.ToDisplayString(),
-            symbol.Name,
-            PartialMethodName
-        );
-    }
 }
 
-internal readonly struct PartialClassInfo
+internal readonly struct InterceptorLocation
 {
-    public PartialClassInfo(string namespaceName, string className, string methodName)
+    public InterceptorLocation(string data)
     {
-        Namespace = namespaceName;
-        ClassName = className;
-        MethodName = methodName;
+        Data = data;
     }
 
-    public string Namespace { get; }
-    public string ClassName { get; }
-    public string MethodName { get; }
+    public string Data { get; }
 }

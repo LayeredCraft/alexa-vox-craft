@@ -14,25 +14,41 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 
+        <!-- Belt & suspenders: generator should no-op if it somehow runs here -->
         <AlexaVoxCraftGeneratorEnabled>false</AlexaVoxCraftGeneratorEnabled>
+        <!-- Internal flag for pack-only analyzer inclusion -->
+        <_IncludeAnalyzerForPack>false</_IncludeAnalyzerForPack>
     </PropertyGroup>
+
     <ItemGroup>
         <None Include="..\..\icon.png" Pack="true" PackagePath="" Visible="False"/>
         <None Include="..\..\README.md" Pack="true" PackagePath="" Visible="False"/>
     </ItemGroup>
 
+    <!-- Normal project refs -->
     <ItemGroup>
-        <ProjectReference Include="..\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
-                          OutputItemType="Analyzer"
-                          ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj"/>
     </ItemGroup>
 
+    <!-- Add analyzer ProjectReference ONLY when packing -->
+    <Target Name="PrepareAnalyzerForPack" BeforeTargets="Pack">
+        <PropertyGroup>
+            <_IncludeAnalyzerForPack>true</_IncludeAnalyzerForPack>
+        </PropertyGroup>
+    </Target>
+
+    <ItemGroup Condition="'$(_IncludeAnalyzerForPack)'=='true'">
+        <ProjectReference Include="..\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"/>
+    </ItemGroup>
+
+    <!-- Copy analyzer DLL(s) into the nupkg under analyzers/dotnet/cs -->
     <Target Name="IncludeAnalyzerInPackage" BeforeTargets="Pack" DependsOnTargets="ResolveReferences">
         <ItemGroup>
             <_AnalyzerDll Include="@(ProjectReferenceWithTargetFramework->'%(TargetPath)')"
-                          Condition="'%(ProjectReferenceWithTargetFramework.OutputItemType)'=='Analyzer'" />
-            <None Include="@(_AnalyzerDll)" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+                          Condition="'%(ProjectReferenceWithTargetFramework.OutputItemType)'=='Analyzer'"/>
+            <None Include="@(_AnalyzerDll)" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
         </ItemGroup>
     </Target>
 
@@ -40,23 +56,29 @@
         <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.1.2.10"/>
         <PackageReference Include="OpenTelemetry.Api" Version="1.13.1"/>
     </ItemGroup>
+
     <ItemGroup>
         <InternalsVisibleTo Include="AlexaVoxCraft.MediatR.Tests"/>
         <InternalsVisibleTo Include="AlexaVoxCraft.MediatR.Lambda.Tests"/>
     </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
+
+    <!-- Framework-specific deps -->
+    <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2"/>
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2"/>
     </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.10"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10"/>
         <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.10"/>
     </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net10.0'">
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-rc.2.25502.107"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-rc.2.25502.107"/>
         <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0-rc.2.25502.107"/>
     </ItemGroup>
+
 </Project>

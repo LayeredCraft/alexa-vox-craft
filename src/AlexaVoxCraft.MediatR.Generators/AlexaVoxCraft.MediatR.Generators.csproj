@@ -7,25 +7,21 @@
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <Deterministic>true</Deterministic>
-        <!-- If you build on CI, this helps stamp deterministic metadata -->
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-
-        <!-- Keep this project internal-only; it will be packed INTO your runtime nupkg
-             via ProjectReference (OutputItemType=Analyzer). Flip to true if you ever
-             want to ship the generator as its own package. -->
+        <!-- Internal-only; shipped inside MediatR nupkg -->
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
         <!-- Keep Roslyn deps private so they don't leak to consumers -->
-        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" PrivateAssets="all"/>
     </ItemGroup>
 
-    <!-- Optional: turn this on locally when debugging to see emitted files on disk -->
-    <PropertyGroup>
-      <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-      <CompilerGeneratedFilesOutputPath>$(IntermediateOutputPath)generated</CompilerGeneratedFilesOutputPath>
+    <!-- Optional: write generated files locally while debugging this project itself -->
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>$(IntermediateOutputPath)generated</CompilerGeneratedFilesOutputPath>
     </PropertyGroup>
 
 </Project>

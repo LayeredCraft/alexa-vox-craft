@@ -7,6 +7,25 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+<!--    <PropertyGroup>-->
+<!--        &lt;!&ndash; If empty, set it &ndash;&gt;-->
+<!--        <InterceptorsNamespaces Condition="'$(InterceptorsNamespaces)' == ''">-->
+<!--            AlexaVoxCraft.Generated-->
+<!--        </InterceptorsNamespaces>-->
+
+<!--        &lt;!&ndash; If already has a value, append &ndash;&gt;-->
+<!--        <InterceptorsNamespaces Condition="'$(InterceptorsNamespaces)' != ''">-->
+<!--            $(InterceptorsNamespaces);AlexaVoxCraft.Generated-->
+<!--        </InterceptorsNamespaces>-->
+<!--    </PropertyGroup>-->
+    <PropertyGroup>
+        <InterceptorsNamespaces>AlexaVoxCraft.Generated</InterceptorsNamespaces>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <CompilerVisibleProperty Include="InterceptorsNamespaces" />
+    </ItemGroup>
+
     <ItemGroup>
         <Content Update="appsettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14,16 +33,36 @@
     </ItemGroup>
 
     <ItemGroup>
-        <!-- Commenting out direct generator reference - it's inherited transitively from AlexaVoxCraft.MediatR -->
+        <!-- Local dev: load the generator directly here so it runs in this compilation -->
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
                           OutputItemType="Analyzer"
                           ReferenceOutputAssembly="false"/>
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj"/>
     </ItemGroup>
 
-    <PropertyGroup>
+    <ItemGroup>
+      <Folder Include="Interceptors\Response\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\LanguageStrings.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LanguageStrings.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\LanguageStrings.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LanguageStrings.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <!-- Only write generated files to disk in Debug builds (nice for inspection) -->
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-<!--        <CompilerGeneratedFilesOutputPath>$(IntermediateOutputPath)generated</CompilerGeneratedFilesOutputPath>-->
+        <!-- Default path under obj/.../generated is fine; omit custom path -->
     </PropertyGroup>
 
 </Project>

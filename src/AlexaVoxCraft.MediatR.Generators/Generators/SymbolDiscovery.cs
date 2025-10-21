@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -18,9 +17,12 @@ internal static class SymbolDiscovery
     private const string IResponseInterceptorName = "AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor";
     private const string IPersistenceAdapterName = "AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter";
 
-    public static RegistrationModel BuildModel(ImmutableArray<INamedTypeSymbol> symbols)
+    public static (RegistrationModel model, ImmutableArray<Diagnostic> diagnostics) BuildModel(ImmutableArray<INamedTypeSymbol> symbols)
     {
         var model = new RegistrationModel();
+        var diagnostics = new List<Diagnostic>();
+        var defaultHandlers = new List<(INamedTypeSymbol symbol, Location location)>();
+        var persistenceAdapters = new List<(INamedTypeSymbol symbol, Location location)>();
 
         foreach (var symbol in symbols)
         {
@@ -37,6 +39,7 @@ internal static class SymbolDiscovery
 
             if (ImplementsInterface(symbol, IDefaultRequestHandlerName))
             {
+                defaultHandlers.Add((symbol, location));
                 model.DefaultHandler = new HandlerRegistration(symbol, null, lifetime, order, location);
             }
             else if (ImplementsGenericInterface(symbol, IRequestHandlerName, out var requestType))
@@ -61,12 +64,38 @@ internal static class SymbolDiscovery
             }
             else if (ImplementsInterface(symbol, IPersistenceAdapterName))
             {
+                persistenceAdapters.Add((symbol, location));
                 model.PersistenceAdapter = new TypeRegistration(symbol, 2, location); // 2 = Singleton
             }
         }
 
         SortRegistrations(model);
-        return model;
+
+        // Check for multiple default handlers
+        if (defaultHandlers.Count > 1)
+        {
+            foreach (var (_, location) in defaultHandlers)
+            {
+                diagnostics.Add(Diagnostic.Create(DiagnosticDescriptors.MultipleDefaultHandlers, location));
+            }
+        }
+
+        // Check for multiple persistence adapters
+        if (persistenceAdapters.Count > 1)
+        {
+            foreach (var (_, location) in persistenceAdapters)
+            {
+                diagnostics.Add(Diagnostic.Create(DiagnosticDescriptors.MultiplePersistenceAdapters, location));
+            }
+        }
+
+        // Check if no handlers found
+        if (model.Handlers.Count == 0 && model.DefaultHandler == null)
+        {
+            diagnostics.Add(Diagnostic.Create(DiagnosticDescriptors.NoHandlersFound, Location.None));
+        }
+
+        return (model, diagnostics.ToImmutableArray());
     }
 
     private static void SortRegistrations(RegistrationModel model)

@@ -199,7 +199,7 @@ public static class ServiceRegistrar
         if (list.Contains(value)) return;
         list.Add(value);
     }
-    public static void AddRequiredServices(this IServiceCollection services, SkillServiceConfiguration settings)
+    public static IServiceCollection AddRequiredServices(this IServiceCollection services, SkillServiceConfiguration settings)
     {
         services.TryAdd(new ServiceDescriptor(typeof(ISkillMediator), typeof(SkillMediator),
             ServiceLifetime.Transient));
@@ -210,6 +210,8 @@ public static class ServiceRegistrar
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestInterceptorBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(ResponseInterceptorBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestExceptionProcessBehavior));
+
+        return services;
     }
 
     private static void TryAddTransientExact(this IServiceCollection services, Type serviceType,
