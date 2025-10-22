@@ -6,6 +6,7 @@ namespace AlexaVoxCraft.MediatR.Generators.Models;
 internal readonly record struct DiscoveredTypeInfo(
     string FullyQualifiedTypeName,
     bool IsAbstract,
+    bool IsGenericTypeDefinition,
     TypeKind TypeKind,
     AttributeInfo? AlexaHandlerAttribute,
     EquatableArray<string> ImplementedInterfaces,

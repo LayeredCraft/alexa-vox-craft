@@ -35,6 +35,9 @@ internal static class SymbolDiscovery
             if (typeInfo.IsAbstract || typeInfo.TypeKind != TypeKind.Class)
                 continue;
 
+            if (typeInfo.IsGenericTypeDefinition)
+                continue;
+
             if (typeInfo.AlexaHandlerAttribute?.Exclude == true)
                 continue;
 

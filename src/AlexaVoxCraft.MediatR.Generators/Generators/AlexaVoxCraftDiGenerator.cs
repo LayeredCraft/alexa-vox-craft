@@ -169,6 +169,7 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
         return new DiscoveredTypeInfo(
             fullyQualifiedName,
             symbol.IsAbstract,
+            symbol.IsGenericType && symbol.IsUnboundGenericType,
             symbol.TypeKind,
             attributeInfo,
             new EquatableArray<string>(interfaces),
