@@ -43,14 +43,18 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
             .Where(static t => t.HasValue)
             .Select(static (t, _) => t!.Value);
 
+        var modelWithDiagnostics = allTypes
+            .Collect()
+            .Select(static (types, _) => SymbolDiscovery.BuildModel(types));
+
         var combined = callSiteProvider
             .Collect()
-            .Combine(allTypes.Collect())
+            .Combine(modelWithDiagnostics)
             .Combine(settings);
 
         context.RegisterSourceOutput(combined, static (spc, tuple) =>
         {
-            var ((callSites, types), (interceptionEnabled, csharpOk)) = tuple;
+            var ((callSites, modelData), (interceptionEnabled, csharpOk)) = tuple;
 
             if (!interceptionEnabled || !csharpOk)
                 return;
@@ -58,13 +62,12 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
             if (callSites.Length == 0)
                 return;
 
-            var (model, discoveryDiagnostics) = SymbolDiscovery.BuildModel(types);
-            foreach (var diagnosticInfo in discoveryDiagnostics)
+            foreach (var diagnosticInfo in modelData.Diagnostics)
             {
                 spc.ReportDiagnostic(Diagnostic.Create(diagnosticInfo.Descriptor, diagnosticInfo.Location));
             }
 
-            var interceptorSource = InterceptorEmitter.EmitInterceptors(callSites.ToImmutableArray(), model);
+            var interceptorSource = InterceptorEmitter.EmitInterceptors(callSites.ToImmutableArray(), modelData.Model);
             spc.AddSource("__AlexaVoxCraft_Interceptors.g.cs",
                 SourceText.From(interceptorSource, System.Text.Encoding.UTF8));
         });

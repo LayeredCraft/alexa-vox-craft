@@ -37,3 +37,8 @@ internal readonly record struct DiagnosticInfo(
     DiagnosticDescriptor Descriptor,
     Location Location
 );
+
+internal readonly record struct ModelWithDiagnostics(
+    RegistrationModel Model,
+    EquatableArray<DiagnosticInfo> Diagnostics
+);

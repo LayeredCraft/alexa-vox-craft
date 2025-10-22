@@ -11,7 +11,7 @@ AlexaVoxCraft is a modular C# .NET library for building Amazon Alexa skills usin
 
 ## Key Features
 
-- **🎯 MediatR Integration**: CQRS-style request handling with pipeline behaviors and auto-discovery
+- **🎯 MediatR Integration**: CQRS-style request handling with compile-time source-generated DI registration
 - **🎨 APL Support**: Complete Alexa Presentation Language implementation for rich visual interfaces
 - **⚡ Lambda Hosting**: Optimized AWS Lambda runtime with custom serialization and ReadyToRun publishing
 - **📊 Session Management**: Robust session attribute handling and game state persistence
@@ -32,6 +32,16 @@ dotnet add package AlexaVoxCraft.Logging
 
 # OpenTelemetry observability (optional)
 dotnet add package AlexaVoxCraft.Observability
+```
+
+### Requirements
+
+⚠️ **SDK Version Required**: To use source-generated dependency injection with interceptors, you must use at least version **8.0.400** of the .NET SDK. This ships with **Visual Studio 2022 version 17.11** or higher.
+
+```bash
+# Check your SDK version
+dotnet --version
+# Should show 8.0.400 or higher
 ```
 
 ## Quick Start - Building a Trivia Skill
@@ -57,10 +67,9 @@ public class TriviaSkillFunction : AlexaSkillFunction<APLSkillRequest, SkillResp
             .UseHandler<LambdaHandler, APLSkillRequest, SkillResponse>()
             .ConfigureServices((context, services) =>
             {
-                // Register all handlers and services from assembly
-                services.AddSkillMediator(context.Configuration, cfg => 
-                    cfg.RegisterServicesFromAssemblyContaining<TriviaSkillFunction>());
-                
+                // Handlers are automatically discovered and registered at compile time
+                services.AddSkillMediator(context.Configuration);
+
                 // Add your business services
                 services.AddScoped<IGameService, GameService>();
                 services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -94,10 +103,20 @@ public class LaunchRequestHandler : IRequestHandler<LaunchRequest>
 Modern request handling patterns with trivia game examples:
 
 - MediatR integration for CQRS
-- Auto-discovery of handlers and services
+- Compile-time source-generated handler registration
 - Type-safe request/response processing
 - Exception handling pipeline
 - Request validation and routing
+
+### [Source Generation](components/source-generation.md)
+
+Compile-time dependency injection with C# interceptors:
+
+- Zero runtime reflection - faster Lambda cold starts
+- Automatic handler discovery at compile time
+- Customizable registration with attributes
+- Execution ordering for pipeline behaviors
+- Type-safe validation during build
 
 ### [APL Integration](components/apl-integration.md)
 
@@ -164,9 +183,10 @@ Our documentation is built around a complete, production-ready trivia skill that
 
 See the [Examples](examples/index.md) section for the complete implementation.
 
-## Requirements
+## Runtime Requirements
 
 - **.NET 8.0** or **.NET 9.0**
+- **.NET SDK 8.0.400+** for source generation (VS 2022 17.11+)
 - **AWS Lambda Runtime** (provided.al2023)
 - **Amazon Alexa Developer Account**
 - **AWS CLI** configured with appropriate permissions

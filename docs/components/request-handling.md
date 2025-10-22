@@ -7,7 +7,7 @@ AlexaVoxCraft provides a powerful request handling system built on MediatR patte
 ## :rocket: Features
 
 - **:gear: MediatR Integration**: Built on proven CQRS patterns with MediatR
-- **:mag: Auto-Discovery**: Automatic handler registration from assemblies
+- **:zap: Source Generation**: Compile-time handler registration with zero runtime reflection
 - **:shield: Type Safety**: Compile-time request/response validation
 - **:arrows_counterclockwise: Pipeline Behaviors**: Composable request/response processing
 - **:warning: Exception Handling**: Centralized error handling and recovery
@@ -17,6 +17,8 @@ AlexaVoxCraft provides a powerful request handling system built on MediatR patte
 
 ### Handler Registration
 
+Handlers are automatically discovered and registered at compile time using source generation:
+
 ```csharp
 // In your AlexaSkillFunction
 protected override void Init(IHostBuilder builder)
@@ -25,12 +27,13 @@ protected override void Init(IHostBuilder builder)
         .UseHandler<LambdaHandler, APLSkillRequest, SkillResponse>()
         .ConfigureServices((context, services) =>
         {
-            // Auto-register all handlers from assembly
-            services.AddSkillMediator(context.Configuration, cfg => 
-                cfg.RegisterServicesFromAssemblyContaining<Program>());
+            // Handlers are automatically discovered and registered at compile time
+            services.AddSkillMediator(context.Configuration);
         });
 }
 ```
+
+See [Source Generation](source-generation.md) for detailed information about compile-time handler registration, customization with attributes, and performance benefits.
 
 ### Simple Request Handler
 
@@ -405,23 +408,30 @@ public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
 
 ## Handler Registration
 
-### Automatic Registration
+### Source-Generated Registration (Default)
+
+Handlers are automatically discovered and registered at compile time using C# interceptors:
 
 ```csharp
-// Register all handlers from assembly
-services.AddSkillMediator(context.Configuration, cfg => 
-    cfg.RegisterServicesFromAssemblyContaining<Program>());
+// Compile-time registration - no runtime reflection
+services.AddSkillMediator(context.Configuration);
 ```
 
-### Manual Registration
+All handlers implementing `IRequestHandler<T>`, `IDefaultRequestHandler`, `IExceptionHandler`, or related interfaces are automatically registered. See the [Source Generation](source-generation.md) documentation for:
+
+- Customizing service lifetimes with `[AlexaHandler(Lifetime = ServiceLifetime.Scoped)]`
+- Controlling execution order with `[AlexaHandler(Order = 10)]`
+- Excluding handlers from registration with `[AlexaHandler(Exclude = true)]`
+- Performance benefits (80% faster Lambda cold starts)
+
+### Runtime Registration (Legacy)
+
+If source generation is disabled via `<EnableMediatRGeneratorInterceptor>false</EnableMediatRGeneratorInterceptor>`, you must use runtime assembly scanning:
 
 ```csharp
+// ⚠️ Only when source generation is disabled
 services.AddSkillMediator(context.Configuration, cfg =>
-{
-    cfg.RegisterHandlers(typeof(LaunchRequestHandler).Assembly);
-    cfg.RegisterInterceptors(typeof(GameManagerRequestInterceptor).Assembly);
-    cfg.RegisterExceptionHandlers(typeof(ErrorHandler).Assembly);
-});
+    cfg.RegisterServicesFromAssemblyContaining<Program>());
 ```
 
 ## Best Practices

@@ -74,6 +74,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", 
 		docs\components\request-handling.md = docs\components\request-handling.md
 		docs\components\pipeline-behaviors.md = docs\components\pipeline-behaviors.md
 		docs\components\session-management.md = docs\components\session-management.md
+		docs\components\source-generation.md = docs\components\source-generation.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{7CFD232D-67DA-4E70-BF89-C019CF445235}"
