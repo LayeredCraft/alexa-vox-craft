@@ -9,7 +9,7 @@ jobs:
   build:
     uses: LayeredCraft/devops-templates/.github/workflows/pr-build.yaml@v6.2
     with:
-      solution: AlexaVoxCraft.sln
+      solution: AlexaVoxCraft.slnx
       hasTests: true
       useMtpRunner: true
       testDirectory: "test"

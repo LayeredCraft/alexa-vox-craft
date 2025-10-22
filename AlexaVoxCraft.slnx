@@ -1,0 +1,70 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/docs/">
+    <File Path="docs/index.md" />
+    <File Path="mkdocs.yml" />
+    <File Path="requirements.txt" />
+  </Folder>
+  <Folder Name="/docs/assets/">
+    <File Path="docs/assets/icon.png" />
+  </Folder>
+  <Folder Name="/docs/assets/css/">
+    <File Path="docs/assets/css/style.scss" />
+  </Folder>
+  <Folder Name="/docs/components/">
+    <File Path="docs/components/apl-integration.md" />
+    <File Path="docs/components/lambda-hosting.md" />
+    <File Path="docs/components/pipeline-behaviors.md" />
+    <File Path="docs/components/request-handling.md" />
+    <File Path="docs/components/session-management.md" />
+    <File Path="docs/components/source-generation.md" />
+  </Folder>
+  <Folder Name="/docs/examples/">
+    <File Path="docs/examples/index.md" />
+  </Folder>
+  <Folder Name="/git/">
+    <File Path=".github/workflows/build.yaml" />
+    <File Path=".github/workflows/docs.yml" />
+    <File Path=".github/workflows/pr-build.yaml" />
+    <File Path=".gitignore" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj">
+      <Build Solution="Release|Any CPU" Project="false" />
+    </Project>
+    <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj">
+      <Build Solution="Release|Any CPU" Project="false" />
+    </Project>
+    <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj">
+      <Build Solution="Release|Any CPU" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="CLAUDE.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="icon.png" />
+    <File Path="LICENSE" />
+    <File Path="NOTICE" />
+    <File Path="README.md" />
+    <File Path="ROADMAP.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/AlexaVoxCraft.MediatR.Generators/AlexaVoxCraft.MediatR.Generators.csproj" />
+    <Project Path="src/AlexaVoxCraft.MediatR.Lambda/AlexaVoxCraft.MediatR.Lambda.csproj" />
+    <Project Path="src/AlexaVoxCraft.MediatR/AlexaVoxCraft.MediatR.csproj" />
+    <Project Path="src/AlexaVoxCraft.Model.Apl/AlexaVoxCraft.Model.Apl.csproj" />
+    <Project Path="src/AlexaVoxCraft.Model/AlexaVoxCraft.Model.csproj" />
+    <Project Path="src/AlexaVoxCraft.Observability/AlexaVoxCraft.Observability.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj" />
+    <Project Path="test/AlexaVoxCraft.MediatR.Lambda.Tests/AlexaVoxCraft.MediatR.Lambda.Tests.csproj" />
+    <Project Path="test/AlexaVoxCraft.MediatR.Tests/AlexaVoxCraft.MediatR.Tests.csproj" />
+    <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj" />
+    <Project Path="test/AlexaVoxCraft.Model.Tests/AlexaVoxCraft.Model.Tests.csproj" />
+  </Folder>
+</Solution>
