@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
@@ -14,24 +14,50 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     </PropertyGroup>
+
     <ItemGroup>
         <None Include="..\..\icon.png" Pack="true" PackagePath="" Visible="False" />
         <None Include="..\..\README.md" Pack="true" PackagePath="" Visible="False" />
+        <None Include="..\AlexaVoxCraft.MediatR.Generators\bin\$(Configuration)\netstandard2.0\AlexaVoxCraft.MediatR.Generators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="AlexaVoxCraft.MediatR.props" Pack="true" PackagePath="build" Visible="true" />
+        <None Include="AlexaVoxCraft.MediatR.targets" Pack="true" PackagePath="build" Visible="true" />
+        <None Include="AlexaVoxCraft.MediatR.props" Pack="true" PackagePath="buildTransitive" Visible="true" />
+        <None Include="AlexaVoxCraft.MediatR.targets" Pack="true" PackagePath="buildTransitive" Visible="true" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj"/>
+        <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+        <ProjectReference Include="..\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.1.1.8" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.9" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.9" />
+        <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.1.2.10" />
+        <PackageReference Include="OpenTelemetry.Api" Version="1.13.1" />
     </ItemGroup>
+
     <ItemGroup>
         <InternalsVisibleTo Include="AlexaVoxCraft.MediatR.Tests" />
         <InternalsVisibleTo Include="AlexaVoxCraft.MediatR.Lambda.Tests" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.10" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net10.0'">
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-rc.2.25502.107" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-rc.2.25502.107" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0-rc.2.25502.107" />
     </ItemGroup>
 
 </Project>

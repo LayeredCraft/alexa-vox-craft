@@ -4,7 +4,7 @@
 
 ## Key Features
 
-- **🎯 MediatR Integration**: CQRS-style request handling with pipeline behaviors and auto-discovery
+- **🎯 MediatR Integration**: CQRS-style request handling with compile-time source-generated DI registration
 - **🎨 APL Support**: Complete Alexa Presentation Language implementation for rich visual interfaces
 - **⚡ Lambda Hosting**: Optimized AWS Lambda runtime with custom serialization and ReadyToRun publishing
 - **📊 Session Management**: Robust session attribute handling and game state persistence
@@ -41,6 +41,16 @@ dotnet add package AlexaVoxCraft.Observability
 dotnet add package LayeredCraft.Logging.CompactJsonFormatter
 ```
 
+### Requirements
+
+⚠️ **SDK Version Required**: To use source-generated dependency injection with interceptors, you must use at least version **8.0.400** of the .NET SDK. This ships with **Visual Studio 2022 version 17.11** or higher.
+
+```bash
+# Check your SDK version
+dotnet --version
+# Should show 8.0.400 or higher
+```
+
 ### Create a Basic Skill
 
 ```csharp
@@ -59,8 +69,8 @@ public class MySkillFunction : AlexaSkillFunction<SkillRequest, SkillResponse>
             .UseHandler<LambdaHandler, SkillRequest, SkillResponse>()
             .ConfigureServices((context, services) =>
             {
-                services.AddSkillMediator(context.Configuration, cfg => 
-                    cfg.RegisterServicesFromAssemblyContaining<MySkillFunction>());
+                // Handlers are automatically discovered and registered at compile time
+                services.AddSkillMediator(context.Configuration);
             });
     }
 }
@@ -68,7 +78,7 @@ public class MySkillFunction : AlexaSkillFunction<SkillRequest, SkillResponse>
 // Handler.cs
 public class LaunchRequestHandler : IRequestHandler<LaunchRequest>
 {
-    public bool CanHandle(IHandlerInput handlerInput) => 
+    public bool CanHandle(IHandlerInput handlerInput) =>
         handlerInput.RequestEnvelope.Request is LaunchRequest;
 
     public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken)
@@ -88,6 +98,7 @@ public class LaunchRequestHandler : IRequestHandler<LaunchRequest>
 ### Core Components
 
 - **[Request Handling](https://layeredcraft.github.io/alexa-vox-craft/components/request-handling/)** - MediatR integration and handler patterns
+- **[Source Generation](https://layeredcraft.github.io/alexa-vox-craft/components/source-generation/)** - Compile-time DI registration with C# interceptors
 - **[APL Integration](https://layeredcraft.github.io/alexa-vox-craft/components/apl-integration/)** - Rich visual interface development
 - **[Lambda Hosting](https://layeredcraft.github.io/alexa-vox-craft/components/lambda-hosting/)** - AWS Lambda deployment and optimization
 - **[Session Management](https://layeredcraft.github.io/alexa-vox-craft/components/session-management/)** - State persistence and user data
@@ -101,25 +112,27 @@ public class LaunchRequestHandler : IRequestHandler<LaunchRequest>
 
 ```
 AlexaVoxCraft/
-├── 📂 src/                              # Core library packages
-│   ├── 📦 AlexaVoxCraft.Model/          # Base Alexa skill models & serialization
-│   ├── 📦 AlexaVoxCraft.Model.Apl/      # APL (Alexa Presentation Language) support
-│   ├── 📦 AlexaVoxCraft.MediatR/        # MediatR integration & request handling
-│   ├── 📦 AlexaVoxCraft.MediatR.Lambda/ # AWS Lambda hosting & runtime
-│   └── 📦 AlexaVoxCraft.Observability/  # OpenTelemetry instrumentation & telemetry
+├── 📂 src/                                    # Core library packages
+│   ├── 📦 AlexaVoxCraft.Model/                # Base Alexa skill models & serialization
+│   ├── 📦 AlexaVoxCraft.Model.Apl/            # APL (Alexa Presentation Language) support
+│   ├── 📦 AlexaVoxCraft.MediatR/              # MediatR integration & request handling
+│   ├── 📦 AlexaVoxCraft.MediatR.Generators/   # Source generator for compile-time DI
+│   ├── 📦 AlexaVoxCraft.MediatR.Lambda/       # AWS Lambda hosting & runtime
+│   └── 📦 AlexaVoxCraft.Observability/        # OpenTelemetry instrumentation & telemetry
 │
-├── 📂 samples/                          # Working example projects
-│   ├── 📱 Sample.Skill.Function/        # Basic Alexa skill demonstration
-│   └── 📱 Sample.Apl.Function/          # APL skill with visual interfaces
+├── 📂 samples/                                # Working example projects
+│   ├── 📱 Sample.Skill.Function/              # Basic Alexa skill demonstration
+│   ├── 📱 Sample.Generated.Function/          # Source-generated DI demonstration
+│   └── 📱 Sample.Apl.Function/                # APL skill with visual interfaces
 │
-├── 📂 test/                             # Comprehensive test coverage
-│   ├── 🧪 AlexaVoxCraft.Model.Tests/    # Core model & serialization tests
-│   ├── 🧪 AlexaVoxCraft.Model.Apl.Tests/ # APL functionality tests
-│   ├── 🧪 AlexaVoxCraft.MediatR.Tests/  # MediatR integration tests
+├── 📂 test/                                   # Comprehensive test coverage
+│   ├── 🧪 AlexaVoxCraft.Model.Tests/          # Core model & serialization tests
+│   ├── 🧪 AlexaVoxCraft.Model.Apl.Tests/      # APL functionality tests
+│   ├── 🧪 AlexaVoxCraft.MediatR.Tests/        # MediatR integration tests
 │   └── 🧪 AlexaVoxCraft.MediatR.Lambda.Tests/ # Lambda hosting tests
 │
-├── 📂 AlexaVoxCraft.TestKit/            # Testing utilities & AutoFixture support
-└── 📂 docs/                             # Documentation source
+├── 📂 AlexaVoxCraft.TestKit/                  # Testing utilities & AutoFixture support
+└── 📂 docs/                                   # Documentation source
 ```
 
 ## 🛠 Core Concepts

@@ -17,7 +17,7 @@ on:
 permissions: write-all
 jobs:
   build:
-    uses: LayeredCraft/devops-templates/.github/workflows/package-build.yaml@v6.1
+    uses: LayeredCraft/devops-templates/.github/workflows/package-build.yaml@v6.2
     with:
       hasTests: true
       useMtpRunner: true
@@ -25,4 +25,5 @@ jobs:
       dotnet-version: |
         8.0.x
         9.0.x
+        10.0.x
     secrets: inherit

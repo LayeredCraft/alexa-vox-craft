@@ -1,0 +1,8 @@
+<Project InitialTargets="AlexaVoxCraft_MediatR">
+    <Target Name="AlexaVoxCraft_MediatR">
+        <PropertyGroup Condition="'$(EnableMediatRGeneratorInterceptor)' != 'false'">
+            <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
+            <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
+        </PropertyGroup>
+    </Target>
+</Project>

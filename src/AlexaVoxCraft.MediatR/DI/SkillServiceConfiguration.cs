@@ -54,7 +54,7 @@ public class SkillServiceConfiguration
     /// Gets the list of assemblies to scan for request handlers and other skill components.
     /// </summary>
     internal List<Assembly> AssembliesToRegister { get; } = new();
-    
+
     /// <summary>
     /// Registers request handlers and services from the assembly containing the specified type.
     /// </summary>
