@@ -29,46 +29,43 @@ internal static class InterceptorEmitter
         sb.AppendLine("file static class AlexaVoxCraftInterceptors");
         sb.AppendLine("{");
 
-        for (int i = 0; i < locations.Length; i++)
+        // Emit all InterceptsLocation attributes
+        foreach (var location in locations)
         {
-            var location = locations[i];
             sb.AppendLine($"    [InterceptsLocation(version: 1, data: \"{location.Data}\")]");
-            sb.AppendLine("    internal static IServiceCollection AddSkillMediator(");
-            sb.AppendLine("        this IServiceCollection services,");
-            sb.AppendLine("        IConfiguration configuration,");
-            sb.AppendLine("        Action<AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration>? settingsAction = null,");
-            sb.AppendLine("        string sectionName = AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration.SectionName)");
-            sb.AppendLine("    {");
-            sb.AppendLine("        // Build effective configuration");
-            sb.AppendLine("        var cfg = new AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration();");
-            sb.AppendLine("        configuration.GetSection(sectionName).Bind(cfg);");
-            sb.AppendLine("        settingsAction?.Invoke(cfg);");
-            sb.AppendLine();
-            sb.AppendLine("        // Register configuration with DI to enable IOptions<SkillServiceConfiguration>");
-            sb.AppendLine("        services.Configure<AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration>(opt =>");
-            sb.AppendLine("        {");
-            sb.AppendLine("            configuration.GetSection(sectionName).Bind(opt);");
-            sb.AppendLine("            settingsAction?.Invoke(opt);");
-            sb.AppendLine("        });");
-            sb.AppendLine();
-            sb.AppendLine("        // Add required core services");
-            sb.AppendLine("        AlexaVoxCraft.MediatR.Registration.ServiceRegistrar.AddRequiredServices(services, cfg);");
-            sb.AppendLine();
-
-            EmitHandlerRegistrations(sb, model);
-            EmitBehaviorRegistrations(sb, model);
-            EmitExceptionHandlerRegistrations(sb, model);
-            EmitInterceptorRegistrations(sb, model);
-            EmitPersistenceAdapterRegistration(sb, model);
-
-            sb.AppendLine("        return services;");
-            sb.AppendLine("    }");
-
-            if (i < locations.Length - 1)
-            {
-                sb.AppendLine();
-            }
         }
+
+        // Emit single method that handles all call sites
+        sb.AppendLine("    internal static IServiceCollection AddSkillMediator(");
+        sb.AppendLine("        this IServiceCollection services,");
+        sb.AppendLine("        IConfiguration configuration,");
+        sb.AppendLine("        Action<AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration>? settingsAction = null,");
+        sb.AppendLine("        string sectionName = AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration.SectionName)");
+        sb.AppendLine("    {");
+        sb.AppendLine("        // Build effective configuration");
+        sb.AppendLine("        var cfg = new AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration();");
+        sb.AppendLine("        configuration.GetSection(sectionName).Bind(cfg);");
+        sb.AppendLine("        settingsAction?.Invoke(cfg);");
+        sb.AppendLine();
+        sb.AppendLine("        // Register configuration with DI to enable IOptions<SkillServiceConfiguration>");
+        sb.AppendLine("        services.Configure<AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration>(opt =>");
+        sb.AppendLine("        {");
+        sb.AppendLine("            configuration.GetSection(sectionName).Bind(opt);");
+        sb.AppendLine("            settingsAction?.Invoke(opt);");
+        sb.AppendLine("        });");
+        sb.AppendLine();
+        sb.AppendLine("        // Add required core services");
+        sb.AppendLine("        AlexaVoxCraft.MediatR.Registration.ServiceRegistrar.AddRequiredServices(services, cfg);");
+        sb.AppendLine();
+
+        EmitHandlerRegistrations(sb, model);
+        EmitBehaviorRegistrations(sb, model);
+        EmitExceptionHandlerRegistrations(sb, model);
+        EmitInterceptorRegistrations(sb, model);
+        EmitPersistenceAdapterRegistration(sb, model);
+
+        sb.AppendLine("        return services;");
+        sb.AppendLine("    }");
 
         sb.AppendLine("}");
         sb.AppendLine("}");
