@@ -57,9 +57,9 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
                 return;
 
             var (model, discoveryDiagnostics) = SymbolDiscovery.BuildModel(symbols);
-            foreach (var diagnostic in discoveryDiagnostics)
+            foreach (var diagnosticInfo in discoveryDiagnostics)
             {
-                spc.ReportDiagnostic(diagnostic);
+                spc.ReportDiagnostic(Diagnostic.Create(diagnosticInfo.Descriptor, diagnosticInfo.Location));
             }
 
             var interceptorSource = InterceptorEmitter.EmitInterceptors(callSites.ToImmutableArray(), model);

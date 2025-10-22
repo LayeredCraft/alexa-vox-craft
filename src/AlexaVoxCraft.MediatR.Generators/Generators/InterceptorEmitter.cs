@@ -99,11 +99,11 @@ internal static class InterceptorEmitter
         foreach (var handler in model.Handlers)
         {
             var method = ToLifetimeMethod(handler.Lifetime);
-            var typeName = handler.Type.ToDisplayString(Microsoft.CodeAnalysis.SymbolDisplayFormat.FullyQualifiedFormat);
+            var typeName = handler.Type.FullyQualifiedName;
 
             if (handler.RequestType != null)
             {
-                var requestTypeName = handler.RequestType.ToDisplayString(Microsoft.CodeAnalysis.SymbolDisplayFormat.FullyQualifiedFormat);
+                var requestTypeName = handler.RequestType.Value.FullyQualifiedName;
                 sb.AppendLine($"        services.{method}<AlexaVoxCraft.MediatR.IRequestHandler<{requestTypeName}>, {typeName}>();");
             }
             else
@@ -114,7 +114,7 @@ internal static class InterceptorEmitter
 
         if (model.DefaultHandler != null)
         {
-            var typeName = model.DefaultHandler.Type.ToDisplayString(Microsoft.CodeAnalysis.SymbolDisplayFormat.FullyQualifiedFormat);
+            var typeName = model.DefaultHandler.Value.Type.FullyQualifiedName;
             sb.AppendLine($"        services.TryAddTransient<AlexaVoxCraft.MediatR.IDefaultRequestHandler, {typeName}>();");
         }
 
@@ -131,7 +131,7 @@ internal static class InterceptorEmitter
         foreach (var behavior in model.Behaviors)
         {
             var method = ToLifetimeMethod(behavior.Lifetime);
-            var typeName = behavior.Type.ToDisplayString(Microsoft.CodeAnalysis.SymbolDisplayFormat.FullyQualifiedFormat);
+            var typeName = behavior.Type.FullyQualifiedName;
             sb.AppendLine($"        services.{method}<AlexaVoxCraft.MediatR.Pipeline.IPipelineBehavior, {typeName}>(); // Order={behavior.Order}");
         }
 
@@ -148,7 +148,7 @@ internal static class InterceptorEmitter
         foreach (var handler in model.ExceptionHandlers)
         {
             var method = ToLifetimeMethod(handler.Lifetime);
-            var typeName = handler.Type.ToDisplayString(Microsoft.CodeAnalysis.SymbolDisplayFormat.FullyQualifiedFormat);
+            var typeName = handler.Type.FullyQualifiedName;
             sb.AppendLine($"        services.{method}<AlexaVoxCraft.MediatR.Pipeline.IExceptionHandler, {typeName}>();");
         }
 
@@ -167,7 +167,7 @@ internal static class InterceptorEmitter
             foreach (var interceptor in model.RequestInterceptors)
             {
                 var method = ToLifetimeMethod(interceptor.Lifetime);
-                var typeName = interceptor.Type.ToDisplayString(Microsoft.CodeAnalysis.SymbolDisplayFormat.FullyQualifiedFormat);
+                var typeName = interceptor.Type.FullyQualifiedName;
                 sb.AppendLine($"        services.{method}<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, {typeName}>();");
             }
 
@@ -181,7 +181,7 @@ internal static class InterceptorEmitter
             foreach (var interceptor in model.ResponseInterceptors)
             {
                 var method = ToLifetimeMethod(interceptor.Lifetime);
-                var typeName = interceptor.Type.ToDisplayString(Microsoft.CodeAnalysis.SymbolDisplayFormat.FullyQualifiedFormat);
+                var typeName = interceptor.Type.FullyQualifiedName;
                 sb.AppendLine($"        services.{method}<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, {typeName}>();");
             }
 
@@ -196,7 +196,7 @@ internal static class InterceptorEmitter
 
         sb.AppendLine("        // Persistence Adapter");
 
-        var typeName = model.PersistenceAdapter.Type.ToDisplayString(Microsoft.CodeAnalysis.SymbolDisplayFormat.FullyQualifiedFormat);
+        var typeName = model.PersistenceAdapter.Value.Type.FullyQualifiedName;
         sb.AppendLine($"        services.TryAddSingleton<AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter, {typeName}>();");
 
         sb.AppendLine();

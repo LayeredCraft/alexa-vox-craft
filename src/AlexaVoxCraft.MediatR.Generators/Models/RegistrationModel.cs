@@ -1,63 +1,39 @@
-using System.Collections.Generic;
+using System;
 using Microsoft.CodeAnalysis;
 
 namespace AlexaVoxCraft.MediatR.Generators.Models;
 
-internal sealed class RegistrationModel
-{
-    public List<HandlerRegistration> Handlers { get; } = new();
-    public HandlerRegistration? DefaultHandler { get; set; }
-    public List<BehaviorRegistration> Behaviors { get; } = new();
-    public List<TypeRegistration> ExceptionHandlers { get; } = new();
-    public List<TypeRegistration> RequestInterceptors { get; } = new();
-    public List<TypeRegistration> ResponseInterceptors { get; } = new();
-    public TypeRegistration? PersistenceAdapter { get; set; }
-}
+internal readonly record struct RegistrationModel(
+    EquatableArray<HandlerRegistration> Handlers,
+    HandlerRegistration? DefaultHandler,
+    EquatableArray<BehaviorRegistration> Behaviors,
+    EquatableArray<TypeRegistration> ExceptionHandlers,
+    EquatableArray<TypeRegistration> RequestInterceptors,
+    EquatableArray<TypeRegistration> ResponseInterceptors,
+    TypeRegistration? PersistenceAdapter
+);
 
-internal sealed class HandlerRegistration
-{
-    public HandlerRegistration(INamedTypeSymbol type, INamedTypeSymbol? requestType, int lifetime, int order, Location location)
-    {
-        Type = type;
-        RequestType = requestType;
-        Lifetime = lifetime;
-        Order = order;
-        Location = location;
-    }
+internal readonly record struct TypeInfo(string FullyQualifiedName) : IEquatable<TypeInfo>;
 
-    public INamedTypeSymbol Type { get; }
-    public INamedTypeSymbol? RequestType { get; }
-    public int Lifetime { get; }
-    public int Order { get; }
-    public Location Location { get; }
-}
+internal readonly record struct HandlerRegistration(
+    TypeInfo Type,
+    TypeInfo? RequestType,
+    int Lifetime,
+    int Order
+) : IEquatable<HandlerRegistration>;
 
-internal sealed class BehaviorRegistration
-{
-    public BehaviorRegistration(INamedTypeSymbol type, int lifetime, int order, Location location)
-    {
-        Type = type;
-        Lifetime = lifetime;
-        Order = order;
-        Location = location;
-    }
+internal readonly record struct BehaviorRegistration(
+    TypeInfo Type,
+    int Lifetime,
+    int Order
+) : IEquatable<BehaviorRegistration>;
 
-    public INamedTypeSymbol Type { get; }
-    public int Lifetime { get; }
-    public int Order { get; }
-    public Location Location { get; }
-}
+internal readonly record struct TypeRegistration(
+    TypeInfo Type,
+    int Lifetime
+) : IEquatable<TypeRegistration>;
 
-internal sealed class TypeRegistration
-{
-    public TypeRegistration(INamedTypeSymbol type, int lifetime, Location location)
-    {
-        Type = type;
-        Lifetime = lifetime;
-        Location = location;
-    }
-
-    public INamedTypeSymbol Type { get; }
-    public int Lifetime { get; }
-    public Location Location { get; }
-}
+internal readonly record struct DiagnosticInfo(
+    DiagnosticDescriptor Descriptor,
+    Location Location
+);

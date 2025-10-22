@@ -17,12 +17,19 @@ internal static class SymbolDiscovery
     private const string IResponseInterceptorName = "AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor";
     private const string IPersistenceAdapterName = "AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter";
 
-    public static (RegistrationModel model, ImmutableArray<Diagnostic> diagnostics) BuildModel(ImmutableArray<INamedTypeSymbol> symbols)
+    public static (RegistrationModel model, ImmutableArray<DiagnosticInfo> diagnostics) BuildModel(ImmutableArray<INamedTypeSymbol> symbols)
     {
-        var model = new RegistrationModel();
-        var diagnostics = new List<Diagnostic>();
-        var defaultHandlers = new List<(INamedTypeSymbol symbol, Location location)>();
-        var persistenceAdapters = new List<(INamedTypeSymbol symbol, Location location)>();
+        var handlers = new List<HandlerRegistration>();
+        HandlerRegistration? defaultHandler = null;
+        var behaviors = new List<BehaviorRegistration>();
+        var exceptionHandlers = new List<TypeRegistration>();
+        var requestInterceptors = new List<TypeRegistration>();
+        var responseInterceptors = new List<TypeRegistration>();
+        TypeRegistration? persistenceAdapter = null;
+
+        var diagnostics = new List<DiagnosticInfo>();
+        var defaultHandlerLocations = new List<Location>();
+        var persistenceAdapterLocations = new List<Location>();
 
         foreach (var symbol in symbols)
         {
@@ -36,114 +43,112 @@ internal static class SymbolDiscovery
             var lifetime = GetLifetime(attribute);
             var order = GetOrder(attribute);
             var location = symbol.Locations.FirstOrDefault() ?? Location.None;
+            var typeInfo = new Models.TypeInfo(symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
 
             // Check for IDefaultRequestHandler
             if (ImplementsInterface(symbol, IDefaultRequestHandlerName))
             {
-                defaultHandlers.Add((symbol, location));
-                model.DefaultHandler = new HandlerRegistration(symbol, null, lifetime, order, location);
+                defaultHandlerLocations.Add(location);
+                defaultHandler = new HandlerRegistration(typeInfo, null, lifetime, order);
             }
 
             // Check for IRequestHandler<T> - can implement multiple
             var requestTypes = GetAllGenericInterfaceTypeArguments(symbol, IRequestHandlerName).ToList();
             foreach (var requestType in requestTypes)
             {
-                model.Handlers.Add(new HandlerRegistration(symbol, requestType, lifetime, order, location));
+                var requestTypeInfo = new Models.TypeInfo(requestType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+                handlers.Add(new HandlerRegistration(typeInfo, requestTypeInfo, lifetime, order));
             }
 
             // Check for IPipelineBehavior
             if (ImplementsInterface(symbol, IPipelineBehaviorName))
             {
-                model.Behaviors.Add(new BehaviorRegistration(symbol, lifetime, order, location));
+                behaviors.Add(new BehaviorRegistration(typeInfo, lifetime, order));
             }
 
             // Check for IExceptionHandler
             if (ImplementsInterface(symbol, IExceptionHandlerName))
             {
-                model.ExceptionHandlers.Add(new TypeRegistration(symbol, lifetime, location));
+                exceptionHandlers.Add(new TypeRegistration(typeInfo, lifetime));
             }
 
             // Check for IRequestInterceptor
             if (ImplementsInterface(symbol, IRequestInterceptorName))
             {
-                model.RequestInterceptors.Add(new TypeRegistration(symbol, lifetime, location));
+                requestInterceptors.Add(new TypeRegistration(typeInfo, lifetime));
             }
 
             // Check for IResponseInterceptor
             if (ImplementsInterface(symbol, IResponseInterceptorName))
             {
-                model.ResponseInterceptors.Add(new TypeRegistration(symbol, lifetime, location));
+                responseInterceptors.Add(new TypeRegistration(typeInfo, lifetime));
             }
 
             // Check for IPersistenceAdapter
             if (ImplementsInterface(symbol, IPersistenceAdapterName))
             {
-                persistenceAdapters.Add((symbol, location));
-                model.PersistenceAdapter = new TypeRegistration(symbol, 2, location); // 2 = Singleton
+                persistenceAdapterLocations.Add(location);
+                persistenceAdapter = new TypeRegistration(typeInfo, 2); // 2 = Singleton
             }
         }
 
-        SortRegistrations(model);
+        SortRegistrations(handlers, behaviors);
 
         // Check for multiple default handlers
-        if (defaultHandlers.Count > 1)
+        if (defaultHandlerLocations.Count > 1)
         {
-            foreach (var (_, location) in defaultHandlers)
+            foreach (var location in defaultHandlerLocations)
             {
-                diagnostics.Add(Diagnostic.Create(DiagnosticDescriptors.MultipleDefaultHandlers, location));
+                diagnostics.Add(new DiagnosticInfo(DiagnosticDescriptors.MultipleDefaultHandlers, location));
             }
         }
 
         // Check for multiple persistence adapters
-        if (persistenceAdapters.Count > 1)
+        if (persistenceAdapterLocations.Count > 1)
         {
-            foreach (var (_, location) in persistenceAdapters)
+            foreach (var location in persistenceAdapterLocations)
             {
-                diagnostics.Add(Diagnostic.Create(DiagnosticDescriptors.MultiplePersistenceAdapters, location));
+                diagnostics.Add(new DiagnosticInfo(DiagnosticDescriptors.MultiplePersistenceAdapters, location));
             }
         }
 
         // Check if no handlers found
-        if (model.Handlers.Count == 0 && model.DefaultHandler == null)
+        if (handlers.Count == 0 && defaultHandler == null)
         {
-            diagnostics.Add(Diagnostic.Create(DiagnosticDescriptors.NoHandlersFound, Location.None));
+            diagnostics.Add(new DiagnosticInfo(DiagnosticDescriptors.NoHandlersFound, Location.None));
         }
+
+        var model = new RegistrationModel(
+            new EquatableArray<HandlerRegistration>(handlers),
+            defaultHandler,
+            new EquatableArray<BehaviorRegistration>(behaviors),
+            new EquatableArray<TypeRegistration>(exceptionHandlers),
+            new EquatableArray<TypeRegistration>(requestInterceptors),
+            new EquatableArray<TypeRegistration>(responseInterceptors),
+            persistenceAdapter
+        );
 
         return (model, diagnostics.ToImmutableArray());
     }
 
-    private static void SortRegistrations(RegistrationModel model)
+    private static void SortRegistrations(List<HandlerRegistration> handlers, List<BehaviorRegistration> behaviors)
     {
-        model.Handlers.Sort((a, b) =>
+        handlers.Sort((a, b) =>
         {
             var orderCompare = a.Order.CompareTo(b.Order);
-            return orderCompare != 0 ? orderCompare : string.CompareOrdinal(a.Type.ToDisplayString(), b.Type.ToDisplayString());
+            return orderCompare != 0 ? orderCompare : string.CompareOrdinal(a.Type.FullyQualifiedName, b.Type.FullyQualifiedName);
         });
 
-        model.Behaviors.Sort((a, b) =>
+        behaviors.Sort((a, b) =>
         {
             var orderCompare = a.Order.CompareTo(b.Order);
-            return orderCompare != 0 ? orderCompare : string.CompareOrdinal(a.Type.ToDisplayString(), b.Type.ToDisplayString());
+            return orderCompare != 0 ? orderCompare : string.CompareOrdinal(a.Type.FullyQualifiedName, b.Type.FullyQualifiedName);
         });
     }
 
     private static bool ImplementsInterface(INamedTypeSymbol symbol, string interfaceName)
     {
         return symbol.AllInterfaces.Any(i => i.ToDisplayString() == interfaceName);
-    }
-
-    private static bool ImplementsGenericInterface(INamedTypeSymbol symbol, string interfaceName, out INamedTypeSymbol? typeArgument)
-    {
-        typeArgument = null;
-        var genericInterface = symbol.AllInterfaces.FirstOrDefault(i =>
-            i.IsGenericType &&
-            i.ConstructedFrom.ToDisplayString() == interfaceName + "<TRequestType>");
-
-        if (genericInterface == null)
-            return false;
-
-        typeArgument = genericInterface.TypeArguments.FirstOrDefault() as INamedTypeSymbol;
-        return true;
     }
 
     private static IEnumerable<INamedTypeSymbol> GetAllGenericInterfaceTypeArguments(INamedTypeSymbol symbol, string interfaceName)
