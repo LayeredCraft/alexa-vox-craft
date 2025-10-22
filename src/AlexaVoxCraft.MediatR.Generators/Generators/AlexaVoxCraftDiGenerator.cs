@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using AlexaVoxCraft.MediatR.Generators.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -37,9 +39,9 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
         var allTypes = context.SyntaxProvider
             .CreateSyntaxProvider(
                 static (node, _) => node is TypeDeclarationSyntax,
-                static (ctx, _) => ctx.SemanticModel.GetDeclaredSymbol((TypeDeclarationSyntax)ctx.Node))
-            .Where(static s => s is not null)
-            .Select(static (s, _) => s!);
+                static (ctx, _) => ExtractTypeInfo(ctx))
+            .Where(static t => t.HasValue)
+            .Select(static (t, _) => t!.Value);
 
         var combined = callSiteProvider
             .Collect()
@@ -48,7 +50,7 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
 
         context.RegisterSourceOutput(combined, static (spc, tuple) =>
         {
-            var ((callSites, symbols), (interceptionEnabled, csharpOk)) = tuple;
+            var ((callSites, types), (interceptionEnabled, csharpOk)) = tuple;
 
             if (!interceptionEnabled || !csharpOk)
                 return;
@@ -56,7 +58,7 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
             if (callSites.Length == 0)
                 return;
 
-            var (model, discoveryDiagnostics) = SymbolDiscovery.BuildModel(symbols);
+            var (model, discoveryDiagnostics) = SymbolDiscovery.BuildModel(types);
             foreach (var diagnosticInfo in discoveryDiagnostics)
             {
                 spc.ReportDiagnostic(Diagnostic.Create(diagnosticInfo.Descriptor, diagnosticInfo.Location));
@@ -113,14 +115,64 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
         return new InterceptorLocation(il.Data);
     }
 
-}
-
-internal readonly struct InterceptorLocation
-{
-    public InterceptorLocation(string data)
+    private static DiscoveredTypeInfo? ExtractTypeInfo(GeneratorSyntaxContext ctx)
     {
-        Data = data;
+        const string AlexaHandlerAttributeName = "AlexaVoxCraft.MediatR.Annotations.AlexaHandlerAttribute";
+
+        var symbol = ctx.SemanticModel.GetDeclaredSymbol((TypeDeclarationSyntax)ctx.Node) as INamedTypeSymbol;
+        if (symbol is null)
+            return null;
+
+        var fullyQualifiedName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        var location = symbol.Locations.FirstOrDefault() ?? Location.None;
+
+        var attribute = symbol.GetAttributes()
+            .FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == AlexaHandlerAttributeName);
+
+        AttributeInfo? attributeInfo = null;
+        if (attribute != null)
+        {
+            var lifetime = 0;
+            var order = 0;
+            var exclude = false;
+
+            var lifetimeArg = attribute.NamedArguments.FirstOrDefault(a => a.Key == "Lifetime");
+            if (lifetimeArg.Value.Value is int lifetimeValue)
+            {
+                lifetime = lifetimeValue;
+            }
+
+            var orderArg = attribute.NamedArguments.FirstOrDefault(a => a.Key == "Order");
+            if (orderArg.Value.Value is int orderValue)
+            {
+                order = orderValue;
+            }
+
+            var excludeArg = attribute.NamedArguments.FirstOrDefault(a => a.Key == "Exclude");
+            if (excludeArg.Value.Value is bool excludeValue)
+            {
+                exclude = excludeValue;
+            }
+
+            attributeInfo = new AttributeInfo(lifetime, order, exclude);
+        }
+
+        var interfaces = new List<string>();
+        foreach (var iface in symbol.AllInterfaces)
+        {
+            interfaces.Add(iface.ToDisplayString());
+        }
+
+        return new DiscoveredTypeInfo(
+            fullyQualifiedName,
+            symbol.IsAbstract,
+            symbol.TypeKind,
+            attributeInfo,
+            new EquatableArray<string>(interfaces),
+            location
+        );
     }
 
-    public string Data { get; }
 }
+
+internal readonly record struct InterceptorLocation(string Data);

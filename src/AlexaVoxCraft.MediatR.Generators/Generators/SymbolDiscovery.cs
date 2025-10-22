@@ -8,7 +8,6 @@ namespace AlexaVoxCraft.MediatR.Generators.Generators;
 
 internal static class SymbolDiscovery
 {
-    private const string AlexaHandlerAttributeName = "AlexaVoxCraft.MediatR.Annotations.AlexaHandlerAttribute";
     private const string IRequestHandlerName = "AlexaVoxCraft.MediatR.IRequestHandler";
     private const string IDefaultRequestHandlerName = "AlexaVoxCraft.MediatR.IDefaultRequestHandler";
     private const string IPipelineBehaviorName = "AlexaVoxCraft.MediatR.Pipeline.IPipelineBehavior";
@@ -17,7 +16,7 @@ internal static class SymbolDiscovery
     private const string IResponseInterceptorName = "AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor";
     private const string IPersistenceAdapterName = "AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter";
 
-    public static (RegistrationModel model, ImmutableArray<DiagnosticInfo> diagnostics) BuildModel(ImmutableArray<INamedTypeSymbol> symbols)
+    public static (RegistrationModel model, ImmutableArray<DiagnosticInfo> diagnostics) BuildModel(ImmutableArray<DiscoveredTypeInfo> types)
     {
         var handlers = new List<HandlerRegistration>();
         HandlerRegistration? defaultHandler = null;
@@ -31,64 +30,62 @@ internal static class SymbolDiscovery
         var defaultHandlerLocations = new List<Location>();
         var persistenceAdapterLocations = new List<Location>();
 
-        foreach (var symbol in symbols)
+        foreach (var typeInfo in types)
         {
-            if (symbol.IsAbstract || symbol.TypeKind != TypeKind.Class)
+            if (typeInfo.IsAbstract || typeInfo.TypeKind != TypeKind.Class)
                 continue;
 
-            var attribute = GetAlexaHandlerAttribute(symbol);
-            if (IsExcluded(attribute))
+            if (typeInfo.AlexaHandlerAttribute?.Exclude == true)
                 continue;
 
-            var lifetime = GetLifetime(attribute);
-            var order = GetOrder(attribute);
-            var location = symbol.Locations.FirstOrDefault() ?? Location.None;
-            var typeInfo = new Models.TypeInfo(symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+            var lifetime = typeInfo.AlexaHandlerAttribute?.Lifetime ?? 0;
+            var order = typeInfo.AlexaHandlerAttribute?.Order ?? 0;
+            var typeModel = new Models.TypeInfo(typeInfo.FullyQualifiedTypeName);
 
             // Check for IDefaultRequestHandler
-            if (ImplementsInterface(symbol, IDefaultRequestHandlerName))
+            if (ImplementsInterface(typeInfo, IDefaultRequestHandlerName))
             {
-                defaultHandlerLocations.Add(location);
-                defaultHandler = new HandlerRegistration(typeInfo, null, lifetime, order);
+                defaultHandlerLocations.Add(typeInfo.Location);
+                defaultHandler = new HandlerRegistration(typeModel, null, lifetime, order);
             }
 
             // Check for IRequestHandler<T> - can implement multiple
-            var requestTypes = GetAllGenericInterfaceTypeArguments(symbol, IRequestHandlerName).ToList();
-            foreach (var requestType in requestTypes)
+            var requestTypes = GetAllGenericInterfaceTypeArguments(typeInfo, IRequestHandlerName).ToList();
+            foreach (var requestTypeName in requestTypes)
             {
-                var requestTypeInfo = new Models.TypeInfo(requestType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
-                handlers.Add(new HandlerRegistration(typeInfo, requestTypeInfo, lifetime, order));
+                var requestTypeInfo = new Models.TypeInfo(requestTypeName);
+                handlers.Add(new HandlerRegistration(typeModel, requestTypeInfo, lifetime, order));
             }
 
             // Check for IPipelineBehavior
-            if (ImplementsInterface(symbol, IPipelineBehaviorName))
+            if (ImplementsInterface(typeInfo, IPipelineBehaviorName))
             {
-                behaviors.Add(new BehaviorRegistration(typeInfo, lifetime, order));
+                behaviors.Add(new BehaviorRegistration(typeModel, lifetime, order));
             }
 
             // Check for IExceptionHandler
-            if (ImplementsInterface(symbol, IExceptionHandlerName))
+            if (ImplementsInterface(typeInfo, IExceptionHandlerName))
             {
-                exceptionHandlers.Add(new TypeRegistration(typeInfo, lifetime));
+                exceptionHandlers.Add(new TypeRegistration(typeModel, lifetime));
             }
 
             // Check for IRequestInterceptor
-            if (ImplementsInterface(symbol, IRequestInterceptorName))
+            if (ImplementsInterface(typeInfo, IRequestInterceptorName))
             {
-                requestInterceptors.Add(new TypeRegistration(typeInfo, lifetime));
+                requestInterceptors.Add(new TypeRegistration(typeModel, lifetime));
             }
 
             // Check for IResponseInterceptor
-            if (ImplementsInterface(symbol, IResponseInterceptorName))
+            if (ImplementsInterface(typeInfo, IResponseInterceptorName))
             {
-                responseInterceptors.Add(new TypeRegistration(typeInfo, lifetime));
+                responseInterceptors.Add(new TypeRegistration(typeModel, lifetime));
             }
 
             // Check for IPersistenceAdapter
-            if (ImplementsInterface(symbol, IPersistenceAdapterName))
+            if (ImplementsInterface(typeInfo, IPersistenceAdapterName))
             {
-                persistenceAdapterLocations.Add(location);
-                persistenceAdapter = new TypeRegistration(typeInfo, 2); // 2 = Singleton
+                persistenceAdapterLocations.Add(typeInfo.Location);
+                persistenceAdapter = new TypeRegistration(typeModel, 2); // 2 = Singleton
             }
         }
 
@@ -146,55 +143,26 @@ internal static class SymbolDiscovery
         });
     }
 
-    private static bool ImplementsInterface(INamedTypeSymbol symbol, string interfaceName)
+    private static bool ImplementsInterface(DiscoveredTypeInfo typeInfo, string interfaceName)
     {
-        return symbol.AllInterfaces.Any(i => i.ToDisplayString() == interfaceName);
+        return typeInfo.ImplementedInterfaces.Any(i => i == interfaceName);
     }
 
-    private static IEnumerable<INamedTypeSymbol> GetAllGenericInterfaceTypeArguments(INamedTypeSymbol symbol, string interfaceName)
+    private static IEnumerable<string> GetAllGenericInterfaceTypeArguments(DiscoveredTypeInfo typeInfo, string interfaceName)
     {
-        return symbol.AllInterfaces
-            .Where(i => i.IsGenericType &&
-                       i.ConstructedFrom.ToDisplayString() == interfaceName + "<TRequestType>")
-            .Select(i => i.TypeArguments.FirstOrDefault() as INamedTypeSymbol)
+        var genericInterfacePrefix = interfaceName + "<";
+        return typeInfo.ImplementedInterfaces
+            .Where(i => i.StartsWith(genericInterfacePrefix))
+            .Select(i =>
+            {
+                var start = i.IndexOf('<') + 1;
+                var end = i.LastIndexOf('>');
+                if (start > 0 && end > start)
+                {
+                    return i.Substring(start, end - start);
+                }
+                return null;
+            })
             .Where(t => t != null)!;
-    }
-
-    private static AttributeData? GetAlexaHandlerAttribute(INamedTypeSymbol symbol)
-    {
-        return symbol.GetAttributes()
-            .FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == AlexaHandlerAttributeName);
-    }
-
-    private static bool IsExcluded(AttributeData? attribute)
-    {
-        if (attribute == null)
-            return false;
-
-        var excludeArg = attribute.NamedArguments.FirstOrDefault(a => a.Key == "Exclude");
-        return excludeArg.Value.Value is true;
-    }
-
-    private static int GetLifetime(AttributeData? attribute)
-    {
-        if (attribute == null)
-            return 0; // 0 = Transient
-
-        var lifetimeArg = attribute.NamedArguments.FirstOrDefault(a => a.Key == "Lifetime");
-        if (lifetimeArg.Value.Value is int lifetimeValue)
-        {
-            return lifetimeValue;
-        }
-
-        return 0; // 0 = Transient
-    }
-
-    private static int GetOrder(AttributeData? attribute)
-    {
-        if (attribute == null)
-            return 0;
-
-        var orderArg = attribute.NamedArguments.FirstOrDefault(a => a.Key == "Order");
-        return orderArg.Value.Value is int orderValue ? orderValue : 0;
     }
 }
