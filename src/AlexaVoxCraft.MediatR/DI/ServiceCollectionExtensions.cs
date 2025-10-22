@@ -9,7 +9,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSkillMediator(this IServiceCollection services, IConfiguration configuration,
         Action<SkillServiceConfiguration>? settingsAction = null, string sectionName = SkillServiceConfiguration.SectionName)
     {
-        Console.WriteLine("In legacey AddSkillMediator extension method");
         // Step 1: Bind configuration values into a new instance
         var serviceConfig = new SkillServiceConfiguration();
         configuration.GetSection(sectionName).Bind(serviceConfig);

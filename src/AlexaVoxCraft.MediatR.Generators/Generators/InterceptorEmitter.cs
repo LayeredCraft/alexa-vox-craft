@@ -78,7 +78,6 @@ internal static class InterceptorEmitter
         sb.AppendLine("namespace System.Runtime.CompilerServices");
         sb.AppendLine("{");
         sb.AppendLine("    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]");
-        // sb.AppendLine("    [Conditional(\"DEBUG\")]");
         sb.AppendLine("    file sealed class InterceptsLocationAttribute : Attribute");
         sb.AppendLine("    {");
         sb.AppendLine("        public InterceptsLocationAttribute(int version, string data)");
