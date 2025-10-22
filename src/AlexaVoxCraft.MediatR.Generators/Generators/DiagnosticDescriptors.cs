@@ -32,22 +32,4 @@ internal static class DiagnosticDescriptors
         defaultSeverity: DiagnosticSeverity.Info,
         isEnabledByDefault: true,
         description: "At least one request handler should be defined to handle Alexa skill requests.");
-
-    public static readonly DiagnosticDescriptor InterceptorsDisabled = new(
-        id: "AVXC004",
-        title: "Interceptors disabled",
-        messageFormat: "InterceptorsNamespaces opt-in not detected (value: '{0}'). Add <InterceptorsNamespaces>AlexaVoxCraft.Generated</InterceptorsNamespaces> to your project file.",
-        category: Category,
-        defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "The project must opt-in to interceptors by setting the InterceptorsNamespaces MSBuild property.");
-
-    public static readonly DiagnosticDescriptor NoCallSites = new(
-        id: "AVXC005",
-        title: "No call sites found",
-        messageFormat: "No invocation to AddSkillMediator was found in this compilation. Ensure you call services.AddSkillMediator() in your service configuration.",
-        category: Category,
-        defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        description: "The generator requires at least one call to AddSkillMediator to generate the interceptor.");
 }

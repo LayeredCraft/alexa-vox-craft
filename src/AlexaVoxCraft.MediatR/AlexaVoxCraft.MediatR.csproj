@@ -13,45 +13,23 @@
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-
-        <AlexaVoxCraftGeneratorEnabled>false</AlexaVoxCraftGeneratorEnabled>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\..\icon.png" Pack="true" PackagePath="" Visible="False" />
         <None Include="..\..\README.md" Pack="true" PackagePath="" Visible="False" />
+        <None Include="..\AlexaVoxCraft.MediatR.Generators\bin\$(Configuration)\netstandard2.0\AlexaVoxCraft.MediatR.Generators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="AlexaVoxCraft.MediatR.props" Pack="true" PackagePath="build" Visible="true" />
+        <None Include="AlexaVoxCraft.MediatR.targets" Pack="true" PackagePath="build" Visible="true" />
+        <None Include="AlexaVoxCraft.MediatR.props" Pack="true" PackagePath="buildTransitive" Visible="true" />
+        <None Include="AlexaVoxCraft.MediatR.targets" Pack="true" PackagePath="buildTransitive" Visible="true" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(NoBuild)'!='true'">
         <ProjectReference Include="..\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
                           OutputItemType="Analyzer"
                           ReferenceOutputAssembly="false" />
-    </ItemGroup>
-
-    <Target Name="IncludeAnalyzerInPackage"
-            BeforeTargets="Pack"
-            DependsOnTargets="ResolveReferences"
-            Condition="'$(NoBuild)'!='true'">
-        <ItemGroup>
-            <_AnalyzerProjectRefs Include="@(ProjectReferenceWithTargetFramework)"
-                                  Condition="'%(ProjectReferenceWithTargetFramework.OutputItemType)'=='Analyzer'" />
-            <_AnalyzerDll Include="@(_AnalyzerProjectRefs->'%(TargetPath)')" />
-            <None Include="@(_AnalyzerDll)"
-                  Pack="true"
-                  PackagePath="analyzers/dotnet/cs"
-                  Visible="false" />
-        </ItemGroup>
-    </Target>
-
-    <ItemGroup Condition="'$(NoBuild)'=='true'">
-        <None Include="..\AlexaVoxCraft.MediatR.Generators\bin\$(Configuration)\netstandard2.0\AlexaVoxCraft.MediatR.Generators.dll"
-              Pack="true"
-              PackagePath="analyzers/dotnet/cs"
-              Visible="false" />
     </ItemGroup>
 
     <ItemGroup>

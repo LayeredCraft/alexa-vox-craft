@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Immutable;
 using System.Text;
 using AlexaVoxCraft.MediatR.Generators.Models;
@@ -42,6 +43,13 @@ internal static class InterceptorEmitter
             sb.AppendLine("        var cfg = new AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration();");
             sb.AppendLine("        configuration.GetSection(sectionName).Bind(cfg);");
             sb.AppendLine("        settingsAction?.Invoke(cfg);");
+            sb.AppendLine();
+            sb.AppendLine("        // Register configuration with DI to enable IOptions<SkillServiceConfiguration>");
+            sb.AppendLine("        services.Configure<AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration>(opt =>");
+            sb.AppendLine("        {");
+            sb.AppendLine("            configuration.GetSection(sectionName).Bind(opt);");
+            sb.AppendLine("            settingsAction?.Invoke(opt);");
+            sb.AppendLine("        });");
             sb.AppendLine();
             sb.AppendLine("        // Add required core services");
             sb.AppendLine("        AlexaVoxCraft.MediatR.Registration.ServiceRegistrar.AddRequiredServices(services, cfg);");

@@ -7,25 +7,6 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-<!--    <PropertyGroup>-->
-<!--        &lt;!&ndash; If empty, set it &ndash;&gt;-->
-<!--        <InterceptorsNamespaces Condition="'$(InterceptorsNamespaces)' == ''">-->
-<!--            AlexaVoxCraft.Generated-->
-<!--        </InterceptorsNamespaces>-->
-
-<!--        &lt;!&ndash; If already has a value, append &ndash;&gt;-->
-<!--        <InterceptorsNamespaces Condition="'$(InterceptorsNamespaces)' != ''">-->
-<!--            $(InterceptorsNamespaces);AlexaVoxCraft.Generated-->
-<!--        </InterceptorsNamespaces>-->
-<!--    </PropertyGroup>-->
-    <PropertyGroup>
-        <InterceptorsNamespaces>AlexaVoxCraft.Generated</InterceptorsNamespaces>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <CompilerVisibleProperty Include="InterceptorsNamespaces" />
-    </ItemGroup>
-
     <ItemGroup>
         <Content Update="appsettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -62,7 +43,12 @@
     <!-- Only write generated files to disk in Debug builds (nice for inspection) -->
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <!-- Default path under obj/.../generated is fine; omit custom path -->
+        <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
+        <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
+        <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
     </PropertyGroup>
+    <ItemGroup>
+        <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor" />
+    </ItemGroup>
 
 </Project>
