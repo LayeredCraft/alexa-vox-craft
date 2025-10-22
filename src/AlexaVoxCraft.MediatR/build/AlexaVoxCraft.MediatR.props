@@ -1,5 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
-  </PropertyGroup>
-</Project>

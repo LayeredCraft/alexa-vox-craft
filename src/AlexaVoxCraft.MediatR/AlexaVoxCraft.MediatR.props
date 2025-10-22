@@ -1,4 +1,8 @@
 <Project>
+    <PropertyGroup>
+        <EnableMediatRGeneratorInterceptor Condition="'$(EnableMediatRGeneratorInterceptor)' == ''">true</EnableMediatRGeneratorInterceptor>
+    </PropertyGroup>
+
     <ItemGroup>
         <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor" />
     </ItemGroup>
