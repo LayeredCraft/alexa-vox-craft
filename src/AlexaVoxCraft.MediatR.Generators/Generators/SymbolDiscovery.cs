@@ -37,32 +37,46 @@ internal static class SymbolDiscovery
             var order = GetOrder(attribute);
             var location = symbol.Locations.FirstOrDefault() ?? Location.None;
 
+            // Check for IDefaultRequestHandler
             if (ImplementsInterface(symbol, IDefaultRequestHandlerName))
             {
                 defaultHandlers.Add((symbol, location));
                 model.DefaultHandler = new HandlerRegistration(symbol, null, lifetime, order, location);
             }
-            else if (ImplementsGenericInterface(symbol, IRequestHandlerName, out var requestType))
+
+            // Check for IRequestHandler<T> - can implement multiple
+            var requestTypes = GetAllGenericInterfaceTypeArguments(symbol, IRequestHandlerName).ToList();
+            foreach (var requestType in requestTypes)
             {
                 model.Handlers.Add(new HandlerRegistration(symbol, requestType, lifetime, order, location));
             }
-            else if (ImplementsInterface(symbol, IPipelineBehaviorName))
+
+            // Check for IPipelineBehavior
+            if (ImplementsInterface(symbol, IPipelineBehaviorName))
             {
                 model.Behaviors.Add(new BehaviorRegistration(symbol, lifetime, order, location));
             }
-            else if (ImplementsInterface(symbol, IExceptionHandlerName))
+
+            // Check for IExceptionHandler
+            if (ImplementsInterface(symbol, IExceptionHandlerName))
             {
                 model.ExceptionHandlers.Add(new TypeRegistration(symbol, lifetime, location));
             }
-            else if (ImplementsInterface(symbol, IRequestInterceptorName))
+
+            // Check for IRequestInterceptor
+            if (ImplementsInterface(symbol, IRequestInterceptorName))
             {
                 model.RequestInterceptors.Add(new TypeRegistration(symbol, lifetime, location));
             }
-            else if (ImplementsInterface(symbol, IResponseInterceptorName))
+
+            // Check for IResponseInterceptor
+            if (ImplementsInterface(symbol, IResponseInterceptorName))
             {
                 model.ResponseInterceptors.Add(new TypeRegistration(symbol, lifetime, location));
             }
-            else if (ImplementsInterface(symbol, IPersistenceAdapterName))
+
+            // Check for IPersistenceAdapter
+            if (ImplementsInterface(symbol, IPersistenceAdapterName))
             {
                 persistenceAdapters.Add((symbol, location));
                 model.PersistenceAdapter = new TypeRegistration(symbol, 2, location); // 2 = Singleton
@@ -130,6 +144,15 @@ internal static class SymbolDiscovery
 
         typeArgument = genericInterface.TypeArguments.FirstOrDefault() as INamedTypeSymbol;
         return true;
+    }
+
+    private static IEnumerable<INamedTypeSymbol> GetAllGenericInterfaceTypeArguments(INamedTypeSymbol symbol, string interfaceName)
+    {
+        return symbol.AllInterfaces
+            .Where(i => i.IsGenericType &&
+                       i.ConstructedFrom.ToDisplayString() == interfaceName + "<TRequestType>")
+            .Select(i => i.TypeArguments.FirstOrDefault() as INamedTypeSymbol)
+            .Where(t => t != null)!;
     }
 
     private static AttributeData? GetAlexaHandlerAttribute(INamedTypeSymbol symbol)
