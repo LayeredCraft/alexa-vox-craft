@@ -111,6 +111,7 @@ nav:
     - Lambda Hosting: components/lambda-hosting.md
     - Session Management: components/session-management.md
     - Pipeline Behaviors: components/pipeline-behaviors.md
+    - Source Generators: components/source-generation.md
   - Examples: examples/index.md
 
 # Social links
