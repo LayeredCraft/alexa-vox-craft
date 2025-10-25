@@ -1,0 +1,11 @@
+<Project>
+    <ItemGroup>
+        <Using Include="Xunit"/>
+        <Using Include="AutoFixture"/>
+        <Using Include="AutoFixture.Xunit3"/>
+        <Using Include="NSubstitute"/>
+        <Using Include="AwesomeAssertions"/>
+        <Using Include="AlexaVoxCraft.TestKit" />
+        <Using Include="AlexaVoxCraft.TestKit.Attributes" />
+    </ItemGroup>
+</Project>
