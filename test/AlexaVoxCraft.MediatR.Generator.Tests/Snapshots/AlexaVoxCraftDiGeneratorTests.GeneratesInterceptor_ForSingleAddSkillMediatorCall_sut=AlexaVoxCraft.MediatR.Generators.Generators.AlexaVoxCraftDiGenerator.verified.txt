@@ -1,0 +1,18 @@
+﻿{
+  Diagnostics: [
+    {
+      Message: No implementations of IRequestHandler or IDefaultRequestHandler were found in the project.,
+      Severity: Info,
+      WarningLevel: 1,
+      Descriptor: {
+        Id: AVXC003,
+        Title: No request handlers found,
+        Description: At least one request handler should be defined to handle Alexa skill requests.,
+        MessageFormat: No implementations of IRequestHandler or IDefaultRequestHandler were found in the project.,
+        Category: AlexaVoxCraftGenerator,
+        DefaultSeverity: Info,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}

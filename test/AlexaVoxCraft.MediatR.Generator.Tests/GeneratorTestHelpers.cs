@@ -1,8 +1,16 @@
 using System.Collections.Immutable;
+using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.MediatR.Lambda;
+using AlexaVoxCraft.Model.Apl;
+using AlexaVoxCraft.Model.Request;
+using Amazon.Lambda.Core;
 using Basic.Reference.Assemblies;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace AlexaVoxCraft.MediatR.Generator.Tests;
 
@@ -12,6 +20,8 @@ namespace AlexaVoxCraft.MediatR.Generator.Tests;
 /// </summary>
 internal sealed class GeneratorTestHelpers
 {
+    private const string GlobalUsingsRelPath = "Cases/GlobalUsings.g.cs";
+    
     /// <summary>
     /// Runs <paramref name="generator"/> against one or more C# files on disk.
     /// Files should live under <c>Cases/</c> and be copied to bin (see .csproj).
@@ -21,7 +31,6 @@ internal sealed class GeneratorTestHelpers
             IEnumerable<string> caseRelativePaths,
             Dictionary<string, ReportDiagnostic>? diagnosticsToSuppress = null,
             Dictionary<string, string>? featureFlags = null,
-            IEnumerable<MetadataReference>? additionalReferences = null,
             LanguageVersion languageVersion = LanguageVersion.Preview,
             IDictionary<string, string>? msbuildProperties = null)
     {
@@ -29,16 +38,35 @@ internal sealed class GeneratorTestHelpers
             .WithLanguageVersion(languageVersion)
             .WithFeatures(featureFlags);
 
-        var trees = caseRelativePaths
+        // Always include the single global-usings file first, if present
+        var trees = new List<SyntaxTree>();
+
+        var globalUsingsPath = ResolveCasePath(GlobalUsingsRelPath);
+        if (File.Exists(globalUsingsPath))
+        {
+            var guText = File.ReadAllText(globalUsingsPath);
+            trees.Add(CSharpSyntaxTree.ParseText(guText, parse, path: NormalizeForDiagnostics(globalUsingsPath)));
+        }
+
+        // Then include the case files passed in
+        trees.AddRange(caseRelativePaths
             .Select(ResolveCasePath)
-            .Select(p => CSharpSyntaxTree.ParseText(File.ReadAllText(p), parse, path: NormalizeForDiagnostics(p)))
-            .ToArray();
+            .Select(p => CSharpSyntaxTree.ParseText(File.ReadAllText(p), parse, path: NormalizeForDiagnostics(p))));
 
         var references = GetBclReferences().ToList();
-        if (additionalReferences is not null)
-        {
-            references.AddRange(additionalReferences);
-        }
+        references.AddRange([
+            MetadataReference.CreateFromFile(typeof(AlexaSkillFunction<,>).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(SkillRequest).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(IHostBuilder).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(ServiceCollectionExtensions).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(IServiceCollection).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(ILambdaContext).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(IConfiguration).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(ConfigurationBinder).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(OptionsServiceCollectionExtensions).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(ServiceLifetime).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(UserEventRequest).Assembly.Location),
+        ]);
 
         var options = new CSharpCompilationOptions(
             OutputKind.DynamicallyLinkedLibrary,
@@ -56,6 +84,20 @@ internal sealed class GeneratorTestHelpers
             references: references,
             options: options
         );
+        var obj = compilation.GetSpecialType(SpecialType.System_Object);
+        if (obj.TypeKind == TypeKind.Error)
+        {
+            var refList = references
+                .OfType<PortableExecutableReference>()
+                .Select(r => System.IO.Path.GetFileName(r.FilePath ?? r.Display))
+                .OrderBy(n => n)
+                .ToArray();
+
+            throw new InvalidOperationException(
+                "BCL references missing: System.Object not resolved.\n" +
+                "References seen:\n  - " + string.Join("\n  - ", refList)
+            );
+        }
 
         // ✅ Wire the analyzer config options provider (this is what you were after)
         AnalyzerConfigOptionsProvider? optionsProvider = null;
@@ -118,22 +160,18 @@ internal sealed class VerifyGlue
     /// Runs <paramref name="generator"/> against one or more input files, checks that generated code compiles,
     /// and snapshots the driver/run result to <c>Snapshots/</c>.
     /// </summary>
-    public static async Task VerifySourcesAsync(
-        IIncrementalGenerator generator,
+    public static async Task VerifySourcesAsync(IIncrementalGenerator generator,
         IEnumerable<string> casePaths,
-        IEnumerable<MetadataReference>? additionalReferences = null,
         Dictionary<string, string>? featureFlags = null,
         Dictionary<string, ReportDiagnostic>? diagnosticsToSuppress = null,
         LanguageVersion languageVersion = LanguageVersion.Preview,
-        IDictionary<string, string>? msbuildProperties = null
-    )
+        IDictionary<string, string>? msbuildProperties = null)
     {
         var (driver, original, parse) = GeneratorTestHelpers.RunFromCases(
             generator,
             casePaths,
             diagnosticsToSuppress,
             featureFlags,
-            additionalReferences,
             languageVersion,
             msbuildProperties
         );
@@ -180,7 +218,8 @@ internal sealed class InMemoryAnalyzerConfigOptions : AnalyzerConfigOptions
 /// </summary>
 internal sealed class InMemoryAnalyzerConfigOptionsProvider : AnalyzerConfigOptionsProvider
 {
-    private static readonly AnalyzerConfigOptions Empty = new InMemoryAnalyzerConfigOptions(new Dictionary<string, string>());
+    private static readonly AnalyzerConfigOptions Empty =
+        new InMemoryAnalyzerConfigOptions(new Dictionary<string, string>());
 
     /// <summary>Creates a provider with the supplied global options (e.g., build_property.*).</summary>
     public InMemoryAnalyzerConfigOptionsProvider(IDictionary<string, string> globalOptions) =>

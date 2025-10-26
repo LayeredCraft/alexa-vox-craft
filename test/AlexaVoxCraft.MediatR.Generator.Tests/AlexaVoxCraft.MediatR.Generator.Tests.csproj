@@ -20,6 +20,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,12 +34,6 @@
         <None Include="Cases\**\*.cs" />
         <None Update="Cases\**\*.cs">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Cases\001_Simple\Function.cs">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Cases\002_MultiRegister\Function.cs">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
