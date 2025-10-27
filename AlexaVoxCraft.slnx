@@ -33,9 +33,27 @@
     <File Path=".gitignore" />
   </Folder>
   <Folder Name="/samples/">
-    <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj" />
-    <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj" />
-    <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj" />
+    <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|Any CPU" Project="Release|Any CPU|NoBuild" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|Any CPU" Project="Release|Any CPU|NoBuild" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|Any CPU" Project="Release|Any CPU|NoBuild" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="CLAUDE.md" />
@@ -47,20 +65,80 @@
     <File Path="ROADMAP.md" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/AlexaVoxCraft.MediatR.Generators/AlexaVoxCraft.MediatR.Generators.csproj" />
-    <Project Path="src/AlexaVoxCraft.MediatR.Lambda/AlexaVoxCraft.MediatR.Lambda.csproj" />
-    <Project Path="src/AlexaVoxCraft.MediatR/AlexaVoxCraft.MediatR.csproj" />
-    <Project Path="src/AlexaVoxCraft.Model.Apl/AlexaVoxCraft.Model.Apl.csproj" />
-    <Project Path="src/AlexaVoxCraft.Model/AlexaVoxCraft.Model.csproj" />
-    <Project Path="src/AlexaVoxCraft.Observability/AlexaVoxCraft.Observability.csproj" />
+    <Project Path="src/AlexaVoxCraft.MediatR.Generators/AlexaVoxCraft.MediatR.Generators.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="src/AlexaVoxCraft.MediatR.Lambda/AlexaVoxCraft.MediatR.Lambda.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="src/AlexaVoxCraft.MediatR/AlexaVoxCraft.MediatR.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="src/AlexaVoxCraft.Model.Apl/AlexaVoxCraft.Model.Apl.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="src/AlexaVoxCraft.Model/AlexaVoxCraft.Model.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="src/AlexaVoxCraft.Observability/AlexaVoxCraft.Observability.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
   </Folder>
   <Folder Name="/test/">
-    <Project Path="AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj" />
-    <Project Path="test/AlexaVoxCraft.MediatR.Generator.Tests/AlexaVoxCraft.MediatR.Generator.Tests.csproj" />
-    <Project Path="test/AlexaVoxCraft.MediatR.Lambda.Tests/AlexaVoxCraft.MediatR.Lambda.Tests.csproj" />
-    <Project Path="test/AlexaVoxCraft.MediatR.Tests/AlexaVoxCraft.MediatR.Tests.csproj" />
-    <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj" />
-    <Project Path="test/AlexaVoxCraft.Model.Tests/AlexaVoxCraft.Model.Tests.csproj" />
+    <Project Path="AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="test/AlexaVoxCraft.MediatR.Generator.Tests/AlexaVoxCraft.MediatR.Generator.Tests.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="test/AlexaVoxCraft.MediatR.Lambda.Tests/AlexaVoxCraft.MediatR.Lambda.Tests.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="test/AlexaVoxCraft.MediatR.Tests/AlexaVoxCraft.MediatR.Tests.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="test/AlexaVoxCraft.Model.Tests/AlexaVoxCraft.Model.Tests.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
     <File Path="test\Directory.Build.props" />
   </Folder>
 </Solution>
