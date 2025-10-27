@@ -19,7 +19,13 @@
         <!-- Generate ready to run images during publishing to improve cold start time. -->
         <PublishReadyToRun>true</PublishReadyToRun>
         <LangVersion>default</LangVersion>
+        <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
+        <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
+        <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
     </PropertyGroup>
+    <ItemGroup>
+        <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj" />
