@@ -34,25 +34,16 @@
   </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj">
-      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
-      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
-      <Configuration Solution="Release|Any CPU" Project="Release|Any CPU|NoBuild" />
-      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
-      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+        <Configuration Solution="Debug|*" Project="Debug|*U" />
+        <Configuration Solution="Release|*" Project="Release|*|NoBuild" />
     </Project>
     <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj">
-      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
-      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
-      <Configuration Solution="Release|Any CPU" Project="Release|Any CPU|NoBuild" />
-      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
-      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+      <Configuration Solution="Debug|*" Project="Debug|*U" />
+      <Configuration Solution="Release|*" Project="Release|*|NoBuild" />
     </Project>
     <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj">
-      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
-      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
-      <Configuration Solution="Release|Any CPU" Project="Release|Any CPU|NoBuild" />
-      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
-      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+        <Configuration Solution="Debug|*" Project="Debug|*U" />
+        <Configuration Solution="Release|*" Project="Release|*|NoBuild" />
     </Project>
   </Folder>
   <Folder Name="/Solution Items/">

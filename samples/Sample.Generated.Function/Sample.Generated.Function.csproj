@@ -5,6 +5,9 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
+        <InterceptorsPreviewNamespaces>AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
+        <InterceptorsNamespaces>AlexaVoxCraft.Generated</InterceptorsNamespaces>
     </PropertyGroup>
 
     <ItemGroup>
@@ -44,9 +47,6 @@
     <!-- Only write generated files to disk in Debug builds (nice for inspection) -->
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
-        <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
-        <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
     </PropertyGroup>
     <ItemGroup>
         <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor" />
