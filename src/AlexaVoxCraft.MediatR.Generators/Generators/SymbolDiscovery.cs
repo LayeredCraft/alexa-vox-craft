@@ -41,7 +41,7 @@ internal static class SymbolDiscovery
             if (typeInfo.AlexaHandlerAttribute?.Exclude == true)
                 continue;
 
-            var lifetime = typeInfo.AlexaHandlerAttribute?.Lifetime ?? 0;
+            var lifetime = typeInfo.AlexaHandlerAttribute?.Lifetime ?? 2;
             var order = typeInfo.AlexaHandlerAttribute?.Order ?? 0;
             var typeModel = new Models.TypeInfo(typeInfo.FullyQualifiedTypeName);
 

@@ -47,10 +47,10 @@ file static class AlexaVoxCraftInterceptors
         AlexaVoxCraft.MediatR.Registration.ServiceRegistrar.AddRequiredServices(services, cfg);
 
         // Request Interceptors
-        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, global::Sample.Generated.Function.LoggingInterceptor>();
+        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, global::Sample.Generated.Function.LoggingInterceptor>();
 
         // Response Interceptors
-        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, global::Sample.Generated.Function.LoggingInterceptor>();
+        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, global::Sample.Generated.Function.LoggingInterceptor>();
 
         return services;
     }
