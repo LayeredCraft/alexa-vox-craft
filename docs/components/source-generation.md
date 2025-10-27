@@ -113,8 +113,10 @@ public class MyHandler : IRequestHandler<LaunchRequest>
 
 Controls the service lifetime for dependency injection:
 
+> **Default Lifetime**: When the `Lifetime` property is not specified, handlers are registered as `Transient` (a new instance is created for each request). This is the recommended default for stateless request handlers.
+
 ```csharp
-// Transient (default) - new instance per request
+// Transient (default when Lifetime not specified) - new instance per request
 [AlexaHandler(Lifetime = ServiceLifetime.Transient)]
 public class TransientHandler : IRequestHandler<LaunchRequest> { }
 

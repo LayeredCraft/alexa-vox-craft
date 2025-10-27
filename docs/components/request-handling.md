@@ -417,6 +417,8 @@ Handlers are automatically discovered and registered at compile time using C# in
 services.AddSkillMediator(context.Configuration);
 ```
 
+Handlers are registered as `Transient` by default (new instance per request), which is appropriate for stateless handlers. You can customize the lifetime using the `[AlexaHandler]` attribute.
+
 All handlers implementing `IRequestHandler<T>`, `IDefaultRequestHandler`, `IExceptionHandler`, or related interfaces are automatically registered. See the [Source Generation](source-generation.md) documentation for:
 
 - Customizing service lifetimes with `[AlexaHandler(Lifetime = ServiceLifetime.Scoped)]`
