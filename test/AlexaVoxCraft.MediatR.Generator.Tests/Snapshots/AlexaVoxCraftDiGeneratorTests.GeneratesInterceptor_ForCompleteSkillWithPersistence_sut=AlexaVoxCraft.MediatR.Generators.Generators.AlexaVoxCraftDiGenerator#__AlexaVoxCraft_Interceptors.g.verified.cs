@@ -47,17 +47,17 @@ file static class AlexaVoxCraftInterceptors
         AlexaVoxCraft.MediatR.Registration.ServiceRegistrar.AddRequiredServices(services, cfg);
 
         // Request Handlers
-        services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.IntentRequest>, global::Sample.Generated.Function.IntentHandler>();
-        services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.LaunchRequest>, global::Sample.Generated.Function.LaunchHandler>();
+        services.AddSingleton<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.IntentRequest>, global::Sample.Generated.Function.IntentHandler>();
+        services.AddSingleton<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.LaunchRequest>, global::Sample.Generated.Function.LaunchHandler>();
 
         // Exception Handlers
-        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IExceptionHandler, global::Sample.Generated.Function.ExceptionHandler>();
+        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IExceptionHandler, global::Sample.Generated.Function.ExceptionHandler>();
 
         // Request Interceptors
-        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, global::Sample.Generated.Function.RequestInterceptor>();
+        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, global::Sample.Generated.Function.RequestInterceptor>();
 
         // Response Interceptors
-        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, global::Sample.Generated.Function.ResponseInterceptor>();
+        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, global::Sample.Generated.Function.ResponseInterceptor>();
 
         // Persistence Adapter
         services.TryAddSingleton<AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter, global::Sample.Generated.Function.DynamoDbPersistenceAdapter>();
