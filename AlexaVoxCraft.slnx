@@ -33,18 +33,9 @@
     <File Path=".gitignore" />
   </Folder>
   <Folder Name="/samples/">
-    <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj">
-        <Configuration Solution="Debug|*" Project="Debug|*U" />
-        <Configuration Solution="Release|*" Project="Release|*|NoBuild" />
-    </Project>
-    <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj">
-      <Configuration Solution="Debug|*" Project="Debug|*U" />
-      <Configuration Solution="Release|*" Project="Release|*|NoBuild" />
-    </Project>
-    <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj">
-        <Configuration Solution="Debug|*" Project="Debug|*U" />
-        <Configuration Solution="Release|*" Project="Release|*|NoBuild" />
-    </Project>
+    <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj" />
+    <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj" />
+    <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="CLAUDE.md" />

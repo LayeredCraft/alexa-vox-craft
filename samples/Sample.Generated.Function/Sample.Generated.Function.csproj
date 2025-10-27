@@ -8,6 +8,7 @@
         <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
         <InterceptorsPreviewNamespaces>AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
         <InterceptorsNamespaces>AlexaVoxCraft.Generated</InterceptorsNamespaces>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>

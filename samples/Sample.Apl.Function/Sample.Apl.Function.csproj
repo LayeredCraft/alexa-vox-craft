@@ -22,6 +22,7 @@
         <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
         <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
         <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>
         <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor" />
