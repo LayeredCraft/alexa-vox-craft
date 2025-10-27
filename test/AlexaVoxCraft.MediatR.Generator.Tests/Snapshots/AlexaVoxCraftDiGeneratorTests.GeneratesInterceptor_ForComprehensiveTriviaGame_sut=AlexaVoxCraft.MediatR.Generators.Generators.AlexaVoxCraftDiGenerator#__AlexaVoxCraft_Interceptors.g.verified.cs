@@ -57,15 +57,15 @@ file static class AlexaVoxCraftInterceptors
         services.TryAddTransient<AlexaVoxCraft.MediatR.IDefaultRequestHandler, global::Sample.Generated.Function.DefaultTriviaHandler>();
 
         // Exception Handlers
-        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IExceptionHandler, global::Sample.Generated.Function.TriviaExceptionHandler>();
+        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IExceptionHandler, global::Sample.Generated.Function.TriviaExceptionHandler>();
 
         // Request Interceptors
-        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, global::Sample.Generated.Function.LanguageRequestInterceptor>();
-        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, global::Sample.Generated.Function.LoggingInterceptor>();
+        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, global::Sample.Generated.Function.LanguageRequestInterceptor>();
+        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IRequestInterceptor, global::Sample.Generated.Function.LoggingInterceptor>();
 
         // Response Interceptors
-        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, global::Sample.Generated.Function.LoggingInterceptor>();
-        services.AddSingleton<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, global::Sample.Generated.Function.SaveDataResponseInterceptor>();
+        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, global::Sample.Generated.Function.LoggingInterceptor>();
+        services.AddTransient<AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor, global::Sample.Generated.Function.SaveDataResponseInterceptor>();
 
         // Persistence Adapter
         services.TryAddSingleton<AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter, global::Sample.Generated.Function.DynamoDbTriviaAdapter>();

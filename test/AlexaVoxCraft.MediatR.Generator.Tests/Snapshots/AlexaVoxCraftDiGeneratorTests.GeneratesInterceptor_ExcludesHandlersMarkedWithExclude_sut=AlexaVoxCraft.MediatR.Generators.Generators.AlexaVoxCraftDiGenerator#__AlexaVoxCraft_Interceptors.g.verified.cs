@@ -47,8 +47,8 @@ file static class AlexaVoxCraftInterceptors
         AlexaVoxCraft.MediatR.Registration.ServiceRegistrar.AddRequiredServices(services, cfg);
 
         // Request Handlers
-        services.AddSingleton<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.IntentRequest>, global::Sample.Generated.Function.IntentHandler>();
-        services.AddSingleton<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.LaunchRequest>, global::Sample.Generated.Function.LaunchHandler>();
+        services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.IntentRequest>, global::Sample.Generated.Function.IntentHandler>();
+        services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.LaunchRequest>, global::Sample.Generated.Function.LaunchHandler>();
 
         return services;
     }
