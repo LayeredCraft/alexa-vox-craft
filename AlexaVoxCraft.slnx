@@ -33,15 +33,9 @@
     <File Path=".gitignore" />
   </Folder>
   <Folder Name="/samples/">
-    <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj">
-      <Build Solution="Release|Any CPU" Project="false" />
-    </Project>
-    <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj">
-      <Build Solution="Release|Any CPU" Project="false" />
-    </Project>
-    <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj">
-      <Build Solution="Release|Any CPU" Project="false" />
-    </Project>
+    <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj" />
+    <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj" />
+    <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="CLAUDE.md" />
@@ -62,9 +56,11 @@
   </Folder>
   <Folder Name="/test/">
     <Project Path="AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj" />
+    <Project Path="test/AlexaVoxCraft.MediatR.Generator.Tests/AlexaVoxCraft.MediatR.Generator.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.MediatR.Lambda.Tests/AlexaVoxCraft.MediatR.Lambda.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.MediatR.Tests/AlexaVoxCraft.MediatR.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.Model.Tests/AlexaVoxCraft.Model.Tests.csproj" />
+    <File Path="test\Directory.Build.props" />
   </Folder>
 </Solution>

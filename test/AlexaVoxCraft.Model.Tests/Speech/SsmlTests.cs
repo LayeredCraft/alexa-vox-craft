@@ -2,10 +2,15 @@
 using AlexaVoxCraft.Model.Response.Ssml;
 using AlexaVoxCraft.TestKit.Attributes;
 using AwesomeAssertions;
+using DomainName = AlexaVoxCraft.Model.Response.Ssml.DomainName;
 using SsmlSpeech = AlexaVoxCraft.Model.Response.Ssml.Speech;
 
 namespace AlexaVoxCraft.Model.Tests.Speech;
 
+/// <summary>
+/// Tests for SSML (Speech Synthesis Markup Language) model classes.
+/// Verifies XML generation, serialization, and constraint validation for all SSML elements.
+/// </summary>
 public sealed class SsmlTests
 {
     [Fact]

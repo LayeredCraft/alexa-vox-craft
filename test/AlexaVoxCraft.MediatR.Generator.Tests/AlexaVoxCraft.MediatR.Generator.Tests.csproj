@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>AlexaVoxCraft.MediatR.Generator.Tests</RootNamespace>
+        <TargetFrameworks>net8.0;net10.0;net9.0</TargetFrameworks>
+        <IsTestProject>true</IsTestProject>
+        <IsPackable>false</IsPackable>
+        <LangVersion>default</LangVersion>
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+        <PackageReference Include="Verify.SourceGenerators" Version="2.5.0" />
+        <PackageReference Include="Verify.XunitV3" Version="31.0.4"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="Cases\**\*.cs" />
+        <None Include="Cases\**\*.cs" />
+        <None Update="Cases\**\*.cs">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
+        <PackageReference Include="Basic.Reference.Assemblies.Net80" Version="1.8.3" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
+        <PackageReference Include="Basic.Reference.Assemblies.Net90" Version="1.8.3" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net10.0'">
+        <PackageReference Include="Basic.Reference.Assemblies.Net100" Version="1.8.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Snapshots\" />
+    </ItemGroup>
+
+</Project>

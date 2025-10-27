@@ -135,7 +135,7 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
         AttributeInfo? attributeInfo = null;
         if (attribute != null)
         {
-            var lifetime = 0;
+            var lifetime = 2;
             var order = 0;
             var exclude = false;
 

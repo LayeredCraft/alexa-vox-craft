@@ -205,9 +205,8 @@ internal static class InterceptorEmitter
     {
         return lifetime switch
         {
-            0 => "AddTransient",
+            0 => "AddSingleton",
             1 => "AddScoped",
-            2 => "AddSingleton",
             _ => "AddTransient"
         };
     }
