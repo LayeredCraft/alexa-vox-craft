@@ -1,0 +1,110 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.5a41f99d-bffb-4140-b94c-220235d373da",
+    "application": {
+      "applicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+    },
+    "attributes": {
+      "score": 0,
+      "currentQuestionIndex": 0,
+      "speechOutput": "Question 1. Who was the only Disney princess to have a tattoo? 1.  Jasmine. 2.  Pocahontas. 3.  Mulan. 4.  Moana. ",
+      "repromptText": "Question 1. Who was the only Disney princess to have a tattoo? 1.  Jasmine. 2.  Pocahontas. 3.  Mulan. 4.  Moana. ",
+      "questions": [346, 312, 294, 63, 21],
+      "answers": ["Jasmine", "Pocahontas", "Mulan", "Moana"],
+      "correctAnserText": "Pocahontas",
+      "correctAnswerIndex": 1,
+      "questionText": "Who was the only Disney princess to have a tattoo?"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.AHLQDC7KNW26ODPRS3FQFSJ4JKDKYWXMJ4IJXZGSHFVNPH5GO72YXCPL5UVKZY5QQMHGAB7RZ3TP3LBXB245PBD5DB63Q2L42SIBS4E32JRTOAEUTUPCSOGT3RC7ZXMQUVU7GVCTHCYWFAWWEXQWY4ZTY7JLIJ26DN7NI2FGDQ7UMDGHJM4IKPC7YEJKLXZKYBBDA3MAOIRBMGI"
+    }
+  },
+  "context": {
+    "Viewports": [
+      {
+        "type": "APL",
+        "id": "medHub",
+        "shape": "RECTANGLE",
+        "dpi": 160,
+        "presentationType": "OVERLAY",
+        "canRotate": false,
+        "configuration": {
+          "current": {
+            "mode": "HUB",
+            "video": {
+              "codecs": ["H_264_42", "H_264_41"]
+            },
+            "size": {
+              "type": "DISCRETE",
+              "pixelWidth": 1280,
+              "pixelHeight": 800
+            }
+          }
+        }
+      }
+    ],
+    "Viewport": {
+      "experiences": [
+        {
+          "arcMinuteWidth": 221,
+          "arcMinuteHeight": 162,
+          "canRotate": false,
+          "canResize": false
+        }
+      ],
+      "mode": "HUB",
+      "shape": "RECTANGLE",
+      "pixelWidth": 1280,
+      "pixelHeight": 800,
+      "dpi": 160,
+      "currentPixelWidth": 1280,
+      "currentPixelHeight": 800,
+      "touch": ["SINGLE"],
+      "keyboard": ["DIRECTION"],
+      "video": {
+        "codecs": ["H_264_42", "H_264_41"]
+      }
+    },
+    "Extensions": {
+      "available": {
+        "aplext:backstack:10": {}
+      }
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.AHLQDC7KNW26ODPRS3FQFSJ4JKDKYWXMJ4IJXZGSHFVNPH5GO72YXCPL5UVKZY5QQMHGAB7RZ3TP3LBXB245PBD5DB63Q2L42SIBS4E32JRTOAEUTUPCSOGT3RC7ZXMQUVU7GVCTHCYWFAWWEXQWY4ZTY7JLIJ26DN7NI2FGDQ7UMDGHJM4IKPC7YEJKLXZKYBBDA3MAOIRBMGI"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.AEHTQBNKJTQBDCNX7QBUUQODLF6QNPEGMAWXJKGP4FAOWAO4RV5KLDBP2N5T2RZEV7JRCL2C37DOS7RUT3VIU7KRXIB5ZBLR5YD6QEYLS6ZW2WMH26YG3DNRRBJFAACU5FDNNH3DTIS5XD6FAVQQ7SBMD2XQ",
+        "supportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      },
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "apiAccessToken": "[TOKEN REDACTED FOR BREVITY]"
+    }
+  },
+  "request": {
+    "type": "Alexa.Presentation.APL.UserEvent",
+    "requestId": "amzn1.echo-api.request.59ea40b6-6fb5-4ea3-8c44-37375312d418",
+    "timestamp": "2025-04-09T12:39:31Z",
+    "locale": "en-US",
+    "arguments": ["answer", 2],
+    "components": {},
+    "source": {
+      "type": "TouchWrapper",
+      "handler": "Press",
+      "id": ""
+    },
+    "token": "triviaPager"
+  }
+}

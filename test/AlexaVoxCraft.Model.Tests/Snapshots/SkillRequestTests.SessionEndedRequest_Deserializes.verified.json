@@ -1,0 +1,63 @@
+﻿{
+  "Version": "1.0",
+  "Session": {
+    "New": false,
+    "SessionId": "amzn1.echo-api.session.a32c0164e5c242b4",
+    "Attributes": {
+      "answers": [
+        "7",
+        "3",
+        "12",
+        "5"
+      ],
+      "correctAnserText": "5",
+      "correctAnswerIndex": 3,
+      "currentQuestionIndex": 0,
+      "questions": {
+        "1": "Guid_1",
+        "10": "Guid_2",
+        "2": "Guid_3",
+        "6": "Guid_4",
+        "8": "Guid_5"
+      },
+      "questionText": "How many crows are in the original Dumbo movie?",
+      "repromptText": "Question 1. How many crows are in the original Dumbo movie? 1.  7. 2.  3. 3.  12. 4.  5. ",
+      "score": 0,
+      "speechOutput": "Question 1. How many crows are in the original Dumbo movie? 1.  7. 2.  3. 3.  12. 4.  5. "
+    },
+    "Application": {
+      "ApplicationId": "amzn1.ask.skill.54b58c306f70c433"
+    },
+    "User": {
+      "UserId": "amzn1.user.54da08ac3df8ffdd"
+    }
+  },
+  "Context": {
+    "System": {
+      "ApiAccessToken": "{apiAccessToken:2e1cced102c372ef}",
+      "ApiEndpoint": "https://api.amazonalexa.com",
+      "Application": {
+        "ApplicationId": "amzn1.ask.skill.54b58c306f70c433"
+      },
+      "User": {
+        "UserId": "amzn1.user.54da08ac3df8ffdd"
+      },
+      "Device": {
+        "DeviceID": "amzn1.device.e55e1ecf68a4415e",
+        "SupportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Request": {
+    "Type": "SessionEndedRequest",
+    "RequestId": "amzn1.echo-api.request.72fb548e4f9dcaf4",
+    "Locale": "en-US",
+    "Timestamp": "DateTime_1"
+  }
+}

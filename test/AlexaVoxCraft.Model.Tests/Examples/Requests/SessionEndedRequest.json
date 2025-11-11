@@ -1,0 +1,189 @@
+{
+  "context": {
+    "Viewport": {
+      "experiences": [
+        {
+          "canResize": false,
+          "canRotate": false,
+          "arcMinuteWidth": 221,
+          "arcMinuteHeight": 162
+        }
+      ],
+      "currentPixelWidth": 1280,
+      "currentPixelHeight": 800,
+      "dpi": 160,
+      "pixelHeight": 800,
+      "pixelWidth": 1280,
+      "touch": [
+        "SINGLE"
+      ],
+      "keyboard": [
+        "DIRECTION"
+      ],
+      "shape": "RECTANGLE",
+      "video": {
+        "codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Viewports": [
+      {
+        "type": "APL",
+        "shape": "RECTANGLE",
+        "dpi": 160,
+        "presentationType": "OVERLAY",
+        "canRotate": false,
+        "configuration": {
+          "current": {
+            "video": {
+              "codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "size": {
+              "type": "DISCRETE",
+              "pixelHeight": 800,
+              "pixelWidth": 1280
+            }
+          }
+        },
+        "id": "medHub"
+      }
+    ],
+    "Extensions": {
+      "available": {
+        "aplext:backstack:10": {}
+      }
+    },
+    "Alexa.Presentation.APL": {
+      "token": "triviaPager",
+      "version": "APL_WEB_RENDERER_GANDALF",
+      "componentsVisibleOnScreen": [
+        {
+          "uid": ":1000",
+          "position": "960x600+0+0:0",
+          "type": "mixed",
+          "tags": {},
+          "children": [
+            {
+              "id": "pagerId",
+              "uid": ":1001",
+              "position": "960x600+0+0:0",
+              "type": "mixed",
+              "tags": {
+                "focused": false,
+                "pager": {
+                  "index": 0
+                }
+              },
+              "children": [
+                {
+                  "uid": ":1003",
+                  "position": "960x600+0+0:0",
+                  "type": "graphic",
+                  "tags": {},
+                  "entities": []
+                },
+                {
+                  "uid": ":1005",
+                  "position": "839x87+60+0:1",
+                  "type": "mixed",
+                  "tags": {},
+                  "entities": []
+                },
+                {
+                  "id": "page1",
+                  "uid": ":1016",
+                  "position": "841x410+60+87:1",
+                  "type": "text",
+                  "tags": {
+                    "spoken": true
+                  },
+                  "entities": []
+                },
+                {
+                  "uid": ":1017",
+                  "position": "839x102+60+497:2",
+                  "type": "text",
+                  "tags": {},
+                  "entities": []
+                }
+              ],
+              "entities": []
+            }
+          ],
+          "entities": []
+        }
+      ]
+    },
+    "System": {
+      "apiAccessToken": "{apiAccessToken:2e1cced102c372ef}",
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "application": {
+        "applicationId": "amzn1.ask.skill.54b58c306f70c433"
+      },
+      "user": {
+        "userId": "amzn1.user.54da08ac3df8ffdd",
+        "accessToken": null,
+        "permissions": null
+      },
+      "device": {
+        "deviceId": "amzn1.device.e55e1ecf68a4415e",
+        "supportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    },
+    "AudioPlayer": null,
+    "Geolocation": null
+  },
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.a32c0164e5c242b4",
+    "attributes": {
+      "score": 0,
+      "currentQuestionIndex": 0,
+      "speechOutput": "Question 1. How many crows are in the original Dumbo movie? 1.  7. 2.  3. 3.  12. 4.  5. ",
+      "repromptText": "Question 1. How many crows are in the original Dumbo movie? 1.  7. 2.  3. 3.  12. 4.  5. ",
+      "questions": {
+        "1": "48b227f9-7098-4a57-8731-3d4e8efcb591",
+        "2": "50a4fdac-eec4-4bf3-9222-3b1ff6f2a791",
+        "6": "ca27ed30-aa58-4783-8663-664d1a6e4357",
+        "8": "b9ef094c-5da9-4832-915f-03c15c67b6da",
+        "10": "db650780-c60b-47c3-8dfc-363cbeba2693"
+      },
+      "answers": [
+        "7",
+        "3",
+        "12",
+        "5"
+      ],
+      "correctAnserText": "5",
+      "correctAnswerIndex": 3,
+      "questionText": "How many crows are in the original Dumbo movie?"
+    },
+    "application": {
+      "applicationId": "amzn1.ask.skill.54b58c306f70c433"
+    },
+    "user": {
+      "userId": "amzn1.user.54da08ac3df8ffdd",
+      "accessToken": null,
+      "permissions": null
+    }
+  },
+  "request": {
+    "reason": "USER_INITIATED",
+    "type": "SessionEndedRequest",
+    "requestId": "amzn1.echo-api.request.72fb548e4f9dcaf4",
+    "locale": "en-US",
+    "timestamp": "2000-01-01T00:00:00Z"
+  }
+}

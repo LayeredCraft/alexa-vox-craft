@@ -1,0 +1,8 @@
+{
+  "type": "AlexaGridList",
+  "headerTitle": "Header Title",
+  "headerAttributionImage": "https://s3.amazonaws.com/ask-skills-assets/apl-layout-assets/attribution_dark_hub_prime.png",
+  "backgroundImageSource": "https://d2o906d8ln7ui1.cloudfront.net/images/BT6_Background.png",
+  "listItems": "${gridListData.listItemsToShow}",
+  "customLayoutName": "MyListItem"
+}
