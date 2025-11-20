@@ -1,0 +1,252 @@
+﻿{
+  "Context": {
+    "Viewport": {
+      "Experiences": [
+        {
+          "CanResize": false,
+          "CanRotate": false,
+          "ArcMinuteWidth": 221,
+          "ArcMinuteHeight": 162
+        }
+      ],
+      "CurrentPixelWidth": 1280,
+      "CurrentPixelHeight": 800,
+      "DPI": 160,
+      "PixelHeight": 800,
+      "PixelWidth": 1280,
+      "Touch": [
+        "SINGLE"
+      ],
+      "Keyboard": [
+        "DIRECTION"
+      ],
+      "Shape": "RECTANGLE",
+      "Video": {
+        "Codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Viewports": [
+      {
+        "Type": "APL",
+        "Shape": "RECTANGLE",
+        "DPI": 160,
+        "PresentationType": "OVERLAY",
+        "CanRotate": false,
+        "Configuration": {
+          "Current": {
+            "Video": {
+              "Codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "Size": {
+              "Type": "DISCRETE",
+              "PixelHeight": 800,
+              "PixelWidth": 1280
+            }
+          }
+        },
+        "ID": "medHub"
+      }
+    ],
+    "Extensions": {
+      "Available": {}
+    },
+    "AplVisualContext": {
+      "Token": "triviaPager",
+      "Version": "APL_WEB_RENDERER_GANDALF",
+      "ComponentsVisibleOnScreen": [
+        {
+          "Uid": ":1000",
+          "Position": "960x600+0+0:0",
+          "Type": "mixed",
+          "Tags": {},
+          "Children": [
+            {
+              "Id": "pagerId",
+              "Uid": ":1001",
+              "Position": "960x600+0+0:0",
+              "Type": "mixed",
+              "Tags": {
+                "Focused": false,
+                "Pager": {
+                  "Index": 1
+                }
+              },
+              "Children": [
+                {
+                  "Uid": ":1020",
+                  "Position": "960x600+0+0:0",
+                  "Type": "graphic",
+                  "Tags": {}
+                },
+                {
+                  "Id": "page2",
+                  "Uid": ":1026",
+                  "Position": "937x96+11+184:1",
+                  "Type": "text",
+                  "Tags": {
+                    "Spoken": true
+                  }
+                },
+                {
+                  "Uid": ":1034",
+                  "Position": "413x52+9+316:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Focused": false,
+                    "Clickable": true
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1036",
+                      "Position": "52x52+9+316:1",
+                      "Type": "mixed",
+                      "Tags": {}
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1043",
+                  "Position": "413x52+509+316:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Focused": false,
+                    "Clickable": true
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1045",
+                      "Position": "51x52+509+316:1",
+                      "Type": "mixed",
+                      "Tags": {}
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1053",
+                  "Position": "413x51+9+400:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Focused": false,
+                    "Clickable": true
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1055",
+                      "Position": "52x51+9+400:1",
+                      "Type": "mixed",
+                      "Tags": {}
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1062",
+                  "Position": "413x51+509+400:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Focused": false,
+                    "Clickable": true
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1064",
+                      "Position": "51x51+509+400:1",
+                      "Type": "mixed",
+                      "Tags": {}
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1069",
+                  "Position": "960x57+0+0:2",
+                  "Type": "empty",
+                  "Tags": {}
+                },
+                {
+                  "Uid": ":1076",
+                  "Position": "960x102+0+497:2",
+                  "Type": "text",
+                  "Tags": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "System": {
+      "ApiAccessToken": "{apiAccessToken:0cba69165513e2b1}",
+      "ApiEndpoint": "https://api.amazonalexa.com",
+      "Application": {
+        "ApplicationId": "amzn1.ask.skill.54b58c306f70c433"
+      },
+      "User": {
+        "UserId": "amzn1.user.54da08ac3df8ffdd"
+      },
+      "Device": {
+        "DeviceID": "amzn1.device.e55e1ecf68a4415e",
+        "SupportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Version": "1.0",
+  "Session": {
+    "New": false,
+    "SessionId": "amzn1.echo-api.session.07629ef4670202b9",
+    "Attributes": {
+      "answers": [
+        "Cinderella",
+        "Ariel",
+        "Belle",
+        "Snow White"
+      ],
+      "correctAnserText": "Cinderella",
+      "correctAnswerIndex": 0,
+      "currentQuestionIndex": 1,
+      "questions": {
+        "10": "Guid_1",
+        "2": "Guid_2",
+        "3": "Guid_3",
+        "5": "Guid_4",
+        "8": "Guid_5"
+      },
+      "questionText": "Who was the first Disney Princess to visit and help Princess Sofia?",
+      "repromptText": "Question 2. Who was the first Disney Princess to visit and help Princess Sofia? 1.  Cinderella. 2.  Ariel. 3.  Belle. 4.  Snow White. ",
+      "score": 1,
+      "speechOutput": "Question 2. Who was the first Disney Princess to visit and help Princess Sofia? 1.  Cinderella. 2.  Ariel. 3.  Belle. 4.  Snow White. "
+    },
+    "Application": {
+      "ApplicationId": "amzn1.ask.skill.54b58c306f70c433"
+    },
+    "User": {
+      "UserId": "amzn1.user.54da08ac3df8ffdd"
+    }
+  },
+  "Request": {
+    "Token": "triviaPager",
+    "Arguments": [
+      "answer",
+      2
+    ],
+    "Source": {
+      "Type": "TouchWrapper",
+      "Handler": "Press",
+      "ComponentId": ""
+    },
+    "Type": "Alexa.Presentation.APL.UserEvent",
+    "RequestId": "amzn1.echo-api.request.adcd5aaaf110e588",
+    "Locale": "en-US",
+    "Timestamp": "DateTime_1"
+  }
+}

@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>AlexaVoxCraft.Model.Apl.Tests</RootNamespace>
+      <TargetFrameworks>net8.0;net10.0;net9.0</TargetFrameworks>
+      <IsTestProject>true</IsTestProject>
+      <IsPackable>false</IsPackable>
+      <LangVersion>default</LangVersion>
+      <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+      <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Verify.XunitV3" Version="31.0.5"/>
+    </ItemGroup>
+    <ItemGroup>
+        <!-- Embed all JSON fixtures under Examples/ -->
+        <EmbeddedResource Include="Examples\**\*.json"/>
+    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj" />
+    <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
+  </ItemGroup>
+
+</Project>
