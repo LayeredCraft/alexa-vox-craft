@@ -1,0 +1,138 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": true,
+    "sessionId": "[SessionId]",
+    "application": {
+      "applicationId": "[AppId]"
+    },
+    "user": {
+      "userId": "[UserId]"
+    }
+  },
+  "context": {
+    "AudioPlayer": {},
+    "Display": {},
+    "Alexa.Presentation.APL": {
+      "presentationUri": "widget://amzn1.ask.skill.1/MyWidgetSandbox/f1cf2427-1-1-1-1",
+      "token": "helloworldWithButtonToken",
+      "version": "APL_WEB_RENDERER_GANDALF",
+      "componentsVisibleOnScreen": [
+        {
+          "uid": ":1000",
+          "position": "1024x600+0+0:0",
+          "type": "text",
+          "tags": {
+            "viewport": {}
+          },
+          "children": [
+            {
+              "id": "fadeHelloTextButton",
+              "uid": ":1002",
+              "position": "270x70+377+450:0",
+              "type": "text",
+              "tags": {
+                "focused": false,
+                "clickable": true
+              },
+              "entities": []
+            }
+          ],
+          "entities": []
+        }
+      ]
+    },
+    "System": {
+      "application": {
+        "applicationId": "[AppId]"
+      },
+      "user": {
+        "userId": "[UserId]"
+      },
+      "device": {
+        "deviceId": "[DeviceId]",
+        "supportedInterfaces": {
+          "AudioPlayer": {},
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "1.21"
+            }
+          }
+        }
+      },
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "apiAccessToken": "<apiAccessToken-value>"
+    },
+    "Viewport": {
+      "experiences": [
+        {
+          "arcMinuteWidth": 246,
+          "arcMinuteHeight": 144,
+          "canRotate": false,
+          "canResize": false
+        }
+      ],
+      "shape": "RECTANGLE",
+      "pixelWidth": 1024,
+      "pixelHeight": 600,
+      "dpi": 160,
+      "currentPixelWidth": 1024,
+      "currentPixelHeight": 600,
+      "touch": [
+        "SINGLE"
+      ],
+      "video": {
+        "codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Viewports": [
+      {
+        "type": "APL",
+        "id": "main",
+        "shape": "RECTANGLE",
+        "dpi": 160,
+        "presentationType": "STANDARD",
+        "canRotate": false,
+        "configuration": {
+          "current": {
+            "video": {
+              "codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "size": {
+              "type": "DISCRETE",
+              "pixelWidth": 1024,
+              "pixelHeight": 600
+            }
+          }
+        }
+      },
+      {
+        "id": "main",
+        "type": "APLT",
+        "supportedProfiles": [ "FOUR_CHARACTER_CLOCK" ],
+        "lineLength": 4,
+        "lineCount": 1,
+        "format": "SEVEN_SEGMENT",
+        "interSegments": [
+          {
+            "x": 2,
+            "y": 0,
+            "characters": "':."
+          }
+        ]
+      }
+    ]
+  },
+  "request": {
+    "type": "LaunchRequest",
+    "requestId": "[RequestId]",
+    "timestamp": "2018-08-08T18:14:25Z",
+    "locale": "en-US"
+  }
+}

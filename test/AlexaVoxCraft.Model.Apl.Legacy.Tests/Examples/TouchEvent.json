@@ -1,0 +1,14 @@
+{
+  "type": "Alexa.Presentation.APL.UserEvent",
+  "requestId": "amzn1.echo-api.request.7c7e470b-da27-45f9-9df6-37a3203c37d2",
+  "timestamp": "2025-04-09T02:48:00Z",
+  "locale": "en-US",
+  "arguments": ["answer", 2],
+  "components": {},
+  "source": {
+    "type": "TouchWrapper",
+    "handler": "Press",
+    "id": ""
+  },
+  "token": "triviaPager"
+}

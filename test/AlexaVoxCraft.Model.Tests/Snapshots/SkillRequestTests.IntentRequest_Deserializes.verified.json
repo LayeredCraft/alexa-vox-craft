@@ -1,0 +1,82 @@
+﻿{
+  "Version": "1.0",
+  "Session": {
+    "New": false,
+    "SessionId": "amzn1.echo-api.session.07629ef4670202b9",
+    "Attributes": {
+      "answers": [
+        "Tower of Chocolate",
+        "Tower of Terror",
+        "Tower of Butterflies",
+        "Tower of Doom"
+      ],
+      "correctAnserText": "Tower of Terror",
+      "correctAnswerIndex": 1,
+      "currentQuestionIndex": 0,
+      "questions": {
+        "10": "Guid_1",
+        "2": "Guid_2",
+        "3": "Guid_3",
+        "5": "Guid_4",
+        "8": "Guid_5"
+      },
+      "questionText": "In Disney’s Hollywood Studios, what is the name of the tower?",
+      "repromptText": "Question 1. In Disney’s Hollywood Studios, what is the name of the tower? 1.  Tower of Chocolate. 2.  Tower of Terror. 3.  Tower of Butterflies. 4.  Tower of Doom. ",
+      "score": 0,
+      "speechOutput": "Question 1. In Disney’s Hollywood Studios, what is the name of the tower? 1.  Tower of Chocolate. 2.  Tower of Terror. 3.  Tower of Butterflies. 4.  Tower of Doom. "
+    },
+    "Application": {
+      "ApplicationId": "amzn1.ask.skill.54b58c306f70c433"
+    },
+    "User": {
+      "UserId": "amzn1.user.54da08ac3df8ffdd"
+    }
+  },
+  "Context": {
+    "System": {
+      "ApiAccessToken": "{apiAccessToken:57057834a0fcc42c}",
+      "ApiEndpoint": "https://api.amazonalexa.com",
+      "Application": {
+        "ApplicationId": "amzn1.ask.skill.54b58c306f70c433"
+      },
+      "User": {
+        "UserId": "amzn1.user.54da08ac3df8ffdd"
+      },
+      "Device": {
+        "DeviceID": "amzn1.device.e55e1ecf68a4415e",
+        "SupportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Request": {
+    "Intent": {
+      "Name": "AnswerIntent",
+      "Signature": {
+        "FullName": "AnswerIntent",
+        "Action": "AnswerIntent"
+      },
+      "ConfirmationStatus": "NONE",
+      "Slots": {
+        "Answer": {
+          "Name": "Answer",
+          "Value": "2",
+          "ConfirmationStatus": "NONE",
+          "Source": "USER",
+          "SlotValue": {
+            "Value": "2"
+          }
+        }
+      }
+    },
+    "Type": "IntentRequest",
+    "RequestId": "amzn1.echo-api.request.73dbaf3a0f824a6e",
+    "Locale": "en-US",
+    "Timestamp": "DateTime_1"
+  }
+}

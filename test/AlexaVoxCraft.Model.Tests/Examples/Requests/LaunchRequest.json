@@ -1,0 +1,106 @@
+{
+  "context": {
+    "Viewport": {
+      "experiences": [
+        {
+          "canResize": false,
+          "canRotate": false,
+          "arcMinuteWidth": 221,
+          "arcMinuteHeight": 162
+        }
+      ],
+      "currentPixelWidth": 1280,
+      "currentPixelHeight": 800,
+      "dpi": 160,
+      "pixelHeight": 800,
+      "pixelWidth": 1280,
+      "touch": [
+        "SINGLE"
+      ],
+      "keyboard": [
+        "DIRECTION"
+      ],
+      "shape": "RECTANGLE",
+      "video": {
+        "codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Viewports": [
+      {
+        "type": "APL",
+        "shape": "RECTANGLE",
+        "dpi": 160,
+        "presentationType": "OVERLAY",
+        "canRotate": false,
+        "configuration": {
+          "current": {
+            "video": {
+              "codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "size": {
+              "type": "DISCRETE",
+              "pixelHeight": 800,
+              "pixelWidth": 1280
+            }
+          }
+        },
+        "id": "medHub"
+      }
+    ],
+    "Extensions": {
+      "available": {
+        "aplext:backstack:10": {}
+      }
+    },
+    "System": {
+      "apiAccessToken": "{apiAccessToken:bbbb96ddea8f8694}",
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "application": {
+        "applicationId": "amzn1.ask.skill.54b58c306f70c433"
+      },
+      "user": {
+        "userId": "amzn1.user.54da08ac3df8ffdd",
+        "accessToken": null,
+        "permissions": null
+      },
+      "device": {
+        "deviceId": "amzn1.device.e55e1ecf68a4415e",
+        "supportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    },
+    "AudioPlayer": null,
+    "Geolocation": null
+  },
+  "version": "1.0",
+  "session": {
+    "new": true,
+    "sessionId": "amzn1.echo-api.session.c97d8db26a70f028",
+    "attributes": {},
+    "application": {
+      "applicationId": "amzn1.ask.skill.54b58c306f70c433"
+    },
+    "user": {
+      "userId": "amzn1.user.54da08ac3df8ffdd",
+      "accessToken": null,
+      "permissions": null
+    }
+  },
+  "request": {
+    "type": "LaunchRequest",
+    "requestId": "amzn1.echo-api.request.2764b1b526b731ea",
+    "locale": "en-US",
+    "timestamp": "2000-01-01T00:00:00Z"
+  }
+}
