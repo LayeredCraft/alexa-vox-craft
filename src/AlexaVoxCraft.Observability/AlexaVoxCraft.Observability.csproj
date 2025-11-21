@@ -10,14 +10,7 @@
         <Title>AlexaVoxCraft.Observability</Title>
         <Description>OpenTelemetry instrumentation for AlexaVoxCraft, providing comprehensive observability for Alexa skill development.</Description>
         <PackageTags>alexa;opentelemetry;observability;telemetry;metrics;tracing;voxcraft</PackageTags>
-        <PackageIcon>icon.png</PackageIcon>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     </PropertyGroup>
-    <ItemGroup>
-        <None Include="..\..\icon.png" Pack="true" PackagePath="" Visible="False" />
-        <None Include="..\..\README.md" Pack="true" PackagePath="" Visible="False" />
-    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj"/>
