@@ -15,32 +15,34 @@ public static class ServiceCollectionExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        /// Registers SMAPI client services with configuration from the specified configuration section.
+        /// Registers SMAPI developer client services for use in CI/CD pipelines and external tooling.
+        /// Uses Login with Amazon (LWA) refresh token authentication with credentials from the Amazon Developer Console.
         /// </summary>
         /// <param name="configuration">The configuration instance.</param>
         /// <param name="sectionName">The configuration section name containing SMAPI credentials. Defaults to "SmapiClient".</param>
         /// <returns>The service collection for chaining.</returns>
         /// <example>
         /// <code>
-        /// services.AddSmapiClient(configuration);
+        /// services.AddSmapiDeveloperClient(configuration);
         /// // Or with custom section name:
-        /// services.AddSmapiClient(configuration, "AlexaSkillManagement");
+        /// services.AddSmapiDeveloperClient(configuration, "AlexaSkillManagement");
         /// </code>
         /// </example>
-        public IServiceCollection AddSmapiClient(IConfiguration configuration,
+        public IServiceCollection AddSmapiDeveloperClient(IConfiguration configuration,
             string sectionName = "SmapiClient")
         {
-            return services.AddSmapiClient(options => configuration.GetSection(sectionName).Bind(options));
+            return services.AddSmapiDeveloperClient(options => configuration.GetSection(sectionName).Bind(options));
         }
 
         /// <summary>
-        /// Registers SMAPI client services with configuration via an action delegate.
+        /// Registers SMAPI developer client services for use in CI/CD pipelines and external tooling.
+        /// Uses Login with Amazon (LWA) refresh token authentication with credentials from the Amazon Developer Console.
         /// </summary>
-        /// <param name="optionsAction">The action to configure SMAPI developer credentials.</param>
+        /// <param name="optionsAction">The action to configure SMAPI developer credentials (ClientId, ClientSecret, RefreshToken).</param>
         /// <returns>The service collection for chaining.</returns>
         /// <example>
         /// <code>
-        /// services.AddSmapiClient(options =>
+        /// services.AddSmapiDeveloperClient(options =>
         /// {
         ///     options.ClientId = "amzn1.application-oa2-client.xxx";
         ///     options.ClientSecret = "your-secret";
@@ -48,7 +50,7 @@ public static class ServiceCollectionExtensions
         /// });
         /// </code>
         /// </example>
-        public IServiceCollection AddSmapiClient(Action<SmapiDeveloperAccessTokenOptions> optionsAction)
+        public IServiceCollection AddSmapiDeveloperClient(Action<SmapiDeveloperAccessTokenOptions> optionsAction)
         {
             services.Configure(optionsAction);
             services.AddHttpClient<IAlexaInteractionModelClient, AlexaInteractionModelClient>(client =>

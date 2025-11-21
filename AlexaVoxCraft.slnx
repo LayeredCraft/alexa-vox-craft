@@ -26,6 +26,9 @@
   <Folder Name="/docs/examples/">
     <File Path="docs/examples/index.md" />
   </Folder>
+  <Folder Name="/docs/smapi/">
+    <File Path="docs/smapi/developer-client.md" />
+  </Folder>
   <Folder Name="/git/">
     <File Path=".github/workflows/build.yaml" />
     <File Path=".github/workflows/docs.yml" />

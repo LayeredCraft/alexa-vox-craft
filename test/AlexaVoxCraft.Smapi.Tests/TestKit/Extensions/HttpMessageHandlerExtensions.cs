@@ -16,6 +16,7 @@ public static class HttpMessageHandlerExtensions
         /// <summary>
         /// Configures a response for HttpMessageHandler.SendAsync.
         /// If no predicate is supplied, it matches any HttpRequestMessage.
+        /// Creates a fresh response for each invocation to avoid disposed content issues.
         /// </summary>
         public ConfiguredCall ReturnsResponse(
             HttpStatusCode statusCode,
@@ -24,19 +25,21 @@ public static class HttpMessageHandlerExtensions
         {
             predicate ??= _ => true; // default: match any request
 
-            var response = new HttpResponseMessage(statusCode)
-            {
-                Content = body is null ? null : JsonContent.Create(body)
-            };
-
             // Register the call on the protected SendAsync method using NSubstitute Arg matchers
             SendAsyncMethod.Invoke(handler, [
                 Arg.Is<HttpRequestMessage>(req => predicate(req)),
                 Arg.Any<CancellationToken>()
             ]);
 
-            // Apply the return value to that configured call
-            return ((object)handler).Returns(Task.FromResult(response));
+            // Return a function that creates a fresh response each time to avoid disposed content
+            return ((object)handler).Returns(_ =>
+            {
+                var response = new HttpResponseMessage(statusCode)
+                {
+                    Content = body is null ? null : JsonContent.Create(body)
+                };
+                return Task.FromResult(response);
+            });
         }
     }
 }

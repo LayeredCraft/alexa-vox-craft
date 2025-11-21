@@ -87,13 +87,24 @@ public sealed class SmapiDeveloperAccessTokenProvider : IAccessTokenProvider, ID
             using var doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
 
-            _currentToken = root.GetProperty("access_token").GetString()
-                           ?? throw new InvalidOperationException("access_token missing in LWA response.");
+            if (!root.TryGetProperty("access_token", out var accessTokenElement) ||
+                accessTokenElement.ValueKind != JsonValueKind.String ||
+                string.IsNullOrWhiteSpace(accessTokenElement.GetString()))
+            {
+                throw new InvalidOperationException(
+                    "access_token missing, not a string, or is null/empty in LWA response.");
+            }
 
-            var expiresIn = root.GetProperty("expires_in").GetInt32();
+            _currentToken = accessTokenElement.GetString();
+
+            if (!root.TryGetProperty("expires_in", out var expiresInElement) || expiresInElement.ValueKind != JsonValueKind.Number)
+            {
+                throw new InvalidOperationException("expires_in missing or not a number in LWA response.");
+            }
+            var expiresIn = expiresInElement.GetInt32();
             _expiresAt = DateTimeOffset.UtcNow.AddSeconds(expiresIn);
 
-            return _currentToken;
+            return _currentToken!;
         }
         finally
         {
