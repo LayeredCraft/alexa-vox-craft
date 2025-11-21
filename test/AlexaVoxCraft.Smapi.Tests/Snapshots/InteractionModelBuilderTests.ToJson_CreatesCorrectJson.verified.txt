@@ -1,0 +1,171 @@
+﻿{
+  "version": "1",
+  "description": "Version 1 of the Jedi Duel interaction model",
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "jedi duel",
+      "intents": [
+        {
+          "name": "StartDuelIntent",
+          "samples": [
+            "begin the duel",
+            "I'm ready to fight",
+            "start my battle",
+            "let's duel",
+            "engage the opponent",
+            "begin battle",
+            "fight now"
+          ],
+          "slots": []
+        },
+        {
+          "name": "ChooseActionIntent",
+          "samples": [
+            "I will {duelAction}",
+            "{duelAction}",
+            "use {duelAction}",
+            "choose {duelAction}",
+            "I choose to {duelAction}"
+          ],
+          "slots": [
+            {
+              "name": "duelAction",
+              "type": "DuelAction"
+            }
+          ]
+        },
+        {
+          "name": "ForfeitDuelIntent",
+          "samples": [
+            "give up",
+            "surrender",
+            "I surrender",
+            "forfeit",
+            "forfeit the duel",
+            "I give up",
+            "end the duel",
+            "quit the duel",
+            "stop the duel",
+            "I quit",
+            "I stop",
+            "I forfeit"
+          ],
+          "slots": []
+        },
+        {
+          "name": "DuelStatusIntent",
+          "samples": [
+            "what's my status",
+            "what's my status",
+            "check my health",
+            "how am I doing",
+            "status report",
+            "show stats",
+            "check status",
+            "what is my status",
+            "how much health do I have",
+            "what's my health",
+            "how are we doing",
+            "show my status"
+          ],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.YesIntent",
+          "samples": [],
+          "slots": []
+        }
+      ],
+      "types": [
+        {
+          "name": "DuelAction",
+          "values": [
+            {
+              "name": {
+                "value": "flee",
+                "synonyms": [
+                  "run",
+                  "escape",
+                  "run away"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "use force",
+                "synonyms": [
+                  "use the force",
+                  "special power",
+                  "force attack",
+                  "force power"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "defend"
+              }
+            },
+            {
+              "name": {
+                "value": "attack"
+              }
+            },
+            {
+              "name": {
+                "value": "force heal",
+                "synonyms": [
+                  "heal"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "focused strike",
+                "synonyms": [
+                  "focused attack"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "power attack",
+                "synonyms": [
+                  "heavy attack",
+                  "strong attack",
+                  "devastating blow",
+                  "crushing strike"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
