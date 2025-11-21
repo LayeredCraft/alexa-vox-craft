@@ -334,7 +334,7 @@ public abstract class BaseClient
     /// <param name="message">The HTTP request message.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The raw response string, or null if the resource was not found.</returns>
-    public  async Task<string?> SendAsync(HttpRequestMessage message, CancellationToken cancellationToken = default)
+    public async Task<string?> SendAsync(HttpRequestMessage message, CancellationToken cancellationToken = default)
     {
         string? result = null;
 

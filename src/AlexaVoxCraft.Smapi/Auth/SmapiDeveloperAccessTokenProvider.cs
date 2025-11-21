@@ -23,21 +23,9 @@ public sealed class SmapiDeveloperAccessTokenProvider : IAccessTokenProvider, ID
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-        if (string.IsNullOrWhiteSpace(_options.ClientId))
-        {
-            throw new ArgumentException("ClientId must be configured.", nameof(options));
-        }
-
-        if (string.IsNullOrWhiteSpace(_options.ClientSecret))
-        {
-            throw new ArgumentException("ClientSecret must be configured.", nameof(options));
-        }
-
-        if (string.IsNullOrWhiteSpace(_options.RefreshToken))
-        {
-            throw new ArgumentException("RefreshToken must be configured.", nameof(options));
-        }
-        
+        ArgumentException.ThrowIfNullOrWhiteSpace(_options.ClientId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(_options.ClientSecret);
+        ArgumentException.ThrowIfNullOrWhiteSpace(_options.RefreshToken);
     }
     
     /// <inheritdoc />
