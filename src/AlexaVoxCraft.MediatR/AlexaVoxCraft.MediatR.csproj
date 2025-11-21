@@ -10,14 +10,9 @@
         <Title>AlexaVoxCraft.MediatR</Title>
         <Description>MediatR support for Alexa skill development, enabling clean request routing and handler composition.</Description>
         <PackageTags>alexa;mediatR;skills;request-handling;voice;voxcraft</PackageTags>
-        <PackageIcon>icon.png</PackageIcon>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\..\icon.png" Pack="true" PackagePath="" Visible="False" />
-        <None Include="..\..\README.md" Pack="true" PackagePath="" Visible="False" />
         <None Include="..\AlexaVoxCraft.MediatR.Generators\bin\$(Configuration)\netstandard2.0\AlexaVoxCraft.MediatR.Generators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
         <None Include="AlexaVoxCraft.MediatR.props" Pack="true" PackagePath="build" Visible="true" />
         <None Include="AlexaVoxCraft.MediatR.targets" Pack="true" PackagePath="build" Visible="true" />
