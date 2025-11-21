@@ -9,58 +9,28 @@ public class InteractionModelBuilderTests
     public async Task ToJson_CreatesCorrectJson()
     {
         var json = InteractionModelBuilder.Create()
-            .WithInvocationName("jedi duel")
+            .WithInvocationName("sample skill")
             .WithVersion("1")
-            .WithDescription("Version 1 of the Jedi Duel interaction model")
-            .AddIntent("StartDuelIntent", intent =>
-                intent.WithSamples("begin the duel", "I'm ready to fight", "start my battle", "let's duel",
-                    "engage the opponent", "begin battle", "fight now"))
+            .WithDescription("Version 1 of the sample interaction model")
+            .AddIntent("StartGameIntent", intent =>
+                intent.WithSamples("start game", "begin", "let's play", "start", "new game"))
             .AddIntent("ChooseActionIntent", intent =>
-                intent.WithSlot("duelAction", "DuelAction")
-                    .WithSamples("I will {duelAction}", "{duelAction}", "use {duelAction}", "choose {duelAction}",
-                        "I choose to {duelAction}"))
-            .AddIntent("ForfeitDuelIntent", intent =>
-                intent.WithSamples("give up",
-                    "surrender",
-                    "I surrender",
-                    "forfeit",
-                    "forfeit the duel",
-                    "I give up",
-                    "end the duel",
-                    "quit the duel",
-                    "stop the duel",
-                    "I quit",
-                    "I stop",
-                    "I forfeit"))
-            .AddIntent("DuelStatusIntent", intent =>
-                intent.WithSamples("what's my status",
-                    "what's my status",
-                    "check my health",
-                    "how am I doing",
-                    "status report",
-                    "show stats",
-                    "check status",
-                    "what is my status",
-                    "how much health do I have",
-                    "what's my health",
-                    "how are we doing",
-                    "show my status"))
+                intent.WithSlot("action", "GameAction")
+                    .WithSamples("I will {action}", "{action}", "use {action}", "choose {action}"))
+            .AddIntent("QuitIntent", intent =>
+                intent.WithSamples("quit", "stop", "exit", "end game"))
+            .AddIntent("StatusIntent", intent =>
+                intent.WithSamples("what's my status", "status", "how am I doing", "show stats"))
             .AddIntent(BuiltInIntent.Cancel)
             .AddIntent(BuiltInIntent.Help)
             .AddIntent(BuiltInIntent.Stop)
             .AddIntent(BuiltInIntent.Fallback)
             .AddIntent(BuiltInIntent.NavigateHome)
             .AddIntent(BuiltInIntent.Yes)
-            .AddSlotType("DuelAction", type =>
-                type.WithValue("flee", v => v.WithSynonyms("run", "escape", "run away"))
-                    .WithValue("use force",
-                        v => v.WithSynonyms("use the force", "special power", "force attack", "force power"))
-                    .WithValue("defend")
-                    .WithValue("attack")
-                    .WithValue("force heal", v => v.WithSynonym("heal"))
-                    .WithValue("focused strike", v => v.WithSynonym("focused attack"))
-                    .WithValue("power attack",
-                        v => v.WithSynonyms("heavy attack", "strong attack", "devastating blow", "crushing strike")))
+            .AddSlotType("GameAction", type =>
+                type.WithValue("move", v => v.WithSynonyms("go", "walk"))
+                    .WithValue("jump", v => v.WithSynonyms("leap", "hop"))
+                    .WithValue("attack", v => v.WithSynonyms("strike", "hit")))
             .ToJson();
         await Verify(json).DisableDiff();
     }

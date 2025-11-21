@@ -1,72 +1,53 @@
 ﻿{
   "version": "1",
-  "description": "Version 1 of the Jedi Duel interaction model",
+  "description": "Version 1 of the sample interaction model",
   "interactionModel": {
     "languageModel": {
-      "invocationName": "jedi duel",
+      "invocationName": "sample skill",
       "intents": [
         {
-          "name": "StartDuelIntent",
+          "name": "StartGameIntent",
           "samples": [
-            "begin the duel",
-            "I'm ready to fight",
-            "start my battle",
-            "let's duel",
-            "engage the opponent",
-            "begin battle",
-            "fight now"
+            "start game",
+            "begin",
+            "let's play",
+            "start",
+            "new game"
           ],
           "slots": []
         },
         {
           "name": "ChooseActionIntent",
           "samples": [
-            "I will {duelAction}",
-            "{duelAction}",
-            "use {duelAction}",
-            "choose {duelAction}",
-            "I choose to {duelAction}"
+            "I will {action}",
+            "{action}",
+            "use {action}",
+            "choose {action}"
           ],
           "slots": [
             {
-              "name": "duelAction",
-              "type": "DuelAction"
+              "name": "action",
+              "type": "GameAction"
             }
           ]
         },
         {
-          "name": "ForfeitDuelIntent",
+          "name": "QuitIntent",
           "samples": [
-            "give up",
-            "surrender",
-            "I surrender",
-            "forfeit",
-            "forfeit the duel",
-            "I give up",
-            "end the duel",
-            "quit the duel",
-            "stop the duel",
-            "I quit",
-            "I stop",
-            "I forfeit"
+            "quit",
+            "stop",
+            "exit",
+            "end game"
           ],
           "slots": []
         },
         {
-          "name": "DuelStatusIntent",
+          "name": "StatusIntent",
           "samples": [
             "what's my status",
-            "what's my status",
-            "check my health",
+            "status",
             "how am I doing",
-            "status report",
-            "show stats",
-            "check status",
-            "what is my status",
-            "how much health do I have",
-            "what's my health",
-            "how are we doing",
-            "show my status"
+            "show stats"
           ],
           "slots": []
         },
@@ -103,63 +84,32 @@
       ],
       "types": [
         {
-          "name": "DuelAction",
+          "name": "GameAction",
           "values": [
             {
               "name": {
-                "value": "flee",
+                "value": "move",
                 "synonyms": [
-                  "run",
-                  "escape",
-                  "run away"
+                  "go",
+                  "walk"
                 ]
               }
             },
             {
               "name": {
-                "value": "use force",
+                "value": "jump",
                 "synonyms": [
-                  "use the force",
-                  "special power",
-                  "force attack",
-                  "force power"
+                  "leap",
+                  "hop"
                 ]
               }
             },
             {
               "name": {
-                "value": "defend"
-              }
-            },
-            {
-              "name": {
-                "value": "attack"
-              }
-            },
-            {
-              "name": {
-                "value": "force heal",
+                "value": "attack",
                 "synonyms": [
-                  "heal"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "focused strike",
-                "synonyms": [
-                  "focused attack"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "power attack",
-                "synonyms": [
-                  "heavy attack",
-                  "strong attack",
-                  "devastating blow",
-                  "crushing strike"
+                  "strike",
+                  "hit"
                 ]
               }
             }
