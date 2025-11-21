@@ -1,0 +1,121 @@
+﻿{
+  "version": "1",
+  "description": "Version 1 of the sample interaction model",
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "sample skill",
+      "intents": [
+        {
+          "name": "StartGameIntent",
+          "samples": [
+            "start game",
+            "begin",
+            "let's play",
+            "start",
+            "new game"
+          ],
+          "slots": []
+        },
+        {
+          "name": "ChooseActionIntent",
+          "samples": [
+            "I will {action}",
+            "{action}",
+            "use {action}",
+            "choose {action}"
+          ],
+          "slots": [
+            {
+              "name": "action",
+              "type": "GameAction"
+            }
+          ]
+        },
+        {
+          "name": "QuitIntent",
+          "samples": [
+            "quit",
+            "stop",
+            "exit",
+            "end game"
+          ],
+          "slots": []
+        },
+        {
+          "name": "StatusIntent",
+          "samples": [
+            "what's my status",
+            "status",
+            "how am I doing",
+            "show stats"
+          ],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": [],
+          "slots": []
+        },
+        {
+          "name": "AMAZON.YesIntent",
+          "samples": [],
+          "slots": []
+        }
+      ],
+      "types": [
+        {
+          "name": "GameAction",
+          "values": [
+            {
+              "name": {
+                "value": "move",
+                "synonyms": [
+                  "go",
+                  "walk"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "jump",
+                "synonyms": [
+                  "leap",
+                  "hop"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "attack",
+                "synonyms": [
+                  "strike",
+                  "hit"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

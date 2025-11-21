@@ -127,4 +127,6 @@ public class BuiltInIntent
 	/// - Triggered when the user's spoken input does not match any of the other intents in the skill
 	/// </summary>
 	public const string Fallback = "AMAZON.FallbackIntent";
+	
+	public const string NavigateHome = "AMAZON.NavigateHomeIntent";
 }

@@ -112,6 +112,8 @@ nav:
     - Session Management: components/session-management.md
     - Pipeline Behaviors: components/pipeline-behaviors.md
     - Source Generators: components/source-generation.md
+  - SMAPI:
+    - Developer Client: smapi/developer-client.md
   - Examples: examples/index.md
 
 # Social links

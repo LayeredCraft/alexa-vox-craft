@@ -26,6 +26,9 @@
   <Folder Name="/docs/examples/">
     <File Path="docs/examples/index.md" />
   </Folder>
+  <Folder Name="/docs/smapi/">
+    <File Path="docs/smapi/developer-client.md" />
+  </Folder>
   <Folder Name="/git/">
     <File Path=".github/workflows/build.yaml" />
     <File Path=".github/workflows/docs.yml" />
@@ -83,6 +86,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
+    <Project Path="src/AlexaVoxCraft.Smapi/AlexaVoxCraft.Smapi.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj">
@@ -110,6 +114,7 @@
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
     <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj" />
+    <Project Path="test/AlexaVoxCraft.Smapi.Tests/AlexaVoxCraft.Smapi.Tests.csproj" />
     <Project Path="test\AlexaVoxCraft.Model.Apl.Legacy.Tests\AlexaVoxCraft.Model.Apl.Legacy.Tests.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
