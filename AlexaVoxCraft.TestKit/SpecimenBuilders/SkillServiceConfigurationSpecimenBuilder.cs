@@ -1,5 +1,6 @@
 using System.Reflection;
 using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.Model.Response.Ssml;
 using AlexaVoxCraft.TestKit.RequestSpecifications;
 using AutoFixture.Kernel;
 
@@ -29,6 +30,7 @@ public class SkillServiceConfigurationSpecimenBuilder(IRequestSpecification requ
             _ when parameterName.Contains("empty") => CreateEmptySkillIdConfiguration(),
             _ when parameterName.Contains("null") => CreateNullSkillIdConfiguration(),
             _ when parameterName.Contains("whitespace") => CreateWhitespaceSkillIdConfiguration(),
+            _ when parameterName.Contains("voiced") || parameterName.Contains("withvoice") => CreateConfigurationWithDefaultVoice(),
             _ => CreateDefaultConfiguration()
         };
     }
@@ -84,6 +86,16 @@ public class SkillServiceConfigurationSpecimenBuilder(IRequestSpecification requ
         {
             SkillId = "amzn1.ask.skill.default-test-id",
             CustomUserAgent = "TestAgent/1.0"
+        };
+    }
+
+    private static SkillServiceConfiguration CreateConfigurationWithDefaultVoice()
+    {
+        return new SkillServiceConfiguration
+        {
+            SkillId = "amzn1.ask.skill.default-test-id",
+            CustomUserAgent = "TestAgent/1.0",
+            DefaultVoiceName = PollyVoices.Generative.Matthew
         };
     }
 }

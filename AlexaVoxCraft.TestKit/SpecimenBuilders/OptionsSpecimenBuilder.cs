@@ -1,5 +1,6 @@
 using System.Reflection;
 using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.Model.Response.Ssml;
 using AlexaVoxCraft.TestKit.RequestSpecifications;
 using AutoFixture.Kernel;
 using Microsoft.Extensions.Options;
@@ -31,6 +32,7 @@ public class OptionsSpecimenBuilder(IRequestSpecification requestSpecification) 
             _ when parameterName.Contains("validconfiguration") => CreateValidOptions(),
             _ when parameterName.Contains("emptyconfiguration") => CreateEmptyOptions(),
             _ when parameterName.Contains("whitespaceconfiguration") => CreateWhitespaceOptions(),
+            _ when parameterName.Contains("voicedconfiguration") || parameterName.Contains("withvoice") => CreateOptionsWithDefaultVoice(),
             _ => CreateDefaultOptions()
         };
     }
@@ -88,6 +90,17 @@ public class OptionsSpecimenBuilder(IRequestSpecification requestSpecification) 
         {
             SkillId = "amzn1.ask.skill.default-test-id",
             CustomUserAgent = "TestAgent/1.0"
+        };
+        return Options.Create(config);
+    }
+
+    private static IOptions<SkillServiceConfiguration> CreateOptionsWithDefaultVoice()
+    {
+        var config = new SkillServiceConfiguration
+        {
+            SkillId = "amzn1.ask.skill.default-test-id",
+            CustomUserAgent = "TestAgent/1.0",
+            DefaultVoiceName = PollyVoices.Generative.Matthew
         };
         return Options.Create(config);
     }

@@ -24,6 +24,23 @@ public class SkillServiceConfiguration
     /// This should match the skill ID configured in the Alexa Developer Console.
     /// </summary>
     public string? SkillId { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the default voice name to use for speech synthesis in responses.
+    /// When set, all speech output from <see cref="Response.IResponseBuilder.Speak(string?)"/>
+    /// and <see cref="Response.IResponseBuilder.Reprompt(string?)"/> will be wrapped in an
+    /// SSML <c>&lt;voice&gt;</c> element using this voice.
+    /// If not set, the Alexa service will use the default voice for the locale.
+    /// </summary>
+    /// <remarks>
+    /// Use <see cref="Model.Response.Ssml.PollyVoices"/> for available Amazon Polly voice name constants.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// config.DefaultVoiceName = PollyVoices.Generative.Matthew;
+    /// </code>
+    /// </example>
+    public string? DefaultVoiceName { get; set; }
 
     /// <summary>
     /// Gets or sets the service lifetime for registered handlers and services.
