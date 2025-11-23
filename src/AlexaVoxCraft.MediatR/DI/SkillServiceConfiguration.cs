@@ -24,6 +24,12 @@ public class SkillServiceConfiguration
     /// This should match the skill ID configured in the Alexa Developer Console.
     /// </summary>
     public string? SkillId { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the default voice name to use for speech synthesis in responses.
+    /// If not set, the Alexa service will use the default voice for the locale.
+    /// </summary>
+    public string? DefaultVoiceName { get; set; }
 
     /// <summary>
     /// Gets or sets the service lifetime for registered handlers and services.

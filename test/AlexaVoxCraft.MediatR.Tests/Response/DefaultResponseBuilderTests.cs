@@ -1,5 +1,6 @@
 using AwesomeAssertions;
 using AlexaVoxCraft.MediatR.Attributes;
+using AlexaVoxCraft.MediatR.DI;
 using AlexaVoxCraft.MediatR.Response;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
@@ -7,6 +8,7 @@ using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Response.Ssml;
 using AlexaVoxCraft.TestKit.Attributes;
 using AutoFixture.Xunit3;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 
 namespace AlexaVoxCraft.MediatR.Tests.Response;
@@ -15,20 +17,24 @@ public class DefaultResponseBuilderTests : TestBase
 {
     [Theory]
     [MediatRAutoData]
-    public void Constructor_WithValidAttributesManager_CreatesInstance(IAttributesManager attributesManager)
+    public void Constructor_WithValidAttributesManager_CreatesInstance(
+        IAttributesManager attributesManager,
+        IOptions<SkillServiceConfiguration> skillServiceConfiguration)
     {
         // Act
-        var builder = new DefaultResponseBuilder(attributesManager);
+        var builder = new DefaultResponseBuilder(attributesManager, skillServiceConfiguration);
 
         // Assert
         builder.Should().NotBeNull();
     }
 
-    [Fact]
-    public void Constructor_WithNullAttributesManager_ThrowsArgumentNullException()
+    [Theory]
+    [MediatRAutoData]
+    public void Constructor_WithNullAttributesManager_ThrowsArgumentNullException(
+        IOptions<SkillServiceConfiguration> skillServiceConfiguration)
     {
         // Act & Assert
-        var exception = Record.Exception(() => new DefaultResponseBuilder(null!));
+        var exception = Record.Exception(() => new DefaultResponseBuilder(null!, skillServiceConfiguration));
 
         exception.Should().NotBeNull();
         exception.Should().BeOfType<ArgumentNullException>();
@@ -36,19 +42,15 @@ public class DefaultResponseBuilderTests : TestBase
 
     [Theory]
     [MediatRAutoData]
-    public async Task Speak_WithPlainText_SetsOutputSpeech(IAttributesManager attributesManager, string speechText)
+    public async Task Speak_WithPlainText_SetsOutputSpeech(DefaultResponseBuilder builder, string speechText)
     {
-        // Arrange
-        var builder = new DefaultResponseBuilder(attributesManager);
-
         // Act
         builder.Speak(speechText);
         var response = await builder.GetResponse(TestContext.Current.CancellationToken);
 
         // Assert
         response.Response.OutputSpeech.Should().NotBeNull();
-        response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>();
-        var ssmlSpeech = (SsmlOutputSpeech)response.Response.OutputSpeech;
+        var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
         ssmlSpeech.Ssml.Should().Contain(speechText.Trim());
     }
 
@@ -66,8 +68,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         response.Response.OutputSpeech.Should().NotBeNull();
-        response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>();
-        var ssmlSpeech = (SsmlOutputSpeech)response.Response.OutputSpeech;
+        var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
         ssmlSpeech.Ssml.Should().Contain("Hello");
         ssmlSpeech.Ssml.Should().Contain("https://example.com/audio.mp3");
     }
@@ -82,8 +83,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         response.Response.OutputSpeech.Should().NotBeNull();
-        response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>();
-        var ssmlSpeech = (SsmlOutputSpeech)response.Response.OutputSpeech;
+        var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
         ssmlSpeech.Ssml.Should().Contain(audioUrl.Trim());
     }
 
@@ -97,8 +97,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         response.Response.Reprompt.Should().NotBeNull();
-        response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>();
-        var ssmlSpeech = (SsmlOutputSpeech)response.Response.Reprompt.OutputSpeech;
+        var ssmlSpeech = response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
         ssmlSpeech.Ssml.Should().Contain(repromptText.Trim());
         response.Response.ShouldEndSession.Should().BeFalse();
     }
@@ -130,8 +129,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         response.Response.Card.Should().NotBeNull();
-        response.Response.Card.Should().BeOfType<SimpleCard>();
-        var card = (SimpleCard)response.Response.Card;
+        var card = response.Response.Card.Should().BeOfType<SimpleCard>().Subject;
         card.Title.Should().Be(title);
         card.Content.Should().Be(content);
     }
@@ -147,8 +145,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         response.Response.Card.Should().NotBeNull();
-        response.Response.Card.Should().BeOfType<StandardCard>();
-        var card = (StandardCard)response.Response.Card;
+        var card = response.Response.Card.Should().BeOfType<StandardCard>().Subject;
         card.Title.Should().Be(title);
         card.Content.Should().Be(content);
         card.Image.Should().BeNull();
@@ -165,8 +162,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         response.Response.Card.Should().NotBeNull();
-        response.Response.Card.Should().BeOfType<StandardCard>();
-        var card = (StandardCard)response.Response.Card;
+        var card = response.Response.Card.Should().BeOfType<StandardCard>().Subject;
         card.Title.Should().Be(title);
         card.Content.Should().Be(content);
         card.Image.Should().NotBeNull();
@@ -198,8 +194,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         response.Response.Card.Should().NotBeNull();
-        response.Response.Card.Should().BeOfType<AskForPermissionsConsentCard>();
-        var card = (AskForPermissionsConsentCard)response.Response.Card;
+        var card = response.Response.Card.Should().BeOfType<AskForPermissionsConsentCard>().Subject;
         card.Permissions.Should().Equal(permissions);
     }
 
@@ -216,8 +211,7 @@ public class DefaultResponseBuilderTests : TestBase
         // Assert
         response.Response.Directives.Should().NotBeNull();
         response.Response.Directives.Should().HaveCount(1);
-        response.Response.Directives[0].Should().BeOfType<AudioPlayerPlayDirective>();
-        var directive = (AudioPlayerPlayDirective)response.Response.Directives[0];
+        var directive = response.Response.Directives[0].Should().BeOfType<AudioPlayerPlayDirective>().Subject;
         directive.PlayBehavior.Should().Be(PlayBehavior.ReplaceAll);
         directive.AudioItem.Stream.Url.Should().Be(url);
         directive.AudioItem.Stream.Token.Should().Be(token);
@@ -235,7 +229,7 @@ public class DefaultResponseBuilderTests : TestBase
         var response = await builder.GetResponse(TestContext.Current.CancellationToken);
 
         // Assert
-        var directive = (AudioPlayerPlayDirective)response.Response.Directives[0];
+        var directive = response.Response.Directives[0].Should().BeOfType<AudioPlayerPlayDirective>().Subject;
         directive.AudioItem.Stream.ExpectedPreviousToken.Should().Be(expectedToken);
     }
 
@@ -309,5 +303,139 @@ public class DefaultResponseBuilderTests : TestBase
         builder.Reprompt(text).Should().Be(builder);
         builder.WithSimpleCard("title", "content").Should().Be(builder);
         builder.WithShouldEndSession(true).Should().Be(builder);
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task Speak_WithDefaultVoice_WrapsOutputInVoiceElement(
+        IAttributesManager attributesManager,
+        IOptions<SkillServiceConfiguration> voicedConfiguration,
+        string speechText)
+    {
+        // Arrange
+        var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
+
+        // Act
+        builder.Speak(speechText);
+        var response = await builder.GetResponse(TestContext.Current.CancellationToken);
+
+        // Assert
+        response.Response.OutputSpeech.Should().NotBeNull();
+        var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.Generative.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain(speechText.Trim());
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task Speak_WithDefaultVoice_AndSsmlElements_WrapsInVoiceElement(
+        IAttributesManager attributesManager,
+        IOptions<SkillServiceConfiguration> voicedConfiguration)
+    {
+        // Arrange
+        var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
+        var plainText = new PlainText("Hello world");
+
+        // Act
+        builder.Speak(plainText);
+        var response = await builder.GetResponse(TestContext.Current.CancellationToken);
+
+        // Assert
+        var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.Generative.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain("Hello world");
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task Reprompt_WithDefaultVoice_WrapsOutputInVoiceElement(
+        IAttributesManager attributesManager,
+        IOptions<SkillServiceConfiguration> voicedConfiguration,
+        string repromptText)
+    {
+        // Arrange
+        var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
+
+        // Act
+        builder.Reprompt(repromptText);
+        var response = await builder.GetResponse(TestContext.Current.CancellationToken);
+
+        // Assert
+        response.Response.Reprompt.Should().NotBeNull();
+        var ssmlSpeech = response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.Generative.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain(repromptText.Trim());
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task Reprompt_WithDefaultVoice_AndSsmlElements_WrapsInVoiceElement(
+        IAttributesManager attributesManager,
+        IOptions<SkillServiceConfiguration> voicedConfiguration)
+    {
+        // Arrange
+        var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
+        var plainText = new PlainText("Please respond");
+
+        // Act
+        builder.Reprompt(plainText);
+        var response = await builder.GetResponse(TestContext.Current.CancellationToken);
+
+        // Assert
+        var ssmlSpeech = response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.Generative.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain("Please respond");
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task Speak_WithoutDefaultVoice_DoesNotWrapInVoiceElement(
+        DefaultResponseBuilder builder,
+        string speechText)
+    {
+        // Act
+        builder.Speak(speechText);
+        var response = await builder.GetResponse(TestContext.Current.CancellationToken);
+
+        // Assert
+        var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        ssmlSpeech.Ssml.Should().NotContain("<voice");
+        ssmlSpeech.Ssml.Should().Contain(speechText.Trim());
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task Reprompt_WithoutDefaultVoice_DoesNotWrapInVoiceElement(
+        DefaultResponseBuilder builder,
+        string repromptText)
+    {
+        // Act
+        builder.Reprompt(repromptText);
+        var response = await builder.GetResponse(TestContext.Current.CancellationToken);
+
+        // Assert
+        var ssmlSpeech = response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        ssmlSpeech.Ssml.Should().NotContain("<voice");
+        ssmlSpeech.Ssml.Should().Contain(repromptText.Trim());
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task SpeakAudio_WithDefaultVoice_WrapsAudioInVoiceElement(
+        IAttributesManager attributesManager,
+        IOptions<SkillServiceConfiguration> voicedConfiguration,
+        string audioUrl)
+    {
+        // Arrange
+        var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
+
+        // Act
+        builder.SpeakAudio(audioUrl);
+        var response = await builder.GetResponse(TestContext.Current.CancellationToken);
+
+        // Assert
+        var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.Generative.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain(audioUrl.Trim());
     }
 }

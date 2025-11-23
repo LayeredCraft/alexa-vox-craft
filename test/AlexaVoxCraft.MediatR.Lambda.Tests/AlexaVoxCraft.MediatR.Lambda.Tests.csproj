@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="OpenTelemetry.Exporter.InMemory" Version="1.13.1" />
+        <PackageReference Include="OpenTelemetry.Exporter.InMemory" Version="1.14.0" />
     </ItemGroup>
 
     <ItemGroup>
