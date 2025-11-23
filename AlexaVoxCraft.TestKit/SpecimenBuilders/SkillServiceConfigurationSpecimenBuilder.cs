@@ -95,7 +95,7 @@ public class SkillServiceConfigurationSpecimenBuilder(IRequestSpecification requ
         {
             SkillId = "amzn1.ask.skill.default-test-id",
             CustomUserAgent = "TestAgent/1.0",
-            DefaultVoiceName = PollyVoices.Generative.Matthew
+            DefaultVoiceName = PollyVoices.EnglishUS.Matthew
         };
     }
 }

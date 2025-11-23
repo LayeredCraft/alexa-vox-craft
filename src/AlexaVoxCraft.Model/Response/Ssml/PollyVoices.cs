@@ -1,189 +1,168 @@
+using System;
+
 namespace AlexaVoxCraft.Model.Response.Ssml;
 
 /// <summary>
-/// Provides constants for Amazon Polly voice IDs that currently have
-/// <c>Generative</c> and/or <c>Long-form</c> variants, as documented in
-/// the Amazon Polly Developer Guide.
-/// <para>
-/// These values are intended to be used anywhere a Polly voice ID is required,
-/// such as:
-/// <list type="bullet">
-///   <item>
-///     <description>The <c>name</c> attribute on the SSML <c>&lt;voice&gt;</c> element.</description>
-///   </item>
-///   <item>
-///     <description>The <c>VoiceId</c> parameter to Polly APIs (for example, <c>SynthesizeSpeech</c>).</description>
-///   </item>
-/// </list>
-/// </para>
-/// <para>
-/// This list is a snapshot based on the AWS documentation at the time of writing,
-/// and is not guaranteed to remain exhaustive as new voices are added.
-/// See the official Amazon Polly documentation for the most up-to-date list.
-/// </para>
+/// Provides constants for **Amazon Polly voice IDs supported by Alexa Skills**.
+/// 
+/// IMPORTANT:
+/// Alexa Skills do NOT support all Amazon Polly voices.
+/// The authoritative list is here:
+/// https://developer.amazon.com/en-US/docs/alexa/custom-skills/speech-synthesis-markup-language-ssml-reference.html#supported-amazon-polly-voices
+///
+/// Only the voices in this file are guaranteed to work in Alexa Skills.
 /// </summary>
-/// <remarks>
-/// Voice IDs are provided in their ASCII form (for example, <c>Celine</c> instead of <c>Céline</c>,
-/// <c>Andres</c> instead of <c>Andrés</c>) to match the IDs returned by the Polly
-/// <c>DescribeVoices</c> API and the "Name/ID" column in the "Available voices" table.
-/// </remarks>
 public static class PollyVoices
 {
-    /// <summary>
-    /// Contains voice IDs that have a Generative engine variant in Amazon Polly.
-    /// <para>
-    /// All of these voices are also available as conversational NTTS voices.
-    /// </para>
-    /// </summary>
-    public static class Generative
+    // ----------------------------------------------------------------------
+    // ENGLISH — UNITED STATES (en-US)
+    // ----------------------------------------------------------------------
+    public static class EnglishUS
     {
-        // English
+        public const string Ivy = "Ivy";           // Female
+        public const string Joanna = "Joanna";     // Female
+        public const string Kendra = "Kendra";     // Female
+        public const string Kimberly = "Kimberly"; // Female
+        public const string Salli = "Salli";       // Female
 
-        /// <summary>English (Australian), female.</summary>
-        public const string Olivia = "Olivia";           // en-AU
-
-        /// <summary>English (Indian), female.</summary>
-        public const string Kajal = "Kajal";             // en-IN
-
-        /// <summary>English (Ireland), female.</summary>
-        public const string Niamh = "Niamh";             // en-IE
-
-        /// <summary>English (South African), female.</summary>
-        public const string Ayanda = "Ayanda";           // en-ZA
-
-        /// <summary>English (UK), female.</summary>
-        public const string Amy = "Amy";                 // en-GB
-
-        /// <summary>English (US), female.</summary>
-        public const string Danielle = "Danielle";       // en-US
-
-        /// <summary>English (US), female.</summary>
-        public const string Joanna = "Joanna";           // en-US
-
-        /// <summary>English (US), male.</summary>
-        public const string Matthew = "Matthew";         // en-US
-
-        /// <summary>English (US), female.</summary>
-        public const string Ruth = "Ruth";               // en-US
-
-        /// <summary>English (US), female.</summary>
-        public const string Salli = "Salli";             // en-US
-
-        /// <summary>English (US), male.</summary>
-        public const string Stephen = "Stephen";         // en-US
-
-        // Dutch
-
-        /// <summary>Dutch (Belgian), female.</summary>
-        public const string Lisa = "Lisa";               // nl-BE
-
-        /// <summary>Dutch (Netherlands), female.</summary>
-        public const string Laura = "Laura";             // nl-NL
-
-        // French
-
-        /// <summary>French (Belgian), female.</summary>
-        public const string Isabelle = "Isabelle";       // fr-BE
-
-        /// <summary>French (Canadian), female.</summary>
-        public const string Gabrielle = "Gabrielle";     // fr-CA
-
-        /// <summary>French (Canadian), male.</summary>
-        public const string Liam = "Liam";               // fr-CA
-
-        /// <summary>French (France), female (Céline/Celine).</summary>
-        public const string Celine = "Celine";           // fr-FR
-
-        /// <summary>French (France), female.</summary>
-        public const string Lea = "Lea";                 // fr-FR
-
-        /// <summary>French (France), male.</summary>
-        public const string Remi = "Remi";               // fr-FR
-
-        // German
-
-        /// <summary>German (Austria), female.</summary>
-        public const string Hannah = "Hannah";           // de-AT
-
-        /// <summary>German (Germany), male.</summary>
-        public const string Daniel = "Daniel";           // de-DE
-
-        /// <summary>German (Germany), female.</summary>
-        public const string Vicki = "Vicki";             // de-DE
-
-        // Italian
-
-        /// <summary>Italian (Italy), female.</summary>
-        public const string Bianca = "Bianca";           // it-IT
-
-        // Korean
-
-        /// <summary>Korean (Korea), female.</summary>
-        public const string Seoyeon = "Seoyeon";         // ko-KR
-
-        // Polish
-
-        /// <summary>Polish (Poland), female.</summary>
-        public const string Ewa = "Ewa";                 // pl-PL
-
-        /// <summary>Polish (Poland), female.</summary>
-        public const string Ola = "Ola";                 // pl-PL
-
-        // Portuguese
-
-        /// <summary>Portuguese (Brazilian), female.</summary>
-        public const string Camila = "Camila";           // pt-BR
-
-        // Spanish
-
-        /// <summary>Spanish (Mexican), male (Andrés/Andres).</summary>
-        public const string Andres = "Andres";           // es-MX
-
-        /// <summary>Spanish (Mexican), female (Mía/Mia).</summary>
-        public const string Mia = "Mia";                 // es-MX
-
-        /// <summary>Spanish (Spain), female.</summary>
-        public const string Lucia = "Lucia";             // es-ES
-
-        /// <summary>Spanish (Spain), male.</summary>
-        public const string Sergio = "Sergio";           // es-ES
-
-        /// <summary>Spanish (US), female.</summary>
-        public const string Lupe = "Lupe";               // es-US
-
-        /// <summary>Spanish (US), male.</summary>
-        public const string Pedro = "Pedro";             // es-US
+        public const string Joey = "Joey";         // Male
+        public const string Justin = "Justin";     // Male
+        public const string Matthew = "Matthew";   // Male
     }
 
-    /// <summary>
-    /// Contains voice IDs that have a Long-form engine variant in Amazon Polly.
-    /// <para>
-    /// Long-form voices are optimized for longer content such as articles, training
-    /// material, or marketing videos, and are also based on generative TTS technology.
-    /// </para>
-    /// </summary>
-    public static class LongForm
+    // ----------------------------------------------------------------------
+    // ENGLISH — UNITED KINGDOM (en-GB)
+    // ----------------------------------------------------------------------
+    public static class EnglishGB
     {
-        // English (US)
+        public const string Amy = "Amy";     // Female
+        public const string Emma = "Emma";   // Female
 
-        /// <summary>English (US), female long-form voice.</summary>
-        public const string Danielle = "Danielle";       // en-US
+        public const string Brian = "Brian"; // Male
+    }
 
-        /// <summary>English (US), male long-form voice.</summary>
-        public const string Gregory = "Gregory";         // en-US
+    // ----------------------------------------------------------------------
+    // ENGLISH — AUSTRALIA (en-AU)
+    // ----------------------------------------------------------------------
+    public static class EnglishAU
+    {
+        public const string Nicole = "Nicole"; // Female
+        public const string Russell = "Russell"; // Male
+    }
 
-        /// <summary>English (US), female long-form voice.</summary>
-        public const string Ruth = "Ruth";               // en-US
+    // ----------------------------------------------------------------------
+    // ENGLISH — INDIA (en-IN)
+    // ----------------------------------------------------------------------
+    public static class EnglishIN
+    {
+        // NOTE: Aditi is bilingual (English + Hindi) and used in two locales
+        public const string Aditi = "Aditi";     // Female
+        public const string Raveena = "Raveena"; // Female
+    }
 
-        /// <summary>English (US), male long-form voice.</summary>
-        public const string Patrick = "Patrick";         // en-US
+    // ----------------------------------------------------------------------
+    // ENGLISH — WALES (en-GB-WLS)
+    // ----------------------------------------------------------------------
+    public static class EnglishWLS
+    {
+        public const string Geraint = "Geraint"; // Male (Welsh English)
+    }
 
-        // Spanish (Spain)
+    // ----------------------------------------------------------------------
+    // FRENCH — CANADA (fr-CA)
+    // ----------------------------------------------------------------------
+    public static class FrenchCA
+    {
+        public const string Chantal = "Chantal"; // Female
+    }
 
-        /// <summary>Spanish (Spain), female long-form voice.</summary>
-        public const string Alba = "Alba";               // es-ES
+    // ----------------------------------------------------------------------
+    // FRENCH — FRANCE (fr-FR)
+    // ----------------------------------------------------------------------
+    public static class FrenchFR
+    {
+        public const string Celine = "Celine";   // Female
+        public const string Lea = "Lea";         // Female
 
-        /// <summary>Spanish (Spain), male long-form voice (Raúl/Raul).</summary>
-        public const string Raul = "Raul";               // es-ES
+        public const string Mathieu = "Mathieu"; // Male
+    }
+
+    // ----------------------------------------------------------------------
+    // GERMAN — GERMANY (de-DE)
+    // ----------------------------------------------------------------------
+    public static class GermanDE
+    {
+        public const string Marlene = "Marlene"; // Female
+        public const string Vicki = "Vicki";     // Female
+
+        public const string Hans = "Hans";       // Male
+    }
+
+    // ----------------------------------------------------------------------
+    // HINDI — INDIA (hi-IN)
+    // ----------------------------------------------------------------------
+    public static class HindiIN
+    {
+        // Aditi appears here as well
+        public const string Aditi = "Aditi"; // Female
+    }
+
+    // ----------------------------------------------------------------------
+    // ITALIAN — ITALY (it-IT)
+    // ----------------------------------------------------------------------
+    public static class ItalianIT
+    {
+        public const string Carla = "Carla";     // Female
+        public const string Bianca = "Bianca";   // Female
+
+        public const string Giorgio = "Giorgio"; // Male
+    }
+
+    // ----------------------------------------------------------------------
+    // JAPANESE — JAPAN (ja-JP)
+    // ----------------------------------------------------------------------
+    public static class JapaneseJP
+    {
+        public const string Mizuki = "Mizuki"; // Female
+        public const string Takumi = "Takumi"; // Male
+    }
+
+    // ----------------------------------------------------------------------
+    // PORTUGUESE — BRAZIL (pt-BR)
+    // ----------------------------------------------------------------------
+    public static class PortugueseBR
+    {
+        public const string Vitoria = "Vitoria"; // Female
+        public const string Camila = "Camila";   // Female
+
+        public const string Ricardo = "Ricardo"; // Male
+    }
+
+    // ----------------------------------------------------------------------
+    // SPANISH — MEXICO (es-MX)
+    // ----------------------------------------------------------------------
+    public static class SpanishMX
+    {
+        public const string Mia = "Mia"; // Female
+    }
+
+    // ----------------------------------------------------------------------
+    // SPANISH — SPAIN (es-ES)
+    // ----------------------------------------------------------------------
+    public static class SpanishES
+    {
+        public const string Conchita = "Conchita"; // Female
+        public const string Lucia = "Lucia";       // Female
+
+        public const string Enrique = "Enrique";   // Male
+    }
+
+    // ----------------------------------------------------------------------
+    // SPANISH — UNITED STATES (es-US)
+    // ----------------------------------------------------------------------
+    public static class SpanishUS
+    {
+        public const string Lupe = "Lupe";   // Female
+        public const string Miguel = "Miguel"; // Male
     }
 }
