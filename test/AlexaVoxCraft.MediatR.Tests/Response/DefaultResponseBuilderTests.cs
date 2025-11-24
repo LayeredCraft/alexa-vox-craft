@@ -322,7 +322,7 @@ public class DefaultResponseBuilderTests : TestBase
         // Assert
         response.Response.OutputSpeech.Should().NotBeNull();
         var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
-        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.EnglishUS.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{AlexaSupportedVoices.EnglishUS.Matthew}\">");
         ssmlSpeech.Ssml.Should().Contain(speechText.Trim());
     }
 
@@ -342,7 +342,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
-        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.EnglishUS.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{AlexaSupportedVoices.EnglishUS.Matthew}\">");
         ssmlSpeech.Ssml.Should().Contain("Hello world");
     }
 
@@ -363,7 +363,7 @@ public class DefaultResponseBuilderTests : TestBase
         // Assert
         response.Response.Reprompt.Should().NotBeNull();
         var ssmlSpeech = response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
-        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.EnglishUS.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{AlexaSupportedVoices.EnglishUS.Matthew}\">");
         ssmlSpeech.Ssml.Should().Contain(repromptText.Trim());
     }
 
@@ -383,7 +383,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         var ssmlSpeech = response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
-        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.EnglishUS.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{AlexaSupportedVoices.EnglishUS.Matthew}\">");
         ssmlSpeech.Ssml.Should().Contain("Please respond");
     }
 
@@ -435,7 +435,7 @@ public class DefaultResponseBuilderTests : TestBase
 
         // Assert
         var ssmlSpeech = response.Response.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
-        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{PollyVoices.EnglishUS.Matthew}\">");
+        ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{AlexaSupportedVoices.EnglishUS.Matthew}\">");
         ssmlSpeech.Ssml.Should().Contain(audioUrl.Trim());
     }
 }

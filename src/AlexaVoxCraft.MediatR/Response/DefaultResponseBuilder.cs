@@ -20,7 +20,7 @@ namespace AlexaVoxCraft.MediatR.Response;
 /// use the specified Amazon Polly voice.
 /// </para>
 /// <para>
-/// Use <see cref="PollyVoices"/> for available voice name constants.
+/// Use <see cref="AlexaSupportedVoices"/> for available voice name constants that are supported by Alexa Skills.
 /// </para>
 /// </remarks>
 public class DefaultResponseBuilder : IResponseBuilder

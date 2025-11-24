@@ -33,11 +33,12 @@ public class SkillServiceConfiguration
     /// If not set, the Alexa service will use the default voice for the locale.
     /// </summary>
     /// <remarks>
-    /// Use <see cref="Model.Response.Ssml.PollyVoices"/> for available Amazon Polly voice name constants.
+    /// Use <see cref="Model.Response.Ssml.AlexaSupportedVoices"/> for available Amazon Polly voice name constants
+    /// that are supported by Alexa Skills.
     /// </remarks>
     /// <example>
     /// <code>
-    /// config.DefaultVoiceName = PollyVoices.Generative.Matthew;
+    /// config.DefaultVoiceName = AlexaSupportedVoices.EnglishUS.Matthew;
     /// </code>
     /// </example>
     public string? DefaultVoiceName { get; set; }
