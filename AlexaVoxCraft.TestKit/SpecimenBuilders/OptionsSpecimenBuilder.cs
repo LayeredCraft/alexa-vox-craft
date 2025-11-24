@@ -100,7 +100,7 @@ public class OptionsSpecimenBuilder(IRequestSpecification requestSpecification) 
         {
             SkillId = "amzn1.ask.skill.default-test-id",
             CustomUserAgent = "TestAgent/1.0",
-            DefaultVoiceName = PollyVoices.Generative.Matthew
+            DefaultVoiceName = AlexaSupportedVoices.EnglishUS.Matthew
         };
         return Options.Create(config);
     }

@@ -490,6 +490,155 @@ private string? GetSlotValue(Intent intent, string slotName)
 }
 ```
 
+## Default Voice Configuration
+
+AlexaVoxCraft supports configuring a default Amazon Polly voice that automatically wraps all speech output. This allows you to give your skill a consistent voice personality without modifying every handler.
+
+### Configuration
+
+Set the default voice in your skill configuration:
+
+```csharp
+// In your AlexaSkillFunction
+protected override void Init(IHostBuilder builder)
+{
+    builder
+        .UseHandler<LambdaHandler, APLSkillRequest, SkillResponse>()
+        .ConfigureServices((context, services) =>
+        {
+            services.AddSkillMediator(context.Configuration);
+
+            // Configure default voice
+            services.Configure<SkillServiceConfiguration>(config =>
+            {
+                config.DefaultVoiceName = AlexaSupportedVoices.EnglishUS.Matthew;
+            });
+        });
+}
+```
+
+Or via `appsettings.json`:
+
+```json
+{
+  "SkillConfiguration": {
+    "SkillId": "amzn1.ask.skill.your-skill-id",
+    "DefaultVoiceName": "Matthew"
+  }
+}
+```
+
+### How It Works
+
+When a default voice is configured, all `Speak()` and `Reprompt()` calls automatically wrap their content in an SSML `<voice>` element:
+
+```csharp
+// Your code
+input.ResponseBuilder.Speak("Welcome to Trivia Challenge!");
+
+// Generated SSML (with DefaultVoiceName = "Matthew")
+<speak><voice name="Matthew">Welcome to Trivia Challenge!</voice></speak>
+```
+
+This works with both plain text and SSML elements:
+
+```csharp
+// Plain text
+input.ResponseBuilder.Speak("Hello world");
+
+// SSML elements
+input.ResponseBuilder.Speak(new PlainText("Hello"), new Audio("sound.mp3"));
+```
+
+### Available Voices
+
+Use the `AlexaSupportedVoices` class for voice constants that are guaranteed to work with Alexa Skills:
+
+```csharp
+using AlexaVoxCraft.Model.Response.Ssml;
+
+// English (US)
+AlexaSupportedVoices.EnglishUS.Ivy       // Female
+AlexaSupportedVoices.EnglishUS.Joanna    // Female
+AlexaSupportedVoices.EnglishUS.Kendra    // Female
+AlexaSupportedVoices.EnglishUS.Kimberly  // Female
+AlexaSupportedVoices.EnglishUS.Salli     // Female
+AlexaSupportedVoices.EnglishUS.Joey      // Male
+AlexaSupportedVoices.EnglishUS.Justin    // Male
+AlexaSupportedVoices.EnglishUS.Matthew   // Male
+
+// English (UK)
+AlexaSupportedVoices.EnglishGB.Amy       // Female
+AlexaSupportedVoices.EnglishGB.Emma      // Female
+AlexaSupportedVoices.EnglishGB.Brian     // Male
+
+// English (Australia)
+AlexaSupportedVoices.EnglishAU.Nicole    // Female
+AlexaSupportedVoices.EnglishAU.Russell   // Male
+
+// German (Germany)
+AlexaSupportedVoices.GermanDE.Marlene    // Female
+AlexaSupportedVoices.GermanDE.Vicki      // Female
+AlexaSupportedVoices.GermanDE.Hans       // Male
+
+// And many more locales...
+```
+
+See the [Alexa SSML Reference](https://developer.amazon.com/en-US/docs/alexa/custom-skills/speech-synthesis-markup-language-ssml-reference.html#supported-amazon-polly-voices) for the complete list of supported voices.
+
+### Manual Voice Wrapping
+
+You can also wrap specific content in a voice using the `WithVoice()` extension methods:
+
+```csharp
+using AlexaVoxCraft.MediatR.Response;
+
+// Wrap plain text
+var speech = "Hello world".WithVoice(AlexaSupportedVoices.EnglishUS.Joanna);
+
+// Wrap SSML elements
+var ssml = new PlainText("Hello").WithVoice(AlexaSupportedVoices.EnglishGB.Amy);
+
+// Wrap multiple elements
+var elements = new ISsml[] { new PlainText("Hello"), new Break(BreakStrength.Medium) };
+var voiced = elements.WithVoice(AlexaSupportedVoices.EnglishUS.Matthew);
+```
+
+### Trivia Skill Example
+
+Give your trivia skill a distinct personality with a consistent voice:
+
+```csharp
+public class TriviaSkillFunction : AlexaSkillFunction<APLSkillRequest, SkillResponse>
+{
+    protected override void Init(IHostBuilder builder)
+    {
+        builder
+            .UseHandler<LambdaHandler, APLSkillRequest, SkillResponse>()
+            .ConfigureServices((context, services) =>
+            {
+                services.AddSkillMediator(context.Configuration);
+
+                // Use Matthew's voice for a friendly male host
+                services.Configure<SkillServiceConfiguration>(config =>
+                {
+                    config.DefaultVoiceName = AlexaSupportedVoices.EnglishUS.Matthew;
+                });
+            });
+    }
+}
+```
+
+Now all responses automatically use Matthew's voice:
+
+```csharp
+// In any handler - voice wrapping happens automatically
+return await input.ResponseBuilder
+    .Speak("Welcome to Trivia Challenge! Ready to test your knowledge?")
+    .Reprompt("Say yes to start playing, or help for instructions.")
+    .GetResponse(cancellationToken);
+```
+
 ## Examples
 
 For more real-world examples, see the [Examples](../examples/index.md) section which includes the complete Disney Trivia skill implementation.
