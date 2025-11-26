@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TargetFrameworks>net10.0;net8.0;net9.0</TargetFrameworks>
+        <LangVersion>default</LangVersion>
+    
+        <PackageId>AlexaVoxCraft.Lambda.Host</PackageId>
+        <Title>AlexaVoxCraft.Lambda.Host</Title>
+        <Description>Lambda hosting and middleware integration for Alexa skills using MediatR and AlexaVoxCraft.</Description>
+        <PackageTags>alexa;lambda;aws;mediatR;voxcraft;hosting;middleware</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AwsLambda.Host" Version="1.0.1-beta.4" />
+    </ItemGroup>
+
+</Project>

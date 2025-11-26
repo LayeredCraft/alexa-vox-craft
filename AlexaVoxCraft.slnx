@@ -50,6 +50,7 @@
     <File Path="ROADMAP.md" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/AlexaVoxCraft.Lambda.Host/AlexaVoxCraft.Lambda.Host.csproj" />
     <Project Path="src/AlexaVoxCraft.MediatR.Generators/AlexaVoxCraft.MediatR.Generators.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
@@ -127,7 +128,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="test\AlexaVoxCraft.Model.Tests\AlexaVoxCraft.Model.Tests.csproj" Type="C#">
+    <Project Path="test\AlexaVoxCraft.Model.Tests\AlexaVoxCraft.Model.Tests.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
