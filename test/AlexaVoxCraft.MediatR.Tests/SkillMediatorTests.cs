@@ -1,7 +1,5 @@
 using AlexaVoxCraft.MediatR.DI;
 using AlexaVoxCraft.Model.Request;
-using AlexaVoxCraft.TestKit.Attributes;
-using AwesomeAssertions;
 using Microsoft.Extensions.Options;
 
 namespace AlexaVoxCraft.MediatR.Tests;

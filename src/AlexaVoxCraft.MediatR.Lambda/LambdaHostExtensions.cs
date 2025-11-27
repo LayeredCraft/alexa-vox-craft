@@ -1,6 +1,6 @@
+using AlexaVoxCraft.Lambda.Serialization;
 using LayeredCraft.Logging.CompactJsonFormatter;
 using AlexaVoxCraft.MediatR.DI;
-using AlexaVoxCraft.MediatR.Lambda.Serialization;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using Amazon.Lambda.Core;

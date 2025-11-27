@@ -3,10 +3,6 @@ using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
-using AlexaVoxCraft.TestKit.Attributes;
-using AutoFixture.Xunit3;
-using AwesomeAssertions;
-using NSubstitute;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 

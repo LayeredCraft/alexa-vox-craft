@@ -1,9 +1,6 @@
-using AwesomeAssertions;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.Response;
 using AlexaVoxCraft.Model.Request;
-using AlexaVoxCraft.TestKit.Attributes;
-using AutoFixture.Xunit3;
 
 namespace AlexaVoxCraft.MediatR.Tests;
 

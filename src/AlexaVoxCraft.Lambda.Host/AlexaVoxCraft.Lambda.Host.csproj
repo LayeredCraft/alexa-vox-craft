@@ -8,16 +8,17 @@
     
         <PackageId>AlexaVoxCraft.Lambda.Host</PackageId>
         <Title>AlexaVoxCraft.Lambda.Host</Title>
-        <Description>Lambda hosting and middleware integration for Alexa skills using MediatR and AlexaVoxCraft.</Description>
-        <PackageTags>alexa;lambda;aws;mediatR;voxcraft;hosting;middleware</PackageTags>
+        <Description>AWS Lambda Host integration for Alexa skills with minimal API-style handler registration using AwsLambda.Host.</Description>
+        <PackageTags>alexa;lambda;aws;voxcraft;hosting;minimal-api;lambda-host</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AlexaVoxCraft.Lambda\AlexaVoxCraft.Lambda.csproj" />
       <ProjectReference Include="..\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AwsLambda.Host" Version="1.0.1-beta.4" />
+      <PackageReference Include="AwsLambda.Host" Version="1.1.0" />
     </ItemGroup>
 
 </Project>

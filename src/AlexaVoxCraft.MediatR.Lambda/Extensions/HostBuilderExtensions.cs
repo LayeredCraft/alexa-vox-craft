@@ -1,4 +1,4 @@
-﻿using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+﻿using AlexaVoxCraft.Lambda.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -6,20 +6,22 @@ namespace AlexaVoxCraft.MediatR.Lambda.Extensions;
 
 public static class HostBuilderExtensions
 {
-    public static IHostBuilder UseHandler<THandler, TRequest, TResponse>(this IHostBuilder builder)
-        where THandler : ILambdaHandler<TRequest, TResponse>
+    extension(IHostBuilder builder)
     {
-        builder.UseHandler(CreateDelegate<THandler, TRequest, TResponse>);
-        return builder;
-    }
-
-    private static void UseHandler<TRequest, TResponse>(this IHostBuilder builder,
-        Func<IServiceProvider, HandlerDelegate<TRequest, TResponse>> handlerFactory)
-    {
-        builder.ConfigureServices(services =>
+        public IHostBuilder UseHandler<THandler, TRequest, TResponse>()
+            where THandler : ILambdaHandler<TRequest, TResponse>
         {
-            services.AddScoped(handlerFactory);
-        });
+            builder.UseHandler(CreateDelegate<THandler, TRequest, TResponse>);
+            return builder;
+        }
+
+        private void UseHandler<TRequest, TResponse>(Func<IServiceProvider, HandlerDelegate<TRequest, TResponse>> handlerFactory)
+        {
+            builder.ConfigureServices(services =>
+            {
+                services.AddScoped(handlerFactory);
+            });
+        }
     }
 
     private static HandlerDelegate<TRequest, TResponse>

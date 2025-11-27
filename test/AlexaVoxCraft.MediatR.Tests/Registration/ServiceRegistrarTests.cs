@@ -4,8 +4,6 @@ using AlexaVoxCraft.MediatR.DI;
 using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.MediatR.Registration;
 using AlexaVoxCraft.MediatR.Response;
-using AlexaVoxCraft.TestKit.Attributes;
-using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AlexaVoxCraft.MediatR.Tests.Registration;

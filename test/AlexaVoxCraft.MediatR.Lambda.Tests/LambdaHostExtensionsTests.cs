@@ -1,8 +1,6 @@
-using AwesomeAssertions;
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+using AlexaVoxCraft.Lambda.Abstractions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
-using AlexaVoxCraft.TestKit.Attributes;
 using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

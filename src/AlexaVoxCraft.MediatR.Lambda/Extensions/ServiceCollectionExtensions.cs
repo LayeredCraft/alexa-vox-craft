@@ -6,14 +6,17 @@ namespace AlexaVoxCraft.MediatR.Lambda.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddSkillContextAccessor(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        if (services is null)
-            throw new ArgumentNullException(nameof(services));
-        services.TryAddSingleton<ISkillContextFactory, DefaultSkillContextFactory>();
-        services.TryAddSingleton<ISkillContextAccessor, SkillContextAccessor>();
-        services.TryAddScoped<SkillRequestFactory>(p =>
-            () => p.GetRequiredService<ISkillContextAccessor>().SkillContext?.Request);
-        return services;
+        public IServiceCollection AddSkillContextAccessor()
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            
+            services.TryAddSingleton<ISkillContextFactory, DefaultSkillContextFactory>();
+            services.TryAddSingleton<ISkillContextAccessor, SkillContextAccessor>();
+            services.TryAddScoped<SkillRequestFactory>(p =>
+                () => p.GetRequiredService<ISkillContextAccessor>().SkillContext?.Request);
+            return services;
+        }
     }
 }

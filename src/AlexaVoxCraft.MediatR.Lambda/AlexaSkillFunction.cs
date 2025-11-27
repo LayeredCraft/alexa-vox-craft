@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.Lambda.Serialization;
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.MediatR.Lambda.Extensions;
-using AlexaVoxCraft.MediatR.Lambda.Serialization;
 using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;

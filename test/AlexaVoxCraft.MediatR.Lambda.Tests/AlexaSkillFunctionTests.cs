@@ -1,12 +1,10 @@
 using System.Diagnostics;
-using AwesomeAssertions;
+using AlexaVoxCraft.Lambda.Abstractions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
 using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
-using AlexaVoxCraft.TestKit.Attributes;
 using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

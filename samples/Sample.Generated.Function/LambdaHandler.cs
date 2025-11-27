@@ -1,5 +1,5 @@
-﻿using AlexaVoxCraft.MediatR;
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+﻿using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;

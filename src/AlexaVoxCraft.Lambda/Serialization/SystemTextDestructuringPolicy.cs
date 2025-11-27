@@ -5,10 +5,20 @@ using AlexaVoxCraft.Model.Serialization;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace AlexaVoxCraft.MediatR.Lambda.Serialization;
+namespace AlexaVoxCraft.Lambda.Serialization;
 
+/// <summary>
+/// Serilog destructuring policy that uses System.Text.Json for object serialization.
+/// </summary>
 public class SystemTextDestructuringPolicy : IDestructuringPolicy
 {
+    /// <summary>
+    /// Attempts to destructure an object for Serilog logging using System.Text.Json serialization.
+    /// </summary>
+    /// <param name="value">The object to destructure.</param>
+    /// <param name="propertyValueFactory">Factory for creating log event property values.</param>
+    /// <param name="result">The destructured log event property value.</param>
+    /// <returns>Always returns true as this policy handles all objects.</returns>
     public bool TryDestructure(object value, ILogEventPropertyValueFactory propertyValueFactory,
         [NotNullWhen(true)] out LogEventPropertyValue? result)
     {
