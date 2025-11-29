@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AWSProjectType>Lambda</AWSProjectType>
+        <AssemblyName>bootstrap</AssemblyName>
+        <!-- This property makes the build directory similar to a publish directory and helps the AWS .NET Lambda Mock Test Tool find project dependencies. -->
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <!-- 
+            Enable trimming to reduce package size of self contained publish which can reduce cold starts. Trimming alters
+            the .NET assemblies put in the deployment package. Additional runtime testing is required to make sure trimming
+            does not have any unattended consequences.
+        
+        <PublishTrimmed>true</PublishTrimmed>
+        -->
+        <!-- Generate ready to run images during publishing to improve cold start time. -->
+        <PublishReadyToRun>true</PublishReadyToRun>
+        <LangVersion>default</LangVersion>
+        <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
+        <InterceptorsPreviewNamespaces>AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
+        <InterceptorsNamespaces>AlexaVoxCraft.Generated</InterceptorsNamespaces>
+        <InterceptorsNamespaces>$(InterceptorsNamespaces);AwsLambda.Host.Core.Generated</InterceptorsNamespaces>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="LayeredCraft.Logging.CompactJsonFormatter" Version="1.0.1.3"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1"/>
+        <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3"/>
+        <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="appsettings.json"/>
+        <Content Include="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Lambda.Host\AlexaVoxCraft.Lambda.Host.csproj"/>
+        <!-- Local dev: load the generator directly here so it runs in this compilation -->
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj"/>
+    </ItemGroup>
+
+</Project>
