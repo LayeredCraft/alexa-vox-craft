@@ -38,6 +38,7 @@
   <Folder Name="/samples/">
     <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj" />
     <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj" />
+    <Project Path="samples/Sample.Host.Function/Sample.Host.Function.csproj" />
     <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">

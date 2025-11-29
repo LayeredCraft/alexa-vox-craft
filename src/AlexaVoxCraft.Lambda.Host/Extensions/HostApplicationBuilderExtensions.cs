@@ -18,7 +18,7 @@ public static class HostApplicationBuilderExtensions
         /// <typeparam name="TRequest">The request type to process.</typeparam>
         /// <typeparam name="TResponse">The response type to return.</typeparam>
         /// <returns>The <see cref="IHostApplicationBuilder"/> for chaining.</returns>
-        internal IHostApplicationBuilder UseHandler<THandler, TRequest, TResponse>()
+        public IHostApplicationBuilder UseHandler<THandler, TRequest, TResponse>()
             where THandler : ILambdaHandler<TRequest, TResponse>
         {
             builder.UseHandler(CreateDelegate<THandler, TRequest, TResponse>);
