@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+using AlexaVoxCraft.Lambda.Abstractions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.MediatR.Lambda.Extensions;
 using AlexaVoxCraft.MediatR.Lambda.Serialization;

@@ -4,11 +4,7 @@ using AlexaVoxCraft.MediatR.Wrappers;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
-using AlexaVoxCraft.TestKit.Attributes;
-using AwesomeAssertions;
-using AutoFixture.Xunit3;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 
@@ -30,7 +26,7 @@ public class OtelRequestHandlerWrapperTests : TestBase
         _activityListener = new ActivityListener
         {
             ShouldListenTo = source => source.Name.Contains(AlexaVoxCraftTelemetry.ActivitySourceName),
-            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
             ActivityStarted = activity => _capturedActivities.Add(activity),
         };
         ActivitySource.AddActivityListener(_activityListener);

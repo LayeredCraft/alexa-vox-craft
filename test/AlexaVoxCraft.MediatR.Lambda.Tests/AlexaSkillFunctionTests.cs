@@ -1,12 +1,10 @@
 using System.Diagnostics;
-using AwesomeAssertions;
+using AlexaVoxCraft.Lambda.Abstractions;
 using AlexaVoxCraft.MediatR.Lambda.Context;
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
 using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
-using AlexaVoxCraft.TestKit.Attributes;
 using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -219,7 +217,7 @@ public class AlexaSkillFunctionTests : TestBase
         using var activityListener = new ActivityListener
         {
             ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
-            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
             ActivityStarted = activity => activities.Add(activity)
         };
         ActivitySource.AddActivityListener(activityListener);
@@ -244,7 +242,7 @@ public class AlexaSkillFunctionTests : TestBase
         using var activityListener = new ActivityListener
         {
             ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
-            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
             ActivityStarted = activity => activities.Add(activity)
         };
         ActivitySource.AddActivityListener(activityListener);
@@ -279,7 +277,7 @@ public class AlexaSkillFunctionTests : TestBase
         using var activityListener = new ActivityListener
         {
             ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
-            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
             ActivityStarted = activity => activities.Add(activity),
             ActivityStopped = activity => events.AddRange(activity.Events)
         };
@@ -356,7 +354,7 @@ public class TestAlexaSkillFunctionWithHandler : AlexaSkillFunction<SkillRequest
         builder.ConfigureServices(services =>
         {
             services.AddSingleton<HandlerDelegate<SkillRequest, SkillResponse>>(
-                (request, context, cancellationToken) => Task.FromResult(new SkillResponse()));
+                (_, _, _) => Task.FromResult(new SkillResponse()));
         });
         base.Init(builder);
     }
@@ -372,7 +370,7 @@ public class TestAlexaSkillFunctionWithThrowingHandler : AlexaSkillFunction<Skil
         builder.ConfigureServices(services =>
         {
             services.AddSingleton<HandlerDelegate<SkillRequest, SkillResponse>>(
-                (request, context, cancellationToken) => Task.FromException<SkillResponse>(new InvalidOperationException("Handler exception")));
+                (_, _, _) => Task.FromException<SkillResponse>(new InvalidOperationException("Handler exception")));
         });
         base.Init(builder);
     }

@@ -1,5 +1,3 @@
-using NSubstitute;
-
 namespace AlexaVoxCraft.MediatR.Tests;
 
 /// <summary>

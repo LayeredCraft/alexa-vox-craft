@@ -1,4 +1,4 @@
-﻿using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+﻿using AlexaVoxCraft.Lambda.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

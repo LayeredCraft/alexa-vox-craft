@@ -1,8 +1,6 @@
-using AwesomeAssertions;
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+using AlexaVoxCraft.Lambda.Abstractions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
-using AlexaVoxCraft.TestKit.Attributes;
 using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -33,10 +31,10 @@ public class LambdaHostExtensionsTests : TestBase
         var customHandlerCalled = false;
         
         Func<TestRunAlexaSkillFunction, IServiceProvider, Func<SkillRequest, ILambdaContext, CancellationToken, Task<SkillResponse>>> handlerBuilder =
-            (function, services) =>
+            (_, _) =>
             {
                 customHandlerCalled = true;
-                return async (request, context, cancellationToken) =>
+                return async (_, _, _) =>
                 {
                     await Task.CompletedTask;
                     return new SkillResponse();
@@ -60,7 +58,7 @@ public class LambdaHostExtensionsTests : TestBase
         var customSerializerCalled = false;
         var mockSerializer = CreateSubstitute<ILambdaSerializer>();
         
-        Func<IServiceProvider, ILambdaSerializer> serializerFactory = services =>
+        Func<IServiceProvider, ILambdaSerializer> serializerFactory = _ =>
         {
             customSerializerCalled = true;
             return mockSerializer;
@@ -167,7 +165,7 @@ public class TestRunAlexaSkillFunctionWithHandler : AlexaSkillFunction<SkillRequ
 {
     protected override void Init(Microsoft.Extensions.Hosting.IHostBuilder builder)
     {
-        builder.ConfigureServices((context, services) =>
+        builder.ConfigureServices((_, services) =>
         {
             services.AddSingleton<HandlerDelegate<SkillRequest, SkillResponse>>((_, _, _) =>
                 Task.FromResult(new SkillResponse()));
