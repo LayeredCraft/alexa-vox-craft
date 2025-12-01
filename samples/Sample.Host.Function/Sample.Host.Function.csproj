@@ -22,7 +22,6 @@
         <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
         <InterceptorsPreviewNamespaces>AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
         <InterceptorsNamespaces>AlexaVoxCraft.Generated</InterceptorsNamespaces>
-        <InterceptorsNamespaces>$(InterceptorsNamespaces);AwsLambda.Host.Core.Generated</InterceptorsNamespaces>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>
