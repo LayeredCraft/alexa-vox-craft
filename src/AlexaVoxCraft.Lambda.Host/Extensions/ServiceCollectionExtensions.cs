@@ -49,10 +49,7 @@ public static class ServiceCollectionExtensions
             {
                 var handler = ActivatorUtilities.CreateInstance<THandler>(sp);
                 return async (request, context, cancellationToken) =>
-                {
-                    var response = await handler.HandleAsync(request, context, cancellationToken);
-                    return response;
-                };
+                    await handler.HandleAsync(request, context, cancellationToken);
             });
 
             return services;
