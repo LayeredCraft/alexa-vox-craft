@@ -1,0 +1,22 @@
+﻿{
+  "IngressPoints": [
+    {
+      "Type": "INTENT",
+      "Name": "OrderIntent",
+      "SampleUtterances": [
+        {
+          "Format": "RAW_TEXT",
+          "Value": "order coffee"
+        },
+        {
+          "Format": "RAW_TEXT",
+          "Value": "buy a latte"
+        },
+        {
+          "Format": "RAW_TEXT",
+          "Value": "get me tea"
+        }
+      ]
+    }
+  ]
+}

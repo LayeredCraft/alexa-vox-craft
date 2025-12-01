@@ -1,0 +1,26 @@
+﻿{
+  "IngressPoints": [
+    {
+      "Type": "INTENT",
+      "Name": "MixedIntent",
+      "SampleUtterances": [
+        {
+          "Format": "RAW_TEXT",
+          "Value": "simple utterance"
+        },
+        {
+          "Format": "RAW_TEXT",
+          "Value": "another one"
+        },
+        {
+          "Format": "RAW_TEXT",
+          "Value": "and another"
+        },
+        {
+          "Format": "SPECIAL",
+          "Value": "configured"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+﻿{
+  "IngressPoints": [
+    {
+      "Type": "LAUNCH",
+      "SampleUtterances": [
+        {
+          "Format": "RAW_TEXT",
+          "Value": "what's new"
+        },
+        {
+          "Format": "RAW_TEXT",
+          "Value": "latest updates"
+        },
+        {
+          "Format": "RAW_TEXT",
+          "Value": "recent changes"
+        }
+      ]
+    }
+  ]
+}

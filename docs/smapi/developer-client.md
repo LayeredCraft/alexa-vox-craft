@@ -178,6 +178,64 @@ var model = InteractionModelBuilder.Create()
     .Build();
 ```
 
+### Name-Free Interactions
+
+Name-Free Interaction (NFI) allows users to interact with your skill without explicitly invoking its name. Configure NFI using the fluent builder API:
+
+```csharp
+using AlexaVoxCraft.Smapi.Builders.InteractionModel;
+
+var model = InteractionModelBuilder.Create()
+    .WithInvocationName("coffee shop")
+    .WithVersion("1")
+    .WithDescription("Coffee shop skill with name-free interactions")
+    .AddIntent("OrderIntent", intent =>
+        intent.WithSlot("drink", "DrinkType")
+              .WithSamples("order {drink}", "buy {drink}"))
+    .AddSlotType("DrinkType", type =>
+        type.WithValue("coffee")
+            .WithValue("tea")
+            .WithValue("latte"))
+    .WithNameFreeInteraction(nfi => nfi
+        .WithLaunchIngressPoint(launch => launch
+            .WithUtterances("what's available", "show menu", "what can I order"))
+        .WithIntentIngressPoint("OrderIntent", intent => intent
+            .WithUtterances("order coffee", "get tea", "buy a latte")))
+    .Build();
+```
+
+#### NFI Builder Methods
+
+**Launch Ingress Points** - Utterances that invoke the skill without the skill name:
+```csharp
+.WithLaunchIngressPoint(launch => launch
+    .WithUtterance("what's new")
+    .WithUtterances("latest updates", "recent changes"))
+```
+
+**Intent Ingress Points** - Utterances that map directly to intents:
+```csharp
+.WithIntentIngressPoint("OrderIntent", intent => intent
+    .WithUtterances("order coffee", "buy tea"))
+```
+
+**Custom Utterance Formats** - Specify format for special utterance processing:
+```csharp
+.WithUtterance("special phrase", utterance => utterance
+    .WithFormat("CUSTOM_FORMAT"))
+```
+
+**Multiple Ingress Points** - Combine launch and multiple intent ingress points:
+```csharp
+.WithNameFreeInteraction(nfi => nfi
+    .WithLaunchIngressPoint(launch => launch
+        .WithUtterances("start", "begin"))
+    .WithIntentIngressPoint("OrderIntent", order => order
+        .WithUtterances("order", "buy"))
+    .WithIntentIngressPoint("StatusIntent", status => status
+        .WithUtterance("check status")))
+```
+
 ### JSON Serialization
 
 Export the interaction model as JSON for debugging or manual deployment:

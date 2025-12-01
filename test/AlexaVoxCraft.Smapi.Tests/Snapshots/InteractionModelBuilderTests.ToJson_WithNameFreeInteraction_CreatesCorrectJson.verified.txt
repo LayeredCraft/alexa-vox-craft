@@ -1,0 +1,72 @@
+{
+  "version": "1",
+  "description": "Coffee shop with name-free interactions",
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "coffee shop",
+      "intents": [
+        {
+          "name": "OrderIntent",
+          "samples": [
+            "order {drink}",
+            "buy {drink}"
+          ],
+          "slots": [
+            {
+              "name": "drink",
+              "type": "DrinkType"
+            }
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "DrinkType",
+          "values": [
+            {
+              "name": {
+                "value": "coffee"
+              }
+            },
+            {
+              "name": {
+                "value": "tea"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "_nameFreeInteraction": {
+      "ingressPoints": [
+        {
+          "type": "LAUNCH",
+          "sampleUtterances": [
+            {
+              "format": "RAW_TEXT",
+              "value": "what's available"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "show menu"
+            }
+          ]
+        },
+        {
+          "type": "INTENT",
+          "name": "OrderIntent",
+          "sampleUtterances": [
+            {
+              "format": "RAW_TEXT",
+              "value": "order coffee"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "get tea"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
