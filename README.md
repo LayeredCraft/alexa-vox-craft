@@ -96,7 +96,7 @@ public class LaunchRequestHandler : IRequestHandler<LaunchRequest>
 
 ## 📖 Documentation
 
-📚 **[Complete Documentation](https://layeredcraft.github.io/alexa-vox-craft/)** - Comprehensive guides and examples
+📚 **[Complete Documentation](https://alexavoxcraft.layeredcraft.dev/)** - Comprehensive guides and examples
 
 ### Core Components
 
