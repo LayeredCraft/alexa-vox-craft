@@ -14,9 +14,10 @@ public sealed class InteractionModelBuilder
     private string _invocationName = string.Empty;
     private string? _version;
     private string? _description;
-    
+
     private readonly Dictionary<string, IntentBuilder> _intents = [];
     private readonly Dictionary<string, SlotTypeBuilder> _slotTypes = [];
+    private NameFreeInteractionBuilder? _nameFreeInteractionBuilder;
 
     private InteractionModelBuilder()
     {
@@ -109,6 +110,18 @@ public sealed class InteractionModelBuilder
     }
 
     /// <summary>
+    /// Configures name-free interaction for the skill.
+    /// </summary>
+    /// <param name="configure">The configuration action.</param>
+    /// <returns>The current <see cref="InteractionModelBuilder"/>.</returns>
+    public InteractionModelBuilder WithNameFreeInteraction(Action<NameFreeInteractionBuilder>? configure = null)
+    {
+        _nameFreeInteractionBuilder ??= new NameFreeInteractionBuilder();
+        configure?.Invoke(_nameFreeInteractionBuilder);
+        return this;
+    }
+
+    /// <summary>
     /// Builds the interaction model definition.
     /// </summary>
     /// <returns>The constructed <see cref="InteractionModelDefinition"/>.</returns>
@@ -146,7 +159,8 @@ public sealed class InteractionModelBuilder
 
         var body = new InteractionModelBody
         {
-            LanguageModel = languageModel
+            LanguageModel = languageModel,
+            NameFreeInteraction = _nameFreeInteractionBuilder?.Build()
         };
 
         return new InteractionModelDefinition

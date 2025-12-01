@@ -4,7 +4,7 @@ public sealed class GeneratorAutoDataAttribute() : AutoDataAttribute(CreateFixtu
 {
     internal static IFixture CreateFixture()
     {
-        return BaseFixtureFactory.CreateFixture(fixture => { });
+        return BaseFixtureFactory.CreateFixture(_ => { });
     }
 }
 

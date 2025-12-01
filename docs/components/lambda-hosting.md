@@ -1,10 +1,21 @@
 # Lambda Hosting
 
-AlexaVoxCraft provides optimized AWS Lambda hosting with custom serialization, ReadyToRun publishing, and comprehensive deployment support for Alexa skills.
+AlexaVoxCraft provides two approaches for hosting Alexa skills in AWS Lambda, both with optimized runtime support, custom serialization, and ReadyToRun publishing capabilities.
 
 > 🎯 **Trivia Skill Examples**: All code examples show deploying a **trivia game skill** to AWS Lambda with DynamoDB integration for storing questions and player scores.
 
-## :rocket: Features
+## Overview
+
+Starting with version 5.0.0, AlexaVoxCraft offers two hosting patterns:
+
+- **🌟 Modern Approach (Recommended)**: Minimal API-style hosting using `AlexaVoxCraft.Lambda.Host` powered by [AwsLambda.Host](https://www.nuget.org/packages/AwsLambda.Host)
+- **Legacy Approach**: Class-based hosting using `AlexaVoxCraft.MediatR.Lambda` with `AlexaSkillFunction<TRequest, TResponse>`
+
+Both approaches share the same core features and are fully supported. **For new projects, we recommend the modern approach** as it aligns with .NET minimal API patterns and provides more flexibility.
+
+## :rocket: Shared Features
+
+Both hosting approaches provide:
 
 - **:zap: Custom Runtime**: Optimized `provided.al2023` runtime with bootstrap handler
 - **:rocket: ReadyToRun Publishing**: Pre-compiled assemblies for faster cold starts
@@ -13,12 +24,227 @@ AlexaVoxCraft provides optimized AWS Lambda hosting with custom serialization, R
 - **:chart_with_upwards_trend: Observability**: Built-in OpenTelemetry and structured logging
 - **:globe_with_meridians: ICU Support**: Internationalization with bundled ICU libraries
 
-## Basic Setup
+## 🌟 Modern Hosting Approach (Recommended)
 
-### Function Configuration
+The modern approach uses the minimal API-style builder pattern familiar from ASP.NET Core, powered by the [AwsLambda.Host](https://www.nuget.org/packages/AwsLambda.Host) package.
+
+### Benefits
+
+- **Familiar Pattern**: Same builder style as ASP.NET Core minimal APIs
+- **Industry Standard**: Uses the well-established `AwsLambda.Host` package
+- **Flexible Configuration**: Direct access to service collection
+- **Better Separation**: Clear separation between infrastructure and business logic
+- **Simpler Code**: No need for separate function class
+
+### Installation
+
+```bash
+dotnet add package AlexaVoxCraft.Lambda.Host
+```
+
+### Basic Setup
+
+#### Program.cs
 
 ```csharp
-// Program.cs
+using AlexaVoxCraft.Lambda.Host;
+using AlexaVoxCraft.Lambda.Host.Extensions;
+using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.Model.Response;
+using AwsLambda.Host.Builder;
+using LayeredCraft.Logging.CompactJsonFormatter;
+using Microsoft.Extensions.Hosting;
+using Sample.Host.Function;
+using Serilog;
+
+try
+{
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .Enrich.FromLogContext()
+        .WriteTo.Console(new CompactJsonFormatter())
+        .CreateBootstrapLogger();
+
+    Log.Information("Starting Lambda Host");
+
+    var builder = LambdaApplication.CreateBuilder();
+    builder.UseHandler<LambdaHandler, SkillRequest, SkillResponse>();
+
+    // Configure Serilog as the primary logging provider
+    builder.Services.AddSerilog(
+        (services, lc) =>
+            lc
+                .ReadFrom.Configuration(builder.Configuration)
+                .ReadFrom.Services(services)
+                .Enrich.FromLogContext()
+    );
+
+    // Register MediatR and handlers (auto-discovered at compile time)
+    builder.Services.AddSkillMediator(builder.Configuration);
+
+    // Register AlexaVoxCraft hosting services
+    builder.Services.AddAlexaSkillHost();
+
+    await using var app = builder.Build();
+
+    // Map the Alexa handler
+    app.MapHandler(AlexaHandler.Handler<SkillRequest, SkillResponse>);
+
+    await app.RunAsync();
+
+    return 0;
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+    return 1;
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+```
+
+#### Lambda Handler Implementation
+
+```csharp
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR;
+using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.Model.Request.Type;
+using AlexaVoxCraft.Model.Response;
+using Amazon.Lambda.Core;
+using Microsoft.Extensions.Logging;
+
+namespace Sample.Host.Function;
+
+public class LambdaHandler : ILambdaHandler<SkillRequest, SkillResponse>
+{
+    private readonly ISkillMediator _mediator;
+    private readonly ILogger<LambdaHandler> _logger;
+
+    public LambdaHandler(ISkillMediator mediator, ILogger<LambdaHandler> logger)
+    {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public async Task<SkillResponse> HandleAsync(SkillRequest request, ILambdaContext context, CancellationToken cancellationToken)
+    {
+        _logger.LogDebug("Received request of type {RequestType}", request.Request.GetType().Name);
+
+        if (request.Request is IntentRequest intent)
+        {
+            _logger.LogDebug("Received intent {IntentType}", intent.Intent.Name);
+        }
+
+        try
+        {
+            var response = await _mediator.Send(request, cancellationToken);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error handling request");
+            throw;
+        }
+    }
+}
+```
+
+### Project Configuration
+
+#### Project File (.csproj)
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AWSProjectType>Lambda</AWSProjectType>
+    <AssemblyName>bootstrap</AssemblyName>
+
+    <!-- Performance optimizations -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PublishReadyToRun>true</PublishReadyToRun>
+
+    <!-- Required for AwsLambda.Host interceptors -->
+    <InterceptorsNamespaces>$(InterceptorsNamespaces);AwsLambda.Host.Core.Generated</InterceptorsNamespaces>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- AlexaVoxCraft packages -->
+    <PackageReference Include="AlexaVoxCraft.Lambda.Host" Version="5.0.0" />
+
+    <!-- Logging -->
+    <PackageReference Include="LayeredCraft.Logging.CompactJsonFormatter" Version="1.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+  </ItemGroup>
+
+  <!-- ICU Globalization Support -->
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" />
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
+  </ItemGroup>
+</Project>
+```
+
+### Advanced Configuration with AWS Services
+
+For skills requiring AWS services like DynamoDB:
+
+```csharp
+var builder = LambdaApplication.CreateBuilder();
+builder.UseHandler<LambdaHandler, APLSkillRequest, SkillResponse>();
+
+// AWS Configuration
+var awsOptions = builder.Configuration.GetAWSOptions();
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonDynamoDB>();
+
+// MediatR and handlers
+builder.Services.AddSkillMediator(builder.Configuration);
+
+// Business services
+builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<IGameService, GameService>();
+
+// Configuration
+builder.Services.Configure<DynamoDbOptions>(opt =>
+    builder.Configuration.GetSection(DynamoDbOptions.DynamoDbSettings).Bind(opt));
+
+// AlexaVoxCraft hosting
+builder.Services.AddAlexaSkillHost();
+
+await using var app = builder.Build();
+app.MapHandler(AlexaHandler.Handler<APLSkillRequest, SkillResponse>);
+await app.RunAsync();
+```
+
+## Legacy Hosting Approach
+
+The legacy approach uses a class-based pattern with `AlexaSkillFunction<TRequest, TResponse>`. This approach is **fully supported** and ideal for existing projects or teams familiar with this pattern.
+
+### When to Use
+
+- Existing projects already using this pattern
+- Teams that prefer class-based architecture
+- No need to refactor working code
+
+### Installation
+
+```bash
+dotnet add package AlexaVoxCraft.MediatR.Lambda
+```
+
+### Basic Setup
+
+#### Program.cs
+
+```csharp
 using AlexaVoxCraft.MediatR.Lambda;
 using AlexaVoxCraft.Model.Apl;
 using AlexaVoxCraft.Model.Response;
@@ -34,9 +260,14 @@ return await LambdaHostExtensions.RunAlexaSkill<TriviaSkillFunction, APLSkillReq
 );
 ```
 
-### Skill Function Implementation
+#### Skill Function Implementation
 
 ```csharp
+using AlexaVoxCraft.MediatR.Lambda;
+using AlexaVoxCraft.Model.Apl;
+using AlexaVoxCraft.Model.Response;
+using Microsoft.Extensions.Hosting;
+
 public class TriviaSkillFunction : AlexaSkillFunction<APLSkillRequest, SkillResponse>
 {
     protected override void Init(IHostBuilder builder)
@@ -82,9 +313,53 @@ public class TriviaSkillFunction : AlexaSkillFunction<APLSkillRequest, SkillResp
 }
 ```
 
-## Project Configuration
+#### Lambda Handler
 
-### Project File Setup
+The Lambda handler implementation is the same for both approaches:
+
+```csharp
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR;
+using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.Model.Response;
+using Amazon.Lambda.Core;
+using Microsoft.Extensions.Logging;
+
+public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
+{
+    private readonly ISkillMediator _mediator;
+    private readonly ILogger<LambdaHandler> _logger;
+
+    public LambdaHandler(ISkillMediator mediator, ILogger<LambdaHandler> logger)
+    {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public async Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context, CancellationToken cancellationToken)
+    {
+        _logger.LogDebug("Received request of type {requestType}", request.Request.GetType().Name);
+
+        if (request.Request is IntentRequest intent)
+        {
+            _logger.LogDebug("Received intent {intentType}", intent.Intent.Name);
+        }
+
+        try
+        {
+            var response = await _mediator.Send(request, cancellationToken);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error handling request");
+            throw;
+        }
+    }
+}
+```
+
+### Project Configuration
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -95,37 +370,36 @@ public class TriviaSkillFunction : AlexaSkillFunction<APLSkillRequest, SkillResp
     <Nullable>enable</Nullable>
     <AWSProjectType>Lambda</AWSProjectType>
     <AssemblyName>bootstrap</AssemblyName>
-    
+
     <!-- Performance optimizations -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PublishReadyToRun>true</PublishReadyToRun>
-    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Core AlexaVoxCraft packages -->
-    <PackageReference Include="AlexaVoxCraft.MediatR.Lambda" Version="2.0.0.61" />
-    <PackageReference Include="AlexaVoxCraft.Model.Apl" Version="2.0.0.61" />
-    
+    <!-- AlexaVoxCraft packages -->
+    <PackageReference Include="AlexaVoxCraft.MediatR.Lambda" Version="5.0.0" />
+    <PackageReference Include="AlexaVoxCraft.Model.Apl" Version="5.0.0" />
+
     <!-- AWS Lambda runtime -->
     <PackageReference Include="Amazon.Lambda.Core" Version="2.6.0" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.13.1" />
-    
+
     <!-- AWS services -->
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="4.0.2" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.2" />
-    
+
     <!-- Observability -->
     <PackageReference Include="OpenTelemetry" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AWS" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.12.0" />
-    
+
     <!-- Additional dependencies -->
     <PackageReference Include="Scrutor" Version="6.1.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
   </ItemGroup>
-  
+
   <!-- ICU Globalization Support -->
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" />
@@ -134,10 +408,13 @@ public class TriviaSkillFunction : AlexaSkillFunction<APLSkillRequest, SkillResp
 </Project>
 ```
 
+## Shared Configuration
+
+The following configuration applies to both hosting approaches.
+
 ### AWS Lambda Tools Configuration
 
 ```json
-// aws-lambda-tools-defaults.json
 {
   "Information": [
     "This file provides default values for the deployment wizard inside Visual Studio and the AWS Lambda commands added to the .NET Core CLI.",
@@ -156,106 +433,9 @@ public class TriviaSkillFunction : AlexaSkillFunction<APLSkillRequest, SkillResp
 }
 ```
 
-## Lambda Handler Implementation
-
-### Core Handler
-
-```csharp
-public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
-{
-    private readonly ISkillMediator _mediator;
-    private readonly ILogger<LambdaHandler> _logger;
-
-    public LambdaHandler(ISkillMediator mediator, ILogger<LambdaHandler> logger)
-    {
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
-    public async Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context, CancellationToken cancellationToken)
-    { 
-        using var activity = DiagnosticsConfig.Source.StartActivityWithTags(
-            $"{nameof(LambdaHandler)}.{nameof(HandleAsync)}", new()
-            {
-                new("rpc.service", nameof(LambdaHandler)),
-                new("rpc.system", "AlexaVoxCraft"),
-                new("request.type", request.Request.GetType().Name)
-            });
-
-        if (request.Request is IntentRequest intent)
-        {
-            _logger.LogDebug("Received intent {intentType}", intent.Intent.Name);
-            activity?.SetTag("alexa.intent.name", intent.Intent.Name);
-        }
-
-        _logger.LogDebug("Received request of type {requestType}", request.Request.Type);
-
-        try
-        {
-            var response = await _mediator.Send(request, cancellationToken);
-            activity?.SetStatus(ActivityStatusCode.Ok);
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error handling request");
-            activity?.AddException(ex);
-            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
-            throw;
-        }
-    }
-}
-```
-
-### Activity Source Decorator
-
-```csharp
-public class ActivitySourceRequestHandlerDecorator<TRequest> : IRequestHandler<TRequest>
-    where TRequest : Request
-{
-    private readonly IRequestHandler<TRequest> _decorated;
-    private readonly ActivitySource _activitySource;
-
-    public ActivitySourceRequestHandlerDecorator(IRequestHandler<TRequest> decorated)
-    {
-        _decorated = decorated;
-        _activitySource = new ActivitySource("TriviaSkill");
-    }
-
-    public Task<bool> CanHandle(IHandlerInput handlerInput, CancellationToken cancellationToken = default)
-    {
-        return _decorated.CanHandle(handlerInput, cancellationToken);
-    }
-
-    public async Task<SkillResponse> Handle(IHandlerInput handlerInput, CancellationToken cancellationToken = default)
-    {
-        using var activity = _activitySource.StartActivity($"{_decorated.GetType().Name}.Handle");
-        
-        activity?.SetTag("alexa.request.type", typeof(TRequest).Name);
-        activity?.SetTag("alexa.user.id", handlerInput.RequestEnvelope.GetUserId());
-
-        try
-        {
-            var result = await _decorated.Handle(handlerInput, cancellationToken);
-            activity?.SetStatus(ActivityStatusCode.Ok);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            activity?.AddException(ex);
-            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
-            throw;
-        }
-    }
-}
-```
-
-## Configuration
-
 ### Application Settings
 
 ```json
-// appsettings.json
 {
   "AWS": {
     "Region": "us-east-1"
@@ -292,35 +472,6 @@ public class ActivitySourceRequestHandlerDecorator<TRequest> : IRequestHandler<T
       }
     }
   }
-}
-```
-
-### Environment-Specific Configuration
-
-```csharp
-// Configuration helper
-public static class ConfigurationExtensions
-{
-    public static void ConfigureForEnvironment(this IServiceCollection services, 
-        IConfiguration configuration, string environment)
-    {
-        switch (environment.ToLower())
-        {
-            case "development":
-                services.Configure<DynamoDbOptions>(opt =>
-                {
-                    opt.TableMaps["GameRepository"].TableName = "trivia-skill-dev";
-                });
-                break;
-                
-            case "production":
-                services.Configure<DynamoDbOptions>(opt =>
-                {
-                    opt.TableMaps["GameRepository"].TableName = "trivia-skill-prod";
-                });
-                break;
-        }
-    }
 }
 ```
 
@@ -420,35 +571,11 @@ Runtime: provided.al2023
 }
 ```
 
-### Custom Metrics
-
-```csharp
-public class DiagnosticsConfig
-{
-    public static readonly ActivitySource Source = new("TriviaSkill");
-    public static readonly string ServiceName = "TriviaSkill";
-    public static readonly string SystemName = "AlexaVoxCraft";
-    
-    public static readonly Counter<int> CorrectCounter = 
-        Metrics.CreateCounter<int>("trivia_correct_answers", "Number of correct answers");
-    
-    public static readonly Counter<int> IncorrectCounter = 
-        Metrics.CreateCounter<int>("trivia_incorrect_answers", "Number of incorrect answers");
-}
-
-// Usage in handlers
-DiagnosticsConfig.CorrectCounter.Add(1, new KeyValuePair<string, object>[]
-{
-    new("user.id", userId),
-    new("question.category", "general")
-});
-```
-
 ### Request/Response Logging
 
 ```csharp
 // Enable detailed request/response logging in development
-"AlexaVoxCraft.MediatR.Lambda.Serialization": "Debug"
+"AlexaVoxCraft.Lambda.Serialization": "Debug"
 ```
 
 ## Security
@@ -524,6 +651,80 @@ var request = new APLSkillRequest
 var response = await handler.HandleAsync(request, mockContext);
 ```
 
+## Migration Guide
+
+### From Legacy to Modern Hosting
+
+If you're migrating an existing skill from the legacy approach to the modern approach:
+
+#### Step 1: Update Package Reference
+
+```bash
+dotnet remove package AlexaVoxCraft.MediatR.Lambda
+dotnet add package AlexaVoxCraft.Lambda.Host
+```
+
+#### Step 2: Update Project File
+
+Add the interceptors namespace:
+
+```xml
+<PropertyGroup>
+  <InterceptorsNamespaces>$(InterceptorsNamespaces);AwsLambda.Host.Core.Generated</InterceptorsNamespaces>
+</PropertyGroup>
+```
+
+#### Step 3: Refactor Program.cs
+
+**Before (Legacy):**
+```csharp
+return await LambdaHostExtensions.RunAlexaSkill<MySkillFunction, SkillRequest, SkillResponse>();
+```
+
+**After (Modern):**
+```csharp
+var builder = LambdaApplication.CreateBuilder();
+builder.UseHandler<LambdaHandler, SkillRequest, SkillResponse>();
+builder.Services.AddSkillMediator(builder.Configuration);
+builder.Services.AddAlexaSkillHost();
+
+await using var app = builder.Build();
+app.MapHandler(AlexaHandler.Handler<SkillRequest, SkillResponse>);
+await app.RunAsync();
+```
+
+#### Step 4: Remove Function Class
+
+Delete the class that inherited from `AlexaSkillFunction<TRequest, TResponse>` and move its service registration logic directly into Program.cs.
+
+#### Step 5: Update Namespace Imports
+
+If you have direct references to moved classes, update imports:
+
+```csharp
+// Change:
+using AlexaVoxCraft.MediatR.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR.Lambda.Serialization;
+
+// To:
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.Lambda.Serialization;
+```
+
+### Benefits of Migration
+
+- More familiar pattern for .NET developers
+- Easier service configuration
+- Better alignment with modern .NET practices
+- Simpler Program.cs without nested configuration
+
+### When NOT to Migrate
+
+- Existing skills working well with legacy approach
+- Team prefers class-based architecture
+- No immediate need for new features
+- Migration effort outweighs benefits
+
 ## Best Practices
 
 ### 1. Use Dependency Injection
@@ -555,8 +756,8 @@ public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken c
 ### 4. Log Structured Data
 
 ```csharp
-_logger.LogInformation("Processing {RequestType} for user {UserId}", 
-    request.GetType().Name, 
+_logger.LogInformation("Processing {RequestType} for user {UserId}",
+    request.GetType().Name,
     userId);
 ```
 

@@ -1,7 +1,5 @@
 ﻿using AlexaVoxCraft.Model.Response;
-using AlexaVoxCraft.TestKit.Attributes;
 using AlexaVoxCraft.TestKit.Extensions;
-using AwesomeAssertions;
 
 namespace AlexaVoxCraft.Model.Tests.Responses;
 

@@ -3,10 +3,6 @@ using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
-using AlexaVoxCraft.TestKit.Attributes;
-using AutoFixture.Xunit3;
-using AwesomeAssertions;
-using NSubstitute;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 
@@ -28,7 +24,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         _activityListener = new ActivityListener
         {
             ShouldListenTo = source => source.Name.Contains(AlexaVoxCraftTelemetry.ActivitySourceName),
-            Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllData,
+            Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
             ActivityStarted = activity => _capturedActivities.Add(activity),
         };
         ActivitySource.AddActivityListener(_activityListener);

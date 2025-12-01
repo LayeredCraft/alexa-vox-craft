@@ -1,0 +1,13 @@
+﻿{
+  "IngressPoints": [
+    {
+      "Type": "LAUNCH",
+      "SampleUtterances": [
+        {
+          "Format": "CUSTOM_FORMAT",
+          "Value": "custom format"
+        }
+      ]
+    }
+  ]
+}

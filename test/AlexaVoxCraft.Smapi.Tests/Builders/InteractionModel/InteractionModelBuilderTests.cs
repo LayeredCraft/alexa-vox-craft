@@ -34,4 +34,27 @@ public class InteractionModelBuilderTests
             .ToJson();
         await Verify(json).DisableDiff();
     }
+
+    [Fact]
+    public async Task ToJson_WithNameFreeInteraction_CreatesCorrectJson()
+    {
+        var json = InteractionModelBuilder.Create()
+            .WithInvocationName("coffee shop")
+            .WithVersion("1")
+            .WithDescription("Coffee shop with name-free interactions")
+            .AddIntent("OrderIntent", intent => intent
+                .WithSamples("order {drink}", "buy {drink}")
+                .WithSlot("drink", "DrinkType"))
+            .AddSlotType("DrinkType", type => type
+                .WithValue("coffee")
+                .WithValue("tea"))
+            .WithNameFreeInteraction(nfi => nfi
+                .WithLaunchIngressPoint(launch => launch
+                    .WithUtterances("what's available", "show menu"))
+                .WithIntentIngressPoint("OrderIntent", intent => intent
+                    .WithUtterances("order coffee", "get tea")))
+            .ToJson();
+
+        await Verify(json).DisableDiff();
+    }
 }
