@@ -19,7 +19,6 @@ try
 
     Log.Information("Starting Lambda Host");
     var builder = LambdaApplication.CreateBuilder();
-    builder.UseHandler<LambdaHandler, SkillRequest, SkillResponse>();
     // Configure Serilog as the primary logging provider
     builder.Services.AddSerilog(
         (services, lc) =>
@@ -30,11 +29,11 @@ try
     );
 
     builder.Services.AddSkillMediator(builder.Configuration);
-    builder.Services.AddAlexaSkillHost();
+    builder.Services.AddAlexaSkillHost<LambdaHandler, SkillRequest, SkillResponse>();
 
     await using var app = builder.Build();
 
-    app.MapHandler(AlexaHandler.Handler<SkillRequest, SkillResponse>);
+    app.MapHandler(AlexaHandler.Invoke<SkillRequest, SkillResponse>);
 
     await app.RunAsync();
     
