@@ -339,14 +339,13 @@ using AlexaVoxCraft.Lambda.Host.Extensions;
 using AwsLambda.Host.Builder;
 
 var builder = LambdaApplication.CreateBuilder();
-builder.UseHandler<LambdaHandler, SkillRequest, SkillResponse>();
 
 builder.Services.AddSerilog(/* ... */);
 builder.Services.AddSkillMediator(builder.Configuration);
-builder.Services.AddAlexaSkillHost();
+builder.Services.AddAlexaSkillHost<LambdaHandler, SkillRequest, SkillResponse>();
 
 await using var app = builder.Build();
-app.MapHandler(AlexaHandler.Handler<SkillRequest, SkillResponse>);
+app.MapHandler(AlexaHandler.Invoke<SkillRequest, SkillResponse>);
 await app.RunAsync();
 ```
 

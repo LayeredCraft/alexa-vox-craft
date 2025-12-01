@@ -69,7 +69,6 @@ try
     Log.Information("Starting Lambda Host");
 
     var builder = LambdaApplication.CreateBuilder();
-    builder.UseHandler<LambdaHandler, SkillRequest, SkillResponse>();
 
     // Configure Serilog as the primary logging provider
     builder.Services.AddSerilog(
@@ -83,13 +82,13 @@ try
     // Register MediatR and handlers (auto-discovered at compile time)
     builder.Services.AddSkillMediator(builder.Configuration);
 
-    // Register AlexaVoxCraft hosting services
-    builder.Services.AddAlexaSkillHost();
+    // Register AlexaVoxCraft hosting services and handler
+    builder.Services.AddAlexaSkillHost<LambdaHandler, SkillRequest, SkillResponse>();
 
     await using var app = builder.Build();
 
     // Map the Alexa handler
-    app.MapHandler(AlexaHandler.Handler<SkillRequest, SkillResponse>);
+    app.MapHandler(AlexaHandler.Invoke<SkillRequest, SkillResponse>);
 
     await app.RunAsync();
 
@@ -198,7 +197,6 @@ For skills requiring AWS services like DynamoDB:
 
 ```csharp
 var builder = LambdaApplication.CreateBuilder();
-builder.UseHandler<LambdaHandler, APLSkillRequest, SkillResponse>();
 
 // AWS Configuration
 var awsOptions = builder.Configuration.GetAWSOptions();
@@ -216,11 +214,11 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.Configure<DynamoDbOptions>(opt =>
     builder.Configuration.GetSection(DynamoDbOptions.DynamoDbSettings).Bind(opt));
 
-// AlexaVoxCraft hosting
-builder.Services.AddAlexaSkillHost();
+// AlexaVoxCraft hosting and handler registration
+builder.Services.AddAlexaSkillHost<LambdaHandler, APLSkillRequest, SkillResponse>();
 
 await using var app = builder.Build();
-app.MapHandler(AlexaHandler.Handler<APLSkillRequest, SkillResponse>);
+app.MapHandler(AlexaHandler.Invoke<APLSkillRequest, SkillResponse>);
 await app.RunAsync();
 ```
 
@@ -684,12 +682,11 @@ return await LambdaHostExtensions.RunAlexaSkill<MySkillFunction, SkillRequest, S
 **After (Modern):**
 ```csharp
 var builder = LambdaApplication.CreateBuilder();
-builder.UseHandler<LambdaHandler, SkillRequest, SkillResponse>();
 builder.Services.AddSkillMediator(builder.Configuration);
-builder.Services.AddAlexaSkillHost();
+builder.Services.AddAlexaSkillHost<LambdaHandler, SkillRequest, SkillResponse>();
 
 await using var app = builder.Build();
-app.MapHandler(AlexaHandler.Handler<SkillRequest, SkillResponse>);
+app.MapHandler(AlexaHandler.Invoke<SkillRequest, SkillResponse>);
 await app.RunAsync();
 ```
 

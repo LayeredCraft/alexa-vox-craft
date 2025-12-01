@@ -10,7 +10,7 @@ namespace AlexaVoxCraft.Lambda.Host;
 public static class AlexaHandler
 {
     /// <summary>
-    /// Processes an Alexa skill request using the registered handler delegate.
+    /// Invokes the Alexa skill handler to process a request.
     /// </summary>
     /// <typeparam name="TRequest">The type of request to process.</typeparam>
     /// <typeparam name="TResponse">The type of response to return.</typeparam>
@@ -19,7 +19,7 @@ public static class AlexaHandler
     /// <param name="context">The Lambda execution context.</param>
     /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
     /// <returns>A task that represents the asynchronous operation and contains the skill response.</returns>
-    public static Task<TResponse> Handler<TRequest, TResponse>(
+    public static Task<TResponse> Invoke<TRequest, TResponse>(
         [Event] TRequest skillRequest,
         HandlerDelegate<TRequest, TResponse> handler,
         ILambdaContext context,
