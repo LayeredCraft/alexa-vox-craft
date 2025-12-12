@@ -57,12 +57,6 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="src/AlexaVoxCraft.Lambda.Host/AlexaVoxCraft.Lambda.Host.csproj">
-      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
-      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
-      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
-      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
-    </Project>
     <Project Path="src/AlexaVoxCraft.Lambda/AlexaVoxCraft.Lambda.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
@@ -100,6 +94,12 @@
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
     <Project Path="src/AlexaVoxCraft.Smapi/AlexaVoxCraft.Smapi.csproj" />
+    <Project Path="src/AlexaVoxCraft.MinimalLambda/AlexaVoxCraft.MinimalLambda.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
   </Folder>
   <Folder Name="/test/">
     <Project Path="AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj">

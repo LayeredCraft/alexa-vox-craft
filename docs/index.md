@@ -4,8 +4,8 @@ title: AlexaVoxCraft
 ---
 
 [![Build Status](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml/badge.svg)](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml)
-[![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/)
-[![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/)
+[![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MinimalLambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MinimalLambda/)
+[![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MinimalLambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MinimalLambda/)
 
 AlexaVoxCraft is a modular C# .NET library for building Amazon Alexa skills using modern .NET practices. It provides comprehensive support for Alexa skill development with CQRS patterns, visual interfaces, and AWS Lambda hosting.
 
@@ -21,8 +21,9 @@ AlexaVoxCraft is a modular C# .NET library for building Amazon Alexa skills usin
 ## Installation
 
 ```bash
-# Core MediatR integration and Lambda hosting
-dotnet add package AlexaVoxCraft.MediatR.Lambda
+# Minimal Lambda hosting and MediatR integration
+dotnet add package AlexaVoxCraft.MinimalLambda
+dotnet add package AlexaVoxCraft.MediatR
 
 # APL visual interface support
 dotnet add package AlexaVoxCraft.Model.Apl
@@ -50,37 +51,50 @@ All code examples in this documentation demonstrate building a **trivia game ski
 
 ```csharp
 // Program.cs
-using AlexaVoxCraft.MediatR.Lambda;
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.MinimalLambda;
+using AlexaVoxCraft.MinimalLambda.Extensions;
 using AlexaVoxCraft.Model.Apl;
 using AlexaVoxCraft.Model.Response;
+using Amazon.Lambda.Core;
+using LayeredCraft.Logging.CompactJsonFormatter;
+using MinimalLambda.Builder;
+using Serilog;
 
 APLSupport.Add();
 
-return await LambdaHostExtensions.RunAlexaSkill<TriviaSkillFunction, APLSkillRequest, SkillResponse>();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console(new CompactJsonFormatter())
+    .CreateLogger();
 
-// Function class
-public class TriviaSkillFunction : AlexaSkillFunction<APLSkillRequest, SkillResponse>
+var builder = LambdaApplication.CreateBuilder();
+
+// Handlers are automatically discovered and registered at compile time
+builder.Services.AddSkillMediator(builder.Configuration);
+
+// AlexaVoxCraft Minimal Lambda host
+builder.Services.AddAlexaSkillHost<TriviaSkillHandler, APLSkillRequest, SkillResponse>();
+
+await using var app = builder.Build();
+app.MapHandler(AlexaHandler.Invoke<APLSkillRequest, SkillResponse>);
+return await app.RunAsync();
+
+// Lambda handler bridges MediatR to the MinimalLambda host
+public class TriviaSkillHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
 {
-    protected override void Init(IHostBuilder builder)
-    {
-        builder
-            .UseHandler<LambdaHandler, APLSkillRequest, SkillResponse>()
-            .ConfigureServices((context, services) =>
-            {
-                // Handlers are automatically discovered and registered at compile time
-                services.AddSkillMediator(context.Configuration);
+    private readonly ISkillMediator _mediator;
 
-                // Add your business services
-                services.AddScoped<IGameService, GameService>();
-                services.AddScoped<IQuestionRepository, QuestionRepository>();
-            });
-    }
+    public TriviaSkillHandler(ISkillMediator mediator) => _mediator = mediator;
+
+    public Task<SkillResponse> HandleAsync(APLSkillRequest request, ILambdaContext context, CancellationToken cancellationToken) =>
+        _mediator.Send(request, cancellationToken);
 }
 
 // Request Handler
 public class LaunchRequestHandler : IRequestHandler<LaunchRequest>
 {
-    public bool CanHandle(IHandlerInput handlerInput) => 
+    public bool CanHandle(IHandlerInput handlerInput) =>
         handlerInput.RequestEnvelope.Request is LaunchRequest;
 
     public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken)
@@ -185,7 +199,7 @@ See the [Examples](examples/index.md) section for the complete implementation.
 
 ## Runtime Requirements
 
-- **.NET 8.0** or **.NET 9.0**
+- **.NET 8.0**, **.NET 9.0**, or **.NET 10.0**
 - **.NET SDK 8.0.400+** for source generation (VS 2022 17.11+)
 - **AWS Lambda Runtime** (provided.al2023)
 - **Amazon Alexa Developer Account**

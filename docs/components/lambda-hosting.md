@@ -6,9 +6,9 @@ AlexaVoxCraft provides two approaches for hosting Alexa skills in AWS Lambda, bo
 
 ## Overview
 
-Starting with version 5.0.0, AlexaVoxCraft offers two hosting patterns:
+Starting with version 5.1.0-beta, AlexaVoxCraft offers two hosting patterns:
 
-- **🌟 Modern Approach (Recommended)**: Minimal API-style hosting using `AlexaVoxCraft.Lambda.Host` powered by [AwsLambda.Host](https://www.nuget.org/packages/AwsLambda.Host)
+- **🌟 Modern Approach (Recommended)**: Minimal API-style hosting using `AlexaVoxCraft.MinimalLambda` powered by [MinimalLambda](https://www.nuget.org/packages/MinimalLambda)
 - **Legacy Approach**: Class-based hosting using `AlexaVoxCraft.MediatR.Lambda` with `AlexaSkillFunction<TRequest, TResponse>`
 
 Both approaches share the same core features and are fully supported. **For new projects, we recommend the modern approach** as it aligns with .NET minimal API patterns and provides more flexibility.
@@ -26,20 +26,21 @@ Both hosting approaches provide:
 
 ## 🌟 Modern Hosting Approach (Recommended)
 
-The modern approach uses the minimal API-style builder pattern familiar from ASP.NET Core, powered by the [AwsLambda.Host](https://www.nuget.org/packages/AwsLambda.Host) package.
+The modern approach uses the MinimalLambda builder pattern familiar from ASP.NET Core minimal APIs. It aligns with the .NET hosting model while keeping cold starts small.
 
 ### Benefits
 
 - **Familiar Pattern**: Same builder style as ASP.NET Core minimal APIs
-- **Industry Standard**: Uses the well-established `AwsLambda.Host` package
-- **Flexible Configuration**: Direct access to service collection
+- **Lean Runtime**: MinimalLambda keeps the bootstrapped Lambda runtime small
+- **Flexible Configuration**: Direct access to the service collection
 - **Better Separation**: Clear separation between infrastructure and business logic
-- **Simpler Code**: No need for separate function class
+- **Simpler Code**: No need for a separate function class
 
 ### Installation
 
 ```bash
-dotnet add package AlexaVoxCraft.Lambda.Host
+dotnet add package AlexaVoxCraft.MinimalLambda
+dotnet add package AlexaVoxCraft.MediatR
 ```
 
 ### Basic Setup
@@ -47,14 +48,16 @@ dotnet add package AlexaVoxCraft.Lambda.Host
 #### Program.cs
 
 ```csharp
-using AlexaVoxCraft.Lambda.Host;
-using AlexaVoxCraft.Lambda.Host.Extensions;
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR;
 using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.MinimalLambda;
+using AlexaVoxCraft.MinimalLambda.Extensions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
-using AwsLambda.Host.Builder;
+using Amazon.Lambda.Core;
 using LayeredCraft.Logging.CompactJsonFormatter;
-using Microsoft.Extensions.Hosting;
+using MinimalLambda.Builder;
 using Sample.Host.Function;
 using Serilog;
 
@@ -66,28 +69,23 @@ try
         .WriteTo.Console(new CompactJsonFormatter())
         .CreateBootstrapLogger();
 
-    Log.Information("Starting Lambda Host");
+    Log.Information("Starting Minimal Lambda Host");
 
     var builder = LambdaApplication.CreateBuilder();
 
-    // Configure Serilog as the primary logging provider
     builder.Services.AddSerilog(
         (services, lc) =>
-            lc
-                .ReadFrom.Configuration(builder.Configuration)
+            lc.ReadFrom.Configuration(builder.Configuration)
                 .ReadFrom.Services(services)
-                .Enrich.FromLogContext()
-    );
+                .Enrich.FromLogContext());
 
-    // Register MediatR and handlers (auto-discovered at compile time)
+    // MediatR handlers are auto-discovered at compile time
     builder.Services.AddSkillMediator(builder.Configuration);
 
     // Register AlexaVoxCraft hosting services and handler
     builder.Services.AddAlexaSkillHost<LambdaHandler, SkillRequest, SkillResponse>();
 
     await using var app = builder.Build();
-
-    // Map the Alexa handler
     app.MapHandler(AlexaHandler.Invoke<SkillRequest, SkillResponse>);
 
     await app.RunAsync();
@@ -170,13 +168,12 @@ public class LambdaHandler : ILambdaHandler<SkillRequest, SkillResponse>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PublishReadyToRun>true</PublishReadyToRun>
 
-    <!-- Required for AwsLambda.Host interceptors -->
-    <InterceptorsNamespaces>$(InterceptorsNamespaces);AwsLambda.Host.Core.Generated</InterceptorsNamespaces>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- AlexaVoxCraft packages -->
-    <PackageReference Include="AlexaVoxCraft.Lambda.Host" Version="5.0.0" />
+    <PackageReference Include="AlexaVoxCraft.MinimalLambda" Version="5.1.0-beta" />
+    <PackageReference Include="AlexaVoxCraft.MediatR" Version="5.1.0-beta" />
 
     <!-- Logging -->
     <PackageReference Include="LayeredCraft.Logging.CompactJsonFormatter" Version="1.0.0" />
@@ -376,8 +373,8 @@ public class LambdaHandler : ILambdaHandler<APLSkillRequest, SkillResponse>
 
   <ItemGroup>
     <!-- AlexaVoxCraft packages -->
-    <PackageReference Include="AlexaVoxCraft.MediatR.Lambda" Version="5.0.0" />
-    <PackageReference Include="AlexaVoxCraft.Model.Apl" Version="5.0.0" />
+    <PackageReference Include="AlexaVoxCraft.MediatR.Lambda" Version="5.1.0-beta" />
+    <PackageReference Include="AlexaVoxCraft.Model.Apl" Version="5.1.0-beta" />
 
     <!-- AWS Lambda runtime -->
     <PackageReference Include="Amazon.Lambda.Core" Version="2.6.0" />
@@ -653,22 +650,24 @@ var response = await handler.HandleAsync(request, mockContext);
 
 ### From Legacy to Modern Hosting
 
-If you're migrating an existing skill from the legacy approach to the modern approach:
+If you're migrating an existing skill from the legacy approach to the MinimalLambda-based host:
 
-#### Step 1: Update Package Reference
+#### Step 1: Update Package References
 
 ```bash
 dotnet remove package AlexaVoxCraft.MediatR.Lambda
-dotnet add package AlexaVoxCraft.Lambda.Host
+dotnet add package AlexaVoxCraft.MinimalLambda
+dotnet add package AlexaVoxCraft.MediatR
 ```
 
-#### Step 2: Update Project File
+#### Step 2: Clean Up Old Interceptor Settings
 
-Add the interceptors namespace:
+Remove any `AwsLambda.Host.Core.Generated` interceptors that were required by the previous host. MinimalLambda does not require them.
 
 ```xml
 <PropertyGroup>
-  <InterceptorsNamespaces>$(InterceptorsNamespaces);AwsLambda.Host.Core.Generated</InterceptorsNamespaces>
+  <InterceptorsNamespaces>AlexaVoxCraft.Generated</InterceptorsNamespaces>
+  <InterceptorsPreviewNamespaces>AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
 </PropertyGroup>
 ```
 
@@ -681,6 +680,13 @@ return await LambdaHostExtensions.RunAlexaSkill<MySkillFunction, SkillRequest, S
 
 **After (Modern):**
 ```csharp
+using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.MinimalLambda;
+using AlexaVoxCraft.MinimalLambda.Extensions;
+using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.Model.Response;
+using MinimalLambda.Builder;
+
 var builder = LambdaApplication.CreateBuilder();
 builder.Services.AddSkillMediator(builder.Configuration);
 builder.Services.AddAlexaSkillHost<LambdaHandler, SkillRequest, SkillResponse>();
@@ -696,17 +702,7 @@ Delete the class that inherited from `AlexaSkillFunction<TRequest, TResponse>` a
 
 #### Step 5: Update Namespace Imports
 
-If you have direct references to moved classes, update imports:
-
-```csharp
-// Change:
-using AlexaVoxCraft.MediatR.Lambda.Abstractions;
-using AlexaVoxCraft.MediatR.Lambda.Serialization;
-
-// To:
-using AlexaVoxCraft.Lambda.Abstractions;
-using AlexaVoxCraft.Lambda.Serialization;
-```
+If you have direct references to moved classes, update imports to the new MinimalLambda host namespaces.
 
 ### Benefits of Migration
 

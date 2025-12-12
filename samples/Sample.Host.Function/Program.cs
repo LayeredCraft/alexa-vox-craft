@@ -1,11 +1,11 @@
-﻿using AlexaVoxCraft.Lambda.Host;
-using AlexaVoxCraft.Lambda.Host.Extensions;
-using AlexaVoxCraft.MediatR.DI;
+﻿using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.MinimalLambda;
+using AlexaVoxCraft.MinimalLambda.Extensions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
-using AwsLambda.Host.Builder;
 using LayeredCraft.Logging.CompactJsonFormatter;
 using Microsoft.Extensions.Hosting;
+using MinimalLambda.Builder;
 using Sample.Host.Function;
 using Serilog;
 
