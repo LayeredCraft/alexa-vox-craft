@@ -43,7 +43,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\AlexaVoxCraft.Lambda.Host\AlexaVoxCraft.Lambda.Host.csproj"/>
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MinimalLambda\AlexaVoxCraft.MinimalLambda.csproj" />
         <!-- Local dev: load the generator directly here so it runs in this compilation -->
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
                           OutputItemType="Analyzer"

@@ -13,16 +13,16 @@
 
 ## 📦 Packages
 
-| Package                          | NuGet                                                                                                                                       | Downloads                                                                                                                                            |
-|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **AlexaVoxCraft.Model**          | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model)                   | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model/)                   |
-| **AlexaVoxCraft.Model.Apl**      | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.Apl.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.Apl)           | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.Apl.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.Apl/)           |
-| **AlexaVoxCraft.MediatR**        | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR)               | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR/)               |
-| **AlexaVoxCraft.Lambda**         | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Lambda)                 | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Lambda/)                 |
-| **AlexaVoxCraft.Lambda.Host**    | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Lambda.Host.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Lambda.Host)       | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Lambda.Host.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Lambda.Host/)       |
-| **AlexaVoxCraft.MediatR.Lambda** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/) |
-| **AlexaVoxCraft.Observability**  | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability)   | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability/)   |
-| **AlexaVoxCraft.Smapi**          | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi)                   | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi/)                   |
+| Package                             | NuGet                                                                                                                                         | Downloads                                                                                                                                                  |
+|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **AlexaVoxCraft.Model**             | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model)                        | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model/)                               |
+| **AlexaVoxCraft.Model.Apl**         | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.Apl.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.Apl)                | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.Apl.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.Apl/)                       |
+| **AlexaVoxCraft.MediatR**           | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR)                    | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR/)                           |
+| **AlexaVoxCraft.Lambda**            | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Lambda)                      | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Lambda/)                             |
+| **AlexaVoxCraft.MinimalLambda**     | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MinimalLambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MinimalLambda)        | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MinimalLambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MinimalLambda/)               |
+| **AlexaVoxCraft.MediatR.Lambda**    | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda)     | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/)             |
+| **AlexaVoxCraft.Observability**     | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability)       | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability/)               |
+| **AlexaVoxCraft.Smapi**             | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi)                        | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi/)                               |
 
 [![Build Status](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml/badge.svg)](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml)
 
@@ -31,8 +31,9 @@
 ### Install Core Packages
 
 ```bash
-# Core MediatR integration and Lambda hosting
-dotnet add package AlexaVoxCraft.MediatR.Lambda
+# Minimal Lambda hosting and MediatR integration
+dotnet add package AlexaVoxCraft.MinimalLambda
+dotnet add package AlexaVoxCraft.MediatR
 
 # APL visual interface support (optional)
 dotnet add package AlexaVoxCraft.Model.Apl
@@ -46,6 +47,8 @@ dotnet add package LayeredCraft.Logging.CompactJsonFormatter
 
 ### Requirements
 
+Supported target frameworks: **.NET 8.0**, **.NET 9.0**, **.NET 10.0**.
+
 ⚠️ **SDK Version Required**: To use source-generated dependency injection with interceptors, you must use at least version **8.0.400** of the .NET SDK. This ships with **Visual Studio 2022 version 17.11** or higher.
 
 ```bash
@@ -57,25 +60,36 @@ dotnet --version
 ### Create a Basic Skill
 
 ```csharp
-// Program.cs
-using AlexaVoxCraft.MediatR.Lambda;
+// Program.cs (MinimalLambda host)
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.MinimalLambda;
+using AlexaVoxCraft.MinimalLambda.Extensions;
 using AlexaVoxCraft.Model.Response;
+using Amazon.Lambda.Core;
+using MinimalLambda.Builder;
 
-return await LambdaHostExtensions.RunAlexaSkill<MySkillFunction, SkillRequest, SkillResponse>();
+var builder = LambdaApplication.CreateBuilder();
 
-// Function.cs
-public class MySkillFunction : AlexaSkillFunction<SkillRequest, SkillResponse>
+// Handlers are automatically discovered and registered at compile time
+builder.Services.AddSkillMediator(builder.Configuration);
+
+// Register AlexaVoxCraft hosting services and handler
+builder.Services.AddAlexaSkillHost<LambdaHandler, SkillRequest, SkillResponse>();
+
+await using var app = builder.Build();
+app.MapHandler(AlexaHandler.Invoke<SkillRequest, SkillResponse>);
+return await app.RunAsync();
+
+// Lambda handler bridges MediatR to the MinimalLambda host
+public class LambdaHandler : ILambdaHandler<SkillRequest, SkillResponse>
 {
-    protected override void Init(IHostBuilder builder)
-    {
-        builder
-            .UseHandler<LambdaHandler, SkillRequest, SkillResponse>()
-            .ConfigureServices((context, services) =>
-            {
-                // Handlers are automatically discovered and registered at compile time
-                services.AddSkillMediator(context.Configuration);
-            });
-    }
+    private readonly ISkillMediator _mediator;
+
+    public LambdaHandler(ISkillMediator mediator) => _mediator = mediator;
+
+    public Task<SkillResponse> HandleAsync(SkillRequest request, ILambdaContext context, CancellationToken cancellationToken) =>
+        _mediator.Send(request, cancellationToken);
 }
 
 // Handler.cs
@@ -121,7 +135,7 @@ AlexaVoxCraft/
 │   ├── 📦 AlexaVoxCraft.MediatR/              # MediatR integration & request handling
 │   ├── 📦 AlexaVoxCraft.MediatR.Generators/   # Source generator for compile-time DI
 │   ├── 📦 AlexaVoxCraft.Lambda/               # Core Lambda abstractions & serialization
-│   ├── 📦 AlexaVoxCraft.Lambda.Host/          # Modern minimal API-style Lambda hosting
+│   ├── 📦 AlexaVoxCraft.MinimalLambda/        # MinimalLambda-based hosting for Alexa skills
 │   ├── 📦 AlexaVoxCraft.MediatR.Lambda/       # Legacy Lambda hosting (AlexaSkillFunction)
 │   ├── 📦 AlexaVoxCraft.Observability/        # OpenTelemetry instrumentation & telemetry
 │   └── 📦 AlexaVoxCraft.Smapi/                # Skill Management API (SMAPI) client
@@ -160,7 +174,8 @@ Skills use the MediatR pattern where:
 | **AlexaVoxCraft.Model** | Core Alexa models | Request/response types, SSML, cards, directives, System.Text.Json serialization |
 | **AlexaVoxCraft.Model.Apl** | APL support | 40+ components, commands, audio, vector graphics, extensions (DataStore, SmartMotion) |
 | **AlexaVoxCraft.MediatR** | Request handling | Handler routing, pipeline behaviors, attributes management, DI integration |
-| **AlexaVoxCraft.MediatR.Lambda** | Lambda hosting | AWS Lambda functions, context management, custom serialization, hosting extensions |
+| **AlexaVoxCraft.MinimalLambda** | MinimalLambda hosting | Minimal API-style hosting for Alexa skills, custom serialization, handler mapping |
+| **AlexaVoxCraft.MediatR.Lambda** | Legacy Lambda hosting | AWS Lambda functions, context management, custom serialization, hosting extensions |
 | **AlexaVoxCraft.Observability** | OpenTelemetry integration | Opt-in telemetry, metrics, spans, semantic attributes, ADOT/CloudWatch support |
 
 ## 🧪 Testing
@@ -266,20 +281,20 @@ You can now configure the cancellation timeout buffer in your `appsettings.json`
 
 The timeout buffer (default: 250ms) is subtracted from Lambda's remaining execution time to allow graceful shutdown and telemetry flushing.
 
-## 📋 Version 5.0.0+ Breaking Changes
+## 📋 Version 5.1.0+ Changes
 
 ### Overview
 
-Version 5.0.0 introduces a modern minimal API-style hosting model powered by the [AwsLambda.Host](https://www.nuget.org/packages/AwsLambda.Host) package. This update also restructures the package architecture to better separate concerns and provide more flexibility. **The legacy hosting approach remains fully supported** for backward compatibility.
+Version 5.1.0 (beta) introduces the `AlexaVoxCraft.MinimalLambda` package, replacing the previous `AlexaVoxCraft.Lambda.Host` host with a MinimalLambda-based experience. The legacy hosting approach remains fully supported for backward compatibility.
 
 ### Package Restructuring
 
-Version 5.0.0 introduces two new packages and refactors the existing Lambda hosting:
+Version 5.1.0 refines the hosting lineup:
 
 | Package | Purpose | Status |
 |---------|---------|--------|
-| **AlexaVoxCraft.Lambda** | Core Lambda abstractions and serialization | New (extracted from MediatR.Lambda) |
-| **AlexaVoxCraft.Lambda.Host** | Modern minimal API-style Lambda hosting | New (recommended for new projects) |
+| **AlexaVoxCraft.Lambda** | Core Lambda abstractions and serialization | Active |
+| **AlexaVoxCraft.MinimalLambda** | MinimalLambda-based hosting | New (recommended for new projects) |
 | **AlexaVoxCraft.MediatR.Lambda** | Legacy Lambda hosting with AlexaSkillFunction | Existing (still fully supported) |
 
 ### Namespace Changes
@@ -322,25 +337,27 @@ public class LambdaHandler : ILambdaHandler<SkillRequest, SkillResponse>
 
 ### Two Hosting Approaches
 
-Version 5.0.0 provides two ways to host Alexa skills in AWS Lambda:
+Version 5.1.0 provides two ways to host Alexa skills in AWS Lambda:
 
 #### 🌟 Modern Approach (Recommended for New Projects)
 
-Use `AlexaVoxCraft.Lambda.Host` for a familiar minimal API-style hosting experience:
+Use `AlexaVoxCraft.MinimalLambda` for a familiar minimal API-style hosting experience:
 
 ```bash
-dotnet add package AlexaVoxCraft.Lambda.Host
+dotnet add package AlexaVoxCraft.MinimalLambda
 ```
 
 ```csharp
 // Program.cs
-using AlexaVoxCraft.Lambda.Host;
-using AlexaVoxCraft.Lambda.Host.Extensions;
-using AwsLambda.Host.Builder;
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.MinimalLambda;
+using AlexaVoxCraft.MinimalLambda.Extensions;
+using AlexaVoxCraft.Model.Response;
+using MinimalLambda.Builder;
 
 var builder = LambdaApplication.CreateBuilder();
 
-builder.Services.AddSerilog(/* ... */);
 builder.Services.AddSkillMediator(builder.Configuration);
 builder.Services.AddAlexaSkillHost<LambdaHandler, SkillRequest, SkillResponse>();
 
@@ -351,16 +368,9 @@ await app.RunAsync();
 
 **Benefits:**
 - Familiar minimal API-style builder pattern (similar to ASP.NET Core)
-- Uses industry-standard `AwsLambda.Host` package
+- Lean MinimalLambda runtime keeps cold starts small
 - More flexible service configuration
 - Better separation of concerns
-
-**Project Configuration:**
-```xml
-<PropertyGroup>
-  <InterceptorsNamespaces>$(InterceptorsNamespaces);AwsLambda.Host.Core.Generated</InterceptorsNamespaces>
-</PropertyGroup>
-```
 
 #### Legacy Approach (Existing Projects)
 
@@ -427,13 +437,11 @@ To adopt the new minimal API-style hosting:
 1. Replace package reference:
    ```bash
    dotnet remove package AlexaVoxCraft.MediatR.Lambda
-   dotnet add package AlexaVoxCraft.Lambda.Host
+   dotnet add package AlexaVoxCraft.MinimalLambda
+   dotnet add package AlexaVoxCraft.MediatR
    ```
 
-2. Update project file to include interceptors:
-   ```xml
-   <InterceptorsNamespaces>$(InterceptorsNamespaces);AwsLambda.Host.Core.Generated</InterceptorsNamespaces>
-   ```
+2. Remove `AwsLambda.Host` interceptor namespaces (not needed with MinimalLambda) and keep your generator interceptors.
 
 3. Refactor Program.cs to use builder pattern (see example above)
 
