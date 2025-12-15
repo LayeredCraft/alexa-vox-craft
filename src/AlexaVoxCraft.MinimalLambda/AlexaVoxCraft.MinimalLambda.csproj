@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="MinimalLambda" Version="2.0.0-beta.7" />
+      <PackageReference Include="MinimalLambda" Version="2.0.0-beta.8" />
     </ItemGroup>
 
 </Project>
