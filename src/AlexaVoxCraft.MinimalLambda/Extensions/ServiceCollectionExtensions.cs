@@ -40,9 +40,9 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton(AlexaJsonOptions.DefaultOptions);
             services.AddSingleton<ILambdaSerializer, AlexaLambdaSerializer>();
-            services.AddLambdaHostContextAccessor();
+            services.AddLambdaInvocationContextAccessor();
             services.AddScoped<SkillRequestFactory>(sp =>
-                () => sp.GetRequiredService<ILambdaHostContextAccessor>().LambdaHostContext
+                () => sp.GetRequiredService<ILambdaInvocationContextAccessor>().LambdaInvocationContext
                     ?.GetRequiredEvent<SkillRequest>());
 
             services.AddScoped<HandlerDelegate<TRequest, TResponse>>(sp =>

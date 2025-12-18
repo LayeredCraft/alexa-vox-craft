@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Verify.XunitV3" Version="31.8.0" />
+        <PackageReference Include="Verify.XunitV3" Version="31.9.0" />
     </ItemGroup>
     <ItemGroup>
         <!-- Embed all JSON fixtures under Examples/ -->

@@ -11,14 +11,5 @@
         <Description>Base model definitions for Alexa skill requests, responses, session state, and directives.</Description>
         <PackageTags>alexa;model;request;response;directive;voxcraft;skills</PackageTags>
     </PropertyGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
-        <PackageReference Include="System.Text.Json" Version="8.0.6" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-        <PackageReference Include="System.Text.Json" Version="9.0.11" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-        <PackageReference Include="System.Text.Json" Version="10.0.1" />
-    </ItemGroup>
 
 </Project>

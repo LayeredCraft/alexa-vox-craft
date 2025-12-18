@@ -20,7 +20,7 @@ public static class AlexaHandler
     /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
     /// <returns>A task that represents the asynchronous operation and contains the skill response.</returns>
     public static Task<TResponse> Invoke<TRequest, TResponse>(
-        [Event] TRequest skillRequest,
+        [FromEvent] TRequest skillRequest,
         HandlerDelegate<TRequest, TResponse> handler,
         ILambdaContext context,
         CancellationToken cancellationToken) => handler(skillRequest, context, cancellationToken);
