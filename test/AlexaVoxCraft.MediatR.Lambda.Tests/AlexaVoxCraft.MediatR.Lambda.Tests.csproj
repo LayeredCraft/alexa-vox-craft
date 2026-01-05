@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
+        <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
     </ItemGroup>
 
 </Project>

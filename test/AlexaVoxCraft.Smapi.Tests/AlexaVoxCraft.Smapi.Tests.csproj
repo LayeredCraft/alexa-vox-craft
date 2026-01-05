@@ -18,11 +18,11 @@
   </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Verify.XunitV3" Version="31.9.0" />
+        <PackageReference Include="Verify.XunitV3" Version="31.9.3" />
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj" />
+    <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj" />
     <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
   </ItemGroup>
 

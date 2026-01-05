@@ -102,12 +102,6 @@
     </Project>
   </Folder>
   <Folder Name="/test/">
-    <Project Path="AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj">
-      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
-      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
-      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
-      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
-    </Project>
     <Project Path="test/AlexaVoxCraft.MediatR.Generator.Tests/AlexaVoxCraft.MediatR.Generator.Tests.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
@@ -128,6 +122,7 @@
     </Project>
     <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.Smapi.Tests/AlexaVoxCraft.Smapi.Tests.csproj" />
+    <Project Path="test/AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj" />
     <Project Path="test\AlexaVoxCraft.Model.Apl.Legacy.Tests\AlexaVoxCraft.Model.Apl.Legacy.Tests.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />

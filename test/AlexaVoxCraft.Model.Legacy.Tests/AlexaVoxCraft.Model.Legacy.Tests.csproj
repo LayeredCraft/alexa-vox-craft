@@ -18,7 +18,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj"/>
-        <ProjectReference Include="..\..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
+        <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
     </ItemGroup>
     <ItemGroup>
         <None Remove="Examples\AskForPermissionConsent.json"/>
