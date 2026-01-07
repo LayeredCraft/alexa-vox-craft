@@ -58,6 +58,7 @@ public class APLComponentConverter :BasePolymorphicConverter<APLComponent>
         [nameof(AlexaTextListItem)] = typeof(AlexaTextListItem),
         [nameof(AlexaTransportControls)] = typeof(AlexaTransportControls),
         [nameof(Sequence)] = typeof(Sequence),
+        [nameof(Spacer)] = typeof(Spacer),
         [nameof(VectorGraphic)] = typeof(VectorGraphic),
     };
     protected override IDictionary<string, Type> DerivedTypes => AplComponentLookup;
