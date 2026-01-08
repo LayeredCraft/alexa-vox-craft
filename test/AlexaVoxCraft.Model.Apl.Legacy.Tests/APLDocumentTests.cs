@@ -187,13 +187,13 @@ public class APLDocumentTests
     {
         var result = Utility.ExampleFileContent<RenderDocumentDirective>("KeeferCustom.json");
         var document = result.Document as APLDocument;
-        Assert.Equal(APLDocumentVersion.V1_1, document.Version);
-        Assert.Equal(10, document.Styles.Count);
+        Assert.Equal(APLDocumentVersion.V1_1, document!.Version);
+        Assert.Equal(10, document.Styles!.Count);
         Assert.Equal(2, document.Styles["textStylePrimary"].Extends.Count);
         Assert.Equal(2, document.MainTemplate.Items.Count);
-        Assert.Equal(3, ((Container)document.MainTemplate.Items[1]).Items.Value.Count);
-        Assert.Single(result.DataSources);
-        var dataSource = Assert.IsType<ObjectDataSource>(result.DataSources["bodyTemplate7Data"]);
+        Assert.Equal(3, ((Container)document.MainTemplate.Items[1]).Items.Items!.Count);
+        Assert.Single(result.DataSources!);
+        var dataSource = Assert.IsType<ObjectDataSource>(result.DataSources!["bodyTemplate7Data"]);
         Assert.True(dataSource.TopLevelData.ContainsKey("backgroundImage"));
         Assert.IsType<Dictionary<string, object>>(dataSource.TopLevelData["backgroundImage"]);
     }
