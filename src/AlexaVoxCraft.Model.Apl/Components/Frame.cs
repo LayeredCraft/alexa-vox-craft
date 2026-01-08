@@ -14,7 +14,7 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
 
     public Frame(APLComponent item)
     {
-        Item = new List<APLComponent> { item };
+        Item = [item];
     }
 
     public Frame(params APLComponent[] item) : this((IEnumerable<APLComponent>)item)
@@ -23,7 +23,7 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
 
     public Frame(IEnumerable<APLComponent> item)
     {
-        Item = new List<APLComponent>(item);
+        Item = new APLCollection<APLComponent>(item);
     }
 
 
@@ -69,7 +69,7 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
 
     [JsonPropertyName("item")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>>? Item { get; set; }
+    public APLCollection<APLComponent>? Item { get; set; }
 
     [JsonPropertyName("borderStrokeWidth")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -83,7 +83,7 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
             var itemProp = info.Properties.FirstOrDefault(p => p.Name == "item");
             if (itemProp is not null)
             {
-                itemProp.CustomConverter = new APLComponentListConverter(false);
+                itemProp.CustomConverter = new APLCollectionConverter<APLComponent>(false);
             }
         });
     }

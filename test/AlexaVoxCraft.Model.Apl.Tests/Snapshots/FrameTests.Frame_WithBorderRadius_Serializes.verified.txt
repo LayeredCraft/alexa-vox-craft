@@ -1,0 +1,1 @@
+﻿{"type":"Frame","borderColor":"#000000","borderRadius":"8dp","borderWidth":2,"item":{"type":"Text","text":"Bordered"}}

@@ -1,0 +1,1 @@
+﻿{"type":"Frame","backgroundColor":"#FFFFFF","borderColor":"#0000FF","borderRadius":"10dp","borderWidth":3,"item":{"type":"Text","text":"Complete Border"},"borderStrokeWidth":"2dp"}

@@ -1,0 +1,1 @@
+﻿{"type":"Container","alignItems":"center","direction":"column","firstItem":{"type":"Spacer","height":"8dp"},"lastItem":{"type":"Spacer","height":"16dp"},"items":[{"type":"Text","text":"Content 1"},{"type":"Text","text":"Content 2"},{"type":"Text","text":"Content 3"}],"justifyContent":"spaceAround","numbered":true,"wrap":"wrap"}

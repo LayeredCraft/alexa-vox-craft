@@ -105,26 +105,24 @@ public class APLEnumerableValueConverter<TValue, TList> : JsonConverter<APLValue
 
         using var document = JsonDocument.ParseValue(ref reader);
         var root = document.RootElement;
-        if (root.ValueKind == JsonValueKind.Object)
+        switch (root.ValueKind)
         {
-            returnValue.Value = (TList)new List<TValue> { root.Deserialize<TValue>(options) }.AsEnumerable();
-            returnValue.IsSingle = true;
-        }
-        else if (root.ValueKind == JsonValueKind.Array)
-        {
-            returnValue.Value = (TList)root.EnumerateArray()
-                .Select(element => JsonSerializer.Deserialize<TValue>(element.GetRawText(), options))
-                // The ToList() is required here to iterate the array as the JsonDcoument above will be disposed
-                .ToList()
-                .AsEnumerable();
-        }
-        else if (root.ValueKind == JsonValueKind.String)
-        {
-            returnValue.Expression = root.GetString();
-        }
-        else
-        {
-            throw new JsonException("Invalid JSON for Enumeration");
+            case JsonValueKind.Object:
+                returnValue.Value = (TList)new List<TValue> { root.Deserialize<TValue>(options) }.AsEnumerable();
+                returnValue.IsSingle = true;
+                break;
+            case JsonValueKind.Array:
+                returnValue.Value = (TList)root.EnumerateArray()
+                    .Select(element => JsonSerializer.Deserialize<TValue>(element.GetRawText(), options))
+                    // The ToList() is required here to iterate the array as the JsonDcoument above will be disposed
+                    .ToList()
+                    .AsEnumerable();
+                break;
+            case JsonValueKind.String:
+                returnValue.Expression = root.GetString();
+                break;
+            default:
+                throw new JsonException("Invalid JSON for Enumeration");
         }
 
         return returnValue;

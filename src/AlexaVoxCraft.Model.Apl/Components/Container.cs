@@ -20,14 +20,14 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     public Container(IEnumerable<APLComponent> items)
     {
-        Items = items.ToList();
+        Items = new APLCollection<APLComponent>(items);
     }
 
     [JsonPropertyName("type")] public override string Type => nameof(Container);
 
     [JsonPropertyName("alignItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> AlignItems { get; set; }
+    public APLValue<string>? AlignItems { get; set; }
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -35,27 +35,27 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("direction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Direction { get; set; }
+    public APLValue<string>? Direction { get; set; }
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>> FirstItem { get; set; }
+    public APLCollection<APLComponent>? FirstItem { get; set; }
 
     [JsonPropertyName("lastItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>> LastItem { get; set; }
+    public APLCollection<APLComponent> LastItem { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>> Items { get; set; }
+    public APLCollection<APLComponent>? Items { get; set; }
 
     [JsonPropertyName("justifyContent")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> JustifyContent { get; set; }
+    public APLValue<string>? JustifyContent { get; set; }
 
     [JsonPropertyName("numbered")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> Numbered { get; set; }
+    public APLValue<bool?>? Numbered { get; set; }
 
     [JsonPropertyName("wrap")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -67,16 +67,16 @@ public class Container : APLComponent, IJsonSerializable<Container>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
-            if (dataProp is not null)
-            {
-                dataProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
+            dataProp?.CustomConverter = new GenericSingleOrListConverter<object>(false);
 
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
-            {
-                itemsProp.CustomConverter = new APLComponentListConverter(false);
-            }
+            itemsProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
+
+            var firstItemProp = info.Properties.FirstOrDefault(p => p.Name == "firstItem");
+            firstItemProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
+
+            var lastItemProp = info.Properties.FirstOrDefault(p => p.Name == "lastItem");
+            lastItemProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
         });
     }
 }

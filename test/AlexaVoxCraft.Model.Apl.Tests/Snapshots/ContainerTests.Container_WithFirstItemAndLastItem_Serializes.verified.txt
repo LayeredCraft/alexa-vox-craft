@@ -1,0 +1,1 @@
+﻿{"type":"Container","firstItem":{"type":"Spacer","height":"8dp"},"lastItem":{"type":"Spacer","height":"16dp"},"items":[{"type":"Text","text":"Content 1"},{"type":"Text","text":"Content 2"}]}

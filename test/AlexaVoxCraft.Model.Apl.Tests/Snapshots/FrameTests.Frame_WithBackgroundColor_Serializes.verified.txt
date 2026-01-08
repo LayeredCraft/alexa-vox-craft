@@ -1,0 +1,1 @@
+﻿{"type":"Frame","backgroundColor":"#FF0000","item":{"type":"Text","text":"Red Frame"}}

@@ -1,0 +1,1 @@
+﻿{"type":"Container","direction":"row","items":[{"type":"Text","text":"Left"},{"type":"Text","text":"Right"}]}
