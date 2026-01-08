@@ -1,0 +1,1 @@
+﻿{"type":"Frame","borderBottomLeftRadius":"12dp","borderBottomRightRadius":"16dp","borderTopLeftRadius":"4dp","borderTopRightRadius":"8dp","item":{"type":"Text","text":"Custom Corners"}}

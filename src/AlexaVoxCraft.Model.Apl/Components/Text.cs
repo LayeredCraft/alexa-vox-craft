@@ -16,7 +16,7 @@ public class Text : TextBase, IJsonSerializable<Text>
     [JsonPropertyName("type")]
     public override string Type => nameof(Text);
 
-    [JsonPropertyName("text")] public APLValue<string> Content { get; set; }
+    [JsonPropertyName("text")] public APLValue<string>? Content { get; set; }
 
     [JsonPropertyName("lang")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

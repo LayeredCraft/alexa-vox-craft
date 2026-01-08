@@ -27,7 +27,7 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("alignItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> AlignItems { get; set; }
+    public APLValue<string>? AlignItems { get; set; }
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -35,11 +35,11 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("direction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Direction { get; set; }
+    public APLValue<string>? Direction { get; set; }
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent> FirstItem { get; set; }
+    public APLCollection<APLComponent>? FirstItem { get; set; }
 
     [JsonPropertyName("lastItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -47,15 +47,15 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent> Items { get; set; }
+    public APLCollection<APLComponent>? Items { get; set; }
 
     [JsonPropertyName("justifyContent")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> JustifyContent { get; set; }
+    public APLValue<string>? JustifyContent { get; set; }
 
     [JsonPropertyName("numbered")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> Numbered { get; set; }
+    public APLValue<bool?>? Numbered { get; set; }
 
     [JsonPropertyName("wrap")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
