@@ -20,7 +20,7 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     public Container(IEnumerable<APLComponent> items)
     {
-        Items = items.ToList();
+        Items = new APLCollection<APLComponent>(items);
     }
 
     [JsonPropertyName("type")] public override string Type => nameof(Container);
@@ -39,15 +39,15 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>> FirstItem { get; set; }
+    public APLCollection<APLComponent> FirstItem { get; set; }
 
     [JsonPropertyName("lastItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>> LastItem { get; set; }
+    public APLCollection<APLComponent> LastItem { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>> Items { get; set; }
+    public APLCollection<APLComponent> Items { get; set; }
 
     [JsonPropertyName("justifyContent")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -75,7 +75,7 @@ public class Container : APLComponent, IJsonSerializable<Container>
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
             if (itemsProp is not null)
             {
-                itemsProp.CustomConverter = new APLComponentListConverter(false);
+                itemsProp.CustomConverter = new APLCollectionConverter<APLComponent>(false);
             }
         });
     }

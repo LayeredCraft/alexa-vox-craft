@@ -18,9 +18,9 @@ public class APLCollectionTests : TestBase
     {
         // Collection expression syntax: [item1, item2]
         APLCollection<APLComponent> collection = [
-            new Text { Content = "Hello" },
+            new Text { Content = "Hello"! },
             new Spacer { Height = "16dp" },
-            new Text { Content = "World" }
+            new Text { Content = "World"! }
         ];
 
         await TestHelper.VerifySerializedObject(collection, CreateOptions(true), "CollectionExpression");
@@ -30,7 +30,7 @@ public class APLCollectionTests : TestBase
     public async Task APLCollection_WithExpressionString_Serializes()
     {
         // Expression string assignment: "${data.items}"
-        APLCollection<APLComponent> collection = "${data.items}";
+        APLCollection<APLComponent> collection = "${data.items}"!;
 
         collection.Expression.Should().Be("${data.items}");
 
@@ -43,11 +43,11 @@ public class APLCollectionTests : TestBase
         // Implicit conversion from List<T>
         var list = new List<APLComponent>
         {
-            new Text { Content = "Item 1" },
-            new Text { Content = "Item 2" }
+            new Text { Content = "Item 1"! },
+            new Text { Content = "Item 2"! }
         };
 
-        APLCollection<APLComponent> collection = list;
+        APLCollection<APLComponent> collection = list!;
 
         collection.Items.Should().HaveCount(2);
 
@@ -58,8 +58,8 @@ public class APLCollectionTests : TestBase
     public async Task APLCollection_ImplicitFromArray_Serializes()
     {
         // Implicit conversion from T[]
-        APLComponent[] array = [new Text { Content = "Array Item" }];
-        APLCollection<APLComponent> collection = array;
+        APLComponent[] array = [new Text { Content = "Array Item"! }];
+        APLCollection<APLComponent> collection = array!;
 
         collection.Items.Should().HaveCount(1);
 
@@ -70,7 +70,7 @@ public class APLCollectionTests : TestBase
     public async Task APLCollection_AlwaysOutputArrayFalse_SingleItem_SerializesAsObject()
     {
         // AlwaysOutputArray=false: single-item as object
-        APLCollection<APLComponent> collection = [new Text { Content = "Single" }];
+        APLCollection<APLComponent> collection = [new Text { Content = "Single"! }];
 
         await TestHelper.VerifySerializedObject(collection, CreateOptions(false), "SingleItemAsObject");
     }
@@ -79,7 +79,7 @@ public class APLCollectionTests : TestBase
     public async Task APLCollection_AlwaysOutputArrayTrue_SingleItem_SerializesAsArray()
     {
         // AlwaysOutputArray=true: single-item as array
-        APLCollection<APLComponent> collection = [new Text { Content = "Single" }];
+        APLCollection<APLComponent> collection = [new Text { Content = "Single"! }];
 
         await TestHelper.VerifySerializedObject(collection, CreateOptions(true), "SingleItemAsArray");
     }
@@ -89,9 +89,9 @@ public class APLCollectionTests : TestBase
     {
         // LINQ operations via IEnumerable<T>
         APLCollection<APLComponent> collection = [
-            new Text { Content = "Text 1" },
+            new Text { Content = "Text 1"! },
             new Spacer { Height = "16dp" },
-            new Text { Content = "Text 2" }
+            new Text { Content = "Text 2"! }
         ];
 
         var textComponents = collection.OfType<Text>().ToList();
@@ -104,7 +104,7 @@ public class APLCollectionTests : TestBase
     [Fact]
     public void APLCollection_Deserializes_FromArray()
     {
-        var json = """[{"type":"Text","text":"Item 1"},{"type":"Text","text":"Item 2"}]""";
+        const string json = """[{"type":"Text","text":"Item 1"},{"type":"Text","text":"Item 2"}]""";
 
         var collection = JsonSerializer.Deserialize<APLCollection<APLComponent>>(json, CreateOptions(true));
 
@@ -118,7 +118,7 @@ public class APLCollectionTests : TestBase
     [Fact]
     public void APLCollection_Deserializes_FromSingleObject()
     {
-        var json = """{"type":"Text","text":"Single Item"}""";
+        const string json = """{"type":"Text","text":"Single Item"}""";
 
         var collection = JsonSerializer.Deserialize<APLCollection<APLComponent>>(json, CreateOptions(false));
 
@@ -131,7 +131,7 @@ public class APLCollectionTests : TestBase
     [Fact]
     public void APLCollection_Deserializes_FromExpression()
     {
-        var json = "\"${data.items}\"";
+        const string json = "\"${data.items}\"";
 
         var collection = JsonSerializer.Deserialize<APLCollection<APLComponent>>(json, CreateOptions(true));
 
