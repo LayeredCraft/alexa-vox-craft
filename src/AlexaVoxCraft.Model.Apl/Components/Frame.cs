@@ -78,13 +78,5 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
     public new static void RegisterTypeInfo<T>() where T : Frame
     {
         APLComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var itemProp = info.Properties.FirstOrDefault(p => p.Name == "item");
-            if (itemProp is not null)
-            {
-                itemProp.CustomConverter = new APLCollectionConverter<APLComponent>(false);
-            }
-        });
     }
 }

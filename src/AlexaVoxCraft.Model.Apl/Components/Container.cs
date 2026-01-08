@@ -68,15 +68,6 @@ public class Container : APLComponent, IJsonSerializable<Container>
         {
             var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
             dataProp?.CustomConverter = new GenericSingleOrListConverter<object>(false);
-
-            var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            itemsProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
-
-            var firstItemProp = info.Properties.FirstOrDefault(p => p.Name == "firstItem");
-            firstItemProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
-
-            var lastItemProp = info.Properties.FirstOrDefault(p => p.Name == "lastItem");
-            lastItemProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
         });
     }
 }

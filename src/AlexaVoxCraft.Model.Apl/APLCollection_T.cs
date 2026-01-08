@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
 
 namespace AlexaVoxCraft.Model.Apl;
 
 [CollectionBuilder(typeof(APLCollectionBuilder), nameof(APLCollectionBuilder.Create))]
+[JsonConverter(typeof(APLCollectionConverterFactory))]
 public class APLCollection<T> : APLValue, IEnumerable<T>
 {
     private List<T> _items;
