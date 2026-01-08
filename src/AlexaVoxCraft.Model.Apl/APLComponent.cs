@@ -142,23 +142,23 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("onMount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnMount { get; set; }
+    public APLCollection<APLCommand>? OnMount { get; set; }
 
     [JsonPropertyName("onCursorEnter")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnCursorEnter { get; set; }
+    public APLCollection<APLCommand>? OnCursorEnter { get; set; }
 
     [JsonPropertyName("onCursorExit")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnCursorExit { get; set; }
+    public APLCollection<APLCommand>? OnCursorExit { get; set; }
 
     [JsonPropertyName("onSpeechMark")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSpeechMark { get; set; }
+    public APLCollection<APLCommand>? OnSpeechMark { get; set; }
 
     [JsonPropertyName("transform")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLTransform>>? Transform { get; set; }
+    public APLCollection<APLTransform>? Transform { get; set; }
 
     [JsonPropertyName("shadowColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -217,26 +217,6 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
             if (paddingProp is not null)
             {
                 paddingProp.CustomConverter = new GenericSingleOrListConverter<int>(false);
-            }
-            var onMountProp = info.Properties.FirstOrDefault(p => p.Name == "onMount");
-            if (onMountProp is not null)
-            {
-                onMountProp.CustomConverter = new APLCommandListConverter(false);
-            }
-            var onCursorEnterProp = info.Properties.FirstOrDefault(p => p.Name == "onCursorEnter");
-            if (onCursorEnterProp is not null)
-            {
-                onCursorEnterProp.CustomConverter = new APLCommandListConverter(false);
-            }
-            var onCursorExitProp = info.Properties.FirstOrDefault(p => p.Name == "onCursorExit");
-            if (onCursorExitProp is not null)
-            {
-                onCursorExitProp.CustomConverter = new APLCommandListConverter(false);
-            }
-            var onSpeechMarkProp = info.Properties.FirstOrDefault(p => p.Name == "onSpeechMark");
-            if (onSpeechMarkProp is not null)
-            {
-                onSpeechMarkProp.CustomConverter = new APLCommandListConverter(false);
             }
             var entitiesProp = info.Properties.FirstOrDefault(p => p.Name == "entities");
             if (entitiesProp is not null)
