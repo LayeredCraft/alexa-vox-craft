@@ -33,11 +33,8 @@ public static class APLSupport
         Parameter.RegisterTypeInfo<Parameter>();
         CommandDefinition.RegisterTypeInfo<CommandDefinition>();
         AudioLayout.AddSupport();
-        Sequencer.AddSupport();
-        Selector.AddSupport();
         DynamicIndexList.RegisterTypeInfo<DynamicIndexList>();
         DynamicTokenList.RegisterTypeInfo<DynamicTokenList>();
-        Mixer.AddSupport();
         Style.RegisterTypeInfo<Style>();
         APLDocument.RegisterTypeInfo<APLDocument>();
         APLKeyboardHandler.AddSupport();
@@ -113,5 +110,7 @@ public static class APLSupport
         AlexaTransportControls.RegisterTypeInfo<AlexaTransportControls>();
         Sequence.RegisterTypeInfo<Sequence>();
         VectorGraphic.RegisterTypeInfo<VectorGraphic>();
+        Reinflate.RegisterTypeInfo<Reinflate>();
+        APLGradient.RegisterTypeInfo<APLGradient>();
     }
 }

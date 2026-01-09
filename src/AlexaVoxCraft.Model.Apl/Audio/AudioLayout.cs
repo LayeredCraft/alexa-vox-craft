@@ -48,15 +48,9 @@ public class AudioLayout
         AlexaJsonOptions.RegisterTypeModifier<AudioLayout>(typeInfo =>
         {
             var parameterProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "parameters");
-            if (parameterProp is not null)
-            {
-                parameterProp.CustomConverter = new ParameterListConverter(true);
-            }
+            parameterProp?.CustomConverter = new ParameterListConverter(true);
             var itemsProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
-            {
-                itemsProp.CustomConverter = new APLAComponentListConverter(true);
-            }
+            itemsProp?.CustomConverter = new APLAComponentListConverter(true);
         });
     }
 }

@@ -61,15 +61,9 @@ public class Layout
                 });
             }
             var parametersProp = info.Properties.FirstOrDefault(p => p.Name == "parameters");
-            if (parametersProp is not null)
-            {
-                parametersProp.CustomConverter = new ParameterListConverter(true);
-            }
+            parametersProp?.CustomConverter = new ParameterListConverter(true);
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
-            {
-                itemsProp.CustomConverter = new APLComponentListConverter(false);
-            }
+            itemsProp?.CustomConverter = new APLComponentListConverter(false);
         });
     }
 }

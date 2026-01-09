@@ -23,7 +23,7 @@ public class APLValueCollectionConverterFactory : JsonConverterFactory
             typeof(APLValueCollectionConverter<>).MakeGenericType(itemType),
             BindingFlags.Instance | BindingFlags.Public,
             binder: null,
-            args: [false],
+            args: [true],  // Default to always output arrays (backward compatible with APLEnumerableValueConverter)
             culture: null)!;
     }
 }

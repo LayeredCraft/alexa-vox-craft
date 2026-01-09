@@ -211,5 +211,10 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
     public new static void RegisterTypeInfo<T>() where T : APLComponent
     {
         APLComponentBase.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var preserveProp = info.Properties.FirstOrDefault(p => p.Name == "preserve");
+            preserveProp?.CustomConverter = new APLValueCollectionConverter<string>(true);
+        });
     }
 }
