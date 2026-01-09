@@ -5,7 +5,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl;
 
-public class VisibilityChangeHandler : IJsonSerializable<VisibilityChangeHandler>
+public class VisibilityChangeHandler
 {
     [JsonPropertyName("when")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -16,13 +16,4 @@ public class VisibilityChangeHandler : IJsonSerializable<VisibilityChangeHandler
     public APLValue<string> Description { get; set; }
 
     [JsonPropertyName("commands")] public APLValueCollection<APLCommand> Commands { get; set; }
-
-    public static void RegisterTypeInfo<T>() where T : VisibilityChangeHandler
-    {
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var prop = info.Properties.FirstOrDefault(p => p.Name == "commands");
-            prop?.CustomConverter = new APLCommandListConverter(true);
-        });
-    }
 }

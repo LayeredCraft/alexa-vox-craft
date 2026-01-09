@@ -6,10 +6,19 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 
-public abstract class AVGItem : IAVGItem
+public abstract class AVGItem : IAVGItem, IJsonSerializable<AVGItem>
 {
     [JsonPropertyName("type")] public abstract string Type { get; }
 
     [JsonPropertyName("filters")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<IAVGFilter> Filters { get; set; }
+
+    public static void RegisterTypeInfo<T>() where T : AVGItem
+    {
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var filtersProp = info.Properties.FirstOrDefault(p => p.Name == "filters");
+            filtersProp?.CustomConverter = new AvgFilterListConverter(false);
+        });
+    }
 }

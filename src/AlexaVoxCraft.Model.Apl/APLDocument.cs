@@ -68,9 +68,11 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
         APLDocumentBase.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
-            var onDisplayStateChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onDisplayStateChange");
-            onDisplayStateChangeProp?.CustomConverter = new APLCommandListConverter(true);
+            var handleKeyUpProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyUp");
+            handleKeyUpProp?.CustomConverter = new APLKeyboardHandlerConverter(false);
 
+            var handleKeyDownProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyDown");
+            handleKeyDownProp?.CustomConverter = new APLKeyboardHandlerConverter(false);
             // Configuration from base
             var extensionsProp = info.Properties.FirstOrDefault(p => p.Name == "extensions");
             if (extensionsProp is not null)
@@ -82,12 +84,6 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
                 });
                 extensionsProp.CustomConverter = new APLValueCollectionConverter<APLExtension>(true);
             }
-
-            var onConfigChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onConfigChange");
-            onConfigChangeProp?.CustomConverter = new APLCommandListConverter(true);
-
-            var onMountProp = info.Properties.FirstOrDefault(p => p.Name == "onMount");
-            onMountProp?.CustomConverter = new APLCommandListConverter(true);
         });
     }
 }

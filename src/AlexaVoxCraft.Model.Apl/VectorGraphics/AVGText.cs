@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 
-public class AVGText : AVGItem
+public class AVGText : AVGItem, IJsonSerializable<AVGText>
 {
     [JsonPropertyName("type")] public override string Type => "text";
 
@@ -73,4 +73,9 @@ public class AVGText : AVGItem
     [JsonPropertyName("letterSpacing")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int?> LetterSpacing { get; set; }
+
+    public static void RegisterTypeInfo<T>() where T : AVGText
+    {
+        AVGItem.RegisterTypeInfo<T>();
+    }
 }

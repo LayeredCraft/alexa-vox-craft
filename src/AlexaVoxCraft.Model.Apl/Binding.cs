@@ -38,6 +38,8 @@ public class Binding : IJsonSerializable<Binding>
                 var binding = (T)obj;
                 return binding.Type != ParameterType.any;
             };
+            var commandsProp = info.Properties.FirstOrDefault(p => p.Name == "commands");
+            commandsProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

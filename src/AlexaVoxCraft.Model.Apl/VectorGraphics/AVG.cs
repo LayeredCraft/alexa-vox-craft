@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 
-public class AVG
+public class AVG : IJsonSerializable<AVG>
 {
     [JsonPropertyName("type")] public string Type => nameof(AVG);
 
@@ -60,4 +63,15 @@ public class AVG
     [JsonPropertyName("viewportWidth")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int?>? ViewportWidth { get; set; }
+
+    public static void RegisterTypeInfo<T>() where T : AVG
+    {
+        AlexaJsonOptions.RegisterTypeModifier<AVG>(info =>
+        {
+            var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
+            dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
+            var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
+            itemsProp?.CustomConverter = new AVGItemListConverter(false);
+        });
+    }
 }

@@ -41,15 +41,14 @@ public class ExecuteCommandsDirective : IDirective, IJsonSerializable<ExecuteCom
 
     [JsonPropertyName("token")] public string Token { get; set; }
 
-    [JsonPropertyName("commands")]
-    public IList<APLCommand> Commands { get; set; }
+    [JsonPropertyName("commands")] public IList<APLCommand> Commands { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : ExecuteCommandsDirective
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var commandsProp = info.Properties.FirstOrDefault(p => p.Name == "commands");
-            commandsProp?.CustomConverter = new APLCommandListConverter(true);
+            commandsProp?.CustomConverter = new GenericSingleOrListConverter<APLCommand>(true);
         });
 
     }

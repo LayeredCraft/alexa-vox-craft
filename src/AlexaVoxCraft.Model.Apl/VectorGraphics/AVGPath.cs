@@ -7,7 +7,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 
-public class AVGPath : AVGItem
+public class AVGPath : AVGItem, IJsonSerializable<AVGPath>
 {
     [JsonPropertyName("type")] public override string Type => "path";
 
@@ -70,6 +70,19 @@ public class AVGPath : AVGItem
     [JsonPropertyName("style")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? Style { get; set; }
+
+    public static void RegisterTypeInfo<T>() where T : AVGPath
+    {
+        AVGItem.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var strokeDashArrayProp = info.Properties.FirstOrDefault(p => p.Name == "strokeDashArray");
+            if (strokeDashArrayProp is not null)
+            {
+                strokeDashArrayProp.CustomConverter = new APLValueCollectionConverter<APLValue<int?>>(false);
+            }
+        });
+    }
 }
 
 [System.Text.Json.Serialization.JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<StrokeLineJoin>))]

@@ -5,7 +5,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Gestures;
 
-public class LongPress : APLGesture
+public class LongPress : APLGesture, IJsonSerializable<LongPress>
 {
     [JsonPropertyName("type")]
     public override string Type => nameof(LongPress);
@@ -17,4 +17,16 @@ public class LongPress : APLGesture
     [JsonPropertyName("onLongPressEnd")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLCommand>? OnLongPressEnd { get; set; }
+
+    public static void RegisterTypeInfo<T>() where T : LongPress
+    {
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var onLongPressStartProp = info.Properties.FirstOrDefault(p => p.Name == "onLongPressStart");
+            onLongPressStartProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onLongPressEndProp = info.Properties.FirstOrDefault(p => p.Name == "onLongPressEnd");
+            onLongPressEndProp?.CustomConverter = new APLCommandListConverter(false);
+        });
+    }
 }

@@ -1,6 +1,6 @@
 ﻿namespace AlexaVoxCraft.Model.Apl.JsonConverter;
 
-public class ParameterListConverter : GenericSingleOrListConverter<Parameter>
+public class ParameterListConverter : SingleOrListConverter<Parameter>
 {
     public ParameterListConverter(bool alwaysOutputArray) : base(alwaysOutputArray) { }
 

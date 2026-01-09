@@ -5,7 +5,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 
-public class AVGGroup : AVGItem
+public class AVGGroup : AVGItem, IJsonSerializable<AVGGroup>
 {
     [JsonPropertyName("type")] public override string Type => "group";
 
@@ -28,4 +28,14 @@ public class AVGGroup : AVGItem
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<IAVGItem> Items { get; set; }
+
+    public static void RegisterTypeInfo<T>() where T : AVGGroup
+    {
+        AVGItem.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
+            itemsProp?.CustomConverter = new AVGItemListConverter(false);
+        });
+    }
 }

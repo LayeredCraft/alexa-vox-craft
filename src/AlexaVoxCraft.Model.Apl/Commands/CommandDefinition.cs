@@ -23,6 +23,8 @@ public class CommandDefinition : IJsonSerializable<CommandDefinition>
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(typeInfo =>
         {
+            var parametersProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "parameters");
+            parametersProp?.CustomConverter = new ParameterValueCollectionConverter(true);
             var commandsProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "commands");
             commandsProp?.CustomConverter = new APLCommandListConverter(false);
         });

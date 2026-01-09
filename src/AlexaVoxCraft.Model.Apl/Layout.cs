@@ -60,7 +60,7 @@ public class Layout
             var parametersProp = info.Properties.FirstOrDefault(p => p.Name == "parameters");
             parametersProp?.CustomConverter = new ParameterListConverter(true);
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            itemsProp?.CustomConverter = new APLComponentListConverter(false);
+            itemsProp?.CustomConverter = new GenericSingleOrListConverter<APLComponent>(false);
         });
     }
 }

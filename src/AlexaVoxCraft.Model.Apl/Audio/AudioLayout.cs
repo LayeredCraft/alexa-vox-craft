@@ -50,7 +50,7 @@ public class AudioLayout
             var parameterProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "parameters");
             parameterProp?.CustomConverter = new ParameterListConverter(true);
             var itemsProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "items");
-            itemsProp?.CustomConverter = new APLAComponentListConverter(true);
+            itemsProp?.CustomConverter = new GenericSingleOrListConverter<APLAComponent>(true);
         });
     }
 }

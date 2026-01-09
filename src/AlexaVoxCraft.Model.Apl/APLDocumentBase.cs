@@ -83,12 +83,7 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
                     var document = (T)obj;
                     return document.Extensions?.Any() ?? false;
                 });
-                extensionsProp.CustomConverter = new APLValueCollectionConverter<APLExtension>(true);
             }
-            var onConfigChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onConfigChange");
-            onConfigChangeProp?.CustomConverter = new APLCommandListConverter(true);
-            var onMountProp = info.Properties.FirstOrDefault(p => p.Name == "onMount");
-            onMountProp?.CustomConverter = new APLCommandListConverter(true);
         });
     }
 }

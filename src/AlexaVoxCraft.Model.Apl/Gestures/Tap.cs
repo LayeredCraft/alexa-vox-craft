@@ -5,7 +5,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Gestures;
 
-public class Tap : APLGesture
+public class Tap : APLGesture, IJsonSerializable<Tap>
 {
     [JsonPropertyName("type")] public override string Type => nameof(Tap);
 
@@ -13,4 +13,12 @@ public class Tap : APLGesture
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLCommand> OnTap { get; set; }
 
+    public static void RegisterTypeInfo<T>() where T : Tap
+    {
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var onTapProp = info.Properties.FirstOrDefault(p => p.Name == "onTap");
+            onTapProp?.CustomConverter = new APLCommandListConverter(false);
+        });
+    }
 }

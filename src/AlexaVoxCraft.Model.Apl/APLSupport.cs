@@ -67,7 +67,6 @@ public static class APLSupport
         AlexaImageList.RegisterTypeInfo<AlexaImageList>();
         AlexaLists.RegisterTypeInfo<AlexaLists>();
         AlexaPaginatedList.RegisterTypeInfo<AlexaPaginatedList>();
-        TickHandler.RegisterTypeInfo<TickHandler>();
         Frame.RegisterTypeInfo<Frame>();
         AlexaProgressBarBase.RegisterTypeInfo<AlexaProgressBar>();
         AlexaProgressBar.RegisterTypeInfo<AlexaProgressBar>();
@@ -98,7 +97,6 @@ public static class APLSupport
         SendTokenListDataDirective.RegisterTypeInfo<SendTokenListDataDirective>();
         AlexaHeader.RegisterTypeInfo<AlexaHeader>();
         AlexaImage.RegisterTypeInfo<AlexaImage>();
-        VisibilityChangeHandler.RegisterTypeInfo<VisibilityChangeHandler>();
         AlexaBackground.RegisterTypeInfo<AlexaBackground>();
         AlexaButton.RegisterTypeInfo<AlexaButton>();
         AlexaDivider.RegisterTypeInfo<AlexaDivider>();
@@ -110,7 +108,6 @@ public static class APLSupport
         AlexaTransportControls.RegisterTypeInfo<AlexaTransportControls>();
         Sequence.RegisterTypeInfo<Sequence>();
         VectorGraphic.RegisterTypeInfo<VectorGraphic>();
-        APLGradient.RegisterTypeInfo<APLGradient>();
         APLAMultiChildComponent.RegisterTypeInfo<APLAMultiChildComponent>();
         Audio.Audio.RegisterTypeInfo<Audio.Audio>();
         Mixer.RegisterTypeInfo<Mixer>();
@@ -124,5 +121,15 @@ public static class APLSupport
         Sequential.RegisterTypeInfo<Sequential>();
         IngredientListItem.RegisterTypeInfo<IngredientListItem>();
         APLAction.RegisterTypeInfo<APLAction>();
+        DoublePress.RegisterTypeInfo<DoublePress>();
+        LongPress.RegisterTypeInfo<LongPress>();
+        SwipeAway.RegisterTypeInfo<SwipeAway>();
+        Tap.RegisterTypeInfo<Tap>();
+        AVG.RegisterTypeInfo<AVG>();
+        AVGGroup.RegisterTypeInfo<AVGGroup>();
+        AVGItem.RegisterTypeInfo<AVGItem>();
+        AVGPath.RegisterTypeInfo<AVGPath>();
+        AVGText.RegisterTypeInfo<AVGText>();
+        APLPageMoveHandler.RegisterTypeInfo<APLPageMoveHandler>();
     }
 }

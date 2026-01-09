@@ -5,7 +5,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl;
 
-public class TickHandler : IJsonSerializable<TickHandler>
+public class TickHandler
 {
     [JsonPropertyName("when")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -20,13 +20,4 @@ public class TickHandler : IJsonSerializable<TickHandler>
     public APLValue<int>? MinimumDelay { get; set; }
 
     [JsonPropertyName("commands")] public APLValueCollection<APLCommand> Commands { get; set; }
-
-    public static void RegisterTypeInfo<T>() where T : TickHandler
-    {
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "commands");
-            primaryActionProp?.CustomConverter = new APLCommandListConverter(true);
-        });
-    }
 }
