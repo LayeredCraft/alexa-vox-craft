@@ -46,27 +46,27 @@ public abstract class AlexaSliderBase : TouchComponent, IJsonSerializable<AlexaS
 
     [JsonPropertyName("onBlurCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnBlurCommand { get; set; }
+    public APLValueCollection<APLCommand>>? OnBlurCommand { get; set; }
 
     [JsonPropertyName("onUpCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnUpCommand { get; set; }
+    public APLValueCollection<APLCommand>>? OnUpCommand { get; set; }
 
     [JsonPropertyName("onDownCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnDownCommand { get; set; }
+    public APLValueCollection<APLCommand>>? OnDownCommand { get; set; }
 
     [JsonPropertyName("onFocusCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnFocusCommand { get; set; }
+    public APLValueCollection<APLCommand>>? OnFocusCommand { get; set; }
 
     [JsonPropertyName("onMoveCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnMoveCommand { get; set; }
+    public APLValueCollection<APLCommand>>? OnMoveCommand { get; set; }
 
     [JsonPropertyName("handleKeyDownCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? HandleKeyDownCommand { get; set; }
+    public APLValueCollection<APLCommand>>? HandleKeyDownCommand { get; set; }
 
     [JsonPropertyName("metadataDisplayed")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

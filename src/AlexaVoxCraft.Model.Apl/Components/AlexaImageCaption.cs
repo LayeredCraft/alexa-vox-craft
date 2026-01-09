@@ -49,7 +49,7 @@ public class AlexaImageCaption : ResponsiveTemplate, IJsonSerializable<AlexaImag
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>> PrimaryAction { get; set; }
 
     [JsonPropertyName("touchForward")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

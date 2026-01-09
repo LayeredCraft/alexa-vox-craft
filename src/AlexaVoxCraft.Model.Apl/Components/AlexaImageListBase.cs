@@ -39,7 +39,7 @@ public abstract class AlexaImageListBase : ResponsiveTemplate, IJsonSerializable
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>?>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>?>? PrimaryAction { get; set; }
 
     [JsonPropertyName("headerAttributionOpacity")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

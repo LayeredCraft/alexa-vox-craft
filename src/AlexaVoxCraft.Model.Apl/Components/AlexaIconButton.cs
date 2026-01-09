@@ -24,7 +24,7 @@ public class AlexaIconButton : APLComponent, IJsonSerializable<AlexaIconButton>
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>>? PrimaryAction { get; set; }
 
     [JsonPropertyName("vectorSource")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -12,7 +12,7 @@ public class GridSequence : ActionableComponent, IJsonSerializable<GridSequence>
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Data { get; set; }
+    public APLValueCollection<object>>? Data { get; set; }
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -24,15 +24,15 @@ public class GridSequence : ActionableComponent, IJsonSerializable<GridSequence>
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>>? Items { get; set; }
+    public APLValueCollection<APLComponent>>? Items { get; set; }
 
     [JsonPropertyName("childHeights")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLDimensionValue>>? ChildHeights { get; set; }
+    public APLValueCollection<APLDimensionValue>>? ChildHeights { get; set; }
 
     [JsonPropertyName("childWidths")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLDimensionValue>>? ChildWidths { get; set; }
+    public APLValueCollection<APLDimensionValue>>? ChildWidths { get; set; }
 
     [JsonPropertyName("numbered")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -40,7 +40,7 @@ public class GridSequence : ActionableComponent, IJsonSerializable<GridSequence>
 
     [JsonPropertyName("onScroll")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnScroll { get; set; }
+    public APLValueCollection<APLCommand>>? OnScroll { get; set; }
 
     [JsonPropertyName("scrollDirection")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

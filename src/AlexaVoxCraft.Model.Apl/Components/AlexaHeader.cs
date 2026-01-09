@@ -50,7 +50,7 @@ public class AlexaHeader : APLComponent, IJsonSerializable<AlexaHeader>
 
     [JsonPropertyName("headerBackButtonCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> HeaderBackButtonCommand { get; set; }
+    public APLValueCollection<APLCommand>> HeaderBackButtonCommand { get; set; }
 
     [JsonPropertyName("headerBackgroundColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

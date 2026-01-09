@@ -37,27 +37,27 @@ public class Video : APLComponent, IJsonSerializable<Video>
 
     [JsonPropertyName("source")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<VideoSource>>? Source { get; set; }
+    public APLValueCollection<VideoSource>>? Source { get; set; }
 
     [JsonPropertyName("onPause")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnPause { get; set; }
+    public APLValueCollection<APLCommand>>? OnPause { get; set; }
 
     [JsonPropertyName("onPlay")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnPlay { get; set; }
+    public APLValueCollection<APLCommand>>? OnPlay { get; set; }
 
     [JsonPropertyName("onTrackUpdate")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnTrackUpdate { get; set; }
+    public APLValueCollection<APLCommand>>? OnTrackUpdate { get; set; }
 
     [JsonPropertyName("onTrackReady")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnTrackReady { get; set; }
+    public APLValueCollection<APLCommand>>? OnTrackReady { get; set; }
 
     [JsonPropertyName("onTrackFail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnTrackFail { get; set; }
+    public APLValueCollection<APLCommand>>? OnTrackFail { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : Video
     {

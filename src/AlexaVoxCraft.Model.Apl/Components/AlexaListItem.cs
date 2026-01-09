@@ -14,7 +14,7 @@ public abstract class AlexaListItem : APLComponent, IJsonSerializable<AlexaListI
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>>? PrimaryAction { get; set; }
 
     [JsonPropertyName("primaryText")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

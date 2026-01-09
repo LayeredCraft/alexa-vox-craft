@@ -18,12 +18,12 @@ public class DataStoreExtension : APLExtension
         Name = name;
     }
 
-    public void OnObjectChanged(APLDocumentBase document, APLValue<IList<APLCommand>> commands)
+    public void OnObjectChanged(APLDocumentBase document, APLValueCollection<APLCommand>> commands)
     {
         document.AddHandler($"{Name}:{ObjectChangedEventName}", commands);
     }
 
-    public void OnObjectReceived(APLDocumentBase document, APLValue<IList<APLCommand>> commands)
+    public void OnObjectReceived(APLDocumentBase document, APLValueCollection<APLCommand>> commands)
     {
         document.AddHandler($"{Name}:{ObjectReceivedEventName}", commands);
     }

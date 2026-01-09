@@ -29,7 +29,7 @@ public class AlexaSwipeToAction : APLComponent, IJsonSerializable<AlexaSwipeToAc
 
     [JsonPropertyName("button1Command")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Button1Command { get; set; }
+    public APLValueCollection<APLCommand>>? Button1Command { get; set; }
 
     [JsonPropertyName("button1Text")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -37,7 +37,7 @@ public class AlexaSwipeToAction : APLComponent, IJsonSerializable<AlexaSwipeToAc
 
     [JsonPropertyName("button2Command")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Button2Command { get; set; }
+    public APLValueCollection<APLCommand>>? Button2Command { get; set; }
 
     [JsonPropertyName("button2Text")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -101,23 +101,23 @@ public class AlexaSwipeToAction : APLComponent, IJsonSerializable<AlexaSwipeToAc
 
     [JsonPropertyName("onButtonsHidden")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnButtonsHidden { get; set; }
+    public APLValueCollection<APLCommand>>? OnButtonsHidden { get; set; }
 
     [JsonPropertyName("onButtonsShown")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnButtonsShown { get; set; }
+    public APLValueCollection<APLCommand>>? OnButtonsShown { get; set; }
 
     [JsonPropertyName("onSwipeDone")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSwipeDone { get; set; }
+    public APLValueCollection<APLCommand>>? OnSwipeDone { get; set; }
 
     [JsonPropertyName("onSwipeMove")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSwipeMove { get; set; }
+    public APLValueCollection<APLCommand>>? OnSwipeMove { get; set; }
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>>? PrimaryAction { get; set; }
 
     [JsonPropertyName("primaryText")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

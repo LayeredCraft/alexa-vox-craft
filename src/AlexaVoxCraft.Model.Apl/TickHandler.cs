@@ -20,7 +20,7 @@ public class TickHandler : IJsonSerializable<TickHandler>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int>? MinimumDelay { get; set; }
 
-    [JsonPropertyName("commands")] public APLValue<IList<APLCommand>> Commands { get; set; }
+    [JsonPropertyName("commands")] public APLValueCollection<APLCommand>> Commands { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : TickHandler
     {

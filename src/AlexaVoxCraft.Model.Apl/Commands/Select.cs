@@ -13,15 +13,15 @@ public class Select : APLCommand
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>>? Commands { get; set; }
 
     [JsonPropertyName("otherwise")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Otherwise { get; set; }
+    public APLValueCollection<APLCommand>>? Otherwise { get; set; }
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Data { get; set; }
+    public APLValueCollection<object>>? Data { get; set; }
 
     public static void AddSupport()
     {

@@ -14,7 +14,7 @@ public class AlexaImageList : AlexaImageListBase, IJsonSerializable<AlexaImageLi
 
     [JsonPropertyName("listItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<AlexaImageListItem>>? ListItems { get; set; }
+    public APLValueCollection<AlexaImageListItem>>? ListItems { get; set; }
 
     [JsonPropertyName("videoAudioTrack")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

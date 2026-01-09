@@ -73,11 +73,11 @@ public class EditText : ActionableComponent, IJsonSerializable<EditText>
 
     [JsonPropertyName("onTextChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnTextChange { get; set; }
+    public APLValueCollection<APLCommand>>? OnTextChange { get; set; }
 
     [JsonPropertyName("onSubmit")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSubmit { get; set; }
+    public APLValueCollection<APLCommand>>? OnSubmit { get; set; }
 
     [JsonPropertyName("secureInput")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

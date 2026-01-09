@@ -24,7 +24,7 @@ public class AlexaLists : AlexaImageListBase, IJsonSerializable<AlexaLists>
     public APLValue<bool?>? ListImagePrimacy { get; set; }
 
     [JsonPropertyName("listItems")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<AlexaListItem>>? ListItems { get; set; }
+    public APLValueCollection<AlexaListItem>>? ListItems { get; set; }
 
     [JsonPropertyName("touchForward")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<bool?>? TouchForward { get; set; }

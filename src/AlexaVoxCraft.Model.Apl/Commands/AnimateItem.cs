@@ -6,7 +6,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Commands;
 
-public class AnimateItem : APLCommand, IJsonSerializable<AnimateItem>
+public class AnimateItem : APLCommand
 {
     [JsonPropertyName("type")] public override string Type => nameof(AnimateItem);
 
@@ -28,17 +28,6 @@ public class AnimateItem : APLCommand, IJsonSerializable<AnimateItem>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<RepeatMode>? RepeatMode { get; set; }
 
-    [JsonPropertyName("value")] public APLValue<IList<AnimatedProperty>> Value { get; set; }
+    [JsonPropertyName("value")] public APLValueCollection<AnimatedProperty> Value { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : AnimateItem
-    {
-        AlexaJsonOptions.RegisterTypeModifier<T>(typeInfo =>
-        {
-            var valueProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "value");
-            if (valueProp is not null)
-            {
-                valueProp.CustomConverter = new AnimatedPropertyListConverter(false);
-            }
-        });
-    }
 }

@@ -30,15 +30,15 @@ public class Pager : ActionableComponent, IJsonSerializable<Pager>
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>> FirstItem { get; set; }
+    public APLValueCollection<APLComponent>> FirstItem { get; set; }
 
     [JsonPropertyName("lastItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>> LastItem { get; set; }
+    public APLValueCollection<APLComponent>> LastItem { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>> Items { get; set; }
+    public APLValueCollection<APLComponent>> Items { get; set; }
 
     [JsonPropertyName("initialPage")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -50,15 +50,15 @@ public class Pager : ActionableComponent, IJsonSerializable<Pager>
 
     [JsonPropertyName("onPageChanged")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> OnPageChanged { get; set; }
+    public APLValueCollection<APLCommand>> OnPageChanged { get; set; }
 
     [JsonPropertyName("handlePageMove")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLPageMoveHandler>> HandlePageMove { get; set; }
+    public APLValueCollection<APLPageMoveHandler>> HandlePageMove { get; set; }
 
     [JsonPropertyName("onChildrenChanged")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> OnChildrenChanged { get; set; }
+    public APLValueCollection<APLCommand>> OnChildrenChanged { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : Pager
     {

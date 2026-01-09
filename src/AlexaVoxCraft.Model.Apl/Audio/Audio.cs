@@ -17,16 +17,5 @@ public class Audio : APLAComponent
 
     [JsonPropertyName("filter")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLAFilter>>? Filters { get; set; }
-    public static void AddSupport()
-    {
-        AlexaJsonOptions.RegisterTypeModifier<Audio>(typeInfo =>
-        {
-            var filterProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "filter");
-            if (filterProp is not null)
-            {
-                filterProp.CustomConverter = new APLAFilterListConverter(false);
-            }
-        });
-    }
+    public APLValueCollection<APLAFilter>? Filters { get; set; }
 }

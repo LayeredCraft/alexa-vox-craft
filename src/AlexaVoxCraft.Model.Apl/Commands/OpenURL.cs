@@ -14,7 +14,7 @@ public class OpenURL : APLCommand, IJsonSerializable<OpenURL>
 
     [JsonPropertyName("onFail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnFail { get; set; }
+    public APLValueCollection<APLCommand>>? OnFail { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : OpenURL
     {

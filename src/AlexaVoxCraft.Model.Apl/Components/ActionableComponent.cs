@@ -10,19 +10,19 @@ public abstract class ActionableComponent : APLComponent, IJsonSerializable<Acti
 {
     [JsonPropertyName("onBlur")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnBlur { get; set; }
+    public APLValueCollection<APLCommand>>? OnBlur { get; set; }
 
     [JsonPropertyName("onFocus")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnFocus { get; set; }
+    public APLValueCollection<APLCommand>>? OnFocus { get; set; }
 
     [JsonPropertyName("handleKeyDown")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLKeyboardHandler>>? HandleKeyDown { get; set; }
+    public APLValueCollection<APLKeyboardHandler>>? HandleKeyDown { get; set; }
 
     [JsonPropertyName("handleKeyUp")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLKeyboardHandler>>? HandleKeyUp { get; set; }
+    public APLValueCollection<APLKeyboardHandler>>? HandleKeyUp { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : ActionableComponent
     {

@@ -31,7 +31,7 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>> Data { get; set; }
+    public APLValueCollection<object> Data { get; set; }
 
     [JsonPropertyName("direction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

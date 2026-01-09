@@ -14,7 +14,7 @@ public class APLPageMoveHandler : IJsonSerializable<APLPageMoveHandler>
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>>? Commands { get; set; }
 
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

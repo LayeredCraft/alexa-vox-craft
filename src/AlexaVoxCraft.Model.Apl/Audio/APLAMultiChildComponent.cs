@@ -10,27 +10,9 @@ public abstract class APLAMultiChildComponent : APLAComponent
 {
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Data { get; set; }
+    public APLValueCollection<object>? Data { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLAComponent>>? Items { get; set; }
-
-    public static void AddSupport()
-    {
-        AlexaJsonOptions.RegisterTypeModifier<APLAMultiChildComponent>(typeInfo =>
-        {
-            var dataProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "data");
-            if (dataProp is not null)
-            {
-                dataProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
-
-            var itemsProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
-            {
-                itemsProp.CustomConverter = new APLAComponentListConverter(false);
-            }
-        });
-    }
+    public APLValueCollection<APLAComponent>? Items { get; set; }
 }

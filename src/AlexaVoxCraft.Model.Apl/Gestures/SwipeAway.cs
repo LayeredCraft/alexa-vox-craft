@@ -12,16 +12,16 @@ public class SwipeAway : APLGesture, IJsonSerializable<SwipeAway>
 
     [JsonPropertyName("onSwipeMove")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSwipeMove { get; set; }
+    public APLValueCollection<APLCommand>>? OnSwipeMove { get; set; }
 
     [JsonPropertyName("onSwipeDone")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSwipeDone { get; set; }
+    public APLValueCollection<APLCommand>>? OnSwipeDone { get; set; }
 
     [JsonPropertyName("item")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 
-    public APLValue<IList<APLComponent>>? Item { get; set; }
+    public APLValueCollection<APLComponent>>? Item { get; set; }
 
     [JsonPropertyName("action")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

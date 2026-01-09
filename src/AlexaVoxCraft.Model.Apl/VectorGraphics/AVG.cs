@@ -26,7 +26,7 @@ public class AVG
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Data { get; set; }
+    public APLValueCollection<object>>? Data { get; set; }
 
     [JsonPropertyName("height")] public APLAbsoluteDimensionValue Height { get; set; }
 
@@ -34,7 +34,7 @@ public class AVG
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<IAVGItem>>? Items { get; set; }
+    public APLValueCollection<IAVGItem>>? Items { get; set; }
 
     [JsonPropertyName("resources")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

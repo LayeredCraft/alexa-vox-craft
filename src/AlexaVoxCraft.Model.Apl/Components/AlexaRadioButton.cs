@@ -12,7 +12,7 @@ public class AlexaRadioButton : APLComponent, IJsonSerializable<AlexaRadioButton
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>>? PrimaryAction { get; set; }
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

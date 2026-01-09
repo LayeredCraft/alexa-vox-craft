@@ -30,7 +30,7 @@ public abstract class SingleOrListConverter<TValue> : JsonConverter<object>
         reader.TokenType == JsonTokenType.String;
 
     public override bool CanConvert(Type typeToConvert) =>
-        typeToConvert == typeof(APLValue<IList<TValue>>) || typeToConvert == typeof(IList<TValue>);
+        typeToConvert == typeof(APLValueCollection<TValue>>) || typeToConvert == typeof(IList<TValue>);
 
     public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -54,9 +54,9 @@ public abstract class SingleOrListConverter<TValue> : JsonConverter<object>
             }
         }
 
-        if (typeToConvert == typeof(APLValue<IList<TValue>>))
+        if (typeToConvert == typeof(APLValueCollection<TValue>>))
         {
-            return new APLValue<IList<TValue>>(list);
+            return new APLValueCollection<TValue>>(list);
         }
 
         return list;
@@ -68,10 +68,10 @@ public abstract class SingleOrListConverter<TValue> : JsonConverter<object>
 
         switch (value)
         {
-            case APLValue<IList<TValue>> { Expression: not null } apl:
+            case APLValueCollection<TValue>> { Expression: not null } apl:
                 JsonSerializer.Serialize(writer, apl.Expression, options);
                 return; // ✅ Return early since expression was written directly
-            case APLValue<IList<TValue>> apl:
+            case APLValueCollection<TValue>> apl:
                 list = apl.Value;
                 break;
             case IList<TValue> normalList:

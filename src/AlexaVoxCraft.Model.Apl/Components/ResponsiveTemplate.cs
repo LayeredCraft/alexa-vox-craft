@@ -82,7 +82,7 @@ public abstract class ResponsiveTemplate : APLComponent, IJsonSerializable<Respo
 
     [JsonPropertyName("headerBackButtonCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>?>? HeaderBackButtonCommand { get; set; }
+    public APLValueCollection<APLCommand>?>? HeaderBackButtonCommand { get; set; }
 
     [JsonPropertyName("headerBackgroundColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

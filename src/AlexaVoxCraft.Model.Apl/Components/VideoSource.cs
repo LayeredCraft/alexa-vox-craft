@@ -24,7 +24,7 @@ public class VideoSource : IJsonSerializable<VideoSource>
     public APLValue<int?> Offset { get; set; }
 
     [JsonPropertyName("textTrack")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<TextTrack>> TextTrack { get; set; }
+    public APLValueCollection<TextTrack>> TextTrack { get; set; }
 
     public static List<VideoSource> FromUrl(string url)
     {

@@ -31,7 +31,7 @@ public class TouchWrapper : TouchComponent, IJsonSerializable<TouchWrapper>
 
     [JsonPropertyName("item")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>>? Item { get; set; }
+    public APLValueCollection<APLComponent>>? Item { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : TouchWrapper
     {

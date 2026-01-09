@@ -84,7 +84,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("headerBackButtonCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? HeaderBackButtonCommand { get; set; }
+    public APLValueCollection<APLCommand>>? HeaderBackButtonCommand { get; set; }
 
     [JsonPropertyName("headerBackgroundColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -104,7 +104,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>>? PrimaryAction { get; set; }
 
     [JsonPropertyName("listItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -116,11 +116,11 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("onSwipeDone")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSwipeDone { get; set; }
+    public APLValueCollection<APLCommand>>? OnSwipeDone { get; set; }
 
     [JsonPropertyName("onSwipeMove")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSwipeMove { get; set; }
+    public APLValueCollection<APLCommand>>? OnSwipeMove { get; set; }
 
     [JsonPropertyName("swipeActionIconBackground")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -132,7 +132,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("optionsButton1Command")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OptionsButton1Command { get; set; }
+    public APLValueCollection<APLCommand>>? OptionsButton1Command { get; set; }
 
     [JsonPropertyName("optionsButton1Text")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -140,7 +140,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("optionsButton2Command")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OptionsButton2Command { get; set; }
+    public APLValueCollection<APLCommand>>? OptionsButton2Command { get; set; }
 
     [JsonPropertyName("optionsButton2Text")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

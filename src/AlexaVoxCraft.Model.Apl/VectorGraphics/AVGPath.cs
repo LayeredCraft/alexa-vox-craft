@@ -38,7 +38,7 @@ public class AVGPath : AVGItem, IJsonSerializable<AVGPath>
 
     [JsonPropertyName("strokeDashArray")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLValue<int?>>>? StrokeDashArray { get; set; }
+    public APLValueCollection<APLValue<int?>>>? StrokeDashArray { get; set; }
 
     [JsonPropertyName("strokeDashOffset")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

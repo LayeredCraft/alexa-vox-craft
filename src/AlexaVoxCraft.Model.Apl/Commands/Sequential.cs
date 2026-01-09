@@ -25,14 +25,14 @@ public class Sequential : APLCommand
 
     [JsonPropertyName("finally")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Finally { get; set; }
+    public APLValueCollection<APLCommand>>? Finally { get; set; }
 
     [JsonPropertyName("catch")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Catch { get; set; }
+    public APLValueCollection<APLCommand>>? Catch { get; set; }
 
     [JsonPropertyName("commands")]
-    public APLValue<IList<APLCommand>> Commands { get; set; }
+    public APLValueCollection<APLCommand>> Commands { get; set; }
 
     [JsonPropertyName("repeatCount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -40,7 +40,7 @@ public class Sequential : APLCommand
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Data { get; set; }
+    public APLValueCollection<object>>? Data { get; set; }
 
     public static void AddSupport()
     {

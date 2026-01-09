@@ -13,11 +13,11 @@ public class DoublePress : APLGesture, IJsonSerializable<DoublePress>
 
     [JsonPropertyName("onDoublePress")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnDoublePress { get; set; }
+    public APLValueCollection<APLCommand>>? OnDoublePress { get; set; }
 
     [JsonPropertyName("onSinglePress")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSinglePress { get; set; }
+    public APLValueCollection<APLCommand>>? OnSinglePress { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : DoublePress
     {

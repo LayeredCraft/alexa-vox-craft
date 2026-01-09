@@ -18,12 +18,12 @@ public class EntitySensingExtension : APLExtension
         Name = name;
     }
 
-    public void OnEntitySensingStateChanged(APLDocumentBase document, APLValue<IList<APLCommand>> commands)
+    public void OnEntitySensingStateChanged(APLDocumentBase document, APLValueCollection<APLCommand>> commands)
     {
         document.AddHandler($"{Name}:{EntitySensingStateChangedEventName}", commands);
     }
 
-    public void OnPrimaryUserChanged(APLDocumentBase document, APLValue<IList<APLCommand>> commands)
+    public void OnPrimaryUserChanged(APLDocumentBase document, APLValueCollection<APLCommand>> commands)
     {
         document.AddHandler($"{Name}:{PrimaryUserChangedEventName}", commands);
     }

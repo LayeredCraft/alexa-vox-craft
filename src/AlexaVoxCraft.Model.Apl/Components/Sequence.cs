@@ -49,7 +49,7 @@ public class Sequence : ActionableComponent, IJsonSerializable<Sequence>
 
     [JsonPropertyName("onScroll")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> OnScroll { get; set; }
+    public APLValueCollection<APLCommand>> OnScroll { get; set; }
 
     [JsonPropertyName("scaling")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

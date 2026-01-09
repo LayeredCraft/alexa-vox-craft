@@ -16,7 +16,7 @@ public class VisibilityChangeHandler : IJsonSerializable<VisibilityChangeHandler
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string> Description { get; set; }
 
-    [JsonPropertyName("commands")] public APLValue<IList<APLCommand>> Commands { get; set; }
+    [JsonPropertyName("commands")] public APLValueCollection<APLCommand>> Commands { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : VisibilityChangeHandler
     {

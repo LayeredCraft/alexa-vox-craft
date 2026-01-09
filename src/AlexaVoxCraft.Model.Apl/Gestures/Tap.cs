@@ -12,7 +12,7 @@ public class Tap : APLGesture, IJsonSerializable<Tap>
 
     [JsonPropertyName("onTap")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> OnTap { get; set; }
+    public APLValueCollection<APLCommand>> OnTap { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : Tap
     {

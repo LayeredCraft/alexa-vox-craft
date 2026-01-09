@@ -21,7 +21,7 @@ public class AlexaButton : APLComponent, IJsonSerializable<AlexaButton>
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     // JsonConverter(typeof(APLCommandListConverter))]
-    public APLValue<IList<APLCommand>> PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>> PrimaryAction { get; set; }
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

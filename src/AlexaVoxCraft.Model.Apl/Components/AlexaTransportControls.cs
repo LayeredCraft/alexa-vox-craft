@@ -49,19 +49,19 @@ public class AlexaTransportControls : APLComponent, IJsonSerializable<AlexaTrans
 
     [JsonPropertyName("secondaryControlsAVGLeft")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? SecondaryControlsAVGLeft { get; set; }
+    public APLValueCollection<APLCommand>>? SecondaryControlsAVGLeft { get; set; }
 
     [JsonPropertyName("secondaryControlsAVGRight")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? SecondaryControlsAVGRight { get; set; }
+    public APLValueCollection<APLCommand>>? SecondaryControlsAVGRight { get; set; }
 
     [JsonPropertyName("secondaryControlsLeftAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? SecondaryControlsLeftAction { get; set; }
+    public APLValueCollection<APLCommand>>? SecondaryControlsLeftAction { get; set; }
 
     [JsonPropertyName("secondaryControlsRightAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? SecondaryControlsRightAction { get; set; }
+    public APLValueCollection<APLCommand>>? SecondaryControlsRightAction { get; set; }
 
     [JsonPropertyName("secondaryControlsLeftAccessibilityLabel")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

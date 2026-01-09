@@ -26,11 +26,11 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
 
     [JsonPropertyName("handleKeyDown")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLKeyboardHandler>>? HandleKeyDown { get; set; }
+    public APLValueCollection<APLKeyboardHandler>>? HandleKeyDown { get; set; }
 
     [JsonPropertyName("handleKeyUp")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLKeyboardHandler>>? HandleKeyUp { get; set; }
+    public APLValueCollection<APLKeyboardHandler>>? HandleKeyUp { get; set; }
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -62,7 +62,7 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
 
     [JsonPropertyName("onDisplayStateChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> OnDisplayStateChange { get; set; }
+    public APLValueCollection<APLCommand>> OnDisplayStateChange { get; set; }
     public new static void RegisterTypeInfo<T>() where T : APLDocument
     {
         APLDocumentBase.RegisterTypeInfo<T>();

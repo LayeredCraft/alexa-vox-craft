@@ -20,7 +20,7 @@ public class InsertItem : APLCommand, IJsonSerializable<InsertItem>
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Items { get; set; }
+    public APLValueCollection<object>>? Items { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : InsertItem
     {

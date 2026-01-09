@@ -49,10 +49,10 @@ public class AlexaGridList : ResponsiveTemplate, IJsonSerializable<AlexaGridList
     public APLValue<int>? ListItemHorizontalCount { get; set; }
 
     [JsonPropertyName("listItems")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? ListItems { get; set; }
+    public APLValueCollection<object>>? ListItems { get; set; }
 
     [JsonPropertyName("primaryAction")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>>? PrimaryAction { get; set; }
 
     [JsonPropertyName("imageShadow")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<bool?>? ImageShadow { get; set; }

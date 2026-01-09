@@ -5,7 +5,9 @@ namespace AlexaVoxCraft.Model.Apl.Commands;
 
 public class AnimatedTransform : AnimatedProperty
 {
-    public AnimatedTransform() { }
+    public AnimatedTransform()
+    {
+    }
 
     public AnimatedTransform(APLTransform from, APLTransform to)
     {
@@ -20,36 +22,27 @@ public class AnimatedTransform : AnimatedProperty
         };
     }
 
-    [JsonPropertyName("property")]
-    public override APLValue<string> Property => "transform";
+    [JsonPropertyName("property")] public override APLValue<string>? Property => "transform";
 
     [JsonPropertyName("from")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLTransform>>? From { get; set; }
+    public APLValueCollection<APLTransform>? From { get; set; }
 
     [JsonPropertyName("to")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLTransform>>? To { get; set; }
+    public APLValueCollection<APLTransform>? To { get; set; }
 
-    public static APLValue<IList<AnimatedProperty>> Multiple(IEnumerable<APLTransform> from, IEnumerable<APLTransform> to)
-    {
-        return new APLValue<IList<AnimatedProperty>>(
-            new List<AnimatedProperty>
-            {
-                new AnimatedTransform
-                {
-                    From = new List<APLTransform>(from),
-                    To = new List<APLTransform>(to)
-                }
-            });
-    }
+    public static APLValueCollection<AnimatedProperty> Multiple(IEnumerable<APLTransform> from,
+        IEnumerable<APLTransform> to) =>
+    [
+        new AnimatedTransform
+        {
+            From = [..from],
+            To = [..to]
+        }
+    ];
 
-    public static APLValue<IList<AnimatedProperty>> Single(APLTransform from, APLTransform to)
-    {
-        return new APLValue<IList<AnimatedProperty>>(
-            new List<AnimatedProperty>
-            {
-                new AnimatedTransform(from,to)
-            });
-    }
+    public static APLValueCollection<AnimatedProperty> Single(APLTransform from, APLTransform to) =>
+        [new AnimatedTransform(from, to)];
+
 }

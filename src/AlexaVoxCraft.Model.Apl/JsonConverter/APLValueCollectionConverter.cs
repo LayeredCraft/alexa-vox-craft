@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,19 @@ public class APLValueCollectionConverter<T> : JsonConverter<APLValueCollection<T
         _alwaysOutputArray = alwaysOutputArray;
     }
 
+    protected virtual object OutputArrayItem(T value) => value!;
+
+    protected virtual JsonTokenType SingleTokenType => JsonTokenType.StartObject;
+
+    protected virtual void ReadSingle(ref Utf8JsonReader reader, JsonSerializerOptions options, IList<T> list)
+    {
+        var value = JsonSerializer.Deserialize<T>(ref reader, options);
+        if (value is not null)
+        {
+            list.Add(value);
+        }
+    }
+
     public override APLValueCollection<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -20,38 +34,35 @@ public class APLValueCollectionConverter<T> : JsonConverter<APLValueCollection<T
 
         var collection = new APLValueCollection<T>();
 
-        switch (reader.TokenType)
+        // Handle expression strings: "${data.items}"
+        if (reader.TokenType == JsonTokenType.String)
         {
-            // Handle expression strings: "${data.items}"
-            case JsonTokenType.String:
-                collection.Expression = reader.GetString();
-                return collection;
-            // Handle single object (Alexa allows single item instead of array)
-            case JsonTokenType.StartObject:
+            collection.Expression = reader.GetString();
+            return collection;
+        }
+
+        // Handle single item using virtual method
+        if (reader.TokenType == SingleTokenType)
+        {
+            ReadSingle(ref reader, options, collection.Items!);
+            return collection;
+        }
+
+        // Handle array
+        if (reader.TokenType == JsonTokenType.StartArray)
+        {
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
             {
                 var item = JsonSerializer.Deserialize<T>(ref reader, options);
                 if (item is not null)
                 {
                     collection.Items!.Add(item);
                 }
-                return collection;
             }
-            // Handle array
-            case JsonTokenType.StartArray:
-            {
-                while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                {
-                    var item = JsonSerializer.Deserialize<T>(ref reader, options);
-                    if (item is not null)
-                    {
-                        collection.Items!.Add(item);
-                    }
-                }
-                return collection;
-            }
-            default:
-                throw new JsonException($"Unexpected token {reader.TokenType} for APLValueCollection<{typeof(T).Name}>");
+            return collection;
         }
+
+        throw new JsonException($"Unexpected token {reader.TokenType} for APLValueCollection<{typeof(T).Name}>");
     }
 
     public override void Write(Utf8JsonWriter writer, APLValueCollection<T> value, JsonSerializerOptions options)
@@ -70,18 +81,18 @@ public class APLValueCollectionConverter<T> : JsonConverter<APLValueCollection<T
             return;
         }
 
-        // Write single item as object if AlwaysOutputArray is false
+        // Write single item using virtual method if AlwaysOutputArray is false
         if (!_alwaysOutputArray && items.Count == 1)
         {
-            JsonSerializer.Serialize(writer, items[0], options);
+            JsonSerializer.Serialize(writer, OutputArrayItem(items[0]), options);
             return;
         }
 
-        // Write array
+        // Write array using virtual method for each item
         writer.WriteStartArray();
         foreach (var item in items)
         {
-            JsonSerializer.Serialize(writer, item, options);
+            JsonSerializer.Serialize(writer, OutputArrayItem(item), options);
         }
         writer.WriteEndArray();
     }

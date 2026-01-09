@@ -28,7 +28,7 @@ public class AVGGroup : AVGItem, IJsonSerializable<AVGGroup>
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<IAVGItem>> Items { get; set; }
+    public APLValueCollection<IAVGItem>> Items { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : AVGGroup
     {

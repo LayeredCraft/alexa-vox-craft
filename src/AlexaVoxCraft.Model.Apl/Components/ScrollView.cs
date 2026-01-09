@@ -31,10 +31,10 @@ public class ScrollView : ActionableComponent, IJsonSerializable<ScrollView>
     }
 
     [JsonPropertyName("item")][JsonIgnore (Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>> Item { get; set; }
+    public APLValueCollection<APLComponent>> Item { get; set; }
 
     [JsonPropertyName("onScroll")][JsonIgnore (Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> OnScroll { get; set; }
+    public APLValueCollection<APLCommand>> OnScroll { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : ScrollView
     {

@@ -35,8 +35,6 @@ public static class APLSupport
         Select.AddSupport();
         InsertItem.RegisterTypeInfo<InsertItem>();
         AudioLayout.AddSupport();
-        Audio.Audio.AddSupport();
-        APLAMultiChildComponent.AddSupport();
         Sequencer.AddSupport();
         Selector.AddSupport();
         DynamicIndexList.RegisterTypeInfo<DynamicIndexList>();

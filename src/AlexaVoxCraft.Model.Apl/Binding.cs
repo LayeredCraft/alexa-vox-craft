@@ -16,7 +16,7 @@ public class Binding : IJsonSerializable<Binding>
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>>? Commands { get; set; }
 
     [JsonConstructor]
     private Binding()

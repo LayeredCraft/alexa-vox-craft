@@ -26,12 +26,12 @@ public class Parallel : APLCommand
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
      // JsonConverter(typeof(APLCommandListConverter))]
-    public APLValue<IList<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>>? Commands { get; set; }
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
      // JsonConverter(typeof(GenericLegacySingleOrListConverter<object>))]
-    public APLValue<IList<object>> Data { get; set; }
+    public APLValueCollection<object>> Data { get; set; }
     public static void AddSupport()
     {
         AlexaJsonOptions.RegisterTypeModifier<Parallel>(info =>

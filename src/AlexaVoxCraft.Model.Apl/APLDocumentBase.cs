@@ -41,11 +41,11 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
 
     [JsonPropertyName("onMount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnMount { get; set; }
+    public APLValueCollection<APLCommand>>? OnMount { get; set; }
 
     [JsonPropertyName("onConfigChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnConfigChange { get; set; }
+    public APLValueCollection<APLCommand>>? OnConfigChange { get; set; }
 
     [JsonPropertyName("settings")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -53,7 +53,7 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
 
     [JsonPropertyName("extensions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLExtension>>? Extensions { get; set; } = new List<APLExtension>();
+    public APLValueCollection<APLExtension>>? Extensions { get; set; } = new List<APLExtension>();
 
     [JsonPropertyName("environment")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -61,7 +61,7 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
 
     [JsonExtensionData] public Dictionary<string, object> Handlers { get; set; }
 
-    public void AddHandler(string name, APLValue<IList<APLCommand>> commands)
+    public void AddHandler(string name, APLValueCollection<APLCommand>> commands)
     {
         if (Handlers == null)
         {

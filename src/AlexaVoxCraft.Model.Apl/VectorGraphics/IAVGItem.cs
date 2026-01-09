@@ -13,5 +13,5 @@ public interface IAVGItem
 
     [JsonPropertyName("filters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<IAVGFilter>>? Filters { get; set; }
+    public APLValueCollection<IAVGFilter>>? Filters { get; set; }
 }

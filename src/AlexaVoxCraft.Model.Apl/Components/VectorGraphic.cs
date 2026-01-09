@@ -24,11 +24,11 @@ public class VectorGraphic : TouchComponent, IJsonSerializable<VectorGraphic>
 
     [JsonPropertyName("onLoad")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnLoad { get; set; }
+    public APLValueCollection<APLCommand>>? OnLoad { get; set; }
 
     [JsonPropertyName("onFail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnFail { get; set; }
+    public APLValueCollection<APLCommand>>? OnFail { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : VectorGraphic
     {

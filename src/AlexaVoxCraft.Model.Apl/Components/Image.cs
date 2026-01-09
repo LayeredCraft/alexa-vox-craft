@@ -44,11 +44,11 @@ public class Image : APLComponent, IJsonSerializable<Image>
 
     [JsonPropertyName("sources")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<string>>? Sources { get; set; }
+    public APLValueCollection<string>>? Sources { get; set; }
 
     [JsonPropertyName("filters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<IImageFilter>> Filters { get; set; }
+    public APLValueCollection<IImageFilter>> Filters { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : Image
     {

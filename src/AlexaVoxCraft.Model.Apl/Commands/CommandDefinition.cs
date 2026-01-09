@@ -14,11 +14,11 @@ public class CommandDefinition : IJsonSerializable<CommandDefinition>
 
     [JsonPropertyName("parameters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<Parameter>>? Parameters { get; set; }
+    public APLValueCollection<Parameter>? Parameters { get; set; }
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>? Commands { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : CommandDefinition
     {

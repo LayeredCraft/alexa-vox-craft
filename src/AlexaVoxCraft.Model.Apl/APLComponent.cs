@@ -20,7 +20,7 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("padding")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<int>>? Padding { get; set; }
+    public APLValueCollection<int>>? Padding { get; set; }
 
     [JsonPropertyName("paddingStart")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -182,15 +182,15 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("entities")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Entities { get; set; }
+    public APLValueCollection<object>>? Entities { get; set; }
 
     [JsonPropertyName("handleTick")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<TickHandler>>? HandleTick { get; set; }
+    public APLValueCollection<TickHandler>>? HandleTick { get; set; }
 
     [JsonPropertyName("handleVisibilityChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<VisibilityChangeHandler>>? HandleVisibilityChange { get; set; }
+    public APLValueCollection<VisibilityChangeHandler>>? HandleVisibilityChange { get; set; }
 
     [JsonPropertyName("role")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -198,11 +198,11 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("actions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLAction>>? Actions { get; set; }
+    public APLValueCollection<APLAction>>? Actions { get; set; }
 
     [JsonPropertyName("preserve")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<string>>? Preserve { get; set; }
+    public APLValueCollection<string>>? Preserve { get; set; }
 
     [JsonPropertyName("layoutDirection")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

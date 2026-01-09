@@ -13,11 +13,11 @@ public class AlexaPaginatedList : ResponsiveTemplate, IJsonSerializable<AlexaPag
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>>? PrimaryAction { get; set; }
 
     [JsonPropertyName("listItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<AlexaPaginatedListItem>>? ListItems { get; set; }
+    public APLValueCollection<AlexaPaginatedListItem>>? ListItems { get; set; }
 
     [JsonPropertyName("headerAttributionOpacity")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

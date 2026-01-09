@@ -13,11 +13,11 @@ public class LongPress : APLGesture, IJsonSerializable<LongPress>
 
     [JsonPropertyName("onLongPressStart")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnLongPressStart { get; set; }
+    public APLValueCollection<APLCommand>>? OnLongPressStart { get; set; }
 
     [JsonPropertyName("onLongPressEnd")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnLongPressEnd { get; set; }
+    public APLValueCollection<APLCommand>>? OnLongPressEnd { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : LongPress
     {
