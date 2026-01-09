@@ -23,7 +23,7 @@ public class Pager : ActionableComponent, IJsonSerializable<Pager>
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<object>> Data { get; set; }
+    public APLValueCollection<object> Data { get; set; }
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

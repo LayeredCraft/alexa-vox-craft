@@ -13,11 +13,11 @@ public class GridSequence : ActionableComponent, IJsonSerializable<GridSequence>
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>>? FirstItem { get; set; }
+    public APLValueCollection<APLComponent>? FirstItem { get; set; }
 
     [JsonPropertyName("lastItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>>? LastItem { get; set; }
+    public APLValueCollection<APLComponent>? LastItem { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

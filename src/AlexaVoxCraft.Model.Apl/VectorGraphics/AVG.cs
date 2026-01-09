@@ -43,7 +43,7 @@ public class AVG
 
     [JsonPropertyName("parameters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<AVGParameter>>? Parameters { get; set; }
+    public APLValueCollection<AVGParameter>? Parameters { get; set; }
 
     [JsonPropertyName("scaleTypeHeight")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

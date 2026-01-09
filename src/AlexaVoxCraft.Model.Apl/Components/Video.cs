@@ -33,7 +33,7 @@ public class Video : APLComponent, IJsonSerializable<Video>
 
     [JsonPropertyName("onEnd")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLCommand>>? OnEnd { get; set; }
+    public APLValueCollection<APLCommand>? OnEnd { get; set; }
 
     [JsonPropertyName("source")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

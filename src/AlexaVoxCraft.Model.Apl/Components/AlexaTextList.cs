@@ -105,7 +105,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("listItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<AlexaTextListItem>>? ListItems { get; set; }
+    public APLValueCollection<AlexaTextListItem>? ListItems { get; set; }
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
