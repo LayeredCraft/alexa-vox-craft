@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.Commands;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
-using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -49,19 +45,19 @@ public class AlexaTransportControls : APLComponent, IJsonSerializable<AlexaTrans
 
     [JsonPropertyName("secondaryControlsAVGLeft")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? SecondaryControlsAVGLeft { get; set; }
+    public APLValueCollection<APLCommand>? SecondaryControlsAVGLeft { get; set; }
 
     [JsonPropertyName("secondaryControlsAVGRight")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? SecondaryControlsAVGRight { get; set; }
+    public APLValueCollection<APLCommand>? SecondaryControlsAVGRight { get; set; }
 
     [JsonPropertyName("secondaryControlsLeftAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? SecondaryControlsLeftAction { get; set; }
+    public APLValueCollection<APLCommand>? SecondaryControlsLeftAction { get; set; }
 
     [JsonPropertyName("secondaryControlsRightAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? SecondaryControlsRightAction { get; set; }
+    public APLValueCollection<APLCommand>? SecondaryControlsRightAction { get; set; }
 
     [JsonPropertyName("secondaryControlsLeftAccessibilityLabel")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -74,35 +70,5 @@ public class AlexaTransportControls : APLComponent, IJsonSerializable<AlexaTrans
     public new static void RegisterTypeInfo<T>() where T : AlexaTransportControls
     {
         APLComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var secondaryControlsAVGLeftProp =
-                info.Properties.FirstOrDefault(p => p.Name == "secondaryControlsAVGLeft");
-            if (secondaryControlsAVGLeftProp is not null)
-            {
-                secondaryControlsAVGLeftProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var secondaryControlsAVGRightProp =
-                info.Properties.FirstOrDefault(p => p.Name == "secondaryControlsAVGRight");
-            if (secondaryControlsAVGRightProp is not null)
-            {
-                secondaryControlsAVGRightProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var secondaryControlsLeftActionProp =
-                info.Properties.FirstOrDefault(p => p.Name == "secondaryControlsLeftAction");
-            if (secondaryControlsLeftActionProp is not null)
-            {
-                secondaryControlsLeftActionProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var secondaryControlsRightActionProp =
-                info.Properties.FirstOrDefault(p => p.Name == "secondaryControlsRightAction");
-            if (secondaryControlsRightActionProp is not null)
-            {
-                secondaryControlsRightActionProp.CustomConverter = new APLCommandListConverter(false);
-            }
-        });
     }
 }

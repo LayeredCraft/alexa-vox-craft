@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
-using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -84,7 +81,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("headerBackButtonCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? HeaderBackButtonCommand { get; set; }
+    public APLValueCollection<APLCommand>? HeaderBackButtonCommand { get; set; }
 
     [JsonPropertyName("headerBackgroundColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -104,7 +101,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>? PrimaryAction { get; set; }
 
     [JsonPropertyName("listItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -116,11 +113,11 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("onSwipeDone")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnSwipeDone { get; set; }
+    public APLValueCollection<APLCommand>? OnSwipeDone { get; set; }
 
     [JsonPropertyName("onSwipeMove")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnSwipeMove { get; set; }
+    public APLValueCollection<APLCommand>? OnSwipeMove { get; set; }
 
     [JsonPropertyName("swipeActionIconBackground")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -132,7 +129,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("optionsButton1Command")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OptionsButton1Command { get; set; }
+    public APLValueCollection<APLCommand>? OptionsButton1Command { get; set; }
 
     [JsonPropertyName("optionsButton1Text")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -140,7 +137,7 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
 
     [JsonPropertyName("optionsButton2Command")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OptionsButton2Command { get; set; }
+    public APLValueCollection<APLCommand>? OptionsButton2Command { get; set; }
 
     [JsonPropertyName("optionsButton2Text")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -181,43 +178,5 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
     public new static void RegisterTypeInfo<T>() where T : AlexaTextList
     {
         APLComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var headerBackButtonCommandProp = info.Properties.FirstOrDefault(p => p.Name == "headerBackButtonCommand");
-            if (headerBackButtonCommandProp is not null)
-            {
-                headerBackButtonCommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
-            if (primaryActionProp is not null)
-            {
-                primaryActionProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var onSwipeDoneProp = info.Properties.FirstOrDefault(p => p.Name == "onSwipeDone");
-            if (onSwipeDoneProp is not null)
-            {
-                onSwipeDoneProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var onSwipeMoveProp = info.Properties.FirstOrDefault(p => p.Name == "onSwipeMove");
-            if (onSwipeMoveProp is not null)
-            {
-                onSwipeMoveProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var optionsButton1CommandProp = info.Properties.FirstOrDefault(p => p.Name == "optionsButton1Command");
-            if (optionsButton1CommandProp is not null)
-            {
-                optionsButton1CommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var optionsButton2CommandProp = info.Properties.FirstOrDefault(p => p.Name == "optionsButton2Command");
-            if (optionsButton2CommandProp is not null)
-            {
-                optionsButton2CommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-        });
     }
 }

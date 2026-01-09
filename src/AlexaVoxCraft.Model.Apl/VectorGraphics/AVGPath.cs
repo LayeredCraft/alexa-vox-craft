@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
@@ -8,7 +7,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 
-public class AVGPath : AVGItem, IJsonSerializable<AVGPath>
+public class AVGPath : AVGItem
 {
     [JsonPropertyName("type")] public override string Type => "path";
 
@@ -38,7 +37,7 @@ public class AVGPath : AVGItem, IJsonSerializable<AVGPath>
 
     [JsonPropertyName("strokeDashArray")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLValue<int?>>>? StrokeDashArray { get; set; }
+    public APLValueCollection<APLValue<int?>>? StrokeDashArray { get; set; }
 
     [JsonPropertyName("strokeDashOffset")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -71,19 +70,6 @@ public class AVGPath : AVGItem, IJsonSerializable<AVGPath>
     [JsonPropertyName("style")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? Style { get; set; }
-
-    public new static void RegisterTypeInfo<T>() where T : AVGPath
-    {
-        AVGItem.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var strokeDashArrayProp = info.Properties.FirstOrDefault(p => p.Name == "strokeDashArray");
-            if (strokeDashArrayProp is not null)
-            {
-                strokeDashArrayProp.CustomConverter = new GenericSingleOrListConverter<APLValue<int?>>(false);
-            }
-        });
-    }
 }
 
 [System.Text.Json.Serialization.JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<StrokeLineJoin>))]

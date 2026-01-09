@@ -1,4 +1,3 @@
-using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 
 namespace AlexaVoxCraft.TestKit.Attributes;

@@ -1,5 +1,4 @@
 using AlexaVoxCraft.Model.Response.Ssml;
-using AutoFixture;
 using AutoFixture.Kernel;
 using DomainName = AlexaVoxCraft.Model.Response.Ssml.DomainName;
 

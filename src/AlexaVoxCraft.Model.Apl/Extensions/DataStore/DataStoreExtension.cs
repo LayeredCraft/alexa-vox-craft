@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AlexaVoxCraft.Model.Apl.Extensions.DataStore;
+﻿namespace AlexaVoxCraft.Model.Apl.Extensions.DataStore;
 
 public class DataStoreExtension : APLExtension
 {
@@ -18,12 +16,12 @@ public class DataStoreExtension : APLExtension
         Name = name;
     }
 
-    public void OnObjectChanged(APLDocumentBase document, APLValueCollection<APLCommand>> commands)
+    public void OnObjectChanged(APLDocumentBase document, APLValueCollection<APLCommand> commands)
     {
         document.AddHandler($"{Name}:{ObjectChangedEventName}", commands);
     }
 
-    public void OnObjectReceived(APLDocumentBase document, APLValueCollection<APLCommand>> commands)
+    public void OnObjectReceived(APLDocumentBase document, APLValueCollection<APLCommand> commands)
     {
         document.AddHandler($"{Name}:{ObjectReceivedEventName}", commands);
     }

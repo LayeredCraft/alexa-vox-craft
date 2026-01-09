@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -24,11 +23,11 @@ public class VectorGraphic : TouchComponent, IJsonSerializable<VectorGraphic>
 
     [JsonPropertyName("onLoad")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnLoad { get; set; }
+    public APLValueCollection<APLCommand>? OnLoad { get; set; }
 
     [JsonPropertyName("onFail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnFail { get; set; }
+    public APLValueCollection<APLCommand>? OnFail { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : VectorGraphic
     {

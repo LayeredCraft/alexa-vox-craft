@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -25,15 +24,7 @@ public class CommandDefinition : IJsonSerializable<CommandDefinition>
         AlexaJsonOptions.RegisterTypeModifier<T>(typeInfo =>
         {
             var parameterProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "parameters");
-            if (parameterProp is not null)
-            {
-                parameterProp.CustomConverter = new ParameterListConverter(true);
-            }
-            var commandsProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "commands");
-            if (commandsProp is not null)
-            {
-                commandsProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            parameterProp?.CustomConverter = new ParameterListConverter(true);
         });
     }
 }

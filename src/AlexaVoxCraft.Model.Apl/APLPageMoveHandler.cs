@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl;
 
-public class APLPageMoveHandler : IJsonSerializable<APLPageMoveHandler>
+public class APLPageMoveHandler
 {
     [JsonPropertyName("when")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -14,7 +13,7 @@ public class APLPageMoveHandler : IJsonSerializable<APLPageMoveHandler>
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>? Commands { get; set; }
 
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -23,16 +22,4 @@ public class APLPageMoveHandler : IJsonSerializable<APLPageMoveHandler>
     [JsonPropertyName("drawOrder")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<DrawOrder?>? DrawOrder { get; set; }
-
-    public static void RegisterTypeInfo<T>() where T : APLPageMoveHandler
-    {
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var commandsProp = info.Properties.FirstOrDefault(p => p.Name == "commands");
-            if (commandsProp is not null)
-            {
-                commandsProp.CustomConverter = new APLCommandListConverter(false);
-            }
-        });
-    }
 }

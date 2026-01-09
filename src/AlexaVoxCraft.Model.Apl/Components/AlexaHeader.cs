@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
-using AlexaVoxCraft.Model.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -50,7 +46,7 @@ public class AlexaHeader : APLComponent, IJsonSerializable<AlexaHeader>
 
     [JsonPropertyName("headerBackButtonCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>> HeaderBackButtonCommand { get; set; }
+    public APLValueCollection<APLCommand> HeaderBackButtonCommand { get; set; }
 
     [JsonPropertyName("headerBackgroundColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -67,13 +63,5 @@ public class AlexaHeader : APLComponent, IJsonSerializable<AlexaHeader>
     public new static void RegisterTypeInfo<T>() where T : AlexaHeader
     {
         APLComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var prop = info.Properties.FirstOrDefault(p => p.Name == "headerBackButtonCommand");
-            if (prop is not null)
-            {
-                prop.CustomConverter = new APLCommandListConverter(false);
-            }
-        });
     }
 }

@@ -1,5 +1,4 @@
 using AlexaVoxCraft.Model.Response.Directive;
-using AutoFixture;
 using AutoFixture.Kernel;
 
 namespace AlexaVoxCraft.TestKit.SpecimenBuilders;

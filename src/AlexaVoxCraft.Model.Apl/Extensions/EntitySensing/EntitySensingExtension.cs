@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AlexaVoxCraft.Model.Apl.Extensions.EntitySensing;
+﻿namespace AlexaVoxCraft.Model.Apl.Extensions.EntitySensing;
 
 public class EntitySensingExtension : APLExtension
 {
@@ -18,12 +16,12 @@ public class EntitySensingExtension : APLExtension
         Name = name;
     }
 
-    public void OnEntitySensingStateChanged(APLDocumentBase document, APLValueCollection<APLCommand>> commands)
+    public void OnEntitySensingStateChanged(APLDocumentBase document, APLValueCollection<APLCommand> commands)
     {
         document.AddHandler($"{Name}:{EntitySensingStateChangedEventName}", commands);
     }
 
-    public void OnPrimaryUserChanged(APLDocumentBase document, APLValueCollection<APLCommand>> commands)
+    public void OnPrimaryUserChanged(APLDocumentBase document, APLValueCollection<APLCommand> commands)
     {
         document.AddHandler($"{Name}:{PrimaryUserChangedEventName}", commands);
     }

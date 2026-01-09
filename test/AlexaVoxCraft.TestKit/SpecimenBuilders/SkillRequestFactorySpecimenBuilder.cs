@@ -2,7 +2,6 @@ using AlexaVoxCraft.MediatR;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.TestKit.RequestSpecifications;
 using AutoFixture.Kernel;
-using NSubstitute;
 
 namespace AlexaVoxCraft.TestKit.SpecimenBuilders;
 

@@ -1,8 +1,6 @@
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.TestKit.SpecimenBuilders;
-using AutoFixture;
 using AutoFixture.Kernel;
-using AutoFixture.Xunit3;
 
 namespace AlexaVoxCraft.TestKit.Attributes;
 

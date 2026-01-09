@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.Filters;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
-using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -44,28 +40,14 @@ public class Image : APLComponent, IJsonSerializable<Image>
 
     [JsonPropertyName("sources")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<string>>? Sources { get; set; }
+    public APLValueCollection<string>? Sources { get; set; }
 
     [JsonPropertyName("filters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<IImageFilter>> Filters { get; set; }
+    public APLValueCollection<IImageFilter> Filters { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : Image
     {
         APLComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var sourcesProp = info.Properties.FirstOrDefault(p => p.Name == "sources");
-            if (sourcesProp is not null)
-            {
-                sourcesProp.CustomConverter = new StringOrArrayConverter(false);
-            }
-
-            var filtersProp = info.Properties.FirstOrDefault(p => p.Name == "filters");
-            if (filtersProp is not null)
-            {
-                filtersProp.CustomConverter = new ImageFilterListConverter(false);
-            }
-        });
     }
 }

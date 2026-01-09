@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
-using AlexaVoxCraft.Model.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -46,27 +42,27 @@ public abstract class AlexaSliderBase : TouchComponent, IJsonSerializable<AlexaS
 
     [JsonPropertyName("onBlurCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnBlurCommand { get; set; }
+    public APLValueCollection<APLCommand>? OnBlurCommand { get; set; }
 
     [JsonPropertyName("onUpCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnUpCommand { get; set; }
+    public APLValueCollection<APLCommand>? OnUpCommand { get; set; }
 
     [JsonPropertyName("onDownCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnDownCommand { get; set; }
+    public APLValueCollection<APLCommand>? OnDownCommand { get; set; }
 
     [JsonPropertyName("onFocusCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnFocusCommand { get; set; }
+    public APLValueCollection<APLCommand>? OnFocusCommand { get; set; }
 
     [JsonPropertyName("onMoveCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnMoveCommand { get; set; }
+    public APLValueCollection<APLCommand>? OnMoveCommand { get; set; }
 
     [JsonPropertyName("handleKeyDownCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? HandleKeyDownCommand { get; set; }
+    public APLValueCollection<APLCommand>? HandleKeyDownCommand { get; set; }
 
     [JsonPropertyName("metadataDisplayed")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -75,43 +71,5 @@ public abstract class AlexaSliderBase : TouchComponent, IJsonSerializable<AlexaS
     public static void RegisterTypeInfo<T>() where T : AlexaSliderBase
     {
         TouchComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var onBlurCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onBlurCommand");
-            if (onBlurCommandProp is not null)
-            {
-                onBlurCommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var onUpCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onUpCommand");
-            if (onUpCommandProp is not null)
-            {
-                onUpCommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var onDownCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onDownCommand");
-            if (onDownCommandProp is not null)
-            {
-                onDownCommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var onFocusCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onFocusCommand");
-            if (onFocusCommandProp is not null)
-            {
-                onFocusCommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var onMoveCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onMoveCommand");
-            if (onMoveCommandProp is not null)
-            {
-                onMoveCommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var handleKeyDownCommandProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyDownCommand");
-            if (handleKeyDownCommandProp is not null)
-            {
-                handleKeyDownCommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-        });
     }
 }

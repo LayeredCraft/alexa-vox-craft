@@ -25,7 +25,7 @@ public class APLTDocument : APLDocumentBase
                 extensionsProp.ShouldSerialize = ((obj, _) =>
                 {
                     var document = (APLTDocument)obj;
-                    return document.Extensions?.Value?.Any() ?? false;
+                    return document.Extensions?.Any() ?? false;
                 });
                 extensionsProp.CustomConverter = new GenericSingleOrListConverter<APLExtension>(true);
             }

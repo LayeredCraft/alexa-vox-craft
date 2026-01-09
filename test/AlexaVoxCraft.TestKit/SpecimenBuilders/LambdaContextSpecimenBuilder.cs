@@ -1,7 +1,6 @@
 using AlexaVoxCraft.TestKit.RequestSpecifications;
 using Amazon.Lambda.Core;
 using AutoFixture.Kernel;
-using NSubstitute;
 
 namespace AlexaVoxCraft.TestKit.SpecimenBuilders;
 

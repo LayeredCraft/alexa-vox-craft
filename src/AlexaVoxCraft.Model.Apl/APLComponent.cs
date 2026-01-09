@@ -20,7 +20,7 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("padding")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<int>>? Padding { get; set; }
+    public APLValueCollection<int>? Padding { get; set; }
 
     [JsonPropertyName("paddingStart")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -182,15 +182,15 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("entities")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<object>>? Entities { get; set; }
+    public APLValueCollection<object>? Entities { get; set; }
 
     [JsonPropertyName("handleTick")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<TickHandler>>? HandleTick { get; set; }
+    public APLValueCollection<TickHandler>? HandleTick { get; set; }
 
     [JsonPropertyName("handleVisibilityChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<VisibilityChangeHandler>>? HandleVisibilityChange { get; set; }
+    public APLValueCollection<VisibilityChangeHandler>? HandleVisibilityChange { get; set; }
 
     [JsonPropertyName("role")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -198,11 +198,11 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("actions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLAction>>? Actions { get; set; }
+    public APLValueCollection<APLAction>? Actions { get; set; }
 
     [JsonPropertyName("preserve")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<string>>? Preserve { get; set; }
+    public APLValueCollection<string>? Preserve { get; set; }
 
     [JsonPropertyName("layoutDirection")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -211,33 +211,5 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
     public new static void RegisterTypeInfo<T>() where T : APLComponent
     {
         APLComponentBase.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var paddingProp = info.Properties.FirstOrDefault(p => p.Name == "padding");
-            if (paddingProp is not null)
-            {
-                paddingProp.CustomConverter = new GenericSingleOrListConverter<int>(false);
-            }
-            var entitiesProp = info.Properties.FirstOrDefault(p => p.Name == "entities");
-            if (entitiesProp is not null)
-            {
-                entitiesProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
-            var handleTickProp = info.Properties.FirstOrDefault(p => p.Name == "handleTick");
-            if (handleTickProp is not null)
-            {
-                handleTickProp.CustomConverter = new GenericSingleOrListConverter<TickHandler>(false);
-            }
-            var handleVisibilityChangeProp = info.Properties.FirstOrDefault(p => p.Name == "handleVisibilityChange");
-            if (handleVisibilityChangeProp is not null)
-            {
-                handleVisibilityChangeProp.CustomConverter = new GenericSingleOrListConverter<VisibilityChangeHandler>(false);
-            }
-            var actionsProp = info.Properties.FirstOrDefault(p => p.Name == "actions");
-            if (actionsProp is not null)
-            {
-                actionsProp.CustomConverter = new GenericSingleOrListConverter<APLAction>(false);
-            }
-        });
     }
 }

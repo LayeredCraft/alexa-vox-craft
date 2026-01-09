@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -14,7 +13,7 @@ public class AlexaImageList : AlexaImageListBase, IJsonSerializable<AlexaImageLi
 
     [JsonPropertyName("listItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<AlexaImageListItem>>? ListItems { get; set; }
+    public APLValueCollection<AlexaImageListItem>? ListItems { get; set; }
 
     [JsonPropertyName("videoAudioTrack")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

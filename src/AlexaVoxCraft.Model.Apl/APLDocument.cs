@@ -26,11 +26,11 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
 
     [JsonPropertyName("handleKeyDown")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLKeyboardHandler>>? HandleKeyDown { get; set; }
+    public APLValueCollection<APLKeyboardHandler>? HandleKeyDown { get; set; }
 
     [JsonPropertyName("handleKeyUp")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLKeyboardHandler>>? HandleKeyUp { get; set; }
+    public APLValueCollection<APLKeyboardHandler>? HandleKeyUp { get; set; }
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -62,29 +62,14 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
 
     [JsonPropertyName("onDisplayStateChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>> OnDisplayStateChange { get; set; }
+    public APLValueCollection<APLCommand> OnDisplayStateChange { get; set; }
     public new static void RegisterTypeInfo<T>() where T : APLDocument
     {
         APLDocumentBase.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var onDisplayStateChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onDisplayStateChange");
-            if (onDisplayStateChangeProp is not null)
-            {
-                onDisplayStateChangeProp.CustomConverter = new APLCommandListConverter(true);
-            }
-
-            var handleKeyUpProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyUp");
-            if (handleKeyUpProp is not null)
-            {
-                handleKeyUpProp.CustomConverter = new APLKeyboardHandlerConverter(false);
-            }
-
-            var handleKeyDownProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyDown");
-            if (handleKeyDownProp is not null)
-            {
-                handleKeyDownProp.CustomConverter = new APLKeyboardHandlerConverter(false);
-            }
+            onDisplayStateChangeProp?.CustomConverter = new APLCommandListConverter(true);
 
             // Configuration from base
             var extensionsProp = info.Properties.FirstOrDefault(p => p.Name == "extensions");
@@ -93,22 +78,16 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
                 extensionsProp.ShouldSerialize = ((obj, _) =>
                 {
                     var document = (T)obj;
-                    return document.Extensions?.Value?.Any() ?? false;
+                    return document.Extensions?.Any() ?? false;
                 });
-                extensionsProp.CustomConverter = new GenericSingleOrListConverter<APLExtension>(true);
+                extensionsProp.CustomConverter = new APLValueCollectionConverter<APLExtension>(true);
             }
 
             var onConfigChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onConfigChange");
-            if (onConfigChangeProp is not null)
-            {
-                onConfigChangeProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            onConfigChangeProp?.CustomConverter = new APLCommandListConverter(true);
 
             var onMountProp = info.Properties.FirstOrDefault(p => p.Name == "onMount");
-            if (onMountProp is not null)
-            {
-                onMountProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            onMountProp?.CustomConverter = new APLCommandListConverter(true);
         });
     }
 }

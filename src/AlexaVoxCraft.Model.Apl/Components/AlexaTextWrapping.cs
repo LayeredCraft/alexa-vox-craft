@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
-using AlexaVoxCraft.Model.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -36,7 +32,7 @@ public class AlexaTextWrapping : ResponsiveTemplate, IJsonSerializable<AlexaText
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>> PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand> PrimaryAction { get; set; }
 
     [JsonPropertyName("touchForward")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -45,13 +41,5 @@ public class AlexaTextWrapping : ResponsiveTemplate, IJsonSerializable<AlexaText
     public new static void RegisterTypeInfo<T>() where T : AlexaTextWrapping
     {
         ResponsiveTemplate.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
-            if (primaryActionProp is not null)
-            {
-                primaryActionProp.CustomConverter = new APLCommandListConverter(false);
-            }
-        });
     }
 }

@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
-using AlexaVoxCraft.Model.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -18,7 +14,7 @@ public class AlexaDetail : ResponsiveTemplate, IJsonSerializable<AlexaDetail>
     public APLValue<string>? Button1AccessibilityLabel { get; set; }
 
     [JsonPropertyName("button1PrimaryAction")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? Button1PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>? Button1PrimaryAction { get; set; }
 
     [JsonPropertyName("button1Style")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? Button1Style { get; set; }
@@ -30,7 +26,7 @@ public class AlexaDetail : ResponsiveTemplate, IJsonSerializable<AlexaDetail>
     public APLValue<string>? Button1Theme { get; set; }
 
     [JsonPropertyName("button2PrimaryAction")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? Button2PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>? Button2PrimaryAction { get; set; }
 
     [JsonPropertyName("button2Style")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? Button2Style { get; set; }
@@ -129,7 +125,7 @@ public class AlexaDetail : ResponsiveTemplate, IJsonSerializable<AlexaDetail>
     public APLValue<string>? TertiaryText { get; set; }
 
     [JsonPropertyName("ingredientListItems")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<IngredientListItem>>? IngredientListItems { get; set; }
+    public APLValueCollection<IngredientListItem>? IngredientListItems { get; set; }
 
     [JsonPropertyName("imageShadow")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<bool?>? ImageShadow { get; set; }
@@ -143,25 +139,5 @@ public class AlexaDetail : ResponsiveTemplate, IJsonSerializable<AlexaDetail>
     public new static void RegisterTypeInfo<T>() where T : AlexaDetail
     {
         ResponsiveTemplate.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var button1PrimaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "button1PrimaryAction");
-            if (button1PrimaryActionProp is not null)
-            {
-                button1PrimaryActionProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var button2PrimaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "button2PrimaryAction");
-            if (button2PrimaryActionProp is not null)
-            {
-                button2PrimaryActionProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var ingredientListItemsProp = info.Properties.FirstOrDefault(p => p.Name == "ingredientListItems");
-            if (ingredientListItemsProp is not null)
-            {
-                ingredientListItemsProp.CustomConverter = new GenericSingleOrListConverter<IngredientListItem>(false);
-            }
-        });
     }
 }

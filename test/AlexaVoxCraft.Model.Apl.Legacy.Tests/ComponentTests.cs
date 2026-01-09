@@ -241,7 +241,7 @@ public class ComponentTests
     {
         var control = new AlexaImageList
         {
-            ListItems = APLValue.To<IList<AlexaImageListItem>>("${imageListData.listItemsToShow}"),
+            ListItems = "${imageListData.listItemsToShow}",
             DefaultImageSource = "https://d2o906d8ln7ui1.cloudfront.net/images/BT7_Background.png",
             ImageBlurredBackground = true,
             PrimaryAction = (new APLCommand[]
@@ -260,7 +260,7 @@ public class ComponentTests
     {
         var control = new AlexaLists
         {
-            ListItems = APLValue.To<IList<AlexaListItem>>("${listData.listItemsToShow}"),
+            ListItems = "${listData.listItemsToShow}",
             ListImagePrimacy = true,
             DefaultImageSource = "https://d2o906d8ln7ui1.cloudfront.net/images/BT7_Background.png",
             ImageBlurredBackground = true
@@ -443,7 +443,7 @@ public class ComponentTests
         };
         var dataBoundContainer = new Container
         {
-            Data = APLValue.To<IList<object>>("$data.random.stuff")
+            Data = "$data.random.stuff"
         };
 
         var rawJson = JsonSerializer.Serialize(rawContainer, options);
@@ -455,7 +455,7 @@ public class ComponentTests
         var newRawContainer = Assert.IsType<Container>(newRaw);
         var newBoundContainer = Assert.IsType<Container>(newBound);
 
-        var dataValue = Assert.IsAssignableFrom<IList<object>>(newRawContainer.Data.Value);
+        var dataValue = Assert.IsAssignableFrom<IList<object>>(newRawContainer.Data);
         var dict = Assert.IsType<Dictionary<string, object>>(dataValue.First());
 
         Assert.Single(dict);

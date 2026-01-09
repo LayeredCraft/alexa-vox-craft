@@ -32,8 +32,6 @@ public static class APLSupport
         // Add support for models
         Parameter.RegisterTypeInfo<Parameter>();
         CommandDefinition.RegisterTypeInfo<CommandDefinition>();
-        Select.AddSupport();
-        InsertItem.RegisterTypeInfo<InsertItem>();
         AudioLayout.AddSupport();
         Sequencer.AddSupport();
         Selector.AddSupport();
@@ -41,12 +39,9 @@ public static class APLSupport
         DynamicTokenList.RegisterTypeInfo<DynamicTokenList>();
         Mixer.AddSupport();
         Style.RegisterTypeInfo<Style>();
-        AVG.AddSupport();
         APLDocument.RegisterTypeInfo<APLDocument>();
         APLKeyboardHandler.AddSupport();
         Import.RegisterTypeInfo<Import>();
-        Sequential.AddSupport();
-        Parallel.AddSupport();
         APLDocumentBase.RegisterTypeInfo<APLDocumentBase>();
         APLTDocument.AddSupport();
         Layout.AddSupport();
@@ -57,20 +52,14 @@ public static class APLSupport
         Image.RegisterTypeInfo<Image>();
         TextBase.RegisterTypeInfo<TextBase>();
         Text.RegisterTypeInfo<Text>();
-        OpenURL.RegisterTypeInfo<OpenURL>();
         ActionableComponent.RegisterTypeInfo<ActionableComponent>();
         ScrollView.RegisterTypeInfo<ScrollView>();
-        AnimateItem.RegisterTypeInfo<AnimateItem>();
         Binding.RegisterTypeInfo<Binding>();
         Video.RegisterTypeInfo<Video>();
         VideoSource.RegisterTypeInfo<VideoSource>();
         TimeText.RegisterTypeInfo<TimeText>();
         TouchComponent.RegisterTypeInfo<TouchComponent>();
         TouchWrapper.RegisterTypeInfo<TouchWrapper>();
-        DoublePress.RegisterTypeInfo<DoublePress>();
-        LongPress.RegisterTypeInfo<LongPress>();
-        SwipeAway.RegisterTypeInfo<SwipeAway>();
-        Tap.RegisterTypeInfo<Tap>();
         AlexaIconButton.RegisterTypeInfo<AlexaIconButton>();
         AlexaListItem.RegisterTypeInfo<AlexaListItem>();
         AlexaPaginatedListItem.RegisterTypeInfo<AlexaPaginatedListItem>();
@@ -91,7 +80,6 @@ public static class APLSupport
         AlexaSlider.RegisterTypeInfo<AlexaSlider>();
         AlexaSliderRadial.RegisterTypeInfo<AlexaSliderRadial>();
         AlexaDetail.RegisterTypeInfo<AlexaDetail>();
-        IngredientListItem.RegisterTypeInfo<IngredientListItem>();
         AlexaGridList.RegisterTypeInfo<AlexaGridList>();
         EditText.RegisterTypeInfo<EditText>();
         AlexaSwipeToAction.RegisterTypeInfo<AlexaSwipeToAction>();
@@ -100,7 +88,6 @@ public static class APLSupport
         AlexaSwitch.RegisterTypeInfo<AlexaSwitch>();
         GridSequence.RegisterTypeInfo<GridSequence>();
         Pager.RegisterTypeInfo<Pager>();
-        APLPageMoveHandler.RegisterTypeInfo<APLPageMoveHandler>();
         AlexaIcon.RegisterTypeInfo<AlexaIcon>();
         AlexaCard.RegisterTypeInfo<AlexaCard>();
         AlexaImageCaption.RegisterTypeInfo<AlexaImageCaption>();
@@ -112,14 +99,9 @@ public static class APLSupport
         ListDataDirective.RegisterTypeInfo<ListDataDirective>();
         SendIndexListDataDirective.RegisterTypeInfo<SendIndexListDataDirective>();
         SendTokenListDataDirective.RegisterTypeInfo<SendTokenListDataDirective>();
-        AVGItem.RegisterTypeInfo<AVGItem>();
-        AVGPath.RegisterTypeInfo<AVGPath>();
-        AVGGroup.RegisterTypeInfo<AVGGroup>();
-        AVGText.RegisterTypeInfo<AVGText>();
         AlexaHeader.RegisterTypeInfo<AlexaHeader>();
         AlexaImage.RegisterTypeInfo<AlexaImage>();
         VisibilityChangeHandler.RegisterTypeInfo<VisibilityChangeHandler>();
-        PlayMedia.RegisterTypeInfo<PlayMedia>();
         AlexaBackground.RegisterTypeInfo<AlexaBackground>();
         AlexaButton.RegisterTypeInfo<AlexaButton>();
         AlexaDivider.RegisterTypeInfo<AlexaDivider>();

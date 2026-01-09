@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -16,7 +15,7 @@ public class Binding : IJsonSerializable<Binding>
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>? Commands { get; set; }
 
     [JsonConstructor]
     private Binding()
@@ -34,19 +33,11 @@ public class Binding : IJsonSerializable<Binding>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var typeProp = info.Properties.FirstOrDefault(p => p.Name == "type");
-            if (typeProp is not null)
+            typeProp?.ShouldSerialize = (obj, _) =>
             {
-                typeProp.ShouldSerialize = (obj, _) =>
-                {
-                    var binding = (T)obj;
-                    return binding.Type != ParameterType.any;
-                };
-            }
-            var commandsProp = info.Properties.FirstOrDefault(p => p.Name == "commands");
-            if (commandsProp is not null)
-            {
-                commandsProp.CustomConverter = new APLCommandListConverter(false);
-            }
+                var binding = (T)obj;
+                return binding.Type != ParameterType.any;
+            };
         });
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -82,7 +81,7 @@ public abstract class ResponsiveTemplate : APLComponent, IJsonSerializable<Respo
 
     [JsonPropertyName("headerBackButtonCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>?>? HeaderBackButtonCommand { get; set; }
+    public APLValueCollection<APLCommand>? HeaderBackButtonCommand { get; set; }
 
     [JsonPropertyName("headerBackgroundColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -99,13 +98,5 @@ public abstract class ResponsiveTemplate : APLComponent, IJsonSerializable<Respo
     public new static void RegisterTypeInfo<T>() where T : ResponsiveTemplate
     {
         APLComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var headerBackButtonCommandProp = info.Properties.FirstOrDefault(p => p.Name == "headerBackButtonCommand");
-            if (headerBackButtonCommandProp is not null)
-            {
-                headerBackButtonCommandProp.CustomConverter = new APLCommandListConverter(false);
-            }
-        });
     }
 }

@@ -41,14 +41,11 @@ public abstract class APLComponentBase : IJsonSerializable<APLComponentBase>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var bindProp = info.Properties.FirstOrDefault(p => p.Name == "bind");
-            if (bindProp is not null)
+            bindProp?.ShouldSerialize = ((obj, _) =>
             {
-                bindProp.ShouldSerialize = ((obj, _) =>
-                {
-                    var layout = (T)obj;
-                    return layout.Bindings?.Any() ?? false;
-                });
-            }
+                var layout = (T)obj;
+                return layout.Bindings?.Any() ?? false;
+            });
         });
     }
 }

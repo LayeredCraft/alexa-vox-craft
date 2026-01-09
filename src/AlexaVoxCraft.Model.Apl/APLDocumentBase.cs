@@ -41,11 +41,11 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
 
     [JsonPropertyName("onMount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnMount { get; set; }
+    public APLValueCollection<APLCommand>? OnMount { get; set; }
 
     [JsonPropertyName("onConfigChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand>>? OnConfigChange { get; set; }
+    public APLValueCollection<APLCommand>? OnConfigChange { get; set; }
 
     [JsonPropertyName("settings")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -53,7 +53,7 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
 
     [JsonPropertyName("extensions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLExtension>>? Extensions { get; set; } = new List<APLExtension>();
+    public APLValueCollection<APLExtension>? Extensions { get; set; } = new List<APLExtension>();
 
     [JsonPropertyName("environment")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -61,7 +61,7 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
 
     [JsonExtensionData] public Dictionary<string, object> Handlers { get; set; }
 
-    public void AddHandler(string name, APLValueCollection<APLCommand>> commands)
+    public void AddHandler(string name, APLValueCollection<APLCommand> commands)
     {
         if (Handlers == null)
         {
@@ -81,20 +81,14 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
                 extensionsProp.ShouldSerialize = ((obj, _) =>
                 {
                     var document = (T)obj;
-                    return document.Extensions?.Value?.Any() ?? false;
+                    return document.Extensions?.Any() ?? false;
                 });
-                extensionsProp.CustomConverter = new GenericSingleOrListConverter<APLExtension>(true);
+                extensionsProp.CustomConverter = new APLValueCollectionConverter<APLExtension>(true);
             }
             var onConfigChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onConfigChange");
-            if (onConfigChangeProp is not null)
-            {
-                onConfigChangeProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            onConfigChangeProp?.CustomConverter = new APLCommandListConverter(true);
             var onMountProp = info.Properties.FirstOrDefault(p => p.Name == "onMount");
-            if (onMountProp is not null)
-            {
-                onMountProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            onMountProp?.CustomConverter = new APLCommandListConverter(true);
         });
     }
 }
