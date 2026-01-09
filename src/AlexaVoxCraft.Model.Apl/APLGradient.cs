@@ -18,9 +18,9 @@ public class APLGradient
 
     [JsonPropertyName("colorRange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public APLValue<string[]>? ColorRange { get; set; }
+    public APLValueCollection<string>? ColorRange { get; set; }
 
     [JsonPropertyName("inputRange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public APLValue<double[]>? InputRange { get; set; }
+    public APLValueCollection<double>? InputRange { get; set; }
 }
