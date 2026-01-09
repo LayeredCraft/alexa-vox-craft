@@ -4,20 +4,20 @@ using AlexaVoxCraft.Model.Apl.JsonConverter;
 
 namespace AlexaVoxCraft.Model.Apl.Tests;
 
-public class APLCollectionTests : TestBase
+public class AplValueCollectionTests : TestBase
 {
     private static JsonSerializerOptions CreateOptions(bool alwaysOutputArray)
     {
         var options = new JsonSerializerOptions(AlexaJson);
-        options.Converters.Add(new APLCollectionConverter<APLComponent>(alwaysOutputArray));
+        options.Converters.Add(new APLValueCollectionConverter<APLComponent>(alwaysOutputArray));
         return options;
     }
 
     [Fact]
-    public async Task APLCollection_WithCollectionExpression_Serializes()
+    public async Task APLValueCollection_WithCollectionExpression_Serializes()
     {
         // Collection expression syntax: [item1, item2]
-        APLCollection<APLComponent> collection = [
+        APLValueCollection<APLComponent> collection = [
             new Text { Content = "Hello"! },
             new Spacer { Height = "16dp" },
             new Text { Content = "World"! }
@@ -27,10 +27,10 @@ public class APLCollectionTests : TestBase
     }
 
     [Fact]
-    public async Task APLCollection_WithExpressionString_Serializes()
+    public async Task APLValueCollection_WithExpressionString_Serializes()
     {
         // Expression string assignment: "${data.items}"
-        APLCollection<APLComponent> collection = "${data.items}"!;
+        APLValueCollection<APLComponent> collection = "${data.items}"!;
 
         collection.Expression.Should().Be("${data.items}");
 
@@ -38,7 +38,7 @@ public class APLCollectionTests : TestBase
     }
 
     [Fact]
-    public async Task APLCollection_ImplicitFromList_Serializes()
+    public async Task APLValueCollection_ImplicitFromList_Serializes()
     {
         // Implicit conversion from List<T>
         var list = new List<APLComponent>
@@ -47,7 +47,7 @@ public class APLCollectionTests : TestBase
             new Text { Content = "Item 2"! }
         };
 
-        APLCollection<APLComponent> collection = list!;
+        APLValueCollection<APLComponent> collection = list!;
 
         collection.Items.Should().HaveCount(2);
 
@@ -55,11 +55,11 @@ public class APLCollectionTests : TestBase
     }
 
     [Fact]
-    public async Task APLCollection_ImplicitFromArray_Serializes()
+    public async Task APLValueCollection_ImplicitFromArray_Serializes()
     {
         // Implicit conversion from T[]
         APLComponent[] array = [new Text { Content = "Array Item"! }];
-        APLCollection<APLComponent> collection = array!;
+        APLValueCollection<APLComponent> collection = array!;
 
         collection.Items.Should().HaveCount(1);
 
@@ -67,28 +67,28 @@ public class APLCollectionTests : TestBase
     }
 
     [Fact]
-    public async Task APLCollection_AlwaysOutputArrayFalse_SingleItem_SerializesAsObject()
+    public async Task APLValueCollection_AlwaysOutputArrayFalse_SingleItem_SerializesAsObject()
     {
         // AlwaysOutputArray=false: single-item as object
-        APLCollection<APLComponent> collection = [new Text { Content = "Single"! }];
+        APLValueCollection<APLComponent> collection = [new Text { Content = "Single"! }];
 
         await TestHelper.VerifySerializedObject(collection, CreateOptions(false), "SingleItemAsObject");
     }
 
     [Fact]
-    public async Task APLCollection_AlwaysOutputArrayTrue_SingleItem_SerializesAsArray()
+    public async Task APLValueCollection_AlwaysOutputArrayTrue_SingleItem_SerializesAsArray()
     {
         // AlwaysOutputArray=true: single-item as array
-        APLCollection<APLComponent> collection = [new Text { Content = "Single"! }];
+        APLValueCollection<APLComponent> collection = [new Text { Content = "Single"! }];
 
         await TestHelper.VerifySerializedObject(collection, CreateOptions(true), "SingleItemAsArray");
     }
 
     [Fact]
-    public void APLCollection_SupportsLinq()
+    public void APLValueCollection_SupportsLinq()
     {
         // LINQ operations via IEnumerable<T>
-        APLCollection<APLComponent> collection = [
+        APLValueCollection<APLComponent> collection = [
             new Text { Content = "Text 1"! },
             new Spacer { Height = "16dp" },
             new Text { Content = "Text 2"! }
@@ -102,11 +102,11 @@ public class APLCollectionTests : TestBase
     }
 
     [Fact]
-    public void APLCollection_Deserializes_FromArray()
+    public void APLValueCollection_Deserializes_FromArray()
     {
         const string json = """[{"type":"Text","text":"Item 1"},{"type":"Text","text":"Item 2"}]""";
 
-        var collection = JsonSerializer.Deserialize<APLCollection<APLComponent>>(json, CreateOptions(true));
+        var collection = JsonSerializer.Deserialize<APLValueCollection<APLComponent>>(json, CreateOptions(true));
 
         collection.Should().NotBeNull();
         collection!.Items.Should().HaveCount(2);
@@ -116,11 +116,11 @@ public class APLCollectionTests : TestBase
     }
 
     [Fact]
-    public void APLCollection_Deserializes_FromSingleObject()
+    public void APLValueCollection_Deserializes_FromSingleObject()
     {
         const string json = """{"type":"Text","text":"Single Item"}""";
 
-        var collection = JsonSerializer.Deserialize<APLCollection<APLComponent>>(json, CreateOptions(false));
+        var collection = JsonSerializer.Deserialize<APLValueCollection<APLComponent>>(json, CreateOptions(false));
 
         collection.Should().NotBeNull();
         collection!.Items.Should().HaveCount(1);
@@ -129,11 +129,11 @@ public class APLCollectionTests : TestBase
     }
 
     [Fact]
-    public void APLCollection_Deserializes_FromExpression()
+    public void APLValueCollection_Deserializes_FromExpression()
     {
         const string json = "\"${data.items}\"";
 
-        var collection = JsonSerializer.Deserialize<APLCollection<APLComponent>>(json, CreateOptions(true));
+        var collection = JsonSerializer.Deserialize<APLValueCollection<APLComponent>>(json, CreateOptions(true));
 
         collection.Should().NotBeNull();
         collection!.Expression.Should().Be("${data.items}");
@@ -141,14 +141,14 @@ public class APLCollectionTests : TestBase
     }
 
     [Fact]
-    public void APLCollection_NullHandling()
+    public void APLValueCollection_NullHandling()
     {
         List<APLComponent>? nullList = null;
         string? nullExpression = null;
 
         // Implicit conversions with null
-        APLCollection<APLComponent>? fromNullList = nullList;
-        APLCollection<APLComponent>? fromNullExpression = nullExpression;
+        APLValueCollection<APLComponent>? fromNullList = nullList;
+        APLValueCollection<APLComponent>? fromNullExpression = nullExpression;
 
         fromNullList.Should().BeNull();
         fromNullExpression.Should().BeNull();

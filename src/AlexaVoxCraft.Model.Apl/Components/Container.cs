@@ -20,7 +20,7 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     public Container(IEnumerable<APLComponent> items)
     {
-        Items = new APLCollection<APLComponent>(items);
+        Items = new APLValueCollection<APLComponent>(items);
     }
 
     [JsonPropertyName("type")] public override string Type => nameof(Container);
@@ -39,15 +39,15 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent>? FirstItem { get; set; }
+    public APLValueCollection<APLComponent>? FirstItem { get; set; }
 
     [JsonPropertyName("lastItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent> LastItem { get; set; }
+    public APLValueCollection<APLComponent> LastItem { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent>? Items { get; set; }
+    public APLValueCollection<APLComponent>? Items { get; set; }
 
     [JsonPropertyName("justifyContent")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

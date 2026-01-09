@@ -73,7 +73,6 @@ public static class APLSupport
         LongPress.RegisterTypeInfo<LongPress>();
         SwipeAway.RegisterTypeInfo<SwipeAway>();
         Tap.RegisterTypeInfo<Tap>();
-        APLAction.RegisterTypeInfo<APLAction>();
         AlexaIconButton.RegisterTypeInfo<AlexaIconButton>();
         AlexaListItem.RegisterTypeInfo<AlexaListItem>();
         AlexaPaginatedListItem.RegisterTypeInfo<AlexaPaginatedListItem>();

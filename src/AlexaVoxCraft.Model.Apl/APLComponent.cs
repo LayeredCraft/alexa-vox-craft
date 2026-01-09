@@ -142,23 +142,23 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("onMount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLCommand>? OnMount { get; set; }
+    public APLValueCollection<APLCommand>? OnMount { get; set; }
 
     [JsonPropertyName("onCursorEnter")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLCommand>? OnCursorEnter { get; set; }
+    public APLValueCollection<APLCommand>? OnCursorEnter { get; set; }
 
     [JsonPropertyName("onCursorExit")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLCommand>? OnCursorExit { get; set; }
+    public APLValueCollection<APLCommand>? OnCursorExit { get; set; }
 
     [JsonPropertyName("onSpeechMark")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLCommand>? OnSpeechMark { get; set; }
+    public APLValueCollection<APLCommand>? OnSpeechMark { get; set; }
 
     [JsonPropertyName("transform")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLTransform>? Transform { get; set; }
+    public APLValueCollection<APLTransform>? Transform { get; set; }
 
     [JsonPropertyName("shadowColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
