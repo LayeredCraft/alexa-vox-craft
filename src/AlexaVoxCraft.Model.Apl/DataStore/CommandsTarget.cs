@@ -21,23 +21,17 @@ public class CommandsTarget : IJsonSerializable<CommandsTarget>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
+            itemsProp?.ShouldSerialize = (obj, _) =>
             {
-                itemsProp.ShouldSerialize = (obj, _) =>
-                {
-                    var commandsTarget = (T)obj;
-                    return commandsTarget.Type == TargetType.Devices;
-                };
-            }
+                var commandsTarget = (T)obj;
+                return commandsTarget.Type == TargetType.Devices;
+            };
             var idProp = info.Properties.FirstOrDefault(p => p.Name == "id");
-            if (idProp is not null)
+            idProp?.ShouldSerialize = (obj, _) =>
             {
-                idProp.ShouldSerialize = (obj, _) =>
-                {
-                    var commandsTarget = (T)obj;
-                    return commandsTarget.Type == TargetType.User;
-                };
-            }
+                var commandsTarget = (T)obj;
+                return commandsTarget.Type == TargetType.User;
+            };
         });
     }
 }

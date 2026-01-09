@@ -9,5 +9,5 @@ public class Reinflate : APLCommand
 
     [JsonPropertyName("preservedSequencers")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string[]>? PreservedSequencers { get; set; }
+    public APLValueCollection<string>? PreservedSequencers { get; set; }
 }

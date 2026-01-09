@@ -52,24 +52,15 @@ public class Layout
         AlexaJsonOptions.RegisterTypeModifier<Layout>(info =>
         {
             var bindProp = info.Properties.FirstOrDefault(p => p.Name == "bind");
-            if (bindProp is not null)
+            bindProp?.ShouldSerialize = ((obj, _) =>
             {
-                bindProp.ShouldSerialize = ((obj, _) =>
-                {
-                    var layout = (Layout)obj;
-                    return layout.Bindings?.Any() ?? false;
-                });
-            }
+                var layout = (Layout)obj;
+                return layout.Bindings?.Any() ?? false;
+            });
             var parametersProp = info.Properties.FirstOrDefault(p => p.Name == "parameters");
-            if (parametersProp is not null)
-            {
-                parametersProp.CustomConverter = new ParameterListConverter(true);
-            }
+            parametersProp?.CustomConverter = new ParameterListConverter(true);
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
-            {
-                itemsProp.CustomConverter = new APLComponentListConverter(false);
-            }
+            itemsProp?.CustomConverter = new GenericSingleOrListConverter<APLComponent>(false);
         });
     }
 }

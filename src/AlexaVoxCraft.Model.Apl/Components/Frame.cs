@@ -23,7 +23,7 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
 
     public Frame(IEnumerable<APLComponent> item)
     {
-        Item = new APLCollection<APLComponent>(item);
+        Item = new APLValueCollection<APLComponent>(item);
     }
 
 
@@ -69,7 +69,7 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
 
     [JsonPropertyName("item")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent>? Item { get; set; }
+    public APLValueCollection<APLComponent>? Item { get; set; }
 
     [JsonPropertyName("borderStrokeWidth")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -81,10 +81,7 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var itemProp = info.Properties.FirstOrDefault(p => p.Name == "item");
-            if (itemProp is not null)
-            {
-                itemProp.CustomConverter = new APLCollectionConverter<APLComponent>(false);
-            }
+            itemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
         });
     }
 }

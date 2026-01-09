@@ -6,7 +6,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Commands;
 
-public class Parallel : APLCommand
+public class Parallel : APLCommand, IJsonSerializable<Parallel>
 {
     public Parallel()
     {
@@ -25,27 +25,20 @@ public class Parallel : APLCommand
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-     // JsonConverter(typeof(APLCommandListConverter))]
-    public APLValue<IList<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>? Commands { get; set; }
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-     // JsonConverter(typeof(GenericLegacySingleOrListConverter<object>))]
-    public APLValue<IList<object>> Data { get; set; }
-    public static void AddSupport()
+    public APLValueCollection<object> Data { get; set; }
+
+    public static void RegisterTypeInfo<T>() where T : Parallel
     {
         AlexaJsonOptions.RegisterTypeModifier<Parallel>(info =>
         {
             var commandsProp = info.Properties.FirstOrDefault(p => p.Name == "commands");
-            if (commandsProp is not null)
-            {
-                commandsProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            commandsProp?.CustomConverter = new APLCommandListConverter(false);
             var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
-            if (dataProp is not null)
-            {
-                dataProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
+            dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
         });
     }
 }

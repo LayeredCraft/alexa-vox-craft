@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -13,27 +12,21 @@ public class LongPress : APLGesture, IJsonSerializable<LongPress>
 
     [JsonPropertyName("onLongPressStart")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnLongPressStart { get; set; }
+    public APLValueCollection<APLCommand>? OnLongPressStart { get; set; }
 
     [JsonPropertyName("onLongPressEnd")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnLongPressEnd { get; set; }
+    public APLValueCollection<APLCommand>? OnLongPressEnd { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : LongPress
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var onLongPressStartProp = info.Properties.FirstOrDefault(p => p.Name == "onLongPressStart");
-            if (onLongPressStartProp is not null)
-            {
-                onLongPressStartProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onLongPressStartProp?.CustomConverter = new APLCommandListConverter(false);
 
             var onLongPressEndProp = info.Properties.FirstOrDefault(p => p.Name == "onLongPressEnd");
-            if (onLongPressEndProp is not null)
-            {
-                onLongPressEndProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onLongPressEndProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

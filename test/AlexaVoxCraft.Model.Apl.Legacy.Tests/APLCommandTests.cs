@@ -18,11 +18,11 @@ public class APLCommandTests
     public void CommandDefinitionWorksProperly()
     {
         var commandDefinition = Utility.ExampleFileContent<CommandDefinition>("jackinthebox.json");
-        Assert.Equal(2,commandDefinition.Parameters.Value.Count);
-        var item = Assert.IsType<AnimateItem>(commandDefinition.Commands.Value.First());
-        var transform = Assert.IsType<AnimatedTransform>(item.Value.Value.Skip(1).First());
-        Assert.Equal(2,transform.From.Value.Count);
-        Assert.Equal(0.1,transform.From.Value.First().ScaleX.Value);
+        Assert.Equal(2,commandDefinition.Parameters!.Items!.Count);
+        var item = Assert.IsType<AnimateItem>(commandDefinition.Commands!.Items!.First());
+        var transform = Assert.IsType<AnimatedTransform>(item.Value.Items!.Skip(1).First());
+        Assert.Equal(2,transform.From!.Items!.Count);
+        Assert.Equal(0.1,transform.From.Items.First().ScaleX!.Value);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class APLCommandTests
         Assert.True(Utility.CompareJson(command,"AnimatedItem.json", _output));
 
         var deserial = Utility.ExampleFileContent<AnimateItem>("AnimatedItem.json");
-        var property = Assert.Single(deserial.Value.Value);
+        var property = Assert.Single(deserial.Value);
         var opacity = Assert.IsType<AnimatedOpacity>(property);
         Assert.Equal(0,opacity.From.Value);
         Assert.Equal(1,opacity.To.Value);
@@ -160,8 +160,8 @@ public class APLCommandTests
     public void Select()
     {
         var select = Utility.ExampleFileContent<Select>("Select.json");
-        Assert.Single(select.Commands.Value);
-        Assert.Equal(5, select.Data.Value.Count);
+        Assert.Single(select.Commands!);
+        Assert.Equal(5, select.Data!.Items!.Count);
     }
 
     [Fact]

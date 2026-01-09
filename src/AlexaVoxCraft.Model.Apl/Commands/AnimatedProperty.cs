@@ -7,5 +7,5 @@ namespace AlexaVoxCraft.Model.Apl.Commands;
 public abstract class AnimatedProperty
 {
     [JsonPropertyName("property")]
-    public abstract APLValue<string> Property { get; }
+    public abstract APLValue<string>? Property { get; }
 }

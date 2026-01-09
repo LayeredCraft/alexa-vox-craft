@@ -1,6 +1,5 @@
 using System.Text.Json;
 using AlexaVoxCraft.Model.Serialization;
-using AwesomeAssertions;
 
 namespace AlexaVoxCraft.TestKit.Extensions;
 

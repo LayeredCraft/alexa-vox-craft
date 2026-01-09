@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -10,19 +9,19 @@ public abstract class ActionableComponent : APLComponent, IJsonSerializable<Acti
 {
     [JsonPropertyName("onBlur")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnBlur { get; set; }
+    public APLValueCollection<APLCommand>? OnBlur { get; set; }
 
     [JsonPropertyName("onFocus")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnFocus { get; set; }
+    public APLValueCollection<APLCommand>? OnFocus { get; set; }
 
     [JsonPropertyName("handleKeyDown")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLKeyboardHandler>>? HandleKeyDown { get; set; }
+    public APLValueCollection<APLKeyboardHandler>? HandleKeyDown { get; set; }
 
     [JsonPropertyName("handleKeyUp")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLKeyboardHandler>>? HandleKeyUp { get; set; }
+    public APLValueCollection<APLKeyboardHandler>? HandleKeyUp { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : ActionableComponent
     {
@@ -30,28 +29,15 @@ public abstract class ActionableComponent : APLComponent, IJsonSerializable<Acti
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var onBlurProp = info.Properties.FirstOrDefault(p => p.Name == "onBlur");
-            if (onBlurProp is not null)
-            {
-                onBlurProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onBlurProp?.CustomConverter = new APLCommandListConverter(false);
 
             var onFocusProp = info.Properties.FirstOrDefault(p => p.Name == "onFocus");
-            if (onFocusProp is not null)
-            {
-                onFocusProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onFocusProp?.CustomConverter = new APLCommandListConverter(false);
 
             var handleKeyDownProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyDown");
-            if (handleKeyDownProp is not null)
-            {
-                handleKeyDownProp.CustomConverter = new APLKeyboardHandlerConverter(false);
-            }
+            handleKeyDownProp?.CustomConverter = new APLKeyboardHandlerConverter(false);
 
             var handleKeyUpProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyUp");
-            if (handleKeyUpProp is not null)
-            {
-                handleKeyUpProp.CustomConverter = new APLKeyboardHandlerConverter(false);
-            }
-        });
-    }
+            handleKeyUpProp?.CustomConverter = new APLKeyboardHandlerConverter(false);
+        });}
 }

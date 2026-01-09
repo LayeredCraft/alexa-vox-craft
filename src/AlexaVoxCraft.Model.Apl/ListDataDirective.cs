@@ -31,14 +31,11 @@ public abstract class ListDataDirective : IDirective, IJsonSerializable<ListData
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
+            itemsProp?.ShouldSerialize = (obj, _) =>
             {
-                itemsProp.ShouldSerialize = (obj, _) =>
-                {
-                    var listDataDirective = (T)obj;
-                    return listDataDirective.Items?.Any() ?? false;
-                };
-            }
+                var listDataDirective = (T)obj;
+                return listDataDirective.Items?.Any() ?? false;
+            };
         });
     }
 }

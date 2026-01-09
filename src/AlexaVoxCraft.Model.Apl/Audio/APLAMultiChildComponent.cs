@@ -1,36 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Audio;
 
-public abstract class APLAMultiChildComponent : APLAComponent
+public abstract class APLAMultiChildComponent : APLAComponent, IJsonSerializable<APLAMultiChildComponent>
 {
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Data { get; set; }
+    public APLValueCollection<object>? Data { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLAComponent>>? Items { get; set; }
+    public APLValueCollection<APLAComponent>? Items { get; set; }
 
-    public static void AddSupport()
+    public static void RegisterTypeInfo<T>() where T : APLAMultiChildComponent
     {
         AlexaJsonOptions.RegisterTypeModifier<APLAMultiChildComponent>(typeInfo =>
         {
             var dataProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "data");
-            if (dataProp is not null)
-            {
-                dataProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
+            dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
 
             var itemsProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
-            {
-                itemsProp.CustomConverter = new APLAComponentListConverter(false);
-            }
+            itemsProp?.CustomConverter = new APLValueCollectionConverter<APLAComponent>(false);
         });
     }
 }

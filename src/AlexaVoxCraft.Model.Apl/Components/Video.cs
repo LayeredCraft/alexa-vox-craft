@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -33,72 +32,45 @@ public class Video : APLComponent, IJsonSerializable<Video>
 
     [JsonPropertyName("onEnd")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLCommand>>? OnEnd { get; set; }
+    public APLValueCollection<APLCommand>? OnEnd { get; set; }
 
     [JsonPropertyName("source")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<VideoSource>>? Source { get; set; }
+    public APLValueCollection<VideoSource>? Source { get; set; }
 
     [JsonPropertyName("onPause")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnPause { get; set; }
+    public APLValueCollection<APLCommand>? OnPause { get; set; }
 
     [JsonPropertyName("onPlay")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnPlay { get; set; }
+    public APLValueCollection<APLCommand>? OnPlay { get; set; }
 
     [JsonPropertyName("onTrackUpdate")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnTrackUpdate { get; set; }
+    public APLValueCollection<APLCommand>? OnTrackUpdate { get; set; }
 
     [JsonPropertyName("onTrackReady")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnTrackReady { get; set; }
+    public APLValueCollection<APLCommand>? OnTrackReady { get; set; }
 
     [JsonPropertyName("onTrackFail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnTrackFail { get; set; }
+    public APLValueCollection<APLCommand>? OnTrackFail { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : Video
     {
         APLComponent.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
-            var sourceProp = info.Properties.FirstOrDefault(p => p.Name == "source");
-            if (sourceProp is not null)
-            {
-                sourceProp.CustomConverter = new GenericSingleOrListConverter<VideoSource>(true);
-            }
-
             var onPauseProp = info.Properties.FirstOrDefault(p => p.Name == "onPause");
-            if (onPauseProp is not null)
-            {
-                onPauseProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onPauseProp?.CustomConverter = new APLCommandListConverter(false);
 
             var onPlayProp = info.Properties.FirstOrDefault(p => p.Name == "onPlay");
-            if (onPlayProp is not null)
-            {
-                onPlayProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onPlayProp?.CustomConverter = new APLCommandListConverter(false);
 
             var onTrackUpdateProp = info.Properties.FirstOrDefault(p => p.Name == "onTrackUpdate");
-            if (onTrackUpdateProp is not null)
-            {
-                onTrackUpdateProp.CustomConverter = new APLCommandListConverter(false);
-            }
-
-            var onTrackReadyProp = info.Properties.FirstOrDefault(p => p.Name == "onTrackReady");
-            if (onTrackReadyProp is not null)
-            {
-                onTrackReadyProp.CustomConverter = new APLCommandListConverter(true);
-            }
-
-            var onTrackFailProp = info.Properties.FirstOrDefault(p => p.Name == "onTrackFail");
-            if (onTrackFailProp is not null)
-            {
-                onTrackFailProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            onTrackUpdateProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

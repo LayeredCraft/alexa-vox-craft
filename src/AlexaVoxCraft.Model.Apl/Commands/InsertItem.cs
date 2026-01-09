@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -20,17 +19,14 @@ public class InsertItem : APLCommand, IJsonSerializable<InsertItem>
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Items { get; set; }
+    public APLValueCollection<object>? Items { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : InsertItem
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(typeInfo =>
         {
             var parameterProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "items");
-            if (parameterProp is not null)
-            {
-                parameterProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
+            parameterProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
         });
     }
 }

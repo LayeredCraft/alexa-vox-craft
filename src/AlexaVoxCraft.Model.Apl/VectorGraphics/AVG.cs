@@ -6,7 +6,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 
-public class AVG
+public class AVG : IJsonSerializable<AVG>
 {
     [JsonPropertyName("type")] public string Type => nameof(AVG);
 
@@ -26,7 +26,7 @@ public class AVG
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Data { get; set; }
+    public APLValueCollection<object>? Data { get; set; }
 
     [JsonPropertyName("height")] public APLAbsoluteDimensionValue Height { get; set; }
 
@@ -34,7 +34,7 @@ public class AVG
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<IAVGItem>>? Items { get; set; }
+    public APLValueCollection<IAVGItem>? Items { get; set; }
 
     [JsonPropertyName("resources")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -46,7 +46,7 @@ public class AVG
 
     [JsonPropertyName("parameters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<AVGParameter>>? Parameters { get; set; }
+    public APLValueCollection<AVGParameter>? Parameters { get; set; }
 
     [JsonPropertyName("scaleTypeHeight")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -63,20 +63,15 @@ public class AVG
     [JsonPropertyName("viewportWidth")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int?>? ViewportWidth { get; set; }
-    public static void AddSupport()
+
+    public static void RegisterTypeInfo<T>() where T : AVG
     {
         AlexaJsonOptions.RegisterTypeModifier<AVG>(info =>
         {
             var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
-            if (dataProp is not null)
-            {
-                dataProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
+            dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
-            {
-                itemsProp.CustomConverter = new AVGItemListConverter(false);
-            }
+            itemsProp?.CustomConverter = new AVGItemListConverter(false);
         });
     }
 }

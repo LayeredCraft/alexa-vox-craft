@@ -89,9 +89,9 @@ public class APLDocumentTests
         Assert.Equal("APL", doc.Type);
         Assert.Equal(APLDocumentVersion.V1_3, doc.Version);
         Assert.NotNull(doc.MainTemplate);
-        Assert.Equal(1,doc.OnMount.Value.Count);
+        Assert.Single(doc.OnMount!.Items!);
 
-        var mount = doc.OnMount.Value.Single();
+        var mount = doc.OnMount.Items!.Single();
         Assert.IsType<OpenURL>(mount);
         Assert.True(Utility.CompareJson(doc, "Example_DailyCheese.json", _output));
     }
@@ -104,7 +104,7 @@ public class APLDocumentTests
         Assert.Equal(APLDocumentVersion.V1_6, doc.Version);
         Assert.True(doc.Settings.SupportsResizing);
 
-        var occ = doc.OnConfigChange.Value.Single();
+        var occ = doc.OnConfigChange!.Single();
         Assert.IsType<Reinflate>(occ);
         Assert.True(Utility.CompareJson(doc, "Example_ChangeDocumentLayout.json", _output));
     }

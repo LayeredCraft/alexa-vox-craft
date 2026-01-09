@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Commands;
 
@@ -10,9 +9,9 @@ public class SendEvent : APLCommand
 
     [JsonPropertyName("arguments")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<object>>? Arguments { get; set; }
+    public APLValueCollection<object>? Arguments { get; set; }
 
     [JsonPropertyName("components")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<string>>? Components { get; set; }
+    public APLValueCollection<string>? Components { get; set; }
 }

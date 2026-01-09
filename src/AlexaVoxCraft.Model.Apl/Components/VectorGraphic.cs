@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
-using AlexaVoxCraft.Model.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -24,28 +20,14 @@ public class VectorGraphic : TouchComponent, IJsonSerializable<VectorGraphic>
 
     [JsonPropertyName("onLoad")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnLoad { get; set; }
+    public APLValueCollection<APLCommand>? OnLoad { get; set; }
 
     [JsonPropertyName("onFail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnFail { get; set; }
+    public APLValueCollection<APLCommand>? OnFail { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : VectorGraphic
     {
         TouchComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var onLoadProp = info.Properties.FirstOrDefault(p => p.Name == "onLoad");
-            if (onLoadProp is not null)
-            {
-                onLoadProp.CustomConverter = new APLCommandListConverter(true);
-            }
-
-            var onFailProp = info.Properties.FirstOrDefault(p => p.Name == "onFail");
-            if (onFailProp is not null)
-            {
-                onFailProp.CustomConverter = new APLCommandListConverter(true);
-            }
-        });
     }
 }

@@ -20,7 +20,7 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("padding")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<int>>? Padding { get; set; }
+    public APLValueCollection<int>? Padding { get; set; }
 
     [JsonPropertyName("paddingStart")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -142,23 +142,23 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("onMount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnMount { get; set; }
+    public APLValueCollection<APLCommand>? OnMount { get; set; }
 
     [JsonPropertyName("onCursorEnter")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnCursorEnter { get; set; }
+    public APLValueCollection<APLCommand>? OnCursorEnter { get; set; }
 
     [JsonPropertyName("onCursorExit")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnCursorExit { get; set; }
+    public APLValueCollection<APLCommand>? OnCursorExit { get; set; }
 
     [JsonPropertyName("onSpeechMark")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSpeechMark { get; set; }
+    public APLValueCollection<APLCommand>? OnSpeechMark { get; set; }
 
     [JsonPropertyName("transform")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLTransform>>? Transform { get; set; }
+    public APLValueCollection<APLTransform>? Transform { get; set; }
 
     [JsonPropertyName("shadowColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -182,15 +182,15 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("entities")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? Entities { get; set; }
+    public APLValueCollection<object>? Entities { get; set; }
 
     [JsonPropertyName("handleTick")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<TickHandler>>? HandleTick { get; set; }
+    public APLValueCollection<TickHandler>? HandleTick { get; set; }
 
     [JsonPropertyName("handleVisibilityChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<VisibilityChangeHandler>>? HandleVisibilityChange { get; set; }
+    public APLValueCollection<VisibilityChangeHandler>? HandleVisibilityChange { get; set; }
 
     [JsonPropertyName("role")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -198,11 +198,11 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("actions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLAction>>? Actions { get; set; }
+    public APLValueCollection<APLAction>? Actions { get; set; }
 
     [JsonPropertyName("preserve")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<string>>? Preserve { get; set; }
+    public APLValueCollection<string>? Preserve { get; set; }
 
     [JsonPropertyName("layoutDirection")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -214,50 +214,31 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var paddingProp = info.Properties.FirstOrDefault(p => p.Name == "padding");
-            if (paddingProp is not null)
-            {
-                paddingProp.CustomConverter = new GenericSingleOrListConverter<int>(false);
-            }
+            paddingProp?.CustomConverter = new APLValueCollectionConverter<int>(false);
+
             var onMountProp = info.Properties.FirstOrDefault(p => p.Name == "onMount");
-            if (onMountProp is not null)
-            {
-                onMountProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onMountProp?.CustomConverter = new APLCommandListConverter(false);
+
             var onCursorEnterProp = info.Properties.FirstOrDefault(p => p.Name == "onCursorEnter");
-            if (onCursorEnterProp is not null)
-            {
-                onCursorEnterProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onCursorEnterProp?.CustomConverter = new APLCommandListConverter(false);
+
             var onCursorExitProp = info.Properties.FirstOrDefault(p => p.Name == "onCursorExit");
-            if (onCursorExitProp is not null)
-            {
-                onCursorExitProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onCursorExitProp?.CustomConverter = new APLCommandListConverter(false);
+
             var onSpeechMarkProp = info.Properties.FirstOrDefault(p => p.Name == "onSpeechMark");
-            if (onSpeechMarkProp is not null)
-            {
-                onSpeechMarkProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onSpeechMarkProp?.CustomConverter = new APLCommandListConverter(false);
+
             var entitiesProp = info.Properties.FirstOrDefault(p => p.Name == "entities");
-            if (entitiesProp is not null)
-            {
-                entitiesProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
+            entitiesProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
+
             var handleTickProp = info.Properties.FirstOrDefault(p => p.Name == "handleTick");
-            if (handleTickProp is not null)
-            {
-                handleTickProp.CustomConverter = new GenericSingleOrListConverter<TickHandler>(false);
-            }
+            handleTickProp?.CustomConverter = new APLValueCollectionConverter<TickHandler>(false);
+
             var handleVisibilityChangeProp = info.Properties.FirstOrDefault(p => p.Name == "handleVisibilityChange");
-            if (handleVisibilityChangeProp is not null)
-            {
-                handleVisibilityChangeProp.CustomConverter = new GenericSingleOrListConverter<VisibilityChangeHandler>(false);
-            }
+            handleVisibilityChangeProp?.CustomConverter = new APLValueCollectionConverter<VisibilityChangeHandler>(false);
+
             var actionsProp = info.Properties.FirstOrDefault(p => p.Name == "actions");
-            if (actionsProp is not null)
-            {
-                actionsProp.CustomConverter = new GenericSingleOrListConverter<APLAction>(false);
-            }
+            actionsProp?.CustomConverter = new APLValueCollectionConverter<APLAction>(false);
         });
     }
 }

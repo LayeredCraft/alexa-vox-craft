@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -8,8 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 
 public class EditText : ActionableComponent, IJsonSerializable<EditText>
 {
-    [JsonPropertyName("type")]
-    public override string Type => nameof(EditText);
+    [JsonPropertyName("type")] public override string Type => nameof(EditText);
 
     [JsonPropertyName("borderColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -73,11 +71,11 @@ public class EditText : ActionableComponent, IJsonSerializable<EditText>
 
     [JsonPropertyName("onTextChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnTextChange { get; set; }
+    public APLValueCollection<APLCommand>? OnTextChange { get; set; }
 
     [JsonPropertyName("onSubmit")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnSubmit { get; set; }
+    public APLValueCollection<APLCommand>? OnSubmit { get; set; }
 
     [JsonPropertyName("secureInput")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -113,16 +111,10 @@ public class EditText : ActionableComponent, IJsonSerializable<EditText>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var onTextChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onTextChange");
-            if (onTextChangeProp is not null)
-            {
-                onTextChangeProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onTextChangeProp?.CustomConverter = new APLCommandListConverter(false);
 
             var onSubmitProp = info.Properties.FirstOrDefault(p => p.Name == "onSubmit");
-            if (onSubmitProp is not null)
-            {
-                onSubmitProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onSubmitProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -28,18 +27,15 @@ public class AVGGroup : AVGItem, IJsonSerializable<AVGGroup>
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<IAVGItem>> Items { get; set; }
+    public APLValueCollection<IAVGItem> Items { get; set; }
 
-    public new static void RegisterTypeInfo<T>() where T : AVGGroup
+    public static void RegisterTypeInfo<T>() where T : AVGGroup
     {
         AVGItem.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            if (itemsProp is not null)
-            {
-                itemsProp.CustomConverter = new AVGItemListConverter(false);
-            }
+            itemsProp?.CustomConverter = new AVGItemListConverter(false);
         });
     }
 }

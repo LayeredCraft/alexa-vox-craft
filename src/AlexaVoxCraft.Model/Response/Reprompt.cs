@@ -37,14 +37,11 @@ public class Reprompt
         ti =>
         {
             var prop = ti.Properties.FirstOrDefault(p => p.Name == "directives");
-            if (prop is not null)
+            prop?.ShouldSerialize = (obj, _) =>
             {
-                prop.ShouldSerialize = (obj, _) =>
-                {
-                    var response = (ResponseBody)obj;
-                    return response.Directives is { Count: > 0 };
-                };
-            }
+                var response = (ResponseBody)obj;
+                return response.Directives is { Count: > 0 };
+            };
         }
     ];
 }

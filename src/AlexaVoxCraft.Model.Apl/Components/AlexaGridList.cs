@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -49,10 +48,10 @@ public class AlexaGridList : ResponsiveTemplate, IJsonSerializable<AlexaGridList
     public APLValue<int>? ListItemHorizontalCount { get; set; }
 
     [JsonPropertyName("listItems")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>>? ListItems { get; set; }
+    public APLValueCollection<object>? ListItems { get; set; }
 
     [JsonPropertyName("primaryAction")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>? PrimaryAction { get; set; }
 
     [JsonPropertyName("imageShadow")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<bool?>? ImageShadow { get; set; }
@@ -75,16 +74,10 @@ public class AlexaGridList : ResponsiveTemplate, IJsonSerializable<AlexaGridList
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var listItemsProp = info.Properties.FirstOrDefault(p => p.Name == "listItems");
-            if (listItemsProp is not null)
-            {
-                listItemsProp.CustomConverter = new GenericSingleOrListConverter<object>(false);
-            }
+            listItemsProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
 
             var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
-            if (primaryActionProp is not null)
-            {
-                primaryActionProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            primaryActionProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

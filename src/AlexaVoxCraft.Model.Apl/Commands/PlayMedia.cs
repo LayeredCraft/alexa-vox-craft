@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.Components;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
@@ -21,17 +20,14 @@ public class PlayMedia : APLCommand, IJsonSerializable<PlayMedia>
     public APLValue<string>? ComponentId { get; set; }
 
     [JsonPropertyName("source")]
-    public APLValue<IList<VideoSource>> Value { get; set; }
+    public APLValueCollection<VideoSource> Value { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : PlayMedia
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var prop = info.Properties.FirstOrDefault(p => p.Name == "source");
-            if (prop is not null)
-            {
-                prop.CustomConverter = new GenericSingleOrListConverter<VideoSource>(false);
-            }
+            prop?.CustomConverter = new APLValueCollectionConverter<VideoSource>(false);
         });
     }
 }

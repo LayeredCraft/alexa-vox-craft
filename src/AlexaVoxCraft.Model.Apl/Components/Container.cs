@@ -20,7 +20,7 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     public Container(IEnumerable<APLComponent> items)
     {
-        Items = new APLCollection<APLComponent>(items);
+        Items = new APLValueCollection<APLComponent>(items);
     }
 
     [JsonPropertyName("type")] public override string Type => nameof(Container);
@@ -31,7 +31,7 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<object>> Data { get; set; }
+    public APLValueCollection<object> Data { get; set; }
 
     [JsonPropertyName("direction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -39,15 +39,15 @@ public class Container : APLComponent, IJsonSerializable<Container>
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent>? FirstItem { get; set; }
+    public APLValueCollection<APLComponent>? FirstItem { get; set; }
 
     [JsonPropertyName("lastItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent> LastItem { get; set; }
+    public APLValueCollection<APLComponent> LastItem { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLCollection<APLComponent>? Items { get; set; }
+    public APLValueCollection<APLComponent>? Items { get; set; }
 
     [JsonPropertyName("justifyContent")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -67,16 +67,16 @@ public class Container : APLComponent, IJsonSerializable<Container>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
-            dataProp?.CustomConverter = new GenericSingleOrListConverter<object>(false);
-
+            dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
+            
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            itemsProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
+            itemsProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
 
             var firstItemProp = info.Properties.FirstOrDefault(p => p.Name == "firstItem");
-            firstItemProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
+            firstItemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
 
             var lastItemProp = info.Properties.FirstOrDefault(p => p.Name == "lastItem");
-            lastItemProp?.CustomConverter = new APLCollectionConverter<APLComponent>(false);
+            lastItemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
         });
     }
 }

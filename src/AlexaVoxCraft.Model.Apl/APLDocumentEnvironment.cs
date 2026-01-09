@@ -25,10 +25,7 @@ public class APLDocumentEnvironment
         AlexaJsonOptions.RegisterTypeModifier<APLDocumentEnvironment>(info =>
         {
             var parametersProp = info.Properties.FirstOrDefault(p => p.Name == "parameters");
-            if (parametersProp is not null)
-            {
-                parametersProp.CustomConverter = new ParameterListConverter(true);
-            }
+            parametersProp?.CustomConverter = new ParameterListConverter(true);
         });
     }
 }

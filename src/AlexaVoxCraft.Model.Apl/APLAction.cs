@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -18,17 +17,14 @@ public class APLAction : IJsonSerializable<APLAction>
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? Commands { get; set; }
+    public APLValueCollection<APLCommand>? Commands { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : APLAction
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var commandsProp = info.Properties.FirstOrDefault(p => p.Name == "commands");
-            if (commandsProp is not null)
-            {
-                commandsProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            commandsProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

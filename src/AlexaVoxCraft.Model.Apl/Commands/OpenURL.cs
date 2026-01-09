@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -14,17 +13,14 @@ public class OpenURL : APLCommand, IJsonSerializable<OpenURL>
 
     [JsonPropertyName("onFail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? OnFail { get; set; }
+    public APLValueCollection<APLCommand>? OnFail { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : OpenURL
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var onFailProp = info.Properties.FirstOrDefault(p => p.Name == "onFail");
-            if (onFailProp is not null)
-            {
-                onFailProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onFailProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

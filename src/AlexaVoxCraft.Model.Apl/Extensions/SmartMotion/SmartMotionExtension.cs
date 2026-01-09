@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AlexaVoxCraft.Model.Apl.Extensions.SmartMotion;
+﻿namespace AlexaVoxCraft.Model.Apl.Extensions.SmartMotion;
 
 public class SmartMotionExtension : APLExtension
 {
@@ -17,7 +15,7 @@ public class SmartMotionExtension : APLExtension
         Name = name;
     }
 
-    public void OnDeviceStateChanged(APLDocumentBase document, APLValue<IList<APLCommand>> commands)
+    public void OnDeviceStateChanged(APLDocumentBase document, APLValueCollection<APLCommand> commands)
     {
         document.AddHandler($"{Name}:{DeviceStateChangedEventName}", commands);
     }

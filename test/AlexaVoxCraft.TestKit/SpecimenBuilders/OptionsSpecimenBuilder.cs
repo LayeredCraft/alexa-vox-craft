@@ -4,7 +4,6 @@ using AlexaVoxCraft.Model.Response.Ssml;
 using AlexaVoxCraft.TestKit.RequestSpecifications;
 using AutoFixture.Kernel;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 
 namespace AlexaVoxCraft.TestKit.SpecimenBuilders;
 

@@ -18,14 +18,14 @@ public class Sequence : ActionableComponent, IJsonSerializable<Sequence>
 
     public Sequence(IEnumerable<APLComponent> items)
     {
-        Items = items.ToList();
+        Items = [..items];
     }
 
     [JsonPropertyName("type")] public override string Type => nameof(Sequence);
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<object>> Data { get; set; }
+    public APLValueCollection<object> Data { get; set; }
 
     [JsonPropertyName("scrollDirection")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -33,15 +33,15 @@ public class Sequence : ActionableComponent, IJsonSerializable<Sequence>
 
     [JsonPropertyName("firstItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>> FirstItem { get; set; }
+    public APLValueCollection<APLComponent> FirstItem { get; set; }
 
     [JsonPropertyName("lastItem")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>> LastItem { get; set; }
+    public APLValueCollection<APLComponent> LastItem { get; set; }
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<List<APLComponent>> Items { get; set; }
+    public APLValueCollection<APLComponent> Items { get; set; }
 
     [JsonPropertyName("numbered")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -49,7 +49,7 @@ public class Sequence : ActionableComponent, IJsonSerializable<Sequence>
 
     [JsonPropertyName("onScroll")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> OnScroll { get; set; }
+    public APLValueCollection<APLCommand> OnScroll { get; set; }
 
     [JsonPropertyName("scaling")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -65,10 +65,7 @@ public class Sequence : ActionableComponent, IJsonSerializable<Sequence>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var onScrollProp = info.Properties.FirstOrDefault(p => p.Name == "onScroll");
-            if (onScrollProp is not null)
-            {
-                onScrollProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onScrollProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

@@ -18,7 +18,7 @@ public class ScrollView : ActionableComponent, IJsonSerializable<ScrollView>
 
     public ScrollView(APLComponent component)
     {
-        Item = new List<APLComponent> { component };
+        Item = [component];
     }
 
     public ScrollView(params APLComponent[] components) : this((IEnumerable<APLComponent>)components)
@@ -27,14 +27,14 @@ public class ScrollView : ActionableComponent, IJsonSerializable<ScrollView>
 
     public ScrollView(IEnumerable<APLComponent> components)
     {
-        Item = new List<APLComponent>(components);
+        Item = [..components];
     }
 
     [JsonPropertyName("item")][JsonIgnore (Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLComponent>> Item { get; set; }
+    public APLValueCollection<APLComponent> Item { get; set; }
 
     [JsonPropertyName("onScroll")][JsonIgnore (Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>> OnScroll { get; set; }
+    public APLValueCollection<APLCommand> OnScroll { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : ScrollView
     {
@@ -42,16 +42,10 @@ public class ScrollView : ActionableComponent, IJsonSerializable<ScrollView>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var itemProp = info.Properties.FirstOrDefault(p => p.Name == "item");
-            if (itemProp is not null)
-            {
-                itemProp.CustomConverter = new APLComponentListConverter(false);
-            }
+            itemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
 
             var onScrollProp = info.Properties.FirstOrDefault(p => p.Name == "onScroll");
-            if (onScrollProp is not null)
-            {
-                onScrollProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            onScrollProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

@@ -1,4 +1,3 @@
-using AutoFixture;
 using AutoFixture.Kernel;
 using LayeredCraft.StructuredLogging.Testing;
 using Microsoft.Extensions.Logging;

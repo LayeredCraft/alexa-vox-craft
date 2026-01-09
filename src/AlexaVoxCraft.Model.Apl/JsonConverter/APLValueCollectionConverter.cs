@@ -5,21 +5,34 @@ using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.JsonConverter;
 
-public class APLCollectionConverter<T> : JsonConverter<APLCollection<T>>
+public class APLValueCollectionConverter<T> : JsonConverter<APLValueCollection<T>>
 {
     private readonly bool _alwaysOutputArray;
 
-    public APLCollectionConverter(bool alwaysOutputArray)
+    public APLValueCollectionConverter(bool alwaysOutputArray)
     {
         _alwaysOutputArray = alwaysOutputArray;
     }
 
-    public override APLCollection<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    protected virtual object OutputArrayItem(T value) => value!;
+
+    protected virtual JsonTokenType SingleTokenType => JsonTokenType.StartObject;
+
+    protected virtual void ReadSingle(ref Utf8JsonReader reader, JsonSerializerOptions options, IList<T> list)
+    {
+        var value = JsonSerializer.Deserialize<T>(ref reader, options);
+        if (value is not null)
+        {
+            list.Add(value);
+        }
+    }
+
+    public override APLValueCollection<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
             return null;
 
-        var collection = new APLCollection<T>();
+        var collection = new APLValueCollection<T>();
 
         // Handle expression strings: "${data.items}"
         if (reader.TokenType == JsonTokenType.String)
@@ -28,14 +41,10 @@ public class APLCollectionConverter<T> : JsonConverter<APLCollection<T>>
             return collection;
         }
 
-        // Handle single object (Alexa allows single item instead of array)
-        if (reader.TokenType == JsonTokenType.StartObject)
+        // Handle single item using virtual method
+        if (reader.TokenType == SingleTokenType)
         {
-            var item = JsonSerializer.Deserialize<T>(ref reader, options);
-            if (item is not null)
-            {
-                collection.Items!.Add(item);
-            }
+            ReadSingle(ref reader, options, collection.Items!);
             return collection;
         }
 
@@ -53,10 +62,10 @@ public class APLCollectionConverter<T> : JsonConverter<APLCollection<T>>
             return collection;
         }
 
-        throw new JsonException($"Unexpected token {reader.TokenType} for APLCollection<{typeof(T).Name}>");
+        throw new JsonException($"Unexpected token {reader.TokenType} for APLValueCollection<{typeof(T).Name}>");
     }
 
-    public override void Write(Utf8JsonWriter writer, APLCollection<T> value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, APLValueCollection<T> value, JsonSerializerOptions options)
     {
         // Expression takes precedence
         if (!string.IsNullOrEmpty(value.Expression))
@@ -72,18 +81,18 @@ public class APLCollectionConverter<T> : JsonConverter<APLCollection<T>>
             return;
         }
 
-        // Write single item as object if AlwaysOutputArray is false
+        // Write single item using virtual method if AlwaysOutputArray is false
         if (!_alwaysOutputArray && items.Count == 1)
         {
-            JsonSerializer.Serialize(writer, items[0], options);
+            JsonSerializer.Serialize(writer, OutputArrayItem(items[0]), options);
             return;
         }
 
-        // Write array
+        // Write array using virtual method for each item
         writer.WriteStartArray();
         foreach (var item in items)
         {
-            JsonSerializer.Serialize(writer, item, options);
+            JsonSerializer.Serialize(writer, OutputArrayItem(item), options);
         }
         writer.WriteEndArray();
     }

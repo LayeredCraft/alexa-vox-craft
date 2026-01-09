@@ -74,7 +74,7 @@ public class AVGText : AVGItem, IJsonSerializable<AVGText>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int?> LetterSpacing { get; set; }
 
-    public new static void RegisterTypeInfo<T>() where T : AVGText
+    public static void RegisterTypeInfo<T>() where T : AVGText
     {
         AVGItem.RegisterTypeInfo<T>();
     }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Apl.VectorGraphics.Filters;
 
@@ -13,5 +12,5 @@ public interface IAVGItem
 
     [JsonPropertyName("filters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<IAVGFilter>>? Filters { get; set; }
+    public APLValueCollection<IAVGFilter>? Filters { get; set; }
 }

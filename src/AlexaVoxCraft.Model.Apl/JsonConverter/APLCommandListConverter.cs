@@ -1,6 +1,6 @@
 ﻿namespace AlexaVoxCraft.Model.Apl.JsonConverter;
 
-public class APLCommandListConverter : SingleOrListConverter<APLCommand>
+public class APLCommandListConverter : APLValueCollectionConverter<APLCommand>
 {
     public APLCommandListConverter(bool alwaysOutputArray) : base(alwaysOutputArray)
     {

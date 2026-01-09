@@ -1,6 +1,4 @@
 using AlexaVoxCraft.TestKit.SpecimenBuilders;
-using AutoFixture;
-using AutoFixture.Xunit3;
 
 namespace AlexaVoxCraft.TestKit.Attributes;
 

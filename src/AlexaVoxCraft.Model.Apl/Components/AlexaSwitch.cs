@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -12,7 +11,7 @@ public class AlexaSwitch : APLComponent, IJsonSerializable<AlexaSwitch>
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<IList<APLCommand>>? PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand>? PrimaryAction { get; set; }
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -36,10 +35,7 @@ public class AlexaSwitch : APLComponent, IJsonSerializable<AlexaSwitch>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
-            if (primaryActionProp is not null)
-            {
-                primaryActionProp.CustomConverter = new APLCommandListConverter(false);
-            }
+            primaryActionProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }
