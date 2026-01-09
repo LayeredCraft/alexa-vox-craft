@@ -1,4 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -68,5 +71,13 @@ public class AlexaGridList : ResponsiveTemplate, IJsonSerializable<AlexaGridList
     public new static void RegisterTypeInfo<T>() where T : AlexaGridList
     {
         ResponsiveTemplate.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var listItemsProp = info.Properties.FirstOrDefault(p => p.Name == "listItems");
+            listItemsProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
+
+            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
+            primaryActionProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

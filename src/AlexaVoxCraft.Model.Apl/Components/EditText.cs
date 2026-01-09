@@ -1,11 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
 public class EditText : ActionableComponent, IJsonSerializable<EditText>
 {
-    [JsonPropertyName("type")]
-    public override string Type => nameof(EditText);
+    [JsonPropertyName("type")] public override string Type => nameof(EditText);
 
     [JsonPropertyName("borderColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -106,5 +108,13 @@ public class EditText : ActionableComponent, IJsonSerializable<EditText>
     public new static void RegisterTypeInfo<T>() where T : EditText
     {
         ActionableComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var onTextChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onTextChange");
+            onTextChangeProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onSubmitProp = info.Properties.FirstOrDefault(p => p.Name == "onSubmit");
+            onSubmitProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

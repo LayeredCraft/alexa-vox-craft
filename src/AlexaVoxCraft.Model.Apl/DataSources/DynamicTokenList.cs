@@ -34,14 +34,11 @@ public class DynamicTokenList : APLDataSource, IJsonSerializable<DynamicTokenLis
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var prop = info.Properties.FirstOrDefault(p => p.Name == "items");
-            if (prop is not null)
+            prop?.ShouldSerialize = (obj, _) =>
             {
-                prop.ShouldSerialize = (obj, _) =>
-                {
-                    var dynamicIndexList = (T)obj;
-                    return dynamicIndexList.Items?.Any() ?? false;
-                };
-            }
+                var dynamicIndexList = (T)obj;
+                return dynamicIndexList.Items?.Any() ?? false;
+            };
         });
     }
 }

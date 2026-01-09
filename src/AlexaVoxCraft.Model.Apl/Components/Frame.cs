@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -75,5 +78,10 @@ public class Frame : APLComponent, IJsonSerializable<Frame>
     public new static void RegisterTypeInfo<T>() where T : Frame
     {
         APLComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var itemProp = info.Properties.FirstOrDefault(p => p.Name == "item");
+            itemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
+        });
     }
 }

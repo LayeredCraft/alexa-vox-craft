@@ -67,7 +67,16 @@ public class Container : APLComponent, IJsonSerializable<Container>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
-            dataProp?.CustomConverter = new GenericSingleOrListConverter<object>(false);
+            dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
+            
+            var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
+            itemsProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
+
+            var firstItemProp = info.Properties.FirstOrDefault(p => p.Name == "firstItem");
+            firstItemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
+
+            var lastItemProp = info.Properties.FirstOrDefault(p => p.Name == "lastItem");
+            lastItemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
         });
     }
 }

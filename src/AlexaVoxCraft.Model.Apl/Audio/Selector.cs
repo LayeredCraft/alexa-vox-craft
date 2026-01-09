@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Apl.Audio;
 
-public class Selector : APLAMultiChildComponent
+public class Selector : APLAMultiChildComponent, IJsonSerializable<Selector>
 {
     [JsonPropertyName("strategy")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -10,4 +10,9 @@ public class Selector : APLAMultiChildComponent
 
     [JsonPropertyName("type")]
     public override string Type => nameof(Selector);
+
+    public static void RegisterTypeInfo<T>() where T : Selector
+    {
+        APLAMultiChildComponent.RegisterTypeInfo<T>();
+    }
 }

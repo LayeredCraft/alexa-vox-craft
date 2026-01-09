@@ -62,5 +62,10 @@ public class Sequence : ActionableComponent, IJsonSerializable<Sequence>
     public new static void RegisterTypeInfo<T>() where T : Sequence
     {
         ActionableComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var onScrollProp = info.Properties.FirstOrDefault(p => p.Name == "onScroll");
+            onScrollProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

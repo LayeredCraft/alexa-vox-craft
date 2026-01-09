@@ -1,5 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.Filters;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -49,5 +52,13 @@ public class Image : APLComponent, IJsonSerializable<Image>
     public new static void RegisterTypeInfo<T>() where T : Image
     {
         APLComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var sourcesProp = info.Properties.FirstOrDefault(p => p.Name == "sources");
+            sourcesProp?.CustomConverter = new StringOrArrayValueCollectionConverter(false);
+
+            var filtersProp = info.Properties.FirstOrDefault(p => p.Name == "filters");
+            filtersProp?.CustomConverter = new APLValueCollectionConverter<IImageFilter>(false);
+        });
     }
 }

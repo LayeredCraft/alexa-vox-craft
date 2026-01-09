@@ -56,13 +56,5 @@ public class AlexaImage : APLComponent, IJsonSerializable<AlexaImage>
     public new static void RegisterTypeInfo<T>() where T : AlexaImage
     {
         APLComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var onLoadProp = info.Properties.FirstOrDefault(p => p.Name == "onLoad");
-            onLoadProp?.CustomConverter = new APLCommandListConverter(true);
-
-            var onFailProp = info.Properties.FirstOrDefault(p => p.Name == "onFail");
-            onFailProp?.CustomConverter = new APLCommandListConverter(true);
-        });
     }
 }

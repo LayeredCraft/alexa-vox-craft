@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -50,5 +53,22 @@ public class GridSequence : ActionableComponent, IJsonSerializable<GridSequence>
     public new static void RegisterTypeInfo<T>() where T : GridSequence
     {
         ActionableComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
+            dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
+
+            var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
+            itemsProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
+
+            var childHeightsProp = info.Properties.FirstOrDefault(p => p.Name == "childHeights");
+            childHeightsProp?.CustomConverter = new APLValueCollectionConverter<APLDimensionValue>(false);
+
+            var childWidthsProp = info.Properties.FirstOrDefault(p => p.Name == "childWidths");
+            childWidthsProp?.CustomConverter = new APLValueCollectionConverter<APLDimensionValue>(false);
+
+            var onScrollProp = info.Properties.FirstOrDefault(p => p.Name == "onScroll");
+            onScrollProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

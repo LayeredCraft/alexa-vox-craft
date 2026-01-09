@@ -51,14 +51,11 @@ public class Parameter : IJsonSerializable<Parameter>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var prop = info.Properties.FirstOrDefault(p => p.Name == "type");
-            if (prop is not null)
+            prop?.ShouldSerialize = (obj, _) =>
             {
-                prop.ShouldSerialize = (obj, _) =>
-                {
-                    var parameter = (T)obj;
-                    return parameter.Type != ParameterType.any;
-                };
-            }
+                var parameter = (T)obj;
+                return parameter.Type != ParameterType.any;
+            };
         });
     }
 }

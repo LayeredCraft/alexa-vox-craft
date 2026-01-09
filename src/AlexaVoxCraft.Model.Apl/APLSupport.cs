@@ -37,7 +37,7 @@ public static class APLSupport
         DynamicTokenList.RegisterTypeInfo<DynamicTokenList>();
         Style.RegisterTypeInfo<Style>();
         APLDocument.RegisterTypeInfo<APLDocument>();
-        APLKeyboardHandler.AddSupport();
+        APLKeyboardHandler.RegisterTypeInfo<APLKeyboardHandler>();
         Import.RegisterTypeInfo<Import>();
         APLDocumentBase.RegisterTypeInfo<APLDocumentBase>();
         APLTDocument.AddSupport();
@@ -110,7 +110,19 @@ public static class APLSupport
         AlexaTransportControls.RegisterTypeInfo<AlexaTransportControls>();
         Sequence.RegisterTypeInfo<Sequence>();
         VectorGraphic.RegisterTypeInfo<VectorGraphic>();
-        Reinflate.RegisterTypeInfo<Reinflate>();
         APLGradient.RegisterTypeInfo<APLGradient>();
+        APLAMultiChildComponent.RegisterTypeInfo<APLAMultiChildComponent>();
+        Audio.Audio.RegisterTypeInfo<Audio.Audio>();
+        Mixer.RegisterTypeInfo<Mixer>();
+        Selector.RegisterTypeInfo<Selector>();
+        Sequencer.RegisterTypeInfo<Sequencer>();
+        InsertItem.RegisterTypeInfo<InsertItem>();
+        OpenURL.RegisterTypeInfo<OpenURL>();
+        Parallel.RegisterTypeInfo<Parallel>();
+        AnimateItem.RegisterTypeInfo<AnimateItem>();
+        Select.RegisterTypeInfo<Select>();
+        Sequential.RegisterTypeInfo<Sequential>();
+        IngredientListItem.RegisterTypeInfo<IngredientListItem>();
+        APLAction.RegisterTypeInfo<APLAction>();
     }
 }

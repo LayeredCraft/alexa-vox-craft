@@ -49,10 +49,7 @@ public class ExecuteCommandsDirective : IDirective, IJsonSerializable<ExecuteCom
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var commandsProp = info.Properties.FirstOrDefault(p => p.Name == "commands");
-            if (commandsProp is not null)
-            {
-                commandsProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            commandsProp?.CustomConverter = new APLCommandListConverter(true);
         });
 
     }

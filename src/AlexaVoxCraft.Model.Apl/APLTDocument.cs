@@ -30,15 +30,9 @@ public class APLTDocument : APLDocumentBase
                 extensionsProp.CustomConverter = new GenericSingleOrListConverter<APLExtension>(true);
             }
             var onConfigChangeProp = info.Properties.FirstOrDefault(p => p.Name == "onConfigChange");
-            if (onConfigChangeProp is not null)
-            {
-                onConfigChangeProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            onConfigChangeProp?.CustomConverter = new APLCommandListConverter(true);
             var onMountProp = info.Properties.FirstOrDefault(p => p.Name == "onMount");
-            if (onMountProp is not null)
-            {
-                onMountProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            onMountProp?.CustomConverter = new APLCommandListConverter(true);
         });
     }
 }

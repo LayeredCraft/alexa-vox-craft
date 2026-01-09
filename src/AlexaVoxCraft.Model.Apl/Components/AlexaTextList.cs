@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -178,5 +181,25 @@ public class AlexaTextList : APLComponent, IJsonSerializable<AlexaTextList>
     public new static void RegisterTypeInfo<T>() where T : AlexaTextList
     {
         APLComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var headerBackButtonCommandProp = info.Properties.FirstOrDefault(p => p.Name == "headerBackButtonCommand");
+            headerBackButtonCommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
+            primaryActionProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onSwipeDoneProp = info.Properties.FirstOrDefault(p => p.Name == "onSwipeDone");
+            onSwipeDoneProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onSwipeMoveProp = info.Properties.FirstOrDefault(p => p.Name == "onSwipeMove");
+            onSwipeMoveProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var optionsButton1CommandProp = info.Properties.FirstOrDefault(p => p.Name == "optionsButton1Command");
+            optionsButton1CommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var optionsButton2CommandProp = info.Properties.FirstOrDefault(p => p.Name == "optionsButton2Command");
+            optionsButton2CommandProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

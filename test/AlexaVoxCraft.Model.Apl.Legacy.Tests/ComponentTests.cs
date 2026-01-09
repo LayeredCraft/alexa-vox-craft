@@ -455,7 +455,7 @@ public class ComponentTests
         var newRawContainer = Assert.IsType<Container>(newRaw);
         var newBoundContainer = Assert.IsType<Container>(newBound);
 
-        var dataValue = Assert.IsAssignableFrom<IList<object>>(newRawContainer.Data);
+        var dataValue = Assert.IsAssignableFrom<APLValueCollection<object>>(newRawContainer.Data);
         var dict = Assert.IsType<Dictionary<string, object>>(dataValue.First());
 
         Assert.Single(dict);

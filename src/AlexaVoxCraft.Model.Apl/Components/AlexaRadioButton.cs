@@ -1,4 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -29,5 +32,10 @@ public class AlexaRadioButton : APLComponent, IJsonSerializable<AlexaRadioButton
     public new static void RegisterTypeInfo<T>() where T : AlexaRadioButton
     {
         APLComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
+            primaryActionProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -178,5 +181,28 @@ public class AlexaSwipeToAction : APLComponent, IJsonSerializable<AlexaSwipeToAc
     public new static void RegisterTypeInfo<T>() where T : AlexaSwipeToAction
     {
         APLComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var button1CommandProp = info.Properties.FirstOrDefault(p => p.Name == "button1Command");
+            button1CommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var button2CommandProp = info.Properties.FirstOrDefault(p => p.Name == "button2Command");
+            button2CommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onButtonsHiddenProp = info.Properties.FirstOrDefault(p => p.Name == "onButtonsHidden");
+            onButtonsHiddenProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onButtonsShownProp = info.Properties.FirstOrDefault(p => p.Name == "onButtonsShown");
+            onButtonsShownProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onSwipeDoneProp = info.Properties.FirstOrDefault(p => p.Name == "onSwipeDone");
+            onSwipeDoneProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onSwipeMoveProp = info.Properties.FirstOrDefault(p => p.Name == "onSwipeMove");
+            onSwipeMoveProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
+            primaryActionProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

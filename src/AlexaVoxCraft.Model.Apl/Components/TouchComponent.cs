@@ -34,5 +34,25 @@ public abstract class TouchComponent : ActionableComponent, IJsonSerializable<To
     public static void RegisterTypeInfo<T>() where T : TouchComponent
     {
         ActionableComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var gesturesProp = info.Properties.FirstOrDefault(p => p.Name == "gestures");
+            gesturesProp?.CustomConverter = new APLGestureListConverter(false);
+
+            var onCancelProp = info.Properties.FirstOrDefault(p => p.Name == "onCancel");
+            onCancelProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onDownProp = info.Properties.FirstOrDefault(p => p.Name == "onDown");
+            onDownProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onUpProp = info.Properties.FirstOrDefault(p => p.Name == "onUp");
+            onUpProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onMoveProp = info.Properties.FirstOrDefault(p => p.Name == "onMove");
+            onMoveProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onPressProp = info.Properties.FirstOrDefault(p => p.Name == "onPress");
+            onPressProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

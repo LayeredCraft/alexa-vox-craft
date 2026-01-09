@@ -36,5 +36,10 @@ public class TouchWrapper : TouchComponent, IJsonSerializable<TouchWrapper>
     public static void RegisterTypeInfo<T>() where T : TouchWrapper
     {
         TouchComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var itemProp = info.Properties.FirstOrDefault(p => p.Name == "item");
+            itemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
+        });
     }
 }

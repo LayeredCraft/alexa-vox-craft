@@ -98,5 +98,10 @@ public abstract class ResponsiveTemplate : APLComponent, IJsonSerializable<Respo
     public new static void RegisterTypeInfo<T>() where T : ResponsiveTemplate
     {
         APLComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var headerBackButtonCommandProp = info.Properties.FirstOrDefault(p => p.Name == "headerBackButtonCommand");
+            headerBackButtonCommandProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

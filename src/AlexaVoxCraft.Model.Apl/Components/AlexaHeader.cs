@@ -1,13 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
 public class AlexaHeader : APLComponent, IJsonSerializable<AlexaHeader>
 {
-    public AlexaHeader()
-    {
-    }
-
     [JsonPropertyName("type")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public override string Type => nameof(AlexaHeader);
@@ -63,5 +62,10 @@ public class AlexaHeader : APLComponent, IJsonSerializable<AlexaHeader>
     public new static void RegisterTypeInfo<T>() where T : AlexaHeader
     {
         APLComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var prop = info.Properties.FirstOrDefault(p => p.Name == "headerBackButtonCommand");
+            prop?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

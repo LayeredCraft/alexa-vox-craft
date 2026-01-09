@@ -1,8 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Commands;
 
-public class AnimateItem : APLCommand
+public class AnimateItem : APLCommand, IJsonSerializable<AnimateItem>
 {
     [JsonPropertyName("type")] public override string Type => nameof(AnimateItem);
 
@@ -26,4 +29,12 @@ public class AnimateItem : APLCommand
 
     [JsonPropertyName("value")] public APLValueCollection<AnimatedProperty> Value { get; set; }
 
+    public static void RegisterTypeInfo<T>() where T : AnimateItem
+    {
+        AlexaJsonOptions.RegisterTypeModifier<T>(typeInfo =>
+        {
+            var valueProp = typeInfo.Properties.FirstOrDefault(p => p.Name == "value");
+            valueProp?.CustomConverter = new APLValueCollectionConverter<AnimatedProperty>(false);
+        });
+    }
 }

@@ -64,23 +64,14 @@ public class Video : APLComponent, IJsonSerializable<Video>
         APLComponent.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
-            var sourceProp = info.Properties.FirstOrDefault(p => p.Name == "source");
-            if (sourceProp is not null)
-            {
-                sourceProp.CustomConverter = new APLValueCollectionConverter<VideoSource>(true);
-            }
+            var onPauseProp = info.Properties.FirstOrDefault(p => p.Name == "onPause");
+            onPauseProp?.CustomConverter = new APLCommandListConverter(false);
 
-            var onTrackReadyProp = info.Properties.FirstOrDefault(p => p.Name == "onTrackReady");
-            if (onTrackReadyProp is not null)
-            {
-                onTrackReadyProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            var onPlayProp = info.Properties.FirstOrDefault(p => p.Name == "onPlay");
+            onPlayProp?.CustomConverter = new APLCommandListConverter(false);
 
-            var onTrackFailProp = info.Properties.FirstOrDefault(p => p.Name == "onTrackFail");
-            if (onTrackFailProp is not null)
-            {
-                onTrackFailProp.CustomConverter = new APLCommandListConverter(true);
-            }
+            var onTrackUpdateProp = info.Properties.FirstOrDefault(p => p.Name == "onTrackUpdate");
+            onTrackUpdateProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

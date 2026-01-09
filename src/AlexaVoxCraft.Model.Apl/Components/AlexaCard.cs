@@ -1,11 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
 public class AlexaCard : ResponsiveTemplate, IJsonSerializable<AlexaCard>
 {
-    [JsonPropertyName("type")]
-    public override string Type => nameof(AlexaCard);
+    [JsonPropertyName("type")] public override string Type => nameof(AlexaCard);
 
     [JsonPropertyName("cardBackgroundColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -122,5 +124,10 @@ public class AlexaCard : ResponsiveTemplate, IJsonSerializable<AlexaCard>
     public new static void RegisterTypeInfo<T>() where T : AlexaCard
     {
         ResponsiveTemplate.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
+            primaryActionProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

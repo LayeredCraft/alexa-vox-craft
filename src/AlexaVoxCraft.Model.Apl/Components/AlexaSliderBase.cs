@@ -1,4 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -71,5 +74,25 @@ public abstract class AlexaSliderBase : TouchComponent, IJsonSerializable<AlexaS
     public static void RegisterTypeInfo<T>() where T : AlexaSliderBase
     {
         TouchComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var onBlurCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onBlurCommand");
+            onBlurCommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onUpCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onUpCommand");
+            onUpCommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onDownCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onDownCommand");
+            onDownCommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onFocusCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onFocusCommand");
+            onFocusCommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onMoveCommandProp = info.Properties.FirstOrDefault(p => p.Name == "onMoveCommand");
+            onMoveCommandProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var handleKeyDownCommandProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyDownCommand");
+            handleKeyDownCommandProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

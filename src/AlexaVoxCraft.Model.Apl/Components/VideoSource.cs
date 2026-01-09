@@ -50,10 +50,7 @@ public class VideoSource : IJsonSerializable<VideoSource>
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
             var textTrackProp = info.Properties.FirstOrDefault(p => p.Name == "textTrack");
-            if (textTrackProp is not null)
-            {
-                textTrackProp.CustomConverter = new APLValueCollectionConverter<TextTrack>(true);
-            }
+            textTrackProp?.CustomConverter = new APLValueCollectionConverter<TextTrack>(true);
         });
     }
 }

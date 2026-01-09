@@ -213,8 +213,32 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
         APLComponentBase.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>
         {
-            var preserveProp = info.Properties.FirstOrDefault(p => p.Name == "preserve");
-            preserveProp?.CustomConverter = new APLValueCollectionConverter<string>(true);
+            var paddingProp = info.Properties.FirstOrDefault(p => p.Name == "padding");
+            paddingProp?.CustomConverter = new APLValueCollectionConverter<int>(false);
+
+            var onMountProp = info.Properties.FirstOrDefault(p => p.Name == "onMount");
+            onMountProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onCursorEnterProp = info.Properties.FirstOrDefault(p => p.Name == "onCursorEnter");
+            onCursorEnterProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onCursorExitProp = info.Properties.FirstOrDefault(p => p.Name == "onCursorExit");
+            onCursorExitProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var onSpeechMarkProp = info.Properties.FirstOrDefault(p => p.Name == "onSpeechMark");
+            onSpeechMarkProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var entitiesProp = info.Properties.FirstOrDefault(p => p.Name == "entities");
+            entitiesProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
+
+            var handleTickProp = info.Properties.FirstOrDefault(p => p.Name == "handleTick");
+            handleTickProp?.CustomConverter = new APLValueCollectionConverter<TickHandler>(false);
+
+            var handleVisibilityChangeProp = info.Properties.FirstOrDefault(p => p.Name == "handleVisibilityChange");
+            handleVisibilityChangeProp?.CustomConverter = new APLValueCollectionConverter<VisibilityChangeHandler>(false);
+
+            var actionsProp = info.Properties.FirstOrDefault(p => p.Name == "actions");
+            actionsProp?.CustomConverter = new APLValueCollectionConverter<APLAction>(false);
         });
     }
 }

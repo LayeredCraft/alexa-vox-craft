@@ -1,11 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
 public class AlexaPhoto : ResponsiveTemplate, IJsonSerializable<AlexaPhoto>
 {
-    [JsonPropertyName("type")]
-    public override string Type => nameof(AlexaPhoto);
+    [JsonPropertyName("type")] public override string Type => nameof(AlexaPhoto);
 
     [JsonPropertyName("attributionImage")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -54,5 +56,10 @@ public class AlexaPhoto : ResponsiveTemplate, IJsonSerializable<AlexaPhoto>
     public new static void RegisterTypeInfo<T>() where T : AlexaPhoto
     {
         ResponsiveTemplate.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var primaryActionProp = info.Properties.FirstOrDefault(p => p.Name == "primaryAction");
+            primaryActionProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

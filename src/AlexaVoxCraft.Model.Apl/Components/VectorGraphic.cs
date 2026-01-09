@@ -32,19 +32,5 @@ public class VectorGraphic : TouchComponent, IJsonSerializable<VectorGraphic>
     public new static void RegisterTypeInfo<T>() where T : VectorGraphic
     {
         TouchComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var onLoadProp = info.Properties.FirstOrDefault(p => p.Name == "onLoad");
-            if (onLoadProp is not null)
-            {
-                onLoadProp.CustomConverter = new APLCommandListConverter(true);
-            }
-
-            var onFailProp = info.Properties.FirstOrDefault(p => p.Name == "onFail");
-            if (onFailProp is not null)
-            {
-                onFailProp.CustomConverter = new APLCommandListConverter(true);
-            }
-        });
     }
 }

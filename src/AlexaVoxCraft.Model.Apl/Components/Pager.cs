@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -60,5 +63,19 @@ public class Pager : ActionableComponent, IJsonSerializable<Pager>
     public new static void RegisterTypeInfo<T>() where T : Pager
     {
         ActionableComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
+            itemsProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
+
+            var onPageChangedProp = info.Properties.FirstOrDefault(p => p.Name == "onPageChanged");
+            onPageChangedProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var handlePageMoveProp = info.Properties.FirstOrDefault(p => p.Name == "handlePageMove");
+            handlePageMoveProp?.CustomConverter = new APLValueCollectionConverter<APLPageMoveHandler>(false);
+
+            var onChildrenChangedProp = info.Properties.FirstOrDefault(p => p.Name == "onChildrenChanged");
+            onChildrenChangedProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

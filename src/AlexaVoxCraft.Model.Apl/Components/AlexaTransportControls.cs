@@ -1,5 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.Commands;
+using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -70,5 +73,23 @@ public class AlexaTransportControls : APLComponent, IJsonSerializable<AlexaTrans
     public new static void RegisterTypeInfo<T>() where T : AlexaTransportControls
     {
         APLComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var secondaryControlsAVGLeftProp =
+                info.Properties.FirstOrDefault(p => p.Name == "secondaryControlsAVGLeft");
+            secondaryControlsAVGLeftProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var secondaryControlsAVGRightProp =
+                info.Properties.FirstOrDefault(p => p.Name == "secondaryControlsAVGRight");
+            secondaryControlsAVGRightProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var secondaryControlsLeftActionProp =
+                info.Properties.FirstOrDefault(p => p.Name == "secondaryControlsLeftAction");
+            secondaryControlsLeftActionProp?.CustomConverter = new APLCommandListConverter(false);
+
+            var secondaryControlsRightActionProp =
+                info.Properties.FirstOrDefault(p => p.Name == "secondaryControlsRightAction");
+            secondaryControlsRightActionProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }

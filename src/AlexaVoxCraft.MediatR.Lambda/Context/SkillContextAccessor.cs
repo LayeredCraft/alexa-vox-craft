@@ -10,10 +10,7 @@ public class SkillContextAccessor : ISkillContextAccessor
         set
         {
             var holder = SkillContextCurrent.Value;
-            if (holder is not null)
-            {
-                holder.Context = null;
-            }
+            holder?.Context = null;
 
             if (value is not null)
             {

@@ -19,18 +19,12 @@ public class DefaultSkillContextFactory : ISkillContextFactory
 
     public void Dispose(SkillContext skillContext)
     {
-        if (_skillContextAccessor is not null)
-        {
-            _skillContextAccessor.SkillContext = null;
-        }
+        _skillContextAccessor?.SkillContext = null;
     }
 
     private DefaultSkillContext Initialize(DefaultSkillContext skillContext)
     {
-        if (_skillContextAccessor is not null)
-        {
-            _skillContextAccessor.SkillContext = skillContext;
-        }
+        _skillContextAccessor?.SkillContext = skillContext;
 
         return skillContext;
     }

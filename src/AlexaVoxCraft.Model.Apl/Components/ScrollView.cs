@@ -39,5 +39,13 @@ public class ScrollView : ActionableComponent, IJsonSerializable<ScrollView>
     public new static void RegisterTypeInfo<T>() where T : ScrollView
     {
         ActionableComponent.RegisterTypeInfo<T>();
+        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
+        {
+            var itemProp = info.Properties.FirstOrDefault(p => p.Name == "item");
+            itemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
+
+            var onScrollProp = info.Properties.FirstOrDefault(p => p.Name == "onScroll");
+            onScrollProp?.CustomConverter = new APLCommandListConverter(false);
+        });
     }
 }
