@@ -4,6 +4,29 @@ AlexaVoxCraft provides comprehensive support for Alexa Presentation Language (AP
 
 > 🎯 **Trivia Skill Examples**: All code examples demonstrate building **visual trivia questions** with multiple-choice answers, score displays, and interactive touch/voice responses.
 
+## ⚠️ Breaking Changes in Version 6.0.0
+
+Version 6.0.0 introduces significant improvements to the APL collection type system. If you're upgrading from v5.x:
+
+**Key Changes:**
+- `APLValue<IList<T>>` and `APLValue<List<T>>` have been replaced with `APLValueCollection<T>`
+- `APLValueCollection<T>` now implements `IList<T>` directly for natural collection operations
+- The `Items` property is now read-only (`IReadOnlyList<T>`)
+- Collection mutations (Add, Remove, Clear, etc.) are now performed directly on the collection object
+
+**Quick Migration Example:**
+```csharp
+// ❌ Before (v5.x)
+container.Items!.Add(new Text { Content = "Hello" });
+var count = container.Items?.Count ?? 0;
+
+// ✅ After (v6.0.0+)
+container.Add(new Text { Content = "Hello" });
+var count = container.Count;
+```
+
+> 📖 For complete migration details and additional examples, see the [Version 6.0.0 Breaking Changes](https://github.com/LayeredCraft/alexa-vox-craft#-version-600-breaking-changes) section in the README.
+
 ## :rocket: Features
 
 - **:art: Fluent Document Builder**: Intuitive API for creating complex APL documents

@@ -44,7 +44,7 @@ public class APLValueCollectionConverter<T> : JsonConverter<APLValueCollection<T
         // Handle single item using virtual method
         if (reader.TokenType == SingleTokenType)
         {
-            ReadSingle(ref reader, options, collection.Items!);
+            ReadSingle(ref reader, options, collection);
             return collection;
         }
 
@@ -56,7 +56,7 @@ public class APLValueCollectionConverter<T> : JsonConverter<APLValueCollection<T
                 var item = JsonSerializer.Deserialize<T>(ref reader, options);
                 if (item is not null)
                 {
-                    collection.Items!.Add(item);
+                    collection.Add(item);
                 }
             }
             return collection;
@@ -74,23 +74,22 @@ public class APLValueCollectionConverter<T> : JsonConverter<APLValueCollection<T
             return;
         }
 
-        var items = value.Items;
-        if (items is null || items.Count == 0)
+        if (value.Count == 0)
         {
             writer.WriteNullValue();
             return;
         }
 
         // Write single item using virtual method if AlwaysOutputArray is false
-        if (!_alwaysOutputArray && items.Count == 1)
+        if (!_alwaysOutputArray && value.Count == 1)
         {
-            JsonSerializer.Serialize(writer, OutputArrayItem(items[0]), options);
+            JsonSerializer.Serialize(writer, OutputArrayItem(value[0]), options);
             return;
         }
 
         // Write array using virtual method for each item
         writer.WriteStartArray();
-        foreach (var item in items)
+        foreach (var item in value)
         {
             JsonSerializer.Serialize(writer, OutputArrayItem(item), options);
         }

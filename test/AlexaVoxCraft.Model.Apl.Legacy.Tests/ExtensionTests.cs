@@ -20,7 +20,7 @@ public class ExtensionTests
     {
         var backstack = new BackstackExtension("Back");
         var doc = new APLDocument(APLDocumentVersion.V1_4);
-        doc.Extensions!.Items!.Add(backstack);
+        doc.Extensions!.Add(backstack);
         doc.Settings = new APLDocumentSettings();
         doc.Settings.Add(backstack.Name, new BackStackSettings { BackstackId = "myDocument" });
         Assert.True(Utility.CompareJson(doc, "ExtensionBackStack.json", _output));
@@ -74,7 +74,7 @@ public class ExtensionTests
     {
         var smartMotion = new SmartMotionExtension("SmartMotion");
         var doc = new APLDocument(APLDocumentVersion.V1_4);
-        doc.Extensions!.Items!.Add(smartMotion);
+        doc.Extensions!.Add(smartMotion);
         doc.Settings = new APLDocumentSettings();
         doc.Settings.Add(smartMotion.Name, new SmartMotionSettings
         {
@@ -174,7 +174,7 @@ public class ExtensionTests
     {
         var entitySensing = new EntitySensingExtension("EntitySensing");
         var doc = new APLDocument(APLDocumentVersion.V1_4);
-        doc.Extensions!.Items!.Add(entitySensing);
+        doc.Extensions!.Add(entitySensing);
         doc.Settings = new APLDocumentSettings();
         doc.Settings.Add(entitySensing.Name, new EntitySensingSettings
         {
@@ -207,7 +207,7 @@ public class ExtensionTests
     {
         var dataStore = new DataStoreExtension("DataStore");
         var doc = new APLDocument(APLDocumentVersion.V2023_1);
-        doc.Extensions!.Items!.Add(dataStore);
+        doc.Extensions!.Add(dataStore);
         doc.Settings = new APLDocumentSettings();
         doc.Settings.Add(dataStore.Name, new DataStoreSettings
         {

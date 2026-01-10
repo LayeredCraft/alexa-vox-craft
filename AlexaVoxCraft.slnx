@@ -22,6 +22,7 @@
     <File Path="docs/components/request-handling.md" />
     <File Path="docs/components/session-management.md" />
     <File Path="docs/components/source-generation.md" />
+    <File Path="docs\components\observability.md" />
   </Folder>
   <Folder Name="/docs/examples/">
     <File Path="docs/examples/index.md" />
