@@ -449,6 +449,182 @@ To adopt the new minimal API-style hosting:
 
 For detailed migration guidance, see the [Lambda Hosting documentation](https://layeredcraft.github.io/alexa-vox-craft/components/lambda-hosting/).
 
+## 📋 Version 6.0.0 Breaking Changes
+
+### APL Collection Type System Overhaul
+
+Version 6.0.0 introduces a major redesign of the APL collection type system with **breaking changes** that affect how you work with APL component arrays and collections.
+
+#### What Changed
+
+**1. Migration from APLValue<IList<T>> to APLValueCollection<T>**
+
+All properties that previously used `APLValue<IList<T>>` or `APLValue<List<T>>` have been migrated to `APLValueCollection<T>`:
+
+```csharp
+// ❌ Before (v5.x)
+public APLValue<IList<APLComponent>>? Items { get; set; }
+public APLValue<List<int>>? Padding { get; set; }
+
+// ✅ After (v6.0.0+)
+public APLValueCollection<APLComponent>? Items { get; set; }
+public APLValueCollection<int>? Padding { get; set; }
+```
+
+**2. APLValue<T> No Longer Supports Collection Types**
+
+`APLValue<T>` now throws `InvalidOperationException` in its static constructor if `T` is any collection type (IEnumerable, ICollection, IList, List, etc.):
+
+```csharp
+// ❌ This will throw InvalidOperationException at runtime
+var value = new APLValue<List<string>>();
+
+// ✅ Use APLValueCollection<T> instead
+var collection = new APLValueCollection<string>();
+```
+
+**3. APLValueCollection<T> Implements IList<T>**
+
+`APLValueCollection<T>` now implements `IList<T>` and `IReadOnlyList<T>` directly, providing natural collection ergonomics:
+
+```csharp
+// ❌ Before (v5.x) - awkward .Items property access
+collection.Items!.Add(new Text());
+var count = collection.Items?.Count ?? 0;
+var first = collection.Items![0];
+
+// ✅ After (v6.0.0+) - direct collection operations
+collection.Add(new Text());
+var count = collection.Count;
+var first = collection[0];
+```
+
+**4. Items Property Changed to Read-Only**
+
+The `Items` property is now `IReadOnlyList<T>` (read-only) instead of `IList<T>?` (settable):
+
+```csharp
+// ❌ Before (v5.x) - Items was settable
+collection.Items = new List<APLComponent> { new Text() };
+
+// ✅ After (v6.0.0+) - Items is read-only, use constructor or Add()
+var collection = new APLValueCollection<APLComponent>([new Text()]);
+// OR
+collection.Add(new Text());
+```
+
+**5. Materialize Pattern for Expression Handling**
+
+Mutations automatically clear the `Expression` property when you modify the collection:
+
+```csharp
+// Expression-backed collection (data binding)
+APLValueCollection<APLComponent> collection = "${data.items}";
+collection.Expression; // "${data.items}"
+
+// Mutation materializes the collection
+collection.Add(new Text());
+collection.Expression; // null - expression cleared
+
+// Read operations preserve the expression
+var count = collection.Count;  // Does NOT clear Expression
+var contains = collection.Contains(item);  // Does NOT clear Expression
+```
+
+#### Migration Guide
+
+**Step 1: Update Property Types**
+
+If you have custom APL components or are working with the model directly:
+
+```csharp
+// Change this:
+public APLValue<IList<APLComponent>>? Children { get; set; }
+public APLValue<List<int>>? Padding { get; set; }
+
+// To this:
+public APLValueCollection<APLComponent>? Children { get; set; }
+public APLValueCollection<int>? Padding { get; set; }
+```
+
+**Step 2: Remove .Items Property Access for Mutations**
+
+```csharp
+// ❌ Before (v5.x)
+container.Items!.Add(new Text { Content = "Hello" });
+container.Items!.Clear();
+var component = container.Items![0];
+
+// ✅ After (v6.0.0+)
+container.Add(new Text { Content = "Hello" });
+container.Clear();
+var component = container[0];
+```
+
+**Step 3: Update Collection Initialization**
+
+Collections can be initialized using collection expressions (C# 12), constructors, or implicit conversions:
+
+```csharp
+// Collection expression (C# 12+)
+APLValueCollection<APLComponent> items = [
+    new Text { Content = "Item 1" },
+    new Text { Content = "Item 2" }
+];
+
+// Constructor with IEnumerable
+var list = new List<APLComponent> { new Text() };
+var collection = new APLValueCollection<APLComponent>(list);
+
+// Implicit conversion
+APLValueCollection<APLComponent> fromList = new List<APLComponent> { new Text() };
+APLValueCollection<APLComponent> fromArray = new[] { new Text() };
+APLValueCollection<APLComponent> fromExpression = "${data.items}";
+```
+
+**Step 4: Be Aware of Materialize Behavior**
+
+If you're using expression-based binding and then mutating the collection:
+
+```csharp
+// This will clear the expression
+var collection = new APLValueCollection<APLComponent> { Expression = "${data.items}" };
+collection.Add(new Text());  // Expression is now null
+
+// If you need to preserve expression mode, don't mutate the collection
+// Use expression-only or items-only, not both
+```
+
+#### What Still Works
+
+- ✅ Collection expressions: `[item1, item2, item3]`
+- ✅ LINQ operations: `collection.OfType<Text>().ToList()`
+- ✅ Foreach enumeration: `foreach (var item in collection)`
+- ✅ Implicit conversions from `List<T>`, `T[]`, and `string`
+- ✅ Expression-based data binding: `"${data.items}"`
+- ✅ JSON serialization (unchanged behavior)
+- ✅ The `Items` property for read-only access and inspection
+
+#### Benefits of This Change
+
+1. **Natural API**: Direct collection operations without `.Items` indirection
+2. **Type Safety**: Cannot accidentally use `APLValue<List<T>>` anymore
+3. **Better IntelliSense**: Collection methods appear directly on the type
+4. **Clearer Intent**: Materialize pattern makes expression/items relationship explicit
+5. **Standard .NET Patterns**: Implements `IList<T>` like other collection types
+
+#### Impact Summary
+
+**High Impact:**
+- Custom APL component implementations
+- Code directly manipulating APL collections
+- Any code using `APLValue<IList<T>>` or `APLValue<List<T>>`
+
+**Low Impact:**
+- Most skill code using the document builder API
+- Code that only reads from collections
+- Expression-based data binding (still works)
+
 ## 🤝 Contributing
 
 PRs are welcome! Please submit issues and ideas to help make this toolkit even better.

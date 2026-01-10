@@ -49,7 +49,7 @@ public class AplValueCollectionTests : TestBase
 
         APLValueCollection<APLComponent> collection = list!;
 
-        collection.Items.Should().HaveCount(2);
+        collection.Should().HaveCount(2);
 
         await TestHelper.VerifySerializedObject(collection, CreateOptions(true), "ImplicitFromList");
     }
@@ -61,7 +61,7 @@ public class AplValueCollectionTests : TestBase
         APLComponent[] array = [new Text { Content = "Array Item"! }];
         APLValueCollection<APLComponent> collection = array!;
 
-        collection.Items.Should().HaveCount(1);
+        collection.Should().HaveCount(1);
 
         await TestHelper.VerifySerializedObject(collection, CreateOptions(true), "ImplicitFromArray");
     }
@@ -109,9 +109,9 @@ public class AplValueCollectionTests : TestBase
         var collection = JsonSerializer.Deserialize<APLValueCollection<APLComponent>>(json, CreateOptions(true));
 
         collection.Should().NotBeNull();
-        collection!.Items.Should().HaveCount(2);
-        collection.Items![0].Should().BeOfType<Text>();
-        collection.Items[1].Should().BeOfType<Text>();
+        collection.Should().HaveCount(2);
+        collection![0].Should().BeOfType<Text>();
+        collection[1].Should().BeOfType<Text>();
         collection.Expression.Should().BeNullOrEmpty();
     }
 
@@ -123,8 +123,8 @@ public class AplValueCollectionTests : TestBase
         var collection = JsonSerializer.Deserialize<APLValueCollection<APLComponent>>(json, CreateOptions(false));
 
         collection.Should().NotBeNull();
-        collection!.Items.Should().HaveCount(1);
-        collection.Items![0].Should().BeOfType<Text>();
+        collection.Should().HaveCount(1);
+        collection![0].Should().BeOfType<Text>();
         collection.Expression.Should().BeNullOrEmpty();
     }
 
@@ -137,7 +137,7 @@ public class AplValueCollectionTests : TestBase
 
         collection.Should().NotBeNull();
         collection!.Expression.Should().Be("${data.items}");
-        collection.Items.Should().BeEmpty();
+        collection.Should().BeEmpty();
     }
 
     [Fact]
@@ -153,4 +153,241 @@ public class AplValueCollectionTests : TestBase
         fromNullList.Should().BeNull();
         fromNullExpression.Should().BeNull();
     }
+
+    #region IList<T> Interface Tests
+
+    [Fact]
+    public void APLValueCollection_IList_Count()
+    {
+        APLValueCollection<APLComponent> collection = [new Text(), new Spacer()];
+        collection.Count.Should().Be(2);
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_IndexerGet()
+    {
+        var text = new Text { Content = "Test"! };
+        APLValueCollection<APLComponent> collection = [text];
+        collection[0].Should().Be(text);
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_IndexerSet()
+    {
+        APLValueCollection<APLComponent> collection = [new Text()];
+        var newText = new Text { Content = "Updated"! };
+        collection[0] = newText;
+        collection[0].Should().Be(newText);
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_Add()
+    {
+        APLValueCollection<APLComponent> collection = [];
+        var text = new Text();
+        collection.Add(text);
+        collection.Should().HaveCount(1);
+        collection[0].Should().Be(text);
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_Remove()
+    {
+        var text = new Text();
+        APLValueCollection<APLComponent> collection = [text];
+        var removed = collection.Remove(text);
+        removed.Should().BeTrue();
+        collection.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_Clear()
+    {
+        APLValueCollection<APLComponent> collection = [new Text(), new Spacer()];
+        collection.Clear();
+        collection.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_Contains()
+    {
+        var text = new Text();
+        APLValueCollection<APLComponent> collection = [text];
+        collection.Contains(text).Should().BeTrue();
+        collection.Contains(new Spacer()).Should().BeFalse();
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_IndexOf()
+    {
+        var text = new Text();
+        APLValueCollection<APLComponent> collection = [new Spacer(), text];
+        collection.IndexOf(text).Should().Be(1);
+        collection.IndexOf(new Text()).Should().Be(-1);
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_Insert()
+    {
+        APLValueCollection<APLComponent> collection = [new Text()];
+        var spacer = new Spacer();
+        collection.Insert(0, spacer);
+        collection.Should().HaveCount(2);
+        collection[0].Should().Be(spacer);
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_RemoveAt()
+    {
+        APLValueCollection<APLComponent> collection = [new Text(), new Spacer()];
+        collection.RemoveAt(0);
+        collection.Should().HaveCount(1);
+        collection[0].Should().BeOfType<Spacer>();
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_CopyTo()
+    {
+        var text = new Text();
+        var spacer = new Spacer();
+        APLValueCollection<APLComponent> collection = [text, spacer];
+        var array = new APLComponent[2];
+        collection.CopyTo(array, 0);
+        array[0].Should().Be(text);
+        array[1].Should().Be(spacer);
+    }
+
+    [Fact]
+    public void APLValueCollection_IList_IsReadOnly()
+    {
+        APLValueCollection<APLComponent> collection = [];
+        collection.IsReadOnly.Should().BeFalse();
+    }
+
+    #endregion
+
+    #region Materialize() Behavior Tests
+
+    [Fact]
+    public void APLValueCollection_Add_ClearsExpression()
+    {
+        APLValueCollection<APLComponent> collection = "${data.items}"!;
+        collection.Expression.Should().Be("${data.items}");
+
+        collection.Add(new Text());
+
+        collection.Expression.Should().BeNullOrEmpty();
+        collection.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public void APLValueCollection_Remove_ClearsExpression()
+    {
+        var text = new Text();
+        APLValueCollection<APLComponent> collection = [text];
+        collection.Expression = "${data.items}";
+
+        collection.Remove(text);
+
+        collection.Expression.Should().BeNullOrEmpty();
+        collection.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void APLValueCollection_Clear_ClearsExpression()
+    {
+        APLValueCollection<APLComponent> collection = [new Text()];
+        collection.Expression = "${data.items}";
+
+        collection.Clear();
+
+        collection.Expression.Should().BeNullOrEmpty();
+        collection.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void APLValueCollection_IndexerSet_ClearsExpression()
+    {
+        APLValueCollection<APLComponent> collection = [new Text()];
+        collection.Expression = "${data.items}";
+
+        collection[0] = new Spacer();
+
+        collection.Expression.Should().BeNullOrEmpty();
+        collection[0].Should().BeOfType<Spacer>();
+    }
+
+    [Fact]
+    public void APLValueCollection_Insert_ClearsExpression()
+    {
+        APLValueCollection<APLComponent> collection = [new Text()];
+        collection.Expression = "${data.items}";
+
+        collection.Insert(0, new Spacer());
+
+        collection.Expression.Should().BeNullOrEmpty();
+        collection.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void APLValueCollection_RemoveAt_ClearsExpression()
+    {
+        APLValueCollection<APLComponent> collection = [new Text(), new Spacer()];
+        collection.Expression = "${data.items}";
+
+        collection.RemoveAt(0);
+
+        collection.Expression.Should().BeNullOrEmpty();
+        collection.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public void APLValueCollection_Count_DoesNotClearExpression()
+    {
+        APLValueCollection<APLComponent> collection = "${data.items}"!;
+        collection.Expression.Should().Be("${data.items}");
+
+        var count = collection.Count;
+
+        collection.Expression.Should().Be("${data.items}");
+        count.Should().Be(0);
+    }
+
+    [Fact]
+    public void APLValueCollection_Contains_DoesNotClearExpression()
+    {
+        APLValueCollection<APLComponent> collection = "${data.items}"!;
+        collection.Expression.Should().Be("${data.items}");
+
+        var contains = collection.Contains(new Text());
+
+        collection.Expression.Should().Be("${data.items}");
+        contains.Should().BeFalse();
+    }
+
+    [Fact]
+    public void APLValueCollection_IndexOf_DoesNotClearExpression()
+    {
+        APLValueCollection<APLComponent> collection = "${data.items}"!;
+        collection.Expression.Should().Be("${data.items}");
+
+        var indexOf = collection.IndexOf(new Text());
+
+        collection.Expression.Should().Be("${data.items}");
+        indexOf.Should().Be(-1);
+    }
+
+    [Fact]
+    public void APLValueCollection_ItemsPropertyAccess_DoesNotClearExpression()
+    {
+        APLValueCollection<APLComponent> collection = "${data.items}"!;
+        collection.Expression.Should().Be("${data.items}");
+
+        var items = collection.Items;
+
+        collection.Expression.Should().Be("${data.items}");
+        items.Should().BeEmpty();
+    }
+
+    #endregion
 }
