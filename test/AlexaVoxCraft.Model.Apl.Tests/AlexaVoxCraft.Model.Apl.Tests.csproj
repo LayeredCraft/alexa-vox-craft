@@ -18,7 +18,7 @@
   </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Verify.XunitV3" Version="31.9.3" />
+        <PackageReference Include="Verify.XunitV3" Version="31.10.0" />
     </ItemGroup>
     <ItemGroup>
         <!-- Embed all JSON fixtures under Examples/ -->
