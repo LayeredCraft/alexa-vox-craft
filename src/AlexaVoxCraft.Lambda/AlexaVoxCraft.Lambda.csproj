@@ -13,9 +13,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Amazon.Lambda.Core" Version="2.8.0" />
-      <PackageReference Include="LayeredCraft.StructuredLogging" Version="1.1.5.15" />
-      <PackageReference Include="Serilog" Version="4.3.0" />
+      <PackageReference Include="Amazon.Lambda.Core" />
+      <PackageReference Include="LayeredCraft.StructuredLogging" />
+      <PackageReference Include="Serilog" />
     </ItemGroup>
 
     <ItemGroup>
