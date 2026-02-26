@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.Logging;
 
-namespace AlexaVoxCraft.Smapi.Clients;
+namespace AlexaVoxCraft.Http.Clients;
 
 /// <summary>
 /// Base class for SMAPI HTTP clients providing common HTTP operations with JSON serialization.
@@ -42,7 +42,7 @@ public abstract class BaseClient
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
         };
     }
 

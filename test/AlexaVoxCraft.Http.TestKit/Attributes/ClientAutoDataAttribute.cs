@@ -1,19 +1,19 @@
-using AlexaVoxCraft.Smapi.Tests.TestKit.SpecimenBuilders;
+using AlexaVoxCraft.Http.TestKit.SpecimenBuilders;
 
-namespace AlexaVoxCraft.Smapi.Tests.TestKit.Attributes;
+namespace AlexaVoxCraft.Http.TestKit.Attributes;
 
 /// <summary>
 /// Provides auto-generated test data with configured HttpClient and HttpMessageHandler for client testing.
 /// </summary>
-public sealed class ClientAutoDataAttribute() : AutoDataAttribute(CreateFixture)
+public class ClientAutoDataAttribute(Func<IFixture> factory) : AutoDataAttribute(factory)
 {
-    internal static IFixture CreateFixture()
+    public static IFixture CreateBaseFixture(Action<IFixture>? customizeAction = null)
     {
         return BaseFixtureFactory.CreateFixture(fixture =>
         {
             fixture.Freeze<HttpMessageHandler>();
             fixture.Customizations.Add(new HttpClientSpecimenBuilder());
-            fixture.Customizations.Add(new InteractionModelDefinitionSpecimenBuilder());
+            customizeAction?.Invoke(fixture);
         });
     }
 }
@@ -22,4 +22,4 @@ public sealed class ClientAutoDataAttribute() : AutoDataAttribute(CreateFixture)
 /// Provides inline test data combined with auto-generated client test data.
 /// </summary>
 public sealed class InlineClientAutoDataAttribute(params object?[] values)
-    : InlineAutoDataAttribute(ClientAutoDataAttribute.CreateFixture, values);
+    : InlineAutoDataAttribute(ClientAutoDataAttribute.CreateBaseFixture, values);

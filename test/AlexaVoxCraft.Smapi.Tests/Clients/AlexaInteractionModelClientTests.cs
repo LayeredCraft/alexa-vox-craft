@@ -1,14 +1,14 @@
 using System.Net;
+using AlexaVoxCraft.Http.TestKit.Extensions;
 using AlexaVoxCraft.Smapi.Clients;
 using AlexaVoxCraft.Smapi.Models.InteractionModel;
 using AlexaVoxCraft.Smapi.Tests.TestKit.Attributes;
-using AlexaVoxCraft.Smapi.Tests.TestKit.Extensions;
 
 namespace AlexaVoxCraft.Smapi.Tests.Clients;
 
 public sealed class AlexaInteractionModelClientTests
 {
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAsync_RequestIsValid_ReturnsModel(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -25,7 +25,7 @@ public sealed class AlexaInteractionModelClientTests
         model.Should().BeEquivalentTo(responseModel);
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAsync_WithValidUri_CallsCorrectEndpoint(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -43,7 +43,7 @@ public sealed class AlexaInteractionModelClientTests
         model.Should().NotBeNull();
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAsync_WhenNotFound_ReturnsNull(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -58,7 +58,7 @@ public sealed class AlexaInteractionModelClientTests
         model.Should().BeNull();
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAsync_WithDevelopmentStage_ReturnsModel(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -73,7 +73,7 @@ public sealed class AlexaInteractionModelClientTests
         model.Should().BeEquivalentTo(responseModel);
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAsync_WithLiveStage_ReturnsModel(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -88,7 +88,7 @@ public sealed class AlexaInteractionModelClientTests
         model.Should().BeEquivalentTo(responseModel);
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task UpdateAsync_WithValidModel_CompletesSuccessfully(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -104,7 +104,7 @@ public sealed class AlexaInteractionModelClientTests
         handler.Received();
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task UpdateAsync_WithValidUri_CallsCorrectEndpoint(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -122,7 +122,7 @@ public sealed class AlexaInteractionModelClientTests
         handler.Received();
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task UpdateAsync_WithDevelopmentStage_CompletesSuccessfully(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -137,7 +137,7 @@ public sealed class AlexaInteractionModelClientTests
         handler.Received();
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task UpdateAsync_WithLiveStage_CompletesSuccessfully(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,
@@ -152,7 +152,7 @@ public sealed class AlexaInteractionModelClientTests
         handler.Received();
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task UpdateAsync_WithComplexModel_SerializesCorrectly(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,

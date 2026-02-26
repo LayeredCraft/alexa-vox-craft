@@ -1,7 +1,7 @@
 using System.Reflection;
 using AutoFixture.Kernel;
 
-namespace AlexaVoxCraft.Smapi.Tests.TestKit.RequestSpecifications;
+namespace AlexaVoxCraft.Http.TestKit.RequestSpecifications;
 
 /// <summary>
 /// Specification that determines if a request is for an HttpClient type.

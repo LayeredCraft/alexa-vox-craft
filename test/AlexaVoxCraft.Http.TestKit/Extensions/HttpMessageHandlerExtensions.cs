@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Reflection;
 using NSubstitute.Core;
 
-namespace AlexaVoxCraft.Smapi.Tests.TestKit.Extensions;
+namespace AlexaVoxCraft.Http.TestKit.Extensions;
 
 public static class HttpMessageHandlerExtensions
 {

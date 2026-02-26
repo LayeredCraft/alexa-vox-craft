@@ -1,13 +1,13 @@
 using System.Net;
+using AlexaVoxCraft.Http.TestKit.Extensions;
 using AlexaVoxCraft.Smapi.Auth;
 using AlexaVoxCraft.Smapi.Tests.TestKit.Attributes;
-using AlexaVoxCraft.Smapi.Tests.TestKit.Extensions;
 
 namespace AlexaVoxCraft.Smapi.Tests.Auth;
 
 public sealed class SmapiDeveloperAccessTokenProviderTests
 {
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAccessTokenAsync_FirstCall_ReturnsToken(
         [Frozen] HttpMessageHandler handler,
         SmapiDeveloperAccessTokenProvider provider,
@@ -21,7 +21,7 @@ public sealed class SmapiDeveloperAccessTokenProviderTests
         token.Should().Be(accessToken);
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAccessTokenAsync_CalledTwiceWithinExpiry_ReturnsSameTokenWithoutSecondRequest(
         [Frozen] HttpMessageHandler handler,
         SmapiDeveloperAccessTokenProvider provider,
@@ -38,7 +38,7 @@ public sealed class SmapiDeveloperAccessTokenProviderTests
         handler.ReceivedCalls().Should().HaveCount(1);
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAccessTokenAsync_CallsCorrectEndpoint(
         [Frozen] HttpMessageHandler handler,
         SmapiDeveloperAccessTokenProvider provider,
@@ -55,7 +55,7 @@ public sealed class SmapiDeveloperAccessTokenProviderTests
         token.Should().NotBeNullOrEmpty();
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAccessTokenAsync_SendsFormUrlEncodedContent(
         [Frozen] HttpMessageHandler handler,
         SmapiDeveloperAccessTokenProvider provider,
@@ -72,7 +72,7 @@ public sealed class SmapiDeveloperAccessTokenProviderTests
         handler.Received();
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public async Task GetAccessTokenAsync_WhenTokenExpiresSoon_RefreshesToken(
         [Frozen] HttpMessageHandler handler,
         SmapiDeveloperAccessTokenProvider provider,
@@ -91,9 +91,9 @@ public sealed class SmapiDeveloperAccessTokenProviderTests
     }
 
     [Theory] 
-    [InlineClientAutoData((string?)null)]
-    [InlineClientAutoData("")]
-    [InlineClientAutoData("   ")]
+    [InlineSmapiClientAutoData((string?)null)]
+    [InlineSmapiClientAutoData("")]
+    [InlineSmapiClientAutoData("   ")]
     public async Task GetAccessTokenAsync_WhenResponseMissingAccessToken_ThrowsInvalidOperationException(
         string? token,
         [Frozen] HttpMessageHandler handler,
@@ -108,7 +108,7 @@ public sealed class SmapiDeveloperAccessTokenProviderTests
             .WithMessage("*access_token missing*");
     }
 
-    [Theory, ClientAutoData]
+    [Theory, SmapiClientAutoData]
     public void Dispose_CanBeCalledMultipleTimes(
         SmapiDeveloperAccessTokenProvider provider)
     {

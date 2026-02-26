@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net10.0;net8.0;net9.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>AlexaVoxCraft.Model.InSkillPurchasing</PackageId>
+        <Title>AlexaVoxCraft.Model.InSkillPurchasing</Title>
+        <Description>Model objects for Alexa In-Skill Purchasing (ISP), including request and directive types for purchase flows and entitlement handling.</Description>
+        <PackageTags>alexa;in-skill-purchasing;isp;entitlements;directives;models;voxcraft</PackageTags>
+    </PropertyGroup>
+
+</Project>

@@ -1,8 +1,10 @@
 using System.Net.Http.Headers;
-using AlexaVoxCraft.Smapi.Auth;
 
-namespace AlexaVoxCraft.Smapi.Http;
+namespace AlexaVoxCraft.Http;
 
+/// <summary>
+/// A delegating handler that attaches a Bearer token to outgoing HTTP requests.
+/// </summary>
 public sealed class BearerTokenHandler : DelegatingHandler
 {
     private readonly IAccessTokenProvider _accessTokenProvider;

@@ -1,6 +1,6 @@
+using AlexaVoxCraft.Http;
 using AlexaVoxCraft.Smapi.Auth;
 using AlexaVoxCraft.Smapi.Clients;
-using AlexaVoxCraft.Smapi.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -60,20 +60,6 @@ public static class ServiceCollectionExtensions
                 .AddAuthorizationForwarding();
             services.AddSingleton<IAccessTokenProvider, SmapiDeveloperAccessTokenProvider>();
             return services;
-        }
-    }
-
-    extension(IHttpClientBuilder builder)
-    {
-        /// <summary>
-        /// Adds bearer token authentication to the HTTP client pipeline.
-        /// </summary>
-        /// <returns>The HTTP client builder for chaining.</returns>
-        public IHttpClientBuilder AddAuthorizationForwarding()
-        {
-            builder.Services.TryAddTransient<BearerTokenHandler>();
-            builder.AddHttpMessageHandler<BearerTokenHandler>();
-            return builder;
         }
     }
 }

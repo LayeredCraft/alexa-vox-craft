@@ -1,0 +1,17 @@
+﻿{
+  "inSkillProducts": [
+    {
+      "productId": "amzn1.adg.product.unique-id-1",
+      "referenceName": "your_product_name_1",
+      "type": "ENTITLEMENT",
+      "name": "Friendly Name",
+      "summary": "Description of the product.",
+      "entitled": "NOT_ENTITLED",
+      "purchasable": "PURCHASABLE",
+      "activeEntitlementCount": 1,
+      "purchaseMode": "TEST"
+    }
+  ],
+  "isTruncated": true,
+  "nextToken": "abcdef"
+}

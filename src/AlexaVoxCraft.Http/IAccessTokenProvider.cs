@@ -1,4 +1,4 @@
-namespace AlexaVoxCraft.Smapi.Auth;
+namespace AlexaVoxCraft.Http;
 
 /// <summary>
 /// Provides OAuth access tokens for authenticated HTTP requests.

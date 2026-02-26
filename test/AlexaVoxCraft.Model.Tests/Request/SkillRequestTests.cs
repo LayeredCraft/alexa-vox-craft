@@ -4,7 +4,7 @@ using AlexaVoxCraft.Model.Request.Type;
 
 namespace AlexaVoxCraft.Model.Tests.Request;
 
-public sealed class SkillRequestTests() : TestBase
+public sealed class SkillRequestTests() : TestBase<SkillRequestTests>
 {
     [Fact]
     public async Task IntentRequest_Deserializes()

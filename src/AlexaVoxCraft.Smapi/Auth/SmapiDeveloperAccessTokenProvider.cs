@@ -1,4 +1,5 @@
 using System.Text.Json;
+using AlexaVoxCraft.Http;
 using Microsoft.Extensions.Options;
 
 namespace AlexaVoxCraft.Smapi.Auth;

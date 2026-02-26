@@ -1,8 +1,8 @@
 using System.Reflection;
-using AlexaVoxCraft.Smapi.Tests.TestKit.RequestSpecifications;
+using AlexaVoxCraft.Http.TestKit.RequestSpecifications;
 using AutoFixture.Kernel;
 
-namespace AlexaVoxCraft.Smapi.Tests.TestKit.SpecimenBuilders;
+namespace AlexaVoxCraft.Http.TestKit.SpecimenBuilders;
 
 /// <summary>
 /// AutoFixture specimen builder that creates configured HttpClient instances for SMAPI testing.
