@@ -3,7 +3,7 @@ using AlexaVoxCraft.Model.Apl.Components;
 
 namespace AlexaVoxCraft.Model.Apl.Tests.Components;
 
-public class FrameTests : TestBase
+public class FrameTests : TestBase<ContainerTests>
 {
     [Fact]
     public async Task Frame_WithCollectionExpression_SingleItem_Serializes()

@@ -1,0 +1,1 @@
+﻿{"token":"correlationToken","payload":{"InSkillProduct":{"productId":"amzn1.adg.product"}},"type":"Connections.SendRequest","name":"Upsell"}

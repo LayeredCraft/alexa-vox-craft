@@ -129,6 +129,7 @@
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
     <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj" />
+    <Project Path="test/AlexaVoxCraft.Model.InSkillPurchasing.Tests/AlexaVoxCraft.Model.InSkillPurchasing.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.Smapi.Tests/AlexaVoxCraft.Smapi.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj" />
     <Project Path="test\AlexaVoxCraft.Model.Apl.Legacy.Tests\AlexaVoxCraft.Model.Apl.Legacy.Tests.csproj">

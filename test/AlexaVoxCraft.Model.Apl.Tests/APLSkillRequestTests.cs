@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace AlexaVoxCraft.Model.Apl.Tests;
 
-public class APLSkillRequestTests : TestBase
+public class APLSkillRequestTests : TestBase<APLSkillRequestTests>
 {
     [Fact]
     public async Task UserTouchRequest_Deserializes()
