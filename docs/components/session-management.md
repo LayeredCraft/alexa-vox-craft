@@ -11,7 +11,8 @@ AlexaVoxCraft provides robust session and state management capabilities for buil
 - **:busts_in_silhouette: User Data Management**: Persistent user profiles and progress
 - **:arrows_counterclockwise: Multi-Turn Conversations**: Stateful conversation flows
 - **:file_cabinet: DynamoDB Integration**: Scalable data persistence patterns
-- **:gear: Attribute Helpers**: Type-safe attribute access and manipulation
+- **:gear: Attribute Helpers**: Type-safe `TryGetAttribute<T>` / `SetAttribute<T>` extensions
+- **:shield: Typed Serialization**: `TypedAttributeDictionaryConverter` preserves CLR types across session round-trips
 
 ## Basic Usage
 
@@ -202,6 +203,92 @@ public class GameService : IGameService
 
         return Task.FromResult(answerCorrect);
     }
+}
+```
+
+## Typed Session Attributes
+
+AlexaVoxCraft ships a `TypedAttributeDictionaryConverter` that automatically wraps every session attribute value with a `_type` discriminator when the response is serialized. When Alexa returns the session on the next turn, the converter reads the discriminator and deserializes each value back to the original CLR type — with no manual parsing.
+
+### How It Works
+
+On **write**, every non-null value is wrapped:
+
+```json
+{
+  "entitledProducts": {
+    "_type": "AlexaVoxCraft.InSkillPurchasing.Models.Product[], AlexaVoxCraft.InSkillPurchasing, ...",
+    "_value": [ { "productId": "amzn1.adg.product.xxx", "name": "Science Pack", ... } ]
+  },
+  "currentScore": {
+    "_type": "System.Int32, System.Private.CoreLib, ...",
+    "_value": 42
+  }
+}
+```
+
+On **read**, `_type` drives deserialization back to the original type. Values written without `_type`/`_value` (set directly by Alexa, or written before the converter was introduced) fall back to `object` deserialization via `ObjectConverter`.
+
+The converter is applied automatically to `Session.Attributes` and `SkillResponse.SessionAttributes` — no additional configuration is required.
+
+### Non-Materialized Enumerable Restriction
+
+The converter **rejects non-materialized enumerables** (LINQ iterators, `IEnumerable<T>` interface references, and other types without a public parameterless constructor) because they cannot be faithfully rehydrated from JSON. Storing a LINQ iterator would serialize correctly but fail silently on read.
+
+```csharp
+// ❌ Will throw JsonException at serialization time
+sessionAttributes["answers"] = questions.Select(q => q.Text);   // LINQ iterator
+
+// ✅ Materialize before storing
+sessionAttributes["answers"] = questions.Select(q => q.Text).ToArray();
+sessionAttributes["answers"] = questions.Select(q => q.Text).ToList();
+
+// ✅ Concrete arrays and lists are always fine
+sessionAttributes.SetAttribute("entitledProducts", entitledProducts.ToArray());
+```
+
+The exception message identifies the problematic key and type to make diagnosis straightforward:
+
+```
+Session attribute 'answers' has a non-materialized enumerable value of type
+'System.Linq.Enumerable+ArraySelectIterator`2[...]'. Store a concrete collection
+type instead (e.g., call .ToList() or .ToArray() before assigning).
+```
+
+### TryGetAttribute\<T\> and SetAttribute\<T\>
+
+`AlexaVoxCraft.MediatR` provides `TryGetAttribute<T>` and `SetAttribute<T>` extension methods on `IDictionary<string, object>` for ergonomic, type-safe attribute access:
+
+```csharp
+// Reading a typed value
+sessionAttributes.TryGetAttribute<Product[]>("entitledProducts", out var products);
+
+// Writing a typed value
+sessionAttributes.SetAttribute("entitledProducts", entitledProducts.ToArray());
+```
+
+`TryGetAttribute<T>` uses a two-stage strategy:
+
+1. **Fast path**: If `TypedAttributeDictionaryConverter` already deserialized the value to the correct CLR type, a direct `is T` cast succeeds with zero allocation.
+2. **Fallback**: For values without a type discriminator (set by Alexa, or written by older code), a UTF-8 serialize/deserialize round-trip produces the target type.
+
+```csharp
+public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken)
+{
+    var sessionAttributes = await input.AttributesManager.GetSessionAttributes(cancellationToken);
+
+    // Read strongly typed — no manual casting or JSON parsing needed
+    sessionAttributes.TryGetAttribute<int>("currentScore", out var score);
+    sessionAttributes.TryGetAttribute<Product[]>("entitledProducts", out var products);
+
+    score++;
+    sessionAttributes.SetAttribute("currentScore", score);
+
+    await input.AttributesManager.SetSessionAttributes(sessionAttributes, cancellationToken);
+
+    return await input.ResponseBuilder
+        .Speak($"Your score is now {score}.")
+        .GetResponse(cancellationToken);
 }
 ```
 
