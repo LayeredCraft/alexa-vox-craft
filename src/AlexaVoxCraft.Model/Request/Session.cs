@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Request;
 
@@ -11,6 +12,7 @@ public class Session
     public string SessionId { get; set; }
 
     [JsonPropertyName("attributes")]
+    [JsonConverter(typeof(TypedAttributeDictionaryConverter))]
     public Dictionary<string, object> Attributes { get; set; }
 
     [JsonPropertyName("application")]
