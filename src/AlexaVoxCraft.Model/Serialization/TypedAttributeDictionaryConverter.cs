@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
@@ -8,14 +9,16 @@ namespace AlexaVoxCraft.Model.Serialization;
 
 /// <summary>
 /// A <see cref="JsonConverter{T}"/> for <see cref="Dictionary{TKey,TValue}">Dictionary&lt;string, object?&gt;</see> that
-/// persists full type information alongside each value using a <c>_type</c> discriminator.
+/// persists type information alongside each value using a <c>_type</c> discriminator.
 /// <para>
-/// On <b>write</b>, each non-null value is wrapped as <c>{ "_type": "AssemblyQualifiedName", "_value": &lt;json&gt; }</c>.
+/// On <b>write</b>, each non-null value is wrapped as <c>{ "_type": "...", "_value": &lt;json&gt; }</c>.
+/// Non-materialized enumerables (e.g., LINQ iterators) are <b>not allowed</b>; callers must store a concrete
+/// collection type (e.g., <see cref="List{T}"/> or an array) by calling <c>.ToList()</c> / <c>.ToArray()</c>.
 /// </para>
 /// <para>
 /// On <b>read</b>, the discriminator drives deserialization back to the original CLR type.
 /// Values that lack <c>_type</c>/<c>_value</c> (legacy or Alexa-set) fall back to <see cref="object"/> deserialization,
-/// which will use your registered <see cref="ObjectConverter"/>. No <see cref="JsonElement"/> leaks.
+/// which will use the registered <see cref="ObjectConverter"/>. No raw <see cref="JsonElement"/> leaks.
 /// Unresolvable types also fall back to <see cref="object"/> via the same path.
 /// </para>
 /// </summary>
@@ -110,19 +113,72 @@ public sealed class TypedAttributeDictionaryConverter : JsonConverter<Dictionary
                 continue;
             }
 
+            // ✅ Enforce materialized collections (Option 1): throw if the runtime type is not safely rehydratable.
+            EnsureMaterializedIfEnumerable(key, val);
+
             var runtimeType = val.GetType();
 
             writer.WriteStartObject();
-            writer.WriteString(
-                TypeDiscriminator,
-                runtimeType.AssemblyQualifiedName ?? runtimeType.FullName ?? runtimeType.Name);
-
+            writer.WriteString(TypeDiscriminator, GetTypeDiscriminator(runtimeType));
             writer.WritePropertyName(ValueProperty);
             JsonSerializer.Serialize(writer, val, runtimeType, options);
             writer.WriteEndObject();
         }
 
         writer.WriteEndObject();
+    }
+
+    private static void EnsureMaterializedIfEnumerable(string key, object val)
+    {
+        // string is IEnumerable<char>, but it's a scalar for our purposes.
+        if (val is string)
+        {
+            return;
+        }
+
+        if (val is IEnumerable)
+        {
+            var runtimeType = val.GetType();
+
+            if (IsNonMaterializedEnumerable(runtimeType))
+            {
+                throw new JsonException(
+                    $"Session attribute '{key}' has a non-materialized enumerable value of type '{runtimeType.FullName}'. " +
+                    "Store a concrete collection type instead (e.g., call .ToList() or .ToArray() before assigning).");
+            }
+        }
+    }
+
+    private static bool IsNonMaterializedEnumerable(Type runtimeType)
+    {
+        // Arrays are fine
+        if (runtimeType.IsArray)
+        {
+            return false;
+        }
+
+        var fullName = runtimeType.FullName;
+
+        // Most common offender: LINQ iterator types (e.g., System.Linq.Enumerable+ArraySelectIterator...)
+        if (fullName is not null &&
+            fullName.StartsWith("System.Linq.Enumerable+", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        // Interface/abstract enumerable types are not rehydratable as a concrete instance
+        if (runtimeType.IsAbstract || runtimeType.IsInterface)
+        {
+            return true;
+        }
+
+        // Many iterator/enumerator implementations have no public parameterless ctor
+        if (runtimeType.IsClass && runtimeType.GetConstructor(Type.EmptyTypes) is null)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private static Type? ResolveType(string? typeName) =>
@@ -138,5 +194,11 @@ public sealed class TypedAttributeDictionaryConverter : JsonConverter<Dictionary
         var r = new Utf8JsonReader(utf8);
         r.Read();
         return JsonSerializer.Deserialize<object?>(ref r, options);
+    }
+
+    private static string GetTypeDiscriminator(Type type)
+    {
+        // Default: AssemblyQualifiedName is the most reliable for Type.GetType(...)
+        return type.AssemblyQualifiedName ?? type.FullName ?? type.Name;
     }
 }

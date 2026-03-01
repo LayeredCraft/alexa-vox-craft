@@ -89,7 +89,19 @@ aws lambda update-function-code \
   --zip-file fileb://bin/Release/net10.0/publish/Sample.Fact.InSkill.Purchases.zip
 ```
 
-### 4. Configure in the Alexa Developer Console
+### 4. Update appsettings.json
+
+Replace the placeholder skill ID with your actual skill ID from the Alexa Developer Console:
+
+```json
+{
+  "SkillConfiguration": {
+    "SkillId": "amzn1.ask.skill.<your-skill-id>"
+  }
+}
+```
+
+### 5. Configure in the Alexa Developer Console
 
 - Set the Lambda ARN as your skill endpoint
 - Create and link in-skill products (science pack, history pack, space pack, all-access subscription) via the developer console

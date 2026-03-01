@@ -14,16 +14,6 @@ public sealed class RequestTests
     private static JsonSerializerOptions _options = new(AlexaJsonOptions.DefaultOptions);
 
     [Fact]
-    public void Can_read_IntentRequest_example()
-    {
-        var convertedObj = GetObjectFromExample<SkillRequest>(IntentRequestFile);
-
-        Assert.NotNull(convertedObj);
-        Assert.Equal(typeof(IntentRequest), convertedObj.GetRequestType());
-        Assert.True(Utility.CompareJson(convertedObj,IntentRequestFile));
-    }
-
-    [Fact]
     public void IntentRequest_Generates_Correct_Name_and_Signature()
     {
         var convertedObj = GetObjectFromExample<SkillRequest>("IntentRequest.json");

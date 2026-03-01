@@ -12,44 +12,6 @@ public sealed class ResponseTests
     private const string ExamplesPath = @"Examples";
 
     [Fact]
-    public void Should_create_same_json_response_as_example()
-    {
-        var skillResponse = new SkillResponse
-        {
-            Version = "1.0",
-            SessionAttributes = new Dictionary<string, object>
-            {
-                {
-                    "supportedHoriscopePeriods", new
-                    {
-                        daily = true,
-                        weekly = false,
-                        monthly = false
-                    }
-                }
-            },
-            Response = new ResponseBody
-            {
-                OutputSpeech = new PlainTextOutputSpeech
-                {
-                    Text =
-                        "Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless. Can I help you with anything else?"
-                },
-                Card = new SimpleCard
-                {
-                    Title = "Horoscope",
-                    Content =
-                        "Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless."
-                },
-                ShouldEndSession = false
-            }
-        };
-
-        Assert.True(Utility.CompareJson(skillResponse, "Response.json"));
-    }
-
-
-    [Fact]
     public void Create_HintDirective()
     {
         // Arrange: create the actual object

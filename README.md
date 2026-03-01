@@ -7,8 +7,9 @@
 - **🎯 MediatR Integration**: CQRS-style request handling with compile-time source-generated DI registration
 - **🎨 APL Support**: Complete Alexa Presentation Language implementation for rich visual interfaces
 - **⚡ Lambda Hosting**: Optimized AWS Lambda runtime with custom serialization and ReadyToRun publishing
-- **📊 Session Management**: Robust session attribute handling and game state persistence
+- **📊 Session Management**: Robust session attribute handling with typed attribute serialization
 - **🔧 Pipeline Behaviors**: Request/response interceptors for cross-cutting concerns like logging and validation
+- **💰 In-Skill Purchasing**: Full ISP support with buy/upsell/cancel directives and entitlement checks
 - **🧪 Testing Support**: Comprehensive testing utilities with AutoFixture integration and property-based testing
 
 ## 📦 Packages
@@ -23,6 +24,8 @@
 | **AlexaVoxCraft.MediatR.Lambda**    | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda)     | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/)             |
 | **AlexaVoxCraft.Observability**     | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability)       | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability/)               |
 | **AlexaVoxCraft.Smapi**             | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi)                        | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi/)                               |
+| **AlexaVoxCraft.Model.InSkillPurchasing** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.InSkillPurchasing) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.InSkillPurchasing/) |
+| **AlexaVoxCraft.InSkillPurchasing** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.InSkillPurchasing) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.InSkillPurchasing/)         |
 
 [![Build Status](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml/badge.svg)](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml)
 
@@ -40,6 +43,9 @@ dotnet add package AlexaVoxCraft.Model.Apl
 
 # OpenTelemetry observability (optional)
 dotnet add package AlexaVoxCraft.Observability
+
+# In-Skill Purchasing support (optional)
+dotnet add package AlexaVoxCraft.InSkillPurchasing
 
 # CloudWatch-compatible JSON logging (optional)
 dotnet add package LayeredCraft.Logging.CompactJsonFormatter
@@ -138,13 +144,16 @@ AlexaVoxCraft/
 │   ├── 📦 AlexaVoxCraft.MinimalLambda/        # MinimalLambda-based hosting for Alexa skills
 │   ├── 📦 AlexaVoxCraft.MediatR.Lambda/       # Legacy Lambda hosting (AlexaSkillFunction)
 │   ├── 📦 AlexaVoxCraft.Observability/        # OpenTelemetry instrumentation & telemetry
-│   └── 📦 AlexaVoxCraft.Smapi/                # Skill Management API (SMAPI) client
+│   ├── 📦 AlexaVoxCraft.Smapi/                # Skill Management API (SMAPI) client
+│   ├── 📦 AlexaVoxCraft.Model.InSkillPurchasing/ # ISP model objects: directives, response types, payment types
+│   └── 📦 AlexaVoxCraft.InSkillPurchasing/    # ISP runtime client (IInSkillPurchasingClient) for entitlement checks
 │
 ├── 📂 samples/                                # Working example projects
 │   ├── 📱 Sample.Skill.Function/              # Basic skill (legacy hosting)
 │   ├── 📱 Sample.Host.Function/               # Modern minimal API hosting
 │   ├── 📱 Sample.Generated.Function/          # Source-generated DI demonstration
-│   └── 📱 Sample.Apl.Function/                # APL skill with visual interfaces
+│   ├── 📱 Sample.Apl.Function/                # APL skill with visual interfaces
+│   └── 📱 Sample.Fact.InSkill.Purchases/      # Premium Fact skill demonstrating ISP buy/upsell/cancel flows
 │
 ├── 📂 test/                                   # Comprehensive test coverage
 │   ├── 🧪 AlexaVoxCraft.Model.Tests/          # Core model & serialization tests
@@ -177,6 +186,8 @@ Skills use the MediatR pattern where:
 | **AlexaVoxCraft.MinimalLambda** | MinimalLambda hosting | Minimal API-style hosting for Alexa skills, custom serialization, handler mapping |
 | **AlexaVoxCraft.MediatR.Lambda** | Legacy Lambda hosting | AWS Lambda functions, context management, custom serialization, hosting extensions |
 | **AlexaVoxCraft.Observability** | OpenTelemetry integration | Opt-in telemetry, metrics, spans, semantic attributes, ADOT/CloudWatch support |
+| **AlexaVoxCraft.Model.InSkillPurchasing** | ISP model objects | `BuyDirective`, `UpsellDirective`, `CancelDirective`, `ConnectionResponsePayload`, `PaymentType` |
+| **AlexaVoxCraft.InSkillPurchasing** | ISP runtime client | `IInSkillPurchasingClient` with `GetProductsAsync`/`GetProductAsync`, DI registration via `AddInSkillPurchasing()` |
 
 ## 🧪 Testing
 
