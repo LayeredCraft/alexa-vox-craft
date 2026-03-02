@@ -235,9 +235,9 @@ public class AlexaLambdaSerializerTests : TestBase
         // Add large amounts of data to simulate real-world scenarios
         var largeString = new string('A', 10000);
 
-        request.Session.Attributes = new Dictionary<string, object>
+        request.Session.Attributes = new Dictionary<string, JsonElement>
         {
-            ["largeString"] = largeString
+            ["largeString"] = JsonSerializer.SerializeToElement(largeString)
         };
         
         // This is just for testing - in reality we'd need to properly construct the large data
@@ -250,9 +250,9 @@ public class AlexaLambdaSerializerTests : TestBase
         
         // Add large amounts of data for testing
         var largeString = new string('B', 10000);
-        response.SessionAttributes = new Dictionary<string, object>
+        response.SessionAttributes = new Dictionary<string, JsonElement>
         {
-            { "largeString", largeString }
+            { "largeString", JsonSerializer.SerializeToElement(largeString) }
         };
         
         return response;

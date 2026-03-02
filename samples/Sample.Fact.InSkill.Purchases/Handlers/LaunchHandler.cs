@@ -1,6 +1,5 @@
 using AlexaVoxCraft.InSkillPurchasing.Models;
 using AlexaVoxCraft.MediatR;
-using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
 using LayeredCraft.StructuredLogging;
@@ -25,8 +24,7 @@ public class LaunchHandler : IRequestHandler<LaunchRequest>
     {
         _logger.Information("IN: {Handler}.{Method}", nameof(LaunchHandler), nameof(Handle));
 
-        var sessionAttributes = await input.AttributesManager.GetSessionAttributes(cancellationToken);
-        sessionAttributes.TryGetAttribute<Product[]>("entitledProducts", out var entitledProducts);
+        input.AttributesManager.TryGetSessionState<Product[]>("entitledProducts", out var entitledProducts);
 
         if (entitledProducts is { Length: > 0 })
         {

@@ -329,12 +329,12 @@ public sealed class ResponseTests
 
         Assert.Equal("1.0", deserialized.Version);
 
-        // Attempt to cast the object to a Dictionary<string, object>
-        var periods = Assert.IsType<Dictionary<string, object>>(deserialized.SessionAttributes["supportedHoriscopePeriods"]);
+        var periods = deserialized.SessionAttributes!["supportedHoriscopePeriods"];
+        Assert.Equal(JsonValueKind.Object, periods.ValueKind);
 
-        Assert.True(Convert.ToBoolean(periods["daily"]));
-        Assert.False(Convert.ToBoolean(periods["weekly"]));
-        Assert.False(Convert.ToBoolean(periods["monthly"]));    
+        Assert.True(periods.GetProperty("daily").GetBoolean());
+        Assert.False(periods.GetProperty("weekly").GetBoolean());
+        Assert.False(periods.GetProperty("monthly").GetBoolean());    
         var responseBody = deserialized.Response;
     
         Assert.Equal(false, responseBody.ShouldEndSession);

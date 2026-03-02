@@ -1,5 +1,4 @@
 using AlexaVoxCraft.Http.TestKit.Attributes;
-using AlexaVoxCraft.Http.TestKit.SpecimenBuilders;
 using AlexaVoxCraft.Smapi.Tests.TestKit.SpecimenBuilders;
 
 namespace AlexaVoxCraft.Smapi.Tests.TestKit.Attributes;

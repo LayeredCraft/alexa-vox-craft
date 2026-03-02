@@ -4,23 +4,12 @@ namespace AlexaVoxCraft.MediatR.Attributes;
 
 public interface IAttributesManager
 {
-    Task<IDictionary<string, object>> GetRequestAttributes(CancellationToken cancellationToken = default);
-
-    Task<IDictionary<string, object>> GetSessionAttributes(CancellationToken cancellationToken = default);
-
-    Task<IDictionary<string, object>> GetPersistentAttributes(CancellationToken cancellationToken = default);
-
-    Task SetRequestAttributes(IDictionary<string, object> requestAttributes, CancellationToken cancellationToken = default);
-
-    Task SetSessionAttributes(IDictionary<string, object> sessionAttributes, CancellationToken cancellationToken = default);
-
-    Task SetPersistentAttributes(IDictionary<string, object> persistentAttributes, CancellationToken cancellationToken = default);
-
+    JsonAttributeBag Session { get; }
+    JsonAttributeBag Request { get; }
+    Task<JsonAttributeBag> GetPersistentAsync(CancellationToken ct = default);
     Task SavePersistentAttributes(CancellationToken cancellationToken = default);
-
     Task<Session> GetSession(CancellationToken cancellationToken = default);
-
-    Task<TState> GetSessionState<TState>(CancellationToken cancellationToken = default) where TState : new();
-
-    Task SetSessionState<TState>(TState state, CancellationToken cancellationToken = default);
-}
+    bool TryGetSessionState<TState>(string key, out TState? state);
+    TState? GetSessionState<TState>(string key);
+    void SetSessionState<TState>(string key, TState state);
+    void ClearSessionState(string key);}

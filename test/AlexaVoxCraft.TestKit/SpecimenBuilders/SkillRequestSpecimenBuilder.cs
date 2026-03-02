@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.TestKit.RequestSpecifications;
@@ -46,7 +47,7 @@ public class SkillRequestSpecimenBuilder(IRequestSpecification requestSpecificat
         var application = new Application { ApplicationId = "amzn1.ask.skill.test-skill-id" };
         var system = new AlexaSystem { Application = application };
         var skillContext = new Context { System = system };
-        var session = new Session { Attributes = new Dictionary<string, object>() };
+        var session = new Session { Attributes = new Dictionary<string, JsonElement>() };
 
         var skillRequest = new SkillRequest 
         { 

@@ -1,8 +1,6 @@
-using AlexaVoxCraft.InSkillPurchasing;
 using AlexaVoxCraft.InSkillPurchasing.Clients;
 using AlexaVoxCraft.InSkillPurchasing.Models;
 using AlexaVoxCraft.MediatR;
-using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.Pipeline;
 using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.Logging;
@@ -34,9 +32,7 @@ public class EntitledProductsInterceptor : IRequestInterceptor
 
             _logger.Information("Currently entitled products: {Products}", entitledProducts.Select(p => p.Name));
 
-            var sessionAttributes = await input.AttributesManager.GetSessionAttributes(cancellationToken);
-            sessionAttributes.SetAttribute("entitledProducts", entitledProducts);
-            await input.AttributesManager.SetSessionAttributes(sessionAttributes, cancellationToken);
+            input.AttributesManager.SetSessionState("entitledProducts", entitledProducts);
         }
         catch (Exception ex)
         {

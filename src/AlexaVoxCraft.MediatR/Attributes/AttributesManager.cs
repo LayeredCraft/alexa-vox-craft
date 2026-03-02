@@ -1,83 +1,42 @@
 ﻿using System.Text.Json;
 using AlexaVoxCraft.MediatR.Attributes.Persistence;
 using AlexaVoxCraft.Model.Request;
-using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.MediatR.Attributes;
 
 public class AttributesManager : IAttributesManager
 {
     private readonly SkillRequest _eventRequest;
-    private IDictionary<string, object> _requestAttributes = new Dictionary<string, object>();
-    private IDictionary<string, object> _persistentAttributes = new Dictionary<string, object>();
-    private IDictionary<string, object>? _sessionAttributes;
     private readonly IPersistenceAdapter? _persistenceAdapter;
-    private bool _persistentAttributeSet = false;
+    private bool _persistentLoaded;
+    private Dictionary<string, JsonElement> _persistentAttributes = [];
+
+    public JsonAttributeBag Session { get; }
+    public JsonAttributeBag Request { get; }
 
     public AttributesManager(SkillRequestFactory skillRequestFactory, IPersistenceAdapter? persistenceAdapter = null)
     {
         ArgumentNullException.ThrowIfNull(skillRequestFactory);
         _persistenceAdapter = persistenceAdapter;
         _eventRequest = skillRequestFactory() ?? throw new ArgumentNullException(nameof(_eventRequest));
-        if (_eventRequest.Session is not null)
-            _sessionAttributes = _eventRequest.Session.Attributes ?? new Dictionary<string, object>();
+
+        var sessionDict = _eventRequest.Session?.Attributes ?? new Dictionary<string, JsonElement>();
+        Session = new JsonAttributeBag(sessionDict);
+        Request = new JsonAttributeBag(new Dictionary<string, JsonElement>());
     }
 
-    public Task<IDictionary<string, object>> GetRequestAttributes(CancellationToken cancellationToken = default)
-    {
-        return Task.FromResult(_requestAttributes);
-    }
-
-    public Task<IDictionary<string, object>> GetSessionAttributes(CancellationToken cancellationToken = default)
-    {
-        if (_sessionAttributes is null)
-            throw new MissingMemberException(nameof(SkillRequest), nameof(SkillRequest.Session));
-
-        return Task.FromResult(_sessionAttributes);
-    }
-
-    public async Task<IDictionary<string, object>> GetPersistentAttributes(
-        CancellationToken cancellationToken = default)
+    public async Task<JsonAttributeBag> GetPersistentAsync(CancellationToken ct = default)
     {
         if (_persistenceAdapter is null)
             throw new MissingMemberException(nameof(AttributesManager), nameof(_persistenceAdapter));
 
-        if (_persistentAttributeSet) return _persistentAttributes;
-        _persistentAttributes = await _persistenceAdapter.GetAttributes(_eventRequest, cancellationToken);
-        _persistentAttributeSet = true;
+        if (!_persistentLoaded)
+        {
+            _persistentAttributes = (await _persistenceAdapter.GetAttributes(_eventRequest, ct)).ToDictionary();
+            _persistentLoaded = true;
+        }
 
-        return _persistentAttributes;
-    }
-
-    public Task SetRequestAttributes(IDictionary<string, object> requestAttributes,
-        CancellationToken cancellationToken = default)
-    {
-        _requestAttributes = requestAttributes;
-
-        return Task.CompletedTask;
-    }
-
-    public Task SetSessionAttributes(IDictionary<string, object> sessionAttributes,
-        CancellationToken cancellationToken = default)
-    {
-        if (_sessionAttributes is null)
-            throw new MissingMemberException(nameof(SkillRequest), nameof(SkillRequest.Session));
-
-        _sessionAttributes = sessionAttributes;
-
-        return Task.CompletedTask;
-    }
-
-    public Task SetPersistentAttributes(IDictionary<string, object> persistentAttributes,
-        CancellationToken cancellationToken = default)
-    {
-        if (_persistenceAdapter is null)
-            throw new MissingMemberException(nameof(AttributesManager), nameof(_persistenceAdapter));
-
-        _persistentAttributes = persistentAttributes;
-        _persistentAttributeSet = true;
-
-        return Task.CompletedTask;
+        return new JsonAttributeBag(_persistentAttributes);
     }
 
     public async Task SavePersistentAttributes(CancellationToken cancellationToken = default)
@@ -85,31 +44,24 @@ public class AttributesManager : IAttributesManager
         if (_persistenceAdapter is null)
             throw new MissingMemberException(nameof(AttributesManager), nameof(_persistenceAdapter));
 
-        if (_persistentAttributeSet)
+        if (_persistentLoaded)
         {
-            await _persistenceAdapter.SaveAttribute(_eventRequest, _persistentAttributes, cancellationToken);
+            await _persistenceAdapter.SaveAttribute(_eventRequest, _persistentAttributes!, cancellationToken);
         }
     }
 
-    public async Task<Session> GetSession(CancellationToken cancellationToken = default)
-    {
-        var attributes = await GetSessionAttributes(cancellationToken);
-        var session = _eventRequest.Session;
-        session!.Attributes = attributes.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        return session;
-    }
+    public Task<Session> GetSession(CancellationToken cancellationToken = default) =>
+        Task.FromResult(_eventRequest.Session);
 
-    public async Task<TState> GetSessionState<TState>(CancellationToken cancellationToken = default) where TState : new()
-    {
-        var attributes = await GetSessionAttributes(cancellationToken);
-        return attributes.TryGetAttribute<TState>(typeof(TState).FullName!, out var state) && state is not null
-            ? state
-            : new TState();
-    }
+    public bool TryGetSessionState<TState>(string key, out TState? state)
+        => Session.TryGet(key, out state);
 
-    public async Task SetSessionState<TState>(TState state, CancellationToken cancellationToken = default)
-    {
-        var attributes = await GetSessionAttributes(cancellationToken);
-        attributes[typeof(TState).FullName!] = JsonSerializer.SerializeToElement(state, AlexaJsonOptions.DefaultOptions);
-    }
+    public TState? GetSessionState<TState>(string key)
+        => Session.Get<TState>(key);
+
+    public void SetSessionState<TState>(string key, TState state)
+        => Session.Set(key, state);
+
+    public void ClearSessionState(string key)
+        => Session.Remove(key);
 }

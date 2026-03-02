@@ -1,6 +1,5 @@
 using AlexaVoxCraft.InSkillPurchasing.Auth;
 using AlexaVoxCraft.Model.Request;
-using AlexaVoxCraft.TestKit.Attributes;
 
 namespace AlexaVoxCraft.InSkillPurchasing.Tests.Auth;
 

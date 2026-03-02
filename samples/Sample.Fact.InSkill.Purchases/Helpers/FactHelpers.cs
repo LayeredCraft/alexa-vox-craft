@@ -1,5 +1,4 @@
 using AlexaVoxCraft.InSkillPurchasing.Models;
-using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using Sample.Fact.InSkill.Purchases.Data;
 

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.DI;
 using AlexaVoxCraft.MediatR.Response;
@@ -255,30 +256,24 @@ public class DefaultResponseBuilderTests : TestBase
 
     [Theory]
     [MediatRAutoData]
-    public async Task GetResponse_CallsGetSessionAttributesOnAttributesManager(
-        [Frozen] IAttributesManager attributesManager, DefaultResponseBuilder builder,
-        Dictionary<string, object> sessionAttributes)
+    public async Task GetResponse_PopulatesSessionAttributesFromSessionBag(
+        [Frozen] IAttributesManager attributesManager, DefaultResponseBuilder builder)
     {
         // Arrange
-        attributesManager.GetSessionAttributes(Arg.Any<CancellationToken>()).Returns(sessionAttributes);
+        var sessionBag = new JsonAttributeBag(new Dictionary<string, JsonElement>());
+        attributesManager.Session.Returns(sessionBag);
 
         // Act
         var response = await builder.GetResponse(TestContext.Current.CancellationToken);
 
         // Assert
-        await attributesManager.Received(1).GetSessionAttributes(Arg.Any<CancellationToken>());
-        response.SessionAttributes.Should().Equal(sessionAttributes);
+        response.SessionAttributes.Should().BeSameAs(sessionBag.Values);
     }
 
     [Theory]
     [MediatRAutoData]
-    public async Task GetResponse_ReturnsCompleteSkillResponse([Frozen] IAttributesManager attributesManager,
-        DefaultResponseBuilder builder, string speechText)
+    public async Task GetResponse_ReturnsCompleteSkillResponse(DefaultResponseBuilder builder, string speechText)
     {
-        // Arrange
-        var session = new Session { Attributes = new Dictionary<string, object>() };
-        attributesManager.GetSession(Arg.Any<CancellationToken>()).Returns(session);
-
         // Act
         builder.Speak(speechText);
         var response = await builder.GetResponse(TestContext.Current.CancellationToken);

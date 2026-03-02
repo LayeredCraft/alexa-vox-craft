@@ -19,7 +19,7 @@ public sealed record Product(
     [property: JsonPropertyName("summary")] string Summary,
     [property: JsonPropertyName("purchasable"), JsonConverter(typeof(JsonStringEnumConverter))] Purchasable Purchasable,
     [property: JsonPropertyName("entitled"), JsonConverter(typeof(JsonStringEnumConverter))] Entitled Entitled,
-    [property: JsonPropertyName("entitledReason"), JsonConverter(typeof(JsonStringEnumConverter))] EntitledReason EntitledReason,
+    [property: JsonPropertyName("entitlementReason"), JsonConverter(typeof(JsonStringEnumConverter))] EntitlementReason EntitlementReason,
     [property: JsonPropertyName("referenceName")] string ReferenceName,
     [property: JsonPropertyName("activeEntitlementCount")] int ActiveEntitlementCount,
     [property: JsonPropertyName("purchaseMode"), JsonConverter(typeof(JsonStringEnumConverter))] PurchaseMode PurchaseMode)
@@ -117,7 +117,7 @@ public enum Entitled
 /// <summary>
 /// Specifies the reason a customer is entitled to an in-skill product.
 /// </summary>
-public enum EntitledReason
+public enum EntitlementReason
 {
     PURCHASED,
     NOT_PURCHASED,

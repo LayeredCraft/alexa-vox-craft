@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using AlexaVoxCraft.Model.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Response;
 
@@ -25,8 +25,7 @@ public class SkillResponse
     /// </summary>
     [JsonPropertyName("sessionAttributes")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    // [JsonConverter(typeof(TypedAttributeDictionaryConverter))]
-    public Dictionary<string, object>? SessionAttributes { get; set; }
+    public Dictionary<string, JsonElement>? SessionAttributes { get; set; }
 
     /// <summary>
     /// Gets or sets the response body containing the actual response data.

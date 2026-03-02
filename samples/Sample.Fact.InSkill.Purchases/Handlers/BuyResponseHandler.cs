@@ -1,7 +1,6 @@
 using AlexaVoxCraft.InSkillPurchasing.Clients;
 using AlexaVoxCraft.InSkillPurchasing.Models;
 using AlexaVoxCraft.MediatR;
-using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.Model.InSkillPurchasing;
 using AlexaVoxCraft.Model.InSkillPurchasing.Responses;
 using AlexaVoxCraft.Model.Request.Type;
@@ -45,10 +44,9 @@ public class BuyResponseHandler : IRequestHandler<ConnectionResponseRequest<Conn
         }
 
         var product = await _ispClient.GetProductAsync(request.Payload.ProductId, cancellationToken);
-
-        var sessionAttributes = await input.AttributesManager.GetSessionAttributes(cancellationToken);
-        sessionAttributes.TryGetAttribute<Product[]>("entitledProducts", out var entitledProducts);
-
+        
+        input.AttributesManager.TryGetSessionState<Product[]>("entitledProducts", out var entitledProducts);
+        
         string speakOutput;
         string repromptOutput;
 

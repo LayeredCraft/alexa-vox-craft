@@ -39,7 +39,7 @@ public sealed class InSkillProductSpecimenBuilder(IRequestSpecification requestS
             Summary: context.Create<string>(),
             Purchasable: Purchasable.PURCHASABLE,
             Entitled: Entitled.NOT_ENTITLED,
-            EntitledReason: EntitledReason.NOT_PURCHASED,
+            EntitlementReason: EntitlementReason.NOT_PURCHASED,
             ReferenceName: context.Create<string>(),
             ActiveEntitlementCount: Math.Abs(context.Create<int>() % 10),
             PurchaseMode: PurchaseMode.TEST)

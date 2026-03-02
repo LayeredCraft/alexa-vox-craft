@@ -1,6 +1,5 @@
 using AlexaVoxCraft.InSkillPurchasing.Models;
 using AlexaVoxCraft.MediatR;
-using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
 using LayeredCraft.StructuredLogging;
@@ -29,8 +28,7 @@ public class YesHandler : IRequestHandler<IntentRequest>
     {
         _logger.Information("IN: {Handler}.{Method}", nameof(YesHandler), nameof(Handle));
 
-        var sessionAttributes = await input.AttributesManager.GetSessionAttributes(cancellationToken);
-        sessionAttributes.TryGetAttribute<Product[]>("entitledProducts", out var entitledProducts);
+        input.AttributesManager.TryGetSessionState<Product[]>("entitledProducts", out var entitledProducts);
 
         var filteredFacts = FactHelpers.GetFilteredFacts(FactData.AllFacts, entitledProducts);
         var yesNoQuestion = FactHelpers.GetRandomYesNoQuestion();

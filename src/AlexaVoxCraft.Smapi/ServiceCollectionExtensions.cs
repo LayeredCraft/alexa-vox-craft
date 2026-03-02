@@ -3,7 +3,6 @@ using AlexaVoxCraft.Smapi.Auth;
 using AlexaVoxCraft.Smapi.Clients;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AlexaVoxCraft.Smapi;
 

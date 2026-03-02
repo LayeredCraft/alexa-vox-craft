@@ -2,8 +2,6 @@ using System.Net;
 using AlexaVoxCraft.Http.TestKit.Extensions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
-using AlexaVoxCraft.TestKit.Attributes;
-using NSubstitute;
 
 namespace AlexaVoxCraft.InSkillPurchasing.Tests.Handlers;
 
