@@ -1,4 +1,5 @@
 using System.Text.Json;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.MediatR.Attributes;
 
@@ -35,8 +36,14 @@ public static class AttributeDictionaryExtensions
                 return true;
             }
 
+            if (raw is JsonElement je)
+            {
+                value = je.Deserialize<T>(AlexaJsonOptions.DefaultOptions);
+                return true;
+            }
+
             // Fallback for legacy values without a type discriminator.
-            value = JsonSerializer.Deserialize<T>(JsonSerializer.SerializeToUtf8Bytes(raw));
+            value = JsonSerializer.Deserialize<T>(JsonSerializer.SerializeToUtf8Bytes(raw, AlexaJsonOptions.DefaultOptions), AlexaJsonOptions.DefaultOptions);
             return true;
         }
 

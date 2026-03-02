@@ -12,7 +12,7 @@ public class Session
     public string SessionId { get; set; }
 
     [JsonPropertyName("attributes")]
-    [JsonConverter(typeof(TypedAttributeDictionaryConverter))]
+    // [JsonConverter(typeof(TypedAttributeDictionaryConverter))]
     public Dictionary<string, object> Attributes { get; set; }
 
     [JsonPropertyName("application")]

@@ -19,4 +19,8 @@ public interface IAttributesManager
     Task SavePersistentAttributes(CancellationToken cancellationToken = default);
 
     Task<Session> GetSession(CancellationToken cancellationToken = default);
+
+    Task<TState> GetSessionState<TState>(CancellationToken cancellationToken = default) where TState : new();
+
+    Task SetSessionState<TState>(TState state, CancellationToken cancellationToken = default);
 }

@@ -4,6 +4,12 @@ using AlexaVoxCraft.Model.Request;
 
 namespace AlexaVoxCraft.MediatR.Tests.Attributes;
 
+file sealed class TestSkillState
+{
+    public string CurrentIntent { get; set; } = string.Empty;
+    public int TurnCount { get; set; }
+}
+
 public class AttributesManagerTests : TestBase
 {
     [Theory]
@@ -289,6 +295,84 @@ public class AttributesManagerTests : TestBase
 
         // Act & Assert
         var exception = await Record.ExceptionAsync(() => manager.GetSession(TestContext.Current.CancellationToken));
+
+        exception.Should().NotBeNull();
+        exception.Should().BeOfType<MissingMemberException>();
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task GetSessionState_WhenNotSet_ReturnsNewInstance(AttributesManager manager)
+    {
+        // Act
+        var result = await manager.GetSessionState<TestSkillState>(TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.CurrentIntent.Should().Be(string.Empty);
+        result.TurnCount.Should().Be(0);
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task SetSessionState_ThenGetSessionState_RoundTripsState(AttributesManager manager)
+    {
+        // Arrange
+        var state = new TestSkillState { CurrentIntent = "PlayMusic", TurnCount = 3 };
+
+        // Act
+        await manager.SetSessionState(state, TestContext.Current.CancellationToken);
+        var result = await manager.GetSessionState<TestSkillState>(TestContext.Current.CancellationToken);
+
+        // Assert
+        result.CurrentIntent.Should().Be("PlayMusic");
+        result.TurnCount.Should().Be(3);
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task SetSessionState_StoresUnderFullTypeName(AttributesManager manager)
+    {
+        // Arrange
+        var state = new TestSkillState { TurnCount = 7 };
+
+        // Act
+        await manager.SetSessionState(state, TestContext.Current.CancellationToken);
+        var attributes = await manager.GetSessionAttributes(TestContext.Current.CancellationToken);
+
+        // Assert
+        attributes.Should().ContainKey(typeof(TestSkillState).FullName!);
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task GetSessionState_WithNullSession_ThrowsMissingMemberException([Frozen] SkillRequest skillRequest,
+        SkillRequestFactory factory)
+    {
+        // Arrange
+        skillRequest.Session = null!;
+        var manager = new AttributesManager(factory);
+
+        // Act & Assert
+        var exception = await Record.ExceptionAsync(() =>
+            manager.GetSessionState<TestSkillState>(TestContext.Current.CancellationToken));
+
+        exception.Should().NotBeNull();
+        exception.Should().BeOfType<MissingMemberException>();
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task SetSessionState_WithNullSession_ThrowsMissingMemberException([Frozen] SkillRequest skillRequest,
+        SkillRequestFactory factory)
+    {
+        // Arrange
+        skillRequest.Session = null!;
+        var manager = new AttributesManager(factory);
+
+        // Act & Assert
+        var exception = await Record.ExceptionAsync(() =>
+            manager.SetSessionState(new TestSkillState(), TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
         exception.Should().BeOfType<MissingMemberException>();

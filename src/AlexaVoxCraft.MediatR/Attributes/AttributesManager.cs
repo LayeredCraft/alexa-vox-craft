@@ -1,5 +1,7 @@
-﻿using AlexaVoxCraft.MediatR.Attributes.Persistence;
+﻿using System.Text.Json;
+using AlexaVoxCraft.MediatR.Attributes.Persistence;
 using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.MediatR.Attributes;
 
@@ -95,5 +97,19 @@ public class AttributesManager : IAttributesManager
         var session = _eventRequest.Session;
         session!.Attributes = attributes.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         return session;
+    }
+
+    public async Task<TState> GetSessionState<TState>(CancellationToken cancellationToken = default) where TState : new()
+    {
+        var attributes = await GetSessionAttributes(cancellationToken);
+        return attributes.TryGetAttribute<TState>(typeof(TState).FullName!, out var state) && state is not null
+            ? state
+            : new TState();
+    }
+
+    public async Task SetSessionState<TState>(TState state, CancellationToken cancellationToken = default)
+    {
+        var attributes = await GetSessionAttributes(cancellationToken);
+        attributes[typeof(TState).FullName!] = JsonSerializer.SerializeToElement(state, AlexaJsonOptions.DefaultOptions);
     }
 }

@@ -113,6 +113,12 @@ public sealed class TypedAttributeDictionaryConverter : JsonConverter<Dictionary
                 continue;
             }
 
+            if (val is JsonElement jsonElement)
+            {
+                jsonElement.WriteTo(writer);
+                continue;
+            }
+
             // ✅ Enforce materialized collections (Option 1): throw if the runtime type is not safely rehydratable.
             EnsureMaterializedIfEnumerable(key, val);
 

@@ -25,7 +25,7 @@ public class SkillResponse
     /// </summary>
     [JsonPropertyName("sessionAttributes")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonConverter(typeof(TypedAttributeDictionaryConverter))]
+    // [JsonConverter(typeof(TypedAttributeDictionaryConverter))]
     public Dictionary<string, object>? SessionAttributes { get; set; }
 
     /// <summary>
