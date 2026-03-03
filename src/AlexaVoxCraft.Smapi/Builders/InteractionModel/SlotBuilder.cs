@@ -9,6 +9,7 @@ public sealed class SlotBuilder
 {
     private readonly string _name;
     private readonly string _type;
+    private readonly List<string> _samples = [];
     private bool _isRequired;
 
     /// <summary>
@@ -46,6 +47,35 @@ public sealed class SlotBuilder
     }
 
     /// <summary>
+    /// Adds a sample utterance to the slot.
+    /// </summary>
+    /// <param name="sample">The sample utterance.</param>
+    /// <returns>The current <see cref="SlotBuilder"/>.</returns>
+    public SlotBuilder WithSample(string sample)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(sample);
+        _samples.Add(sample);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds multiple sample utterances to the slot.
+    /// </summary>
+    /// <param name="samples">The sample utterances.</param>
+    /// <returns>The current <see cref="SlotBuilder"/>.</returns>
+    public SlotBuilder WithSamples(params string[] samples)
+    {
+        ArgumentNullException.ThrowIfNull(samples);
+
+        foreach (var sample in samples)
+        {
+            WithSample(sample);
+        }
+
+        return this;
+    }
+
+    /// <summary>
     /// Builds the slot instance.
     /// </summary>
     /// <returns>The constructed <see cref="IntentSlot"/>.</returns>
@@ -54,6 +84,7 @@ public sealed class SlotBuilder
         {
             Name = _name,
             Type = _type,
-            IsRequired = _isRequired
+            IsRequired = _isRequired,
+            Samples = _samples.Count > 0 ? [.. _samples] : null
         };
 }
