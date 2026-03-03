@@ -25,4 +25,11 @@ public sealed record IntentSlot
     [JsonPropertyName("elicitationRequired")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool IsRequired { get; init; }
+
+    /// <summary>
+    /// Gets the sample utterances for this slot.
+    /// </summary>
+    [JsonPropertyName("samples")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public IReadOnlyList<string>? Samples { get; init; }
 }

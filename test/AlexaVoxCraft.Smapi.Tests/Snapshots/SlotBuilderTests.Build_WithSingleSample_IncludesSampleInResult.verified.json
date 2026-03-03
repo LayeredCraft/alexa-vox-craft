@@ -1,0 +1,8 @@
+﻿{
+  "Name": "productCategory",
+  "Type": "factType",
+  "IsRequired": false,
+  "Samples": [
+    "{productCategory} pack"
+  ]
+}
