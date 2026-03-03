@@ -21,11 +21,7 @@ public interface IAttributesManager
     JsonAttributeBag Request { get; }
     Task<JsonAttributeBag> GetPersistentAsync(CancellationToken ct = default);
     Task SavePersistentAttributes(CancellationToken cancellationToken = default);
-    Task<Session> GetSession(CancellationToken cancellationToken = default);
-    bool TryGetSessionState<TState>(string key, out TState? state);
-    TState? GetSessionState<TState>(string key);
-    void SetSessionState<TState>(string key, TState state);
-    void ClearSessionState(string key);
+    Task<Session?> GetSession(CancellationToken cancellationToken = default);
 }
 ```
 
@@ -78,27 +74,6 @@ public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken c
 ```
 
 The `DefaultResponseBuilder` automatically copies `Session.Values` into `SkillResponse.SessionAttributes` when building the response — no manual step required.
-
-### Convenience Methods on IAttributesManager
-
-The following methods delegate directly to `Session` and are available as shorthand on `IAttributesManager`:
-
-```csharp
-// Equivalent to Session.Set(key, state)
-input.AttributesManager.SetSessionState("gameStarted", true);
-
-// Equivalent to Session.Get<T>(key)
-var started = input.AttributesManager.GetSessionState<bool>("gameStarted");
-
-// Equivalent to Session.TryGet<T>(key, out value)
-if (input.AttributesManager.TryGetSessionState<GameState>("gameState", out var gameState))
-{
-    // use gameState
-}
-
-// Equivalent to Session.Remove(key)
-input.AttributesManager.ClearSessionState("tempKey");
-```
 
 ## Request Attributes
 
@@ -264,7 +239,7 @@ public sealed class SaveStateInterceptor : IResponseInterceptor
 public Task<bool> CanHandle(IHandlerInput handlerInput, CancellationToken cancellationToken = default)
 {
     var isNewSession = handlerInput.RequestEnvelope.Session?.New == true;
-    var hasGameStarted = handlerInput.AttributesManager.TryGetSessionState<bool>("gameStarted", out var started)
+    var hasGameStarted = handlerInput.AttributesManager.Session.TryGet<bool>("gameStarted", out var started)
         && started;
 
     return Task.FromResult(isNewSession || !hasGameStarted);
