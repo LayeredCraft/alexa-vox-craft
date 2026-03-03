@@ -27,7 +27,7 @@ public class PrintImageV1 : IConnectionTask
     [JsonPropertyName("description")]
     public string Description { get; set; }
 
-    [JsonPropertyName("imageType"),JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PrintImageV1Type>))]
+    [JsonPropertyName("imageType"), JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PrintImageV1Type>))]
     public PrintImageV1Type ImageV1Type { get; set; }
 
     [JsonPropertyName("url")]

@@ -18,7 +18,7 @@ public class Sequence : ActionableComponent, IJsonSerializable<Sequence>
 
     public Sequence(IEnumerable<APLComponent> items)
     {
-        Items = [..items];
+        Items = [.. items];
     }
 
     [JsonPropertyName("type")] public override string Type => nameof(Sequence);

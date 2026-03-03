@@ -11,7 +11,7 @@ public sealed class CardTests
     {
         card.Title.Should().NotBeNullOrEmpty();
         card.Content.Should().NotBeNullOrEmpty();
-        
+
         card.ShouldRoundTripSerialize();
     }
 
@@ -24,7 +24,7 @@ public sealed class CardTests
         card.Image.Should().NotBeNull();
         card.Image.SmallImageUrl.Should().NotBeNullOrEmpty();
         card.Image.LargeImageUrl.Should().NotBeNullOrEmpty();
-        
+
         card.ShouldRoundTripSerialize();
     }
 
@@ -34,7 +34,7 @@ public sealed class CardTests
     {
         card.Permissions.Should().NotBeEmpty();
         card.Permissions.Should().OnlyContain(p => !string.IsNullOrEmpty(p));
-        
+
         card.ShouldRoundTripSerialize();
     }
 
@@ -43,7 +43,7 @@ public sealed class CardTests
     public void LinkAccountCard_WithGeneratedData_SerializesCorrectly(LinkAccountCard card)
     {
         card.Type.Should().Be("LinkAccount");
-        
+
         card.ShouldRoundTripSerialize();
     }
 }

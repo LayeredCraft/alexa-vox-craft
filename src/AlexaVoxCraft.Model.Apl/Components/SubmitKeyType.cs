@@ -7,14 +7,14 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<SubmitKeyType>))]
 public enum SubmitKeyType
 {
-    [EnumMember(Value="done")]
+    [EnumMember(Value = "done")]
     Done,
-    [EnumMember(Value="go")]
+    [EnumMember(Value = "go")]
     Go,
-    [EnumMember(Value="next")]
+    [EnumMember(Value = "next")]
     Next,
-    [EnumMember(Value="search")]
+    [EnumMember(Value = "search")]
     Search,
-    [EnumMember(Value="send")]
+    [EnumMember(Value = "send")]
     Send
 }

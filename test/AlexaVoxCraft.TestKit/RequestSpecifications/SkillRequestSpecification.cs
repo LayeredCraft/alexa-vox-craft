@@ -8,7 +8,7 @@ namespace AlexaVoxCraft.TestKit.RequestSpecifications;
 public class SkillRequestSpecification : IRequestSpecification
 {
     private readonly static Type[] ValidTypes = [typeof(SkillRequest), typeof(Request)];
-    
+
     public bool IsSatisfiedBy(object request)
     {
         return request switch

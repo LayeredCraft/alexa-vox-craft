@@ -19,7 +19,7 @@ public class MediatRAutoDataAttribute() : AutoDataAttribute(CreateFixture)
             fixture.Customizations.Add(new ServiceCollectionSpecimenBuilder());
             fixture.Customizations.Add(new OptionsSpecimenBuilder());
             fixture.Customizations.Add(new RequestHandlerDelegateSpecimenBuilder());
-            
+
             // Register all ILogger<T> to use TestLogger<T> with Debug level
             fixture.Customize(new TestLoggerCustomization());
         });

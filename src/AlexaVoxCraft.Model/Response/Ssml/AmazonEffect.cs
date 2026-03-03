@@ -4,20 +4,20 @@ namespace AlexaVoxCraft.Model.Response.Ssml;
 
 public class AmazonEffect : ICommonSsml
 {
-	public string Text { get; set; }
+    public string Text { get; set; }
 
-	public AmazonEffect(string text)
-	{
-		if (string.IsNullOrWhiteSpace(text))
-		{
-			throw new ArgumentNullException(nameof(text), "Text value required for AmazonEffect in Ssml");
-		}
+    public AmazonEffect(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentNullException(nameof(text), "Text value required for AmazonEffect in Ssml");
+        }
 
-		Text = text;
-	}
+        Text = text;
+    }
 
-	public XNode ToXml()
-	{
-		return new XElement(Namespaces.TempAmazon + "effect", new XAttribute("name", "whispered"),new XText(Text));
-	}
+    public XNode ToXml()
+    {
+        return new XElement(Namespaces.TempAmazon + "effect", new XAttribute("name", "whispered"), new XText(Text));
+    }
 }

@@ -3,7 +3,8 @@ using System.Reflection;
 namespace AlexaVoxCraft.TestKit;
 
 public static class FixtureLoader
-{    public static string FromResource(Assembly asm, string resourceName)
+{
+    public static string FromResource(Assembly asm, string resourceName)
     {
         using var s = asm.GetManifestResourceStream(resourceName)
                       ?? throw new InvalidOperationException($"Missing embedded resource: {resourceName}");
@@ -18,5 +19,5 @@ public static class FixtureLoader
         var resource = $"{asmName}.Examples.{tail}";
         return FromResource(asm, resource);
     }
-    
+
 }

@@ -6,12 +6,6 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.MediatR.Tests.Attributes;
 
-file sealed class TestSkillState
-{
-    public string CurrentIntent { get; set; } = string.Empty;
-    public int TurnCount { get; set; }
-}
-
 public class AttributesManagerTests : TestBase
 {
     [Theory]
@@ -77,7 +71,7 @@ public class AttributesManagerTests : TestBase
 
     [Theory]
     [MediatRAutoData]
-    public async Task GetPersistentAsync_WithoutPersistenceAdapter_ThrowsMissingMemberException(
+    public async Task GetPersistentAsync_WithoutPersistenceAdapter_ThrowsInvalidOperationException(
         SkillRequestFactory factory)
     {
         var manager = new AttributesManager(factory);
@@ -85,7 +79,7 @@ public class AttributesManagerTests : TestBase
         var exception = await Record.ExceptionAsync(() => manager.GetPersistentAsync(TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
-        exception.Should().BeOfType<MissingMemberException>();
+        exception.Should().BeOfType<InvalidOperationException>();
     }
 
     [Theory]
@@ -123,7 +117,22 @@ public class AttributesManagerTests : TestBase
 
     [Theory]
     [MediatRAutoData]
-    public async Task SavePersistentAttributes_WithoutPersistenceAdapter_ThrowsMissingMemberException(
+    public async Task GetPersistentAsync_CalledMultipleTimes_ReturnsSameBagInstance(
+        [Frozen] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
+    {
+        IDictionary<string, JsonElement> adapterData = new Dictionary<string, JsonElement>();
+        persistenceAdapter.GetAttributes(Arg.Any<SkillRequest>(), Arg.Any<CancellationToken>())
+            .Returns(adapterData);
+
+        var first = await manager.GetPersistentAsync(TestContext.Current.CancellationToken);
+        var second = await manager.GetPersistentAsync(TestContext.Current.CancellationToken);
+
+        first.Should().BeSameAs(second);
+    }
+
+    [Theory]
+    [MediatRAutoData]
+    public async Task SavePersistentAttributes_WithoutPersistenceAdapter_ThrowsInvalidOperationException(
         SkillRequestFactory factory)
     {
         var manager = new AttributesManager(factory);
@@ -131,7 +140,7 @@ public class AttributesManagerTests : TestBase
         var exception = await Record.ExceptionAsync(() => manager.SavePersistentAttributes(TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
-        exception.Should().BeOfType<MissingMemberException>();
+        exception.Should().BeOfType<InvalidOperationException>();
     }
 
     [Theory]
@@ -175,70 +184,15 @@ public class AttributesManagerTests : TestBase
 
     [Theory]
     [MediatRAutoData]
-    public void SetSessionState_ThenGetSessionState_RoundTripsValue(AttributesManager manager)
+    public async Task GetSession_WhenSessionIsNull_ReturnsNull(
+        [Frozen] SkillRequest skillRequest, SkillRequestFactory factory)
     {
-        var state = new TestSkillState { CurrentIntent = "PlayMusic", TurnCount = 3 };
+        skillRequest.Session = null!;
+        var manager = new AttributesManager(factory);
 
-        manager.SetSessionState("myState", state);
-        var result = manager.GetSessionState<TestSkillState>("myState");
-
-        result.Should().NotBeNull();
-        result!.CurrentIntent.Should().Be("PlayMusic");
-        result.TurnCount.Should().Be(3);
-    }
-
-    [Theory]
-    [MediatRAutoData]
-    public void GetSessionState_WhenNotSet_ReturnsNull(AttributesManager manager)
-    {
-        var result = manager.GetSessionState<TestSkillState>("missing");
+        var result = await manager.GetSession(TestContext.Current.CancellationToken);
 
         result.Should().BeNull();
     }
 
-    [Theory]
-    [MediatRAutoData]
-    public void TryGetSessionState_WhenNotSet_ReturnsFalse(AttributesManager manager)
-    {
-        var found = manager.TryGetSessionState<TestSkillState>("missing", out var result);
-
-        found.Should().BeFalse();
-        result.Should().BeNull();
-    }
-
-    [Theory]
-    [MediatRAutoData]
-    public void TryGetSessionState_WhenSet_ReturnsTrueAndValue(AttributesManager manager)
-    {
-        var state = new TestSkillState { CurrentIntent = "HelpIntent", TurnCount = 1 };
-        manager.SetSessionState("myState", state);
-
-        var found = manager.TryGetSessionState<TestSkillState>("myState", out var result);
-
-        found.Should().BeTrue();
-        result.Should().NotBeNull();
-        result!.CurrentIntent.Should().Be("HelpIntent");
-    }
-
-    [Theory]
-    [MediatRAutoData]
-    public void ClearSessionState_RemovesKey(AttributesManager manager)
-    {
-        manager.SetSessionState("myState", new TestSkillState { TurnCount = 5 });
-
-        manager.ClearSessionState("myState");
-
-        manager.GetSessionState<TestSkillState>("myState").Should().BeNull();
-    }
-
-    [Theory]
-    [MediatRAutoData]
-    public void SetSessionState_StoresValueInSessionBag(AttributesManager manager)
-    {
-        var state = new TestSkillState { TurnCount = 7 };
-
-        manager.SetSessionState("myState", state);
-
-        manager.Session.Values.Should().ContainKey("myState");
-    }
 }

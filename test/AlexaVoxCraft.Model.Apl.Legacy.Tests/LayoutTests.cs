@@ -9,8 +9,8 @@ public class LayoutTests
     {
         var layout = Utility.ExampleFileContent<Layout>("Layout.json");
         Assert.Equal("A basic header with a title and a logo", layout.Description);
-        Assert.Equal(2,layout.Parameters.Count);
-        Assert.Equal(2,layout.Items.Count);
+        Assert.Equal(2, layout.Parameters.Count);
+        Assert.Equal(2, layout.Items.Count);
     }
 
     [Fact]
@@ -18,8 +18,8 @@ public class LayoutTests
     {
         var layout = Utility.ExampleFileContent<Layout>("Layout.json");
         var first = layout.Parameters.First();
-        Assert.Equal("title",first.Name);
-        Assert.Equal(ParameterType.@string,first.Type);
+        Assert.Equal("title", first.Name);
+        Assert.Equal(ParameterType.@string, first.Type);
     }
 
     [Fact]
@@ -27,11 +27,11 @@ public class LayoutTests
     {
         var image = new AlexaImage
         {
-            ImageSource= "https://d2o906d8ln7ui1.cloudfront.net/images/MollyforBT7.png",
+            ImageSource = "https://d2o906d8ln7ui1.cloudfront.net/images/MollyforBT7.png",
             ImageRoundedCorner = true,
             Scale = Scale.BestFit,
             ImageAlignment = AlexaImageAlignment.Center,
-            ImageWidth = new AbsoluteDimension(75,"vh"),
+            ImageWidth = new AbsoluteDimension(75, "vh"),
             ImageAspectRatio = AlexaImageAspectRatio.Square,
             ImageBlurredBackground = true
         };
@@ -47,7 +47,7 @@ public class LayoutTests
         document.MainTemplate = new Layout(
             new AlexaFooter("Hint Text")
         ).AsMain();
-        Assert.Contains(Import.AlexaLayouts,document.Imports);
+        Assert.Contains(Import.AlexaLayouts, document.Imports);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class LayoutTests
     [Fact]
     public void AlexaFooterRecognisesExistingImport()
     {
-        var document = new APLDocument {Imports = new List<Import> {Import.AlexaLayouts}};
+        var document = new APLDocument { Imports = new List<Import> { Import.AlexaLayouts } };
         Import.AlexaLayouts.Into(document);
         Assert.Single(document.Imports);
     }
@@ -73,7 +73,7 @@ public class LayoutTests
     public void AlexaFooterGeneratesCorrectJson()
     {
         var footer = new AlexaFooter("Hint Text");
-        Assert.True(Utility.CompareJson(footer,"AlexaFooter.json", null));
+        Assert.True(Utility.CompareJson(footer, "AlexaFooter.json", null));
     }
 
     [Fact]
@@ -93,6 +93,6 @@ public class LayoutTests
             LayoutDirection = LayoutDirection.RTL
         };
 
-        Assert.True(Utility.CompareJson(header,"AlexaHeader.json", null));
+        Assert.True(Utility.CompareJson(header, "AlexaHeader.json", null));
     }
 }

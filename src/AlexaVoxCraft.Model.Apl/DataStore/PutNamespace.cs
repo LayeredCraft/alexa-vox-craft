@@ -6,7 +6,7 @@ public class PutNamespace : DataStoreCommand
 {
     public const string CommandType = "PUT_NAMESPACE";
 
-    public PutNamespace() : base(CommandType){}
+    public PutNamespace() : base(CommandType) { }
 
     [JsonPropertyName("namespace")]
     public string Namespace { get; set; }

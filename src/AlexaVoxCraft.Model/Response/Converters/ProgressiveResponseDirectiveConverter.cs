@@ -16,7 +16,7 @@ public class ProgressiveResponseDirectiveConverter : BasePolymorphicConverter<IP
     protected override string TypeDiscriminatorPropertyName => "type";
     protected override IDictionary<string, Type> DerivedTypes => ProgressiveResponseTypes;
 
-    
+
     protected override IDictionary<string, Func<JsonElement, Type>>
         DataDrivenTypeFactories => ProgressiveResponseDataDrivenTypeFactories;
 

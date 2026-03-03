@@ -24,7 +24,7 @@ public class LaunchHandler : IRequestHandler<LaunchRequest>
     {
         _logger.Information("IN: {Handler}.{Method}", nameof(LaunchHandler), nameof(Handle));
 
-        input.AttributesManager.TryGetSessionState<Product[]>("entitledProducts", out var entitledProducts);
+        input.AttributesManager.Session.TryGet<Product[]>("entitledProducts", out var entitledProducts);
 
         if (entitledProducts is { Length: > 0 })
         {

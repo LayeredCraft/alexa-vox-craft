@@ -7,10 +7,10 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<SliderSize>))]
 public enum SliderSize
 {
-    [EnumMember(Value="small")]
+    [EnumMember(Value = "small")]
     Small,
-    [EnumMember(Value="medium")]
+    [EnumMember(Value = "medium")]
     Medium,
-    [EnumMember(Value="large")]
+    [EnumMember(Value = "large")]
     Large
 }

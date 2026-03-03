@@ -6,7 +6,7 @@ using AlexaVoxCraft.Model.Response.Converters;
 
 namespace AlexaVoxCraft.Model.Apl.JsonConverter;
 
-public class APLAFilterConverter: BasePolymorphicConverter<APLAFilter>
+public class APLAFilterConverter : BasePolymorphicConverter<APLAFilter>
 {
     private static Dictionary<string, Type> _derivedTypes = new()
     {

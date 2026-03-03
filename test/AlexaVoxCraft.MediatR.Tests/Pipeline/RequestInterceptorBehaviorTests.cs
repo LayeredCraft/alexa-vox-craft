@@ -15,10 +15,10 @@ public class RequestInterceptorBehaviorTests : TestBase
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         var behavior = new RequestInterceptorBehavior(Enumerable.Empty<IRequestInterceptor>());
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         await next.Received(1).Invoke();
@@ -35,15 +35,15 @@ public class RequestInterceptorBehaviorTests : TestBase
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         var behavior = new RequestInterceptorBehavior(new[] { interceptor });
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         await interceptor.Received(1).Process(handlerInput, Arg.Any<CancellationToken>());
         await next.Received(1).Invoke();
-        
+
         // Verify interceptor was called before next
         Received.InOrder(async () =>
         {
@@ -65,17 +65,17 @@ public class RequestInterceptorBehaviorTests : TestBase
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         var behavior = new RequestInterceptorBehavior(new[] { firstInterceptor, secondInterceptor, thirdInterceptor });
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         await firstInterceptor.Received(1).Process(handlerInput, Arg.Any<CancellationToken>());
         await secondInterceptor.Received(1).Process(handlerInput, Arg.Any<CancellationToken>());
         await thirdInterceptor.Received(1).Process(handlerInput, Arg.Any<CancellationToken>());
         await next.Received(1).Invoke();
-        
+
         // Verify order of execution
         Received.InOrder(async () =>
         {
@@ -98,13 +98,13 @@ public class RequestInterceptorBehaviorTests : TestBase
         var testException = new InvalidOperationException("Interceptor failed");
         faultyInterceptor.Process(handlerInput, Arg.Any<CancellationToken>())
             .Returns(Task.FromException(testException));
-        
+
         var behavior = new RequestInterceptorBehavior(new[] { faultyInterceptor, normalInterceptor });
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
-        
+
         exception.Should().Be(testException);
         await faultyInterceptor.Received(1).Process(handlerInput, Arg.Any<CancellationToken>());
         await normalInterceptor.DidNotReceive().Process(Arg.Any<IHandlerInput>(), Arg.Any<CancellationToken>());
@@ -124,13 +124,13 @@ public class RequestInterceptorBehaviorTests : TestBase
         var testException = new InvalidOperationException("Second interceptor failed");
         faultyInterceptor.Process(handlerInput, Arg.Any<CancellationToken>())
             .Returns(Task.FromException(testException));
-        
+
         var behavior = new RequestInterceptorBehavior(new[] { firstInterceptor, faultyInterceptor, thirdInterceptor });
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
-        
+
         exception.Should().Be(testException);
         await firstInterceptor.Received(1).Process(handlerInput, Arg.Any<CancellationToken>());
         await faultyInterceptor.Received(1).Process(handlerInput, Arg.Any<CancellationToken>());
@@ -144,7 +144,7 @@ public class RequestInterceptorBehaviorTests : TestBase
     {
         // Act & Assert
         var exception = Record.Exception(() => new RequestInterceptorBehavior(null!));
-        
+
         exception.Should().BeNull();
     }
 
@@ -161,10 +161,10 @@ public class RequestInterceptorBehaviorTests : TestBase
         var cancellationToken = cts.Token;
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         var behavior = new RequestInterceptorBehavior(new[] { interceptor });
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, cancellationToken, next);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         await interceptor.Received(1).Process(handlerInput, cancellationToken);
@@ -181,11 +181,11 @@ public class RequestInterceptorBehaviorTests : TestBase
         var testException = new InvalidOperationException("Next failed");
         next.Invoke().Returns(Task.FromException<SkillResponse>(testException));
         var behavior = new RequestInterceptorBehavior(new[] { interceptor });
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
-        
+
         exception.Should().Be(testException);
         await interceptor.Received(1).Process(handlerInput, Arg.Any<CancellationToken>());
         await next.Received(1).Invoke();
@@ -202,10 +202,10 @@ public class RequestInterceptorBehaviorTests : TestBase
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         var emptyInterceptors = new List<IRequestInterceptor>();
         var behavior = new RequestInterceptorBehavior(emptyInterceptors);
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         await next.Received(1).Invoke();

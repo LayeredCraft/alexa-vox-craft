@@ -22,9 +22,9 @@ public class DataStoreClient
     {
     }
 
-    public DataStoreClient(string endpointUrl, string accessToken):this(null, endpointUrl, accessToken)
+    public DataStoreClient(string endpointUrl, string accessToken) : this(null, endpointUrl, accessToken)
     {
-            
+
     }
 
     public DataStoreClient(HttpClient client, string endpointUrl, string accessToken)
@@ -73,7 +73,7 @@ public class DataStoreClient
         await using var body = await response.Content.ReadAsStreamAsync();
         var result = await JsonSerializer.DeserializeAsync<QueuedResultResponse>(body, AlexaJsonOptions.DefaultOptions);
         return result!;
-        
+
     }
 
     public async Task<CommandsResponse> Commands(CommandsRequest request)

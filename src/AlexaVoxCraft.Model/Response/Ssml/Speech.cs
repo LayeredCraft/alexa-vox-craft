@@ -5,38 +5,38 @@ namespace AlexaVoxCraft.Model.Response.Ssml;
 public class Speech
 {
 
-	public Speech()
-	{
-	}
+    public Speech()
+    {
+    }
 
-	public Speech(params ISsml[] elements)
-	{
-		Elements = [.. elements];
-	}
+    public Speech(params ISsml[] elements)
+    {
+        Elements = [.. elements];
+    }
 
-	public List<ISsml> Elements { get; set; } = [];
+    public List<ISsml> Elements { get; set; } = [];
 
 
-	public string ToXml()
-	{
-		if (Elements.Count == 0)
-		{
-			throw new InvalidOperationException("No text available");
-		}
+    public string ToXml()
+    {
+        if (Elements.Count == 0)
+        {
+            throw new InvalidOperationException("No text available");
+        }
 
-		XElement root = new XElement("speak", 
-			new XAttribute(XNamespace.Xmlns + "amazon", Namespaces.TempAmazon),
-			new XAttribute(XNamespace.Xmlns + "alexa",Namespaces.TempAlexa));
-		root.Add(Elements.Select(e => e.ToXml()));
+        XElement root = new XElement("speak",
+            new XAttribute(XNamespace.Xmlns + "amazon", Namespaces.TempAmazon),
+            new XAttribute(XNamespace.Xmlns + "alexa", Namespaces.TempAlexa));
+        root.Add(Elements.Select(e => e.ToXml()));
 
-		string xmlString = root.ToString(SaveOptions.DisableFormatting);
+        string xmlString = root.ToString(SaveOptions.DisableFormatting);
 
-		if (xmlString.StartsWith("<speak>", StringComparison.Ordinal))
-		{
-			return xmlString;
-		}
+        if (xmlString.StartsWith("<speak>", StringComparison.Ordinal))
+        {
+            return xmlString;
+        }
 
-		var endOfSpeakTag = xmlString.IndexOf('>');
-		return $"<speak>{xmlString[(endOfSpeakTag + 1)..]}";
-	}
+        var endOfSpeakTag = xmlString.IndexOf('>');
+        return $"<speak>{xmlString[(endOfSpeakTag + 1)..]}";
+    }
 }

@@ -14,7 +14,7 @@ public sealed class DialogDirectiveTests
         directive.UpdatedIntent.Should().NotBeNull();
         directive.UpdatedIntent.Name.Should().NotBeNullOrEmpty();
         directive.UpdatedIntent.Slots.Should().NotBeEmpty();
-        
+
         directive.ShouldRoundTripSerialize();
     }
 
@@ -26,7 +26,7 @@ public sealed class DialogDirectiveTests
         directive.SlotName.Should().NotBeNullOrEmpty();
         directive.UpdatedIntent.Should().NotBeNull();
         directive.UpdatedIntent.Name.Should().NotBeNullOrEmpty();
-        
+
         directive.ShouldRoundTripSerialize();
     }
 
@@ -38,7 +38,7 @@ public sealed class DialogDirectiveTests
         directive.SlotName.Should().NotBeNullOrEmpty();
         directive.UpdatedIntent.Should().NotBeNull();
         directive.UpdatedIntent.Name.Should().NotBeNullOrEmpty();
-        
+
         directive.ShouldRoundTripSerialize();
     }
 
@@ -50,7 +50,7 @@ public sealed class DialogDirectiveTests
         directive.UpdatedIntent.Should().NotBeNull();
         directive.UpdatedIntent.Name.Should().NotBeNullOrEmpty();
         directive.UpdatedIntent.Slots.Should().NotBeEmpty();
-        
+
         directive.ShouldRoundTripSerialize();
     }
 
@@ -61,12 +61,12 @@ public sealed class DialogDirectiveTests
         directive.Type.Should().Be("Dialog.UpdateDynamicEntities");
         directive.UpdateBehavior.Should().BeOneOf(UpdateBehavior.Replace, UpdateBehavior.Clear);
         directive.Types.Should().NotBeEmpty();
-        
+
         foreach (var slotType in directive.Types)
         {
             slotType.Name.Should().NotBeNullOrEmpty();
             slotType.Values.Should().NotBeEmpty();
-            
+
             foreach (var value in slotType.Values)
             {
                 value.Id.Should().NotBeNullOrEmpty();
@@ -74,7 +74,7 @@ public sealed class DialogDirectiveTests
                 value.Name.Value.Should().NotBeNullOrEmpty();
             }
         }
-        
+
         directive.ShouldRoundTripSerialize();
     }
 
@@ -84,21 +84,21 @@ public sealed class DialogDirectiveTests
     {
         intent.Name.Should().NotBeNullOrEmpty();
         intent.ConfirmationStatus.Should().BeOneOf(
-            ConfirmationStatus.None, 
-            ConfirmationStatus.Confirmed, 
+            ConfirmationStatus.None,
+            ConfirmationStatus.Confirmed,
             ConfirmationStatus.Denied);
         intent.Slots.Should().NotBeEmpty();
-        
+
         foreach (var slot in intent.Slots.Values)
         {
             slot.Name.Should().NotBeNullOrEmpty();
             slot.Value.Should().NotBeNullOrEmpty();
             slot.ConfirmationStatus.Should().BeOneOf(
-                ConfirmationStatus.None, 
-                ConfirmationStatus.Confirmed, 
+                ConfirmationStatus.None,
+                ConfirmationStatus.Confirmed,
                 ConfirmationStatus.Denied);
         }
-        
+
         intent.ShouldRoundTripSerialize();
     }
 
@@ -108,7 +108,7 @@ public sealed class DialogDirectiveTests
     {
         slotType.Name.Should().NotBeNullOrEmpty();
         slotType.Values.Should().NotBeEmpty();
-        
+
         foreach (var value in slotType.Values)
         {
             value.Id.Should().NotBeNullOrEmpty();
@@ -116,7 +116,7 @@ public sealed class DialogDirectiveTests
             value.Name.Value.Should().NotBeNullOrEmpty();
             value.Name.Synonyms.Should().NotBeNull();
         }
-        
+
         slotType.ShouldRoundTripSerialize();
     }
 }

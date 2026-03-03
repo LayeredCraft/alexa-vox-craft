@@ -28,7 +28,7 @@ public class YesHandler : IRequestHandler<IntentRequest>
     {
         _logger.Information("IN: {Handler}.{Method}", nameof(YesHandler), nameof(Handle));
 
-        input.AttributesManager.TryGetSessionState<Product[]>("entitledProducts", out var entitledProducts);
+        input.AttributesManager.Session.TryGet<Product[]>("entitledProducts", out var entitledProducts);
 
         var filteredFacts = FactHelpers.GetFilteredFacts(FactData.AllFacts, entitledProducts);
         var yesNoQuestion = FactHelpers.GetRandomYesNoQuestion();

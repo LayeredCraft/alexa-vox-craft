@@ -7,18 +7,18 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<Snap>))]
 public enum Snap
 {
-    [EnumMember(Value="none")]
+    [EnumMember(Value = "none")]
     None,
-    [EnumMember(Value="start")]
+    [EnumMember(Value = "start")]
     Start,
-    [EnumMember(Value="center")]
+    [EnumMember(Value = "center")]
     Center,
-    [EnumMember(Value="end")]
+    [EnumMember(Value = "end")]
     End,
-    [EnumMember(Value="forceStart")]
+    [EnumMember(Value = "forceStart")]
     ForceStart,
-    [EnumMember(Value="forceCenter")]
+    [EnumMember(Value = "forceCenter")]
     ForceCenter,
-    [EnumMember(Value="forceEnd")]
+    [EnumMember(Value = "forceEnd")]
     ForceEnd
 }

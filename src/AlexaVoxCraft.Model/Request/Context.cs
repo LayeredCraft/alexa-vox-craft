@@ -7,7 +7,7 @@ public class Context
 {
     [JsonPropertyName("System")]
     public AlexaSystem System { get; set; }
-        
+
     [JsonPropertyName("AudioPlayer")]
     public PlaybackState AudioPlayer { get; set; }
 

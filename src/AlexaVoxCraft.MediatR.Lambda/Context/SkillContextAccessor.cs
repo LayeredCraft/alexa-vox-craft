@@ -18,7 +18,7 @@ public class SkillContextAccessor : ISkillContextAccessor
             }
         }
     }
-        
+
     private class SkillContextHolder
     {
         public SkillContext? Context;

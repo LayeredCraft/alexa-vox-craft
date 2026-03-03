@@ -10,7 +10,7 @@ public class AbsoluteDimension : Dimension
 
     public static explicit operator AbsoluteDimension(int value)
     {
-        return new AbsoluteDimension(value,string.Empty);
+        return new AbsoluteDimension(value, string.Empty);
     }
 
     public string Unit { get; set; }

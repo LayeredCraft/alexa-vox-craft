@@ -27,13 +27,15 @@ public class ScrollView : ActionableComponent, IJsonSerializable<ScrollView>
 
     public ScrollView(IEnumerable<APLComponent> components)
     {
-        Item = [..components];
+        Item = [.. components];
     }
 
-    [JsonPropertyName("item")][JsonIgnore (Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("item")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLComponent> Item { get; set; }
 
-    [JsonPropertyName("onScroll")][JsonIgnore (Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("onScroll")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLCommand> OnScroll { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : ScrollView

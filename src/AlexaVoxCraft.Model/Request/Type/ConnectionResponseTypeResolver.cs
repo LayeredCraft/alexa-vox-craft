@@ -22,7 +22,7 @@ public class ConnectionResponseTypeResolver : IDataDrivenRequestTypeResolver
             if (_handlers.Any(h => h.GetType() == handler.GetType()))
                 return;
 
-            _handlers = [.._handlers, handler];
+            _handlers = [.. _handlers, handler];
         }
     }
 

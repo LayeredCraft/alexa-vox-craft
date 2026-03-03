@@ -23,7 +23,7 @@ public static class AlexaJsonOptions
         {
             var cachedOptions = _cachedOptions;
             var currentVersion = _version;
-            
+
             // Check if we have cached options for current version
             if (cachedOptions is not null && _cachedVersion == currentVersion)
             {
@@ -66,7 +66,7 @@ public static class AlexaJsonOptions
 
         // Add all converters after JSON options are configured
         options.Converters.Add(new ObjectConverter());
-        
+
         // Add all registered converters thread-safely  
         foreach (var converter in _converters)
         {
@@ -75,14 +75,14 @@ public static class AlexaJsonOptions
 
         return options;
     }
-    
+
     public static void RegisterConverter<T>(JsonConverter<T> converter) where T : notnull
     {
         lock (_lock)
         {
             // Update converters collection
             _converters = _converters.Add(converter);
-            
+
             // Invalidate cache by incrementing version
             _version++;
             _cachedOptions = null;
@@ -99,12 +99,12 @@ public static class AlexaJsonOptions
                 modifier(ti);
             }
         });
-        
+
         lock (_lock)
         {
             // Update modifiers collection
             _modifiers = _modifiers.Add(wrappedModifier);
-            
+
             // Invalidate cache by incrementing version
             _version++;
             _cachedOptions = null;

@@ -39,5 +39,6 @@ public abstract class ActionableComponent : APLComponent, IJsonSerializable<Acti
 
             var handleKeyUpProp = info.Properties.FirstOrDefault(p => p.Name == "handleKeyUp");
             handleKeyUpProp?.CustomConverter = new APLKeyboardHandlerConverter(false);
-        });}
+        });
+    }
 }

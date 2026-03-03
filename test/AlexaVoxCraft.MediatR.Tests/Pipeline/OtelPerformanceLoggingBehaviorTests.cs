@@ -53,7 +53,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -83,7 +83,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
             .ContainEquivalentOf(new KeyValuePair<string, object?>(AlexaSemanticAttributes.RequestId,
                 handlerInput.RequestEnvelope.Request.RequestId));
         activity.Status.Should().Be(ActivityStatusCode.Ok);
-        
+
         _capturedMetrics.Should().NotBeEmpty("Metrics should have been captured");
         var latency = _capturedMetrics
             .Where(m => m.Name == AlexaMetricNames.Latency)
@@ -108,11 +108,11 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         next.Invoke().Returns(Task.FromException<SkillResponse>(exception));
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentException>(() => 
+        await Assert.ThrowsAsync<ArgumentException>(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
 
         FlushMetrics();
-        
+
         // Assert activity
         var activity = _capturedActivities.Should().ContainSingle().Subject;
         activity.Status.Should().Be(ActivityStatusCode.Error);
@@ -144,11 +144,11 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         next.Invoke().Returns(Task.FromException<SkillResponse>(exception));
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => 
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
 
         FlushMetrics();
-        
+
         // Assert activity status
         var activity = _capturedActivities.Should().ContainSingle().Subject;
         activity.Status.Should().Be(ActivityStatusCode.Error);
@@ -172,11 +172,11 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         next.Invoke().Returns(Task.FromException<SkillResponse>(exception));
 
         // Act & Assert
-        await Assert.ThrowsAsync<TimeoutException>(() => 
+        await Assert.ThrowsAsync<TimeoutException>(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
 
         FlushMetrics();
-        
+
         // Assert activity
         var activity = _capturedActivities.Should().ContainSingle().Subject;
         activity.Status.Should().Be(ActivityStatusCode.Error);
@@ -200,11 +200,11 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         next.Invoke().Returns(Task.FromException<SkillResponse>(exception));
 
         // Act & Assert
-        await Assert.ThrowsAsync<NotImplementedException>(() => 
+        await Assert.ThrowsAsync<NotImplementedException>(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
 
         FlushMetrics();
-        
+
         // Assert activity
         var activity = _capturedActivities.Should().ContainSingle().Subject;
         activity.Status.Should().Be(ActivityStatusCode.Error);
@@ -232,7 +232,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -270,7 +270,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -309,7 +309,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -327,7 +327,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData] 
+    [MediatRAutoData]
     public async Task Handle_WithHelpIntentRequest_RecordsHelpIntentTelemetry(
         PerformanceLoggingBehavior behavior,
         [Frozen] IHandlerInput handlerInput,
@@ -343,7 +343,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -371,7 +371,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -397,7 +397,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -421,14 +421,14 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         {
             { "Alexa.Presentation.APL", new { } }
         };
-        
+
         // Ensure Device object exists and has SupportedInterfaces
         if (displayRequest.Context.System.Device == null)
         {
             displayRequest.Context.System.Device = new Device();
         }
         displayRequest.Context.System.Device.SupportedInterfaces = supportedInterfaces;
-        
+
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         handlerInput.RequestEnvelope.Returns(displayRequest);
 
@@ -436,7 +436,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -461,7 +461,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
             launchRequest.Context.System.Device = new Device();
         }
         launchRequest.Context.System.Device.SupportedInterfaces = new Dictionary<string, object>();
-        
+
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         handlerInput.RequestEnvelope.Returns(launchRequest);
 
@@ -469,7 +469,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -489,7 +489,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     {
         // Arrange - Set session as new
         intentRequest.Session.New = true;
-        
+
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         handlerInput.RequestEnvelope.Returns(intentRequest);
 
@@ -497,7 +497,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -517,7 +517,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     {
         // Arrange - Set session as existing (not new)
         intentRequest.Session.New = false;
-        
+
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         handlerInput.RequestEnvelope.Returns(intentRequest);
 
@@ -525,7 +525,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -545,7 +545,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     {
         // Arrange - AudioPlayerRequest typically doesn't have a session
         audioRequest.Session = null!;
-        
+
         next.Invoke().Returns(Task.FromResult(expectedResponse));
         handlerInput.RequestEnvelope.Returns(audioRequest);
 
@@ -553,7 +553,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
 
         FlushMetrics();
-        
+
         // Assert
         result.Should().Be(expectedResponse);
 
@@ -561,7 +561,7 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         activity.TagObjects.Should()
             .ContainEquivalentOf(new KeyValuePair<string, object?>(AlexaSemanticAttributes.SessionNew, AlexaSemanticValues.False));
     }
-    
+
     /// <summary>
     /// Forces collection of metrics by triggering the meter provider to export.
     /// Call this before asserting on captured metrics.

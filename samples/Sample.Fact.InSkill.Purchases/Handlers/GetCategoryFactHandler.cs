@@ -45,62 +45,62 @@ public class GetCategoryFactHandler : IRequestHandler<IntentRequest>
         switch (factCategory)
         {
             case "free":
-            {
-                var facts = FactData.AllFacts.Where(f => f.Type == "free").ToArray();
-                return await input.ResponseBuilder
-                    .Speak($"Here's your free fact: {FactHelpers.GetRandomFact(facts)} {FactHelpers.GetRandomYesNoQuestion()}")
-                    .Reprompt(FactHelpers.GetRandomYesNoQuestion())
-                    .GetResponse(cancellationToken);
-            }
-
-            case "random":
-            case "all_access":
-            {
-                input.AttributesManager.TryGetSessionState<Product[]>("entitledProducts", out var entitledProducts);
-                var filteredFacts = FactHelpers.GetFilteredFacts(FactData.AllFacts, entitledProducts);
-                return await input.ResponseBuilder
-                    .Speak($"Here's your random fact: {FactHelpers.GetRandomFact(filteredFacts)} {FactHelpers.GetRandomYesNoQuestion()}")
-                    .Reprompt(FactHelpers.GetRandomYesNoQuestion())
-                    .GetResponse(cancellationToken);
-            }
-
-            default:
-            {
-                var categoryFacts = FactData.AllFacts.Where(f => f.Type == factCategory).ToArray();
-                var result = await _ispClient.GetProductsAsync(cancellationToken: cancellationToken);
-                var products = result?.Products ?? [];
-
-                var subscription = products.FirstOrDefault(p => p.ReferenceName == "all_access");
-                var categoryProduct = products.FirstOrDefault(p => p.ReferenceName == $"{factCategory}_pack");
-
-                var hasAccess = subscription?.Entitled == Entitled.ENTITLED ||
-                                categoryProduct?.Entitled == Entitled.ENTITLED;
-
-                if (hasAccess)
                 {
+                    var facts = FactData.AllFacts.Where(f => f.Type == "free").ToArray();
                     return await input.ResponseBuilder
-                        .Speak($"Here's your {factCategory} fact: {FactHelpers.GetRandomFact(categoryFacts)} {FactHelpers.GetRandomYesNoQuestion()}")
+                        .Speak($"Here's your free fact: {FactHelpers.GetRandomFact(facts)} {FactHelpers.GetRandomYesNoQuestion()}")
                         .Reprompt(FactHelpers.GetRandomYesNoQuestion())
                         .GetResponse(cancellationToken);
                 }
 
-                if (categoryProduct is not null)
+            case "random":
+            case "all_access":
                 {
-                    var upsellMessage = $"You don't currently own the {factCategory} pack. {categoryProduct.Summary} Want to learn more?";
+                    input.AttributesManager.Session.TryGet<Product[]>("entitledProducts", out var entitledProducts);
+                    var filteredFacts = FactHelpers.GetFilteredFacts(FactData.AllFacts, entitledProducts);
                     return await input.ResponseBuilder
-                        .AddDirective(new UpsellDirective(categoryProduct.ProductId, "correlationToken")
-                        {
-                            Payload = new(categoryProduct.ProductId, upsellMessage)
-                        })
+                        .Speak($"Here's your random fact: {FactHelpers.GetRandomFact(filteredFacts)} {FactHelpers.GetRandomYesNoQuestion()}")
+                        .Reprompt(FactHelpers.GetRandomYesNoQuestion())
                         .GetResponse(cancellationToken);
                 }
 
-                _logger.Warning("Category {Category} had no matching ISP product", factCategory);
-                return await input.ResponseBuilder
-                    .Speak($"I'm having trouble accessing the {factCategory} facts right now. Try a different category for now. {FactHelpers.GetRandomYesNoQuestion()}")
-                    .Reprompt(FactHelpers.GetRandomYesNoQuestion())
-                    .GetResponse(cancellationToken);
-            }
+            default:
+                {
+                    var categoryFacts = FactData.AllFacts.Where(f => f.Type == factCategory).ToArray();
+                    var result = await _ispClient.GetProductsAsync(cancellationToken: cancellationToken);
+                    var products = result?.Products ?? [];
+
+                    var subscription = products.FirstOrDefault(p => p.ReferenceName == "all_access");
+                    var categoryProduct = products.FirstOrDefault(p => p.ReferenceName == $"{factCategory}_pack");
+
+                    var hasAccess = subscription?.Entitled == Entitled.ENTITLED ||
+                                    categoryProduct?.Entitled == Entitled.ENTITLED;
+
+                    if (hasAccess)
+                    {
+                        return await input.ResponseBuilder
+                            .Speak($"Here's your {factCategory} fact: {FactHelpers.GetRandomFact(categoryFacts)} {FactHelpers.GetRandomYesNoQuestion()}")
+                            .Reprompt(FactHelpers.GetRandomYesNoQuestion())
+                            .GetResponse(cancellationToken);
+                    }
+
+                    if (categoryProduct is not null)
+                    {
+                        var upsellMessage = $"You don't currently own the {factCategory} pack. {categoryProduct.Summary} Want to learn more?";
+                        return await input.ResponseBuilder
+                            .AddDirective(new UpsellDirective(categoryProduct.ProductId, "correlationToken")
+                            {
+                                Payload = new(categoryProduct.ProductId, upsellMessage)
+                            })
+                            .GetResponse(cancellationToken);
+                    }
+
+                    _logger.Warning("Category {Category} had no matching ISP product", factCategory);
+                    return await input.ResponseBuilder
+                        .Speak($"I'm having trouble accessing the {factCategory} facts right now. Try a different category for now. {FactHelpers.GetRandomYesNoQuestion()}")
+                        .Reprompt(FactHelpers.GetRandomYesNoQuestion())
+                        .GetResponse(cancellationToken);
+                }
         }
     }
 }

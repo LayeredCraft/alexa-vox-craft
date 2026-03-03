@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.DataStore;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<TargetType>))]
 public enum TargetType
 {
-    [EnumMember(Value="DEVICES")]
+    [EnumMember(Value = "DEVICES")]
     Devices,
-    [EnumMember(Value="USER")]
+    [EnumMember(Value = "USER")]
     User
 }

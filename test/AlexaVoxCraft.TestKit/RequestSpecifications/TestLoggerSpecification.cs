@@ -11,7 +11,7 @@ public class TestLoggerSpecification : IRequestSpecification
         return request switch
         {
             Type type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ILogger<>),
-            ParameterInfo parameter => parameter.ParameterType.IsGenericType && 
+            ParameterInfo parameter => parameter.ParameterType.IsGenericType &&
                                      parameter.ParameterType.GetGenericTypeDefinition() == typeof(ILogger<>),
             _ => false
         };

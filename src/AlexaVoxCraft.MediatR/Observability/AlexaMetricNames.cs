@@ -7,7 +7,7 @@ public static class AlexaMetricNames
     public const string ColdStarts = "alexa.cold_starts";
     public const string SlotResolutions = "alexa.slots.resolution";
     public const string SkillVerificationFailures = "alexa.skill_verification.failures";
-    
+
     public const string Latency = "alexa.latency";
     public const string HandlerDuration = "alexa.handler.duration";
     public const string HandlerResolutionDuration = "alexa.handler.resolution.duration";

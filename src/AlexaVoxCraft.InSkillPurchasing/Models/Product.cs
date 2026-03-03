@@ -81,7 +81,7 @@ public static class ProductFilterExtensions
 
 
             query = "?" + string.Join("&", content.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-            return  query;
+            return query;
         }
     }
 }

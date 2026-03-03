@@ -21,20 +21,20 @@ public sealed class ErrorHandler : IExceptionHandler
     {
         var requestType = handlerInput.RequestEnvelope.Request.Type;
         var locale = handlerInput.RequestEnvelope.Request.Locale;
-        
+
         using var scope = _logger.BeginScope("RequestType", requestType, "Locale", locale);
-        
-        _logger.Debug(ex,"Handling launch request of type {RequestType} in locale {Locale}", requestType, locale);
-        
+
+        _logger.Debug(ex, "Handling launch request of type {RequestType} in locale {Locale}", requestType, locale);
+
         using var _ = _logger.TimeOperation("Launch response generation");
-        
+
         var response = await handlerInput.ResponseBuilder
             .Speak("Hello world from the Error Handler!")
             .WithShouldEndSession(false)
             .GetResponse(cancellationToken);
-            
+
         _logger.Debug("Generated launch response with speech output");
-        
+
         return response;
 
     }

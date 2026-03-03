@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Request;
 
 public class AuthenticationConfidenceLevelCustomPolicy
 {
-    public AuthenticationConfidenceLevelCustomPolicy(){}
+    public AuthenticationConfidenceLevelCustomPolicy() { }
 
     public AuthenticationConfidenceLevelCustomPolicy(string policyName)
     {

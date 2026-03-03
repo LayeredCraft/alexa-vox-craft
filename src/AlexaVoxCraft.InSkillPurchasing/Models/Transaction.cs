@@ -20,7 +20,7 @@ public sealed record Transaction(
     DateTimeOffset CreatedTime,
     [property: JsonPropertyName("lastModifiedTime")]
     DateTimeOffset LastModifiedTime);
-    
+
 /// <summary>
 /// Contains metadata associated with a transaction list response, such as pagination info.
 /// </summary>

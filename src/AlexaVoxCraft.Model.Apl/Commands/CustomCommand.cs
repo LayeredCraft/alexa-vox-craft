@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Commands;
 
-public class CustomCommand:APLCommand
+public class CustomCommand : APLCommand
 {
     public CustomCommand() { }
 

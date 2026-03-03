@@ -11,7 +11,7 @@ public class APLTDocument : APLDocumentBase
     [JsonPropertyName("type")]
     public override string Type => DocumentType;
 
-    public APLTDocument():base(APLDocumentVersion.V1)
+    public APLTDocument() : base(APLDocumentVersion.V1)
     {
 
     }

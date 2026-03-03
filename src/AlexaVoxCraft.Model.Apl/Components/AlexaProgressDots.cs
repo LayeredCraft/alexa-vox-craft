@@ -11,7 +11,8 @@ public class AlexaProgressDots : APLComponent, IJsonSerializable<AlexaProgressDo
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? ComponentId { get; set; }
 
-    [JsonPropertyName("dotSize")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("dotSize")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLDimensionValue? DotSize { get; set; }
 
     [JsonPropertyName("theme")]

@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ScrollableTagDirection>))]
 public enum ScrollableTagDirection
 {
-    [EnumMember(Value="horizontal")]
+    [EnumMember(Value = "horizontal")]
     Horizontal,
-    [EnumMember(Value="vertical")]
+    [EnumMember(Value = "vertical")]
     Vertical
 }

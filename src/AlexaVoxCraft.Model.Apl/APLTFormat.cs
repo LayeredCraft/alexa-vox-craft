@@ -7,6 +7,6 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<APLTFormat>))]
 public enum APLTFormat
 {
-    [EnumMember(Value="SEVEN_SEGMENT")]
+    [EnumMember(Value = "SEVEN_SEGMENT")]
     SevenSegment
 }

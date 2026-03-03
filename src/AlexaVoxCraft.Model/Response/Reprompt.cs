@@ -11,12 +11,12 @@ public class Reprompt
 
     public Reprompt(string text)
     {
-        OutputSpeech = new PlainTextOutputSpeech {Text = text};
+        OutputSpeech = new PlainTextOutputSpeech { Text = text };
     }
 
     public Reprompt(Ssml.Speech speech)
     {
-        OutputSpeech = new SsmlOutputSpeech {Ssml = speech.ToXml()};
+        OutputSpeech = new SsmlOutputSpeech { Ssml = speech.ToXml() };
     }
 
     [JsonPropertyName("outputSpeech")]

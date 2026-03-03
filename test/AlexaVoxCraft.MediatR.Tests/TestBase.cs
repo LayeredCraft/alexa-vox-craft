@@ -9,7 +9,7 @@ public abstract class TestBase
     /// Creates a substitute for the specified type.
     /// </summary>
     protected T CreateSubstitute<T>() where T : class => Substitute.For<T>();
-    
+
     /// <summary>
     /// Gets the current test cancellation token.
     /// </summary>

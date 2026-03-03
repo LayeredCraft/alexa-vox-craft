@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Response.Ssml;
 
-public class Word:ICommonSsml
+public class Word : ICommonSsml
 {
     public string Text { get; set; }
     public string Role { get; set; }
@@ -14,7 +14,7 @@ public class Word:ICommonSsml
             throw new ArgumentNullException(nameof(text), "Text value required for Word in Ssml");
         }
 
-        if(string.IsNullOrWhiteSpace(role))
+        if (string.IsNullOrWhiteSpace(role))
         {
             throw new ArgumentNullException(nameof(text), "Role value required for Word in Ssml");
         }

@@ -5,9 +5,9 @@ namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 public enum AVGVersion
 {
     Unknown,
-    [EnumMember(Value="1.0")]
+    [EnumMember(Value = "1.0")]
     V1_0,
-    [EnumMember(Value="1.1")]
+    [EnumMember(Value = "1.1")]
     V1_1,
     [EnumMember(Value = "1.2")]
     V1_2

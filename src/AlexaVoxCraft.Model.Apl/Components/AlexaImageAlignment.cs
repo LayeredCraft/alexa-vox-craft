@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<AlexaImageAlignment>))]
 public enum AlexaImageAlignment
 {
-    [EnumMember(Value="bottom")]
+    [EnumMember(Value = "bottom")]
     Bottom,
     [EnumMember(Value = "bottom-left")]
     BottomLeft,

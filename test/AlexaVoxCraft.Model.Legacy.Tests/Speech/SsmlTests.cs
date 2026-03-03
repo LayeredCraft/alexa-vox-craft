@@ -279,7 +279,7 @@ public sealed class SsmlTests
         var actual = new AmazonEmotion(EmotionName.Excited, EmotionIntensity.Medium);
         actual.Elements.Add(new PlainText("Christina wins this round!"));
         xmlHost.Elements.Add(actual);
-        Assert.Equal(expected,xmlHost.ToXml());
+        Assert.Equal(expected, xmlHost.ToXml());
     }
 
     // AutoFixture-based tests
@@ -288,7 +288,7 @@ public sealed class SsmlTests
     public void Speech_WithGeneratedData_GeneratesValidXml(SsmlSpeech speech)
     {
         speech.Elements.Should().NotBeEmpty();
-        
+
         var xml = speech.ToXml();
         xml.Should().NotBeNullOrEmpty();
         xml.Should().StartWith("<speak");
@@ -303,7 +303,7 @@ public sealed class SsmlTests
         xml.Should().NotBeNullOrEmpty();
         xml.Should().NotContain("<");
         xml.Should().NotContain(">");
-        
+
     }
 
     [Theory]
@@ -313,7 +313,7 @@ public sealed class SsmlTests
         var xml = breakElement.ToXml().ToString(SaveOptions.DisableFormatting);
         xml.Should().StartWith("<break");
         xml.Should().EndWith(" />");
-        
+
     }
 
     [Theory]
@@ -324,7 +324,7 @@ public sealed class SsmlTests
         xml.Should().StartWith("<say-as");
         xml.Should().Contain("interpret-as=");
         xml.Should().EndWith("</say-as>");
-        
+
     }
 
     [Theory]
@@ -335,7 +335,7 @@ public sealed class SsmlTests
         xml.Should().StartWith("<w");
         xml.Should().Contain("role=");
         xml.Should().EndWith("</w>");
-        
+
     }
 
     [Theory]
@@ -346,7 +346,7 @@ public sealed class SsmlTests
         xml.Should().StartWith("<sub");
         xml.Should().Contain("alias=");
         xml.Should().EndWith("</sub>");
-        
+
     }
 
     [Theory]
@@ -354,11 +354,11 @@ public sealed class SsmlTests
     public void Prosody_WithGeneratedData_HasValidAttributes(Prosody prosody)
     {
         prosody.Elements.Should().NotBeEmpty();
-        
+
         var xml = prosody.ToXml().ToString(SaveOptions.DisableFormatting);
         xml.Should().StartWith("<prosody");
         xml.Should().EndWith("</prosody>");
-        
+
     }
 
     [Theory]
@@ -369,7 +369,7 @@ public sealed class SsmlTests
         xml.Should().StartWith("<emphasis");
         xml.Should().Contain("level=");
         xml.Should().EndWith("</emphasis>");
-        
+
     }
 
     [Theory]
@@ -381,7 +381,7 @@ public sealed class SsmlTests
         xml.Should().Contain("alphabet=");
         xml.Should().Contain("ph=");
         xml.Should().EndWith("</phoneme>");
-        
+
     }
 
     [Theory]
@@ -393,7 +393,7 @@ public sealed class SsmlTests
         xml.Should().Contain("src=");
         // Audio can end with either "</audio>" (with children) or "/>" (self-closing, no children)
         xml.Should().Match(x => x.EndsWith("</audio>") || x.EndsWith("/>"));
-        
+
     }
 
     [Theory]
@@ -404,7 +404,7 @@ public sealed class SsmlTests
         xml.Should().StartWith("<voice");
         xml.Should().Contain("name=");
         xml.Should().EndWith("</voice>");
-        
+
     }
 
     [Theory]
@@ -415,7 +415,7 @@ public sealed class SsmlTests
         xml.Should().StartWith("<lang");
         xml.Should().Contain("xml:lang=");
         xml.Should().EndWith("</lang>");
-        
+
     }
 
     [Theory]
@@ -424,11 +424,11 @@ public sealed class SsmlTests
     {
         var speech = new SsmlSpeech();
         speech.Elements.Add(effect);
-        
+
         var xml = speech.ToXml();
         xml.Should().Contain("<amazon:effect");
         xml.Should().Contain("</amazon:effect>");
-        
+
     }
 
     [Theory]
@@ -436,15 +436,15 @@ public sealed class SsmlTests
     public void AmazonDomain_WithGeneratedData_HasValidDomain(AmazonDomain domain)
     {
         domain.Elements.Should().NotBeEmpty();
-        
+
         var speech = new SsmlSpeech();
         speech.Elements.Add(domain);
-        
+
         var xml = speech.ToXml();
         xml.Should().Contain("<amazon:domain");
         xml.Should().Contain("name=");
         xml.Should().Contain("</amazon:domain>");
-        
+
     }
 
     [Theory]
@@ -452,16 +452,16 @@ public sealed class SsmlTests
     public void AmazonEmotion_WithGeneratedData_HasValidAttributes(AmazonEmotion emotion)
     {
         emotion.Elements.Should().NotBeEmpty();
-        
+
         var speech = new SsmlSpeech();
         speech.Elements.Add(emotion);
-        
+
         var xml = speech.ToXml();
         xml.Should().Contain("<amazon:emotion");
         xml.Should().Contain("name=");
         xml.Should().Contain("intensity=");
         xml.Should().Contain("</amazon:emotion>");
-        
+
     }
 
     [Theory]
@@ -470,12 +470,12 @@ public sealed class SsmlTests
     {
         var speech = new SsmlSpeech();
         speech.Elements.Add(alexaName);
-        
+
         var xml = speech.ToXml();
         xml.Should().Contain("<alexa:name");
         xml.Should().Contain("personId=");
         xml.Should().Contain("amzn1.ask.person.");
-        
+
     }
 
     private void CompareXml(string expected, ISsml ssml)

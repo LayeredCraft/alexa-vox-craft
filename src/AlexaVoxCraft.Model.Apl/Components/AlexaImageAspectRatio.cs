@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<AlexaImageAspectRatio>))]
 public enum AlexaImageAspectRatio
 {
-    [EnumMember(Value="square")]
+    [EnumMember(Value = "square")]
     Square,
     [EnumMember(Value = "round")]
     Round,

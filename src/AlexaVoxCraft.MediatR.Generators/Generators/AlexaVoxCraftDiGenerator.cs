@@ -24,7 +24,7 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
                 && !enableSwitch.Equals("false", StringComparison.Ordinal));
 
         var csharpSufficient = context.CompilationProvider
-            .Select((x,_) => x is CSharpCompilation { LanguageVersion: LanguageVersion.Default or >= LanguageVersion.CSharp11 });
+            .Select((x, _) => x is CSharpCompilation { LanguageVersion: LanguageVersion.Default or >= LanguageVersion.CSharp11 });
 
         var settings = interceptionEnabledSetting
             .Combine(csharpSufficient);

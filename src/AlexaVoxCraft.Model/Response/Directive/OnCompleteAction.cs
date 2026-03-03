@@ -4,8 +4,8 @@ namespace AlexaVoxCraft.Model.Response.Directive;
 
 public enum OnCompleteAction
 {
-    [EnumMember(Value="RESUME_SESSION")]
+    [EnumMember(Value = "RESUME_SESSION")]
     ResumeSession,
-    [EnumMember(Value="SEND_ERRORS_ONLY")]
+    [EnumMember(Value = "SEND_ERRORS_ONLY")]
     SendErrorsOnly
 }

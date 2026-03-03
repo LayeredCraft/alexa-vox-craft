@@ -5,7 +5,7 @@ using AlexaVoxCraft.Model.Response.Converters;
 
 namespace AlexaVoxCraft.Model.Apl.JsonConverter;
 
-public class DataStoreErrorConverter: BasePolymorphicConverter<DataStoreError>
+public class DataStoreErrorConverter : BasePolymorphicConverter<DataStoreError>
 {
     private static readonly Dictionary<string, Type> DataStoreErrorLookup = new()
     {

@@ -8,7 +8,7 @@ public class APLDocumentConverter : BasePolymorphicConverter<APLDocumentReferenc
 {
     // Leaving this commented out for now. I'm not sure why they were doing a ToUpper() on the type string,
     // but I want to keep this in case we need to do something similar in the future.
-    
+
     // public override APLDocumentReference ReadJson(JsonReader reader, Type objectType,
     //     APLDocumentReference existingValue, bool hasExistingValue,
     //     JsonSerializer serializer)

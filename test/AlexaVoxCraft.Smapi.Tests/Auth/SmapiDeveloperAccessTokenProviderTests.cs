@@ -90,7 +90,7 @@ public sealed class SmapiDeveloperAccessTokenProviderTests
         handler.ReceivedCalls().Should().HaveCount(2);
     }
 
-    [Theory] 
+    [Theory]
     [InlineSmapiClientAutoData((string?)null)]
     [InlineSmapiClientAutoData("")]
     [InlineSmapiClientAutoData("   ")]

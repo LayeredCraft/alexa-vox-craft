@@ -28,11 +28,11 @@ public class DefaultHandler : IDefaultRequestHandler
         var requestType = input.RequestEnvelope.Request.Type;
         var locale = input.RequestEnvelope.Request.Locale;
         var aplSupported = input.RequestEnvelope.APLSupported();
-        
+
         using var scope = _logger.BeginScope("RequestType", requestType, "Locale", locale, "APLSupported", aplSupported);
-        
+
         _logger.Debug("Handling APL request of type {RequestType} with APL support: {APLSupported}", requestType, aplSupported);
-        
+
         using var _ = _logger.TimeOperation("APL response generation");
         var speechOutput = new StringBuilder("Hello world!");
         var document = new APLDocument(APLDocumentVersion.V2023_2)
@@ -124,15 +124,15 @@ public class DefaultHandler : IDefaultRequestHandler
         {
             _logger.Debug("APL is not supported - returning voice-only response");
         }
-        
+
         var response = await input.ResponseBuilder
             .Speak(speechOutput.ToString())
             .Reprompt(speechOutput.ToString())
             .WithSimpleCard("APL Sample", speechOutput.ToString())
             .GetResponse(cancellationToken);
-            
+
         _logger.Debug("Generated APL sample response with {SpeechLength} characters", speechOutput.Length);
-        
+
         return response;
     }
 }

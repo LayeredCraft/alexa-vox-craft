@@ -8,7 +8,7 @@ public class ConnectionSendRequest<T> : ConnectionSendRequest
     public T Payload { get; set; }
 }
 
-public class ConnectionSendRequest:IDirective
+public class ConnectionSendRequest : IDirective
 {
     public const string DirectiveType = "Connections.SendRequest";
     [JsonPropertyName("type")] public string Type => DirectiveType;

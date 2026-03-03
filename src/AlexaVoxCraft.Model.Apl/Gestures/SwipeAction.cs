@@ -4,10 +4,10 @@ namespace AlexaVoxCraft.Model.Apl.Gestures;
 
 public enum SwipeAction
 {
-    [EnumMember(Value="reveal")]
+    [EnumMember(Value = "reveal")]
     Reveal,
-    [EnumMember(Value="slide")]
+    [EnumMember(Value = "slide")]
     Slide,
-    [EnumMember(Value="cover")]
+    [EnumMember(Value = "cover")]
     Cover
 }

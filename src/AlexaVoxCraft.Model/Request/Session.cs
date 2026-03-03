@@ -12,7 +12,7 @@ public class Session
     public string SessionId { get; set; }
 
     [JsonPropertyName("attributes")]
-    public Dictionary<string, JsonElement> Attributes { get; set; }
+    public Dictionary<string, JsonElement>? Attributes { get; set; }
 
     [JsonPropertyName("application")]
     public Application Application { get; set; }

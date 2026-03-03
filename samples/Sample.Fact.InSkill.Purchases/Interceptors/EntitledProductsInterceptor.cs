@@ -32,7 +32,7 @@ public class EntitledProductsInterceptor : IRequestInterceptor
 
             _logger.Information("Currently entitled products: {Products}", entitledProducts.Select(p => p.Name));
 
-            input.AttributesManager.SetSessionState("entitledProducts", entitledProducts);
+            input.AttributesManager.Session.Set("entitledProducts", entitledProducts);
         }
         catch (Exception ex)
         {

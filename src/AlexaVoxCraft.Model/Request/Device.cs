@@ -13,7 +13,7 @@ public class Device
     public bool IsInterfaceSupported(string interfaceName)
     {
         var hasInterface = SupportedInterfaces?.ContainsKey(interfaceName);
-        return (hasInterface.HasValue ? hasInterface.Value : false); 
+        return (hasInterface.HasValue ? hasInterface.Value : false);
     }
 
     [JsonPropertyName("persistentEndpointId")]

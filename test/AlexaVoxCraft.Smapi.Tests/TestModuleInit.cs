@@ -9,10 +9,10 @@ public static class TestModuleInit
     {
         // Centralize all snapshots under: <project>/Snapshots
         UseProjectRelativeDirectory("Snapshots");
-        
+
         // Make Verify(object) JSON match your style
         VerifierSettings.UseStrictJson();
-        
+
         VerifierSettings.ScrubEmptyLines();
         VerifierSettings.ScrubLinesWithReplace(line => line.Replace("<!--!-->", ""));
     }

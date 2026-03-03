@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Response.Directive;
 
-public class JsonDirective:IDirective
+public class JsonDirective : IDirective
 {
     public JsonDirective() { }
 

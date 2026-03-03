@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Commands;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<RepeatMode>))]
 public enum RepeatMode
 {
-    [EnumMember(Value="restart")]
+    [EnumMember(Value = "restart")]
     Restart,
-    [EnumMember(Value="reverse")]
+    [EnumMember(Value = "reverse")]
     Reverse
 }

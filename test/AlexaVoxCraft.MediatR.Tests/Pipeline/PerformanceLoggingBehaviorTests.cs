@@ -20,13 +20,13 @@ public class PerformanceLoggingBehaviorTests : TestBase
     {
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
-        
+
         // Verify logging using structured logging testing extensions
         var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
         testLogger.AssertLogCount(LogLevel.Debug, 2);
@@ -45,13 +45,13 @@ public class PerformanceLoggingBehaviorTests : TestBase
         // Arrange
         var expectedException = new InvalidOperationException("Test exception");
         next.Invoke().Returns(Task.FromException<SkillResponse>(expectedException));
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
-        
+
         exception.Should().Be(expectedException);
-        
+
         // Verify error logging using structured logging testing extensions
         var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
         testLogger.AssertLogCount(LogLevel.Error, 1);
@@ -72,10 +72,10 @@ public class PerformanceLoggingBehaviorTests : TestBase
         // Arrange
         handlerInput.RequestEnvelope.Returns(intentRequest);
         next.Invoke().Returns(Task.FromResult(expectedResponse));
-        
+
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
         testLogger.HasLogEntry(LogLevel.Debug, "Processing Alexa skill request").Should().BeTrue();
@@ -95,10 +95,10 @@ public class PerformanceLoggingBehaviorTests : TestBase
     {
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
-        
+
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
         testLogger.HasLogEntry(LogLevel.Debug, "Processing Alexa skill request").Should().BeTrue();
@@ -116,10 +116,10 @@ public class PerformanceLoggingBehaviorTests : TestBase
     {
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
-        
+
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         await next.Received(1).Invoke();
     }
@@ -135,10 +135,10 @@ public class PerformanceLoggingBehaviorTests : TestBase
     {
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
-        
+
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert - scope creation and proper logging should occur
         var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
         testLogger.AssertLogCount(LogLevel.Debug, 2);
@@ -152,7 +152,7 @@ public class PerformanceLoggingBehaviorTests : TestBase
     {
         // Act & Assert
         var exception = Record.Exception(() => new PerformanceLoggingBehavior(null!));
-        
+
         exception.Should().BeOfType<ArgumentNullException>();
     }
 
@@ -168,10 +168,10 @@ public class PerformanceLoggingBehaviorTests : TestBase
     {
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
-        
+
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
         var debugEntries = testLogger.GetLogEntriesContaining("LaunchRequest");

@@ -8,9 +8,9 @@ namespace AlexaVoxCraft.MediatR.Response;
 public interface IResponseBuilder
 {
     #region Builder Methods
-    
+
     #region Speech Methods
-    
+
     IResponseBuilder Speak(string? speechOutput);
 
     IResponseBuilder Speak(params ISsml[] elements);
@@ -21,18 +21,18 @@ public interface IResponseBuilder
 
     IResponseBuilder Reprompt(params ISsml[] elements);
 
-    IResponseBuilder WithSimpleCard(string cardTitle, 
+    IResponseBuilder WithSimpleCard(string cardTitle,
         string cardContent);
 
-    IResponseBuilder WithStandardCard(string cardTitle, 
-        string cardContent, 
-        string? smallImageUrl = null, 
+    IResponseBuilder WithStandardCard(string cardTitle,
+        string cardContent,
+        string? smallImageUrl = null,
         string? largeImageUrl = null);
 
     IResponseBuilder WithLinkAccountCard();
 
     IResponseBuilder WithAskForPermissionsConsentCard(List<string> permissionArray);
-    
+
     #endregion
 
     #region Directive Methods
@@ -40,7 +40,7 @@ public interface IResponseBuilder
     IResponseBuilder AddAudioPlayerPlayDirective(PlayBehavior playBehavior, string url, string token,
         int offsetInMilliseconds, string? expectedPreviousToken = null, AudioItemMetadata? audioItemMetadata = null,
         CancellationToken cancellationToken = default);
-    
+
     IResponseBuilder AddAudioPlayerStopDirective();
 
     IResponseBuilder AddAudioPlayerClearQueueDirective(ClearBehavior clearBehavior);

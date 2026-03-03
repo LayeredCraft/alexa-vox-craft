@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Request.Type;
 
-public class AudioPlayerRequest: Request
+public class AudioPlayerRequest : Request
 {
     [JsonPropertyName("token")]
     public string Token { get; set; }
@@ -18,7 +18,7 @@ public class AudioPlayerRequest: Request
 
     [JsonPropertyName("enqueuedToken")]
     public string EnqueuedToken { get; set; }
-        
+
     public bool HasEnqueuedItem
     {
         get

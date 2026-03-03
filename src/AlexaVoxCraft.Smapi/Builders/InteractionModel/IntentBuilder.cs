@@ -85,7 +85,7 @@ public sealed class IntentBuilder
         return new Intent
         {
             Name = _name,
-            Samples = [.._samples],
+            Samples = [.. _samples],
             Slots = slots
         };
     }

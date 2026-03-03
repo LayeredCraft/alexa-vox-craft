@@ -21,7 +21,7 @@ public class RequestExceptionProcessBehavior : IPipelineBehavior
                 if (await exceptionHandler.CanHandle(input, e, cancellationToken))
                 {
                     return await exceptionHandler.Handle(input, e, cancellationToken);
-                }                
+                }
             }
             throw;
         }

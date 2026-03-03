@@ -7,6 +7,6 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<APLTProfile>))]
 public enum APLTProfile
 {
-    [EnumMember(Value="FOUR_CHARACTER_CLOCK")]
+    [EnumMember(Value = "FOUR_CHARACTER_CLOCK")]
     FourCharacterClock
 }

@@ -11,10 +11,10 @@ public class ConnectionResponseRequestTests : TestBase<ConnectionResponseRequest
     {
         var json = Fx("Response/ConnectionResponseRequest.json");
         var request = JsonSerializer.Deserialize<ConnectionResponseRequest<ConnectionResponsePayload>>(json, ClientOptions);
-        
+
         request.Should().NotBeNull();
         request.Payload.Should().NotBeNull();
-        
+
         await TestHelper.VerifyRequestObject(request);
     }
 }

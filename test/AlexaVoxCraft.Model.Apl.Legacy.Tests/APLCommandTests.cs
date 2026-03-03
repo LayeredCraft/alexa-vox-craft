@@ -18,11 +18,11 @@ public class APLCommandTests
     public void CommandDefinitionWorksProperly()
     {
         var commandDefinition = Utility.ExampleFileContent<CommandDefinition>("jackinthebox.json");
-        Assert.Equal(2,commandDefinition.Parameters!.Items!.Count);
+        Assert.Equal(2, commandDefinition.Parameters!.Items!.Count);
         var item = Assert.IsType<AnimateItem>(commandDefinition.Commands!.Items!.First());
         var transform = Assert.IsType<AnimatedTransform>(item.Value.Items!.Skip(1).First());
-        Assert.Equal(2,transform.From!.Items!.Count);
-        Assert.Equal(0.1,transform.From.Items.First().ScaleX!.Value);
+        Assert.Equal(2, transform.From!.Items!.Count);
+        Assert.Equal(0.1, transform.From.Items.First().ScaleX!.Value);
     }
 
     [Fact]
@@ -45,13 +45,13 @@ public class APLCommandTests
             Value = list
         };
 
-        Assert.True(Utility.CompareJson(command,"AnimatedItem.json", _output));
+        Assert.True(Utility.CompareJson(command, "AnimatedItem.json", _output));
 
         var deserial = Utility.ExampleFileContent<AnimateItem>("AnimatedItem.json");
         var property = Assert.Single(deserial.Value);
         var opacity = Assert.IsType<AnimatedOpacity>(property);
-        Assert.Equal(0,opacity.From.Value);
-        Assert.Equal(1,opacity.To.Value);
+        Assert.Equal(0, opacity.From.Value);
+        Assert.Equal(1, opacity.To.Value);
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class APLCommandTests
             ComponentId = "myAudioPlayer",
             Value = 5000
         };
-        Assert.True(Utility.CompareJson(command,"ControlMediaCommand.json", null));
+        Assert.True(Utility.CompareJson(command, "ControlMediaCommand.json", null));
     }
 
     [Fact]
@@ -90,16 +90,16 @@ public class APLCommandTests
             Property = "opacity",
             Value = "1"
         };
-        Assert.True(Utility.CompareJson(command,"SetValueCommand.json", null));
+        Assert.True(Utility.CompareJson(command, "SetValueCommand.json", null));
     }
 
     [Fact]
     public void PlayMediaDeserializesCorrectly()
     {
         var command = Utility.ExampleFileContent<ControlMedia>("ControlMediaCommand.json");
-        Assert.Equal(ControlMediaCommand.Seek,command.Command.Value);
-        Assert.Equal("myAudioPlayer",command.ComponentId.Value);
-        Assert.Equal(5000,command.Value.Value);
+        Assert.Equal(ControlMediaCommand.Seek, command.Command.Value);
+        Assert.Equal("myAudioPlayer", command.ComponentId.Value);
+        Assert.Equal(5000, command.Value.Value);
     }
 
     [Fact]

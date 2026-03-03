@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Response.Ssml;
 
-public class Voice:ICommonSsml
+public class Voice : ICommonSsml
 {
     public string Name { get; set; }
 
@@ -21,6 +21,6 @@ public class Voice:ICommonSsml
 
     public XNode ToXml()
     {
-        return new XElement("voice", new XAttribute("name",Name), Elements.Select(e => e.ToXml()));
+        return new XElement("voice", new XAttribute("name", Name), Elements.Select(e => e.ToXml()));
     }
 }

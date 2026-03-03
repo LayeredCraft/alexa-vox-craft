@@ -11,7 +11,7 @@ public class RenderDocumentDirective : IDirective
     public const string APLTDirectiveType = "Alexa.Presentation.APLT.RenderDocument";
     public const string APLADirectiveType = "Alexa.Presentation.APLA.RenderDocument";
 
-    public RenderDocumentDirective(){}
+    public RenderDocumentDirective() { }
 
     public RenderDocumentDirective(APLDocumentReference document)
     {

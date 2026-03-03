@@ -17,7 +17,7 @@ public class ServiceRegistrarTests : TestBase
         SkillServiceConfiguration emptyConfiguration)
     {
         var exception = Record.Exception(() => services.AddSkillMediatorClasses(emptyConfiguration));
-        
+
         exception.Should().BeNull();
     }
 
@@ -29,9 +29,9 @@ public class ServiceRegistrarTests : TestBase
     {
         // Add current assembly to test registration logic
         validConfiguration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-        
+
         var exception = Record.Exception(() => services.AddSkillMediatorClasses(validConfiguration));
-        
+
         exception.Should().BeNull();
         // Note: Test assembly may not contain any handlers, so we just verify no exception is thrown
     }
@@ -45,9 +45,9 @@ public class ServiceRegistrarTests : TestBase
         var assembly = Assembly.GetExecutingAssembly();
         validConfiguration.RegisterServicesFromAssembly(assembly);
         validConfiguration.RegisterServicesFromAssembly(assembly); // Add duplicate
-        
+
         var exception = Record.Exception(() => services.AddSkillMediatorClasses(validConfiguration));
-        
+
         exception.Should().BeNull();
         // Should handle duplicates without throwing
     }
@@ -60,15 +60,15 @@ public class ServiceRegistrarTests : TestBase
     {
         // Add the MediatR assembly which contains actual pipeline types
         validConfiguration.RegisterServicesFromAssemblyContaining<SkillMediator>();
-        
+
         services.AddSkillMediatorClasses(validConfiguration);
-        
+
         // Should register pipeline interface types
-        var pipelineServices = services.Where(s => 
+        var pipelineServices = services.Where(s =>
             s.ServiceType == typeof(IExceptionHandler) ||
             s.ServiceType == typeof(IRequestInterceptor) ||
             s.ServiceType == typeof(IResponseInterceptor)).ToList();
-        
+
         // Even if no concrete implementations exist in the assembly, the method should not fail
         pipelineServices.Should().NotBeNull();
     }
@@ -80,11 +80,11 @@ public class ServiceRegistrarTests : TestBase
         SkillServiceConfiguration validConfiguration)
     {
         var initialCount = services.Count;
-        
+
         services.AddRequiredServices(validConfiguration);
-        
+
         services.Count.Should().BeGreaterThan(initialCount);
-        
+
         // Verify key services are registered
         services.Should().Contain(s => s.ServiceType == typeof(ISkillMediator));
         services.Should().Contain(s => s.ServiceType == typeof(IHandlerInput));
@@ -101,10 +101,10 @@ public class ServiceRegistrarTests : TestBase
     {
         services.AddRequiredServices(validConfiguration);
         var countAfterFirst = services.Count;
-        
+
         services.AddRequiredServices(validConfiguration);
         var countAfterSecond = services.Count;
-        
+
         // Should not add duplicates due to TryAdd methods
         countAfterSecond.Should().Be(countAfterFirst);
     }
@@ -116,15 +116,15 @@ public class ServiceRegistrarTests : TestBase
         SkillServiceConfiguration validConfiguration)
     {
         services.AddRequiredServices(validConfiguration);
-        
+
         var skillMediatorService = services.FirstOrDefault(s => s.ServiceType == typeof(ISkillMediator));
         skillMediatorService.Should().NotBeNull();
         skillMediatorService!.Lifetime.Should().Be(ServiceLifetime.Transient);
-        
+
         var attributesManagerService = services.FirstOrDefault(s => s.ServiceType == typeof(IAttributesManager));
         attributesManagerService.Should().NotBeNull();
         attributesManagerService!.Lifetime.Should().Be(ServiceLifetime.Scoped);
-        
+
         var responseBuilderService = services.FirstOrDefault(s => s.ServiceType == typeof(IResponseBuilder));
         responseBuilderService.Should().NotBeNull();
         responseBuilderService!.Lifetime.Should().Be(ServiceLifetime.Scoped);
@@ -137,10 +137,10 @@ public class ServiceRegistrarTests : TestBase
         SkillServiceConfiguration validConfiguration)
     {
         services.AddRequiredServices(validConfiguration);
-        
+
         var pipelineBehaviors = services.Where(s => s.ServiceType == typeof(IPipelineBehavior)).ToList();
         pipelineBehaviors.Should().HaveCount(4); // Performance, RequestInterceptor, ResponseInterceptor, RequestExceptionProcess
-        
+
         var behaviorTypes = pipelineBehaviors.Select(s => s.ImplementationType?.Name).ToList();
         behaviorTypes.Should().Contain("PerformanceLoggingBehavior");
         behaviorTypes.Should().Contain("RequestInterceptorBehavior");
@@ -155,17 +155,17 @@ public class ServiceRegistrarTests : TestBase
         SkillServiceConfiguration validConfiguration)
     {
         services.AddRequiredServices(validConfiguration);
-        
+
         // Verify specific implementation types are registered
         var skillMediatorService = services.FirstOrDefault(s => s.ServiceType == typeof(ISkillMediator));
         skillMediatorService!.ImplementationType.Should().Be(typeof(SkillMediator));
-        
+
         var handlerInputService = services.FirstOrDefault(s => s.ServiceType == typeof(IHandlerInput));
         handlerInputService!.ImplementationType.Should().Be(typeof(DefaultHandlerInput));
-        
+
         var attributesManagerService = services.FirstOrDefault(s => s.ServiceType == typeof(IAttributesManager));
         attributesManagerService!.ImplementationType.Should().Be(typeof(AttributesManager));
-        
+
         var responseBuilderService = services.FirstOrDefault(s => s.ServiceType == typeof(IResponseBuilder));
         responseBuilderService!.ImplementationType.Should().Be(typeof(DefaultResponseBuilder));
     }
@@ -178,10 +178,10 @@ public class ServiceRegistrarTests : TestBase
     {
         services.AddRequiredServices(validConfiguration);
         var firstCount = services.Where(s => s.ServiceType == typeof(IPipelineBehavior)).Count();
-        
+
         services.AddRequiredServices(validConfiguration);
         var secondCount = services.Where(s => s.ServiceType == typeof(IPipelineBehavior)).Count();
-        
+
         // Should not add duplicate pipeline behaviors
         secondCount.Should().Be(firstCount);
     }
@@ -194,11 +194,11 @@ public class ServiceRegistrarTests : TestBase
     {
         // Add the test assembly to ensure we have some types to work with
         validConfiguration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-        
+
         var initialCount = services.Count;
-        
+
         services.AddSkillMediatorClasses(validConfiguration);
-        
+
         // Should have processed the assembly without errors
         services.Count.Should().BeGreaterThanOrEqualTo(initialCount);
     }
@@ -211,7 +211,7 @@ public class ServiceRegistrarTests : TestBase
     {
         // Configuration with no assemblies should not fail
         var exception = Record.Exception(() => services.AddSkillMediatorClasses(validConfiguration));
-        
+
         exception.Should().BeNull();
     }
 }

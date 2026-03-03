@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Response.Ssml;
 
-public class PlainText:ICommonSsml
+public class PlainText : ICommonSsml
 {
     public PlainText(string text)
     {

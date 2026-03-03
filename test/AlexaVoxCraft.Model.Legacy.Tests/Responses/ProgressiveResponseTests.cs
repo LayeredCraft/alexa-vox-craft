@@ -20,7 +20,7 @@ public sealed class ProgressiveResponseTests
         var header = new ProgressiveResponseHeader("amzn1.echo-api.request.xxxxxxx");
         var directive = new VoicePlayerSpeakDirective("This text is spoken while your skill processes the full response.");
         var request = new ProgressiveResponseRequest(header, directive);
-        
+
         Assert.True(Utility.CompareJson(request, "ProgressiveResponseRequest.json"));
     }
 
@@ -43,7 +43,7 @@ public sealed class ProgressiveResponseTests
     [Fact]
     public async Task ResponseWithNoHeaderReturnsNull()
     {
-        var request = new ProgressiveResponse {Client = new HttpClient()};
+        var request = new ProgressiveResponse { Client = new HttpClient() };
         var result = await request.Send(new VoicePlayerSpeakDirective("test"));
         Assert.Null(result);
     }
@@ -59,7 +59,7 @@ public sealed class ProgressiveResponseTests
     [Fact]
     public async Task ResponseWithNullDirectiveReturnsNull()
     {
-        var request = new ProgressiveResponse { Header = new ProgressiveResponseHeader("test"),Client = new HttpClient() };
+        var request = new ProgressiveResponse { Header = new ProgressiveResponseHeader("test"), Client = new HttpClient() };
         var result = await request.Send(null);
         Assert.Null(result);
     }
@@ -117,16 +117,16 @@ public sealed class ProgressiveResponseTests
     private ProgressiveResponse CreateProgressiveResponse(Func<HttpRequestMessage, HttpResponseMessage> handlerAction)
     {
         var handler = new ActionMessageHandler(handlerAction);
-        var client =  new HttpClient(handler);
+        var client = new HttpClient(handler);
         return new ProgressiveResponse("xxx", "authToken", "http://localhost", client);
     }
 }
 
-public class ActionMessageHandler:HttpMessageHandler
+public class ActionMessageHandler : HttpMessageHandler
 {
-    private Func<HttpRequestMessage,HttpResponseMessage> Action { get; }
+    private Func<HttpRequestMessage, HttpResponseMessage> Action { get; }
 
-    public ActionMessageHandler(Func<HttpRequestMessage,HttpResponseMessage> action)
+    public ActionMessageHandler(Func<HttpRequestMessage, HttpResponseMessage> action)
     {
         Action = action;
     }

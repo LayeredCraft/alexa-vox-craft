@@ -44,9 +44,9 @@ public class BuyResponseHandler : IRequestHandler<ConnectionResponseRequest<Conn
         }
 
         var product = await _ispClient.GetProductAsync(request.Payload.ProductId, cancellationToken);
-        
-        input.AttributesManager.TryGetSessionState<Product[]>("entitledProducts", out var entitledProducts);
-        
+
+        input.AttributesManager.Session.TryGet<Product[]>("entitledProducts", out var entitledProducts);
+
         string speakOutput;
         string repromptOutput;
 

@@ -121,32 +121,32 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
         var requestId = lambdaContext.AwsRequestId;
         var remainingTime = lambdaContext.RemainingTime;
         var isColdStart = AlexaVoxCraftTelemetry.IsColdStart();
-        
+
         using var span = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.LambdaExecution, ActivityKind.Internal);
-        
+
         span?.SetTag(AlexaSemanticAttributes.FaasName, lambdaContext.FunctionName);
         span?.SetTag(AlexaSemanticAttributes.FaasVersion, lambdaContext.FunctionVersion);
         span?.SetTag(AlexaSemanticAttributes.AwsLambdaRequestId, requestId);
         span?.SetTag(AlexaSemanticAttributes.AwsLambdaMemoryLimit, lambdaContext.MemoryLimitInMB);
         span?.SetTag(AlexaSemanticAttributes.AwsLambdaRemainingTime, remainingTime.TotalMilliseconds);
         span?.SetTag(AlexaSemanticAttributes.ApplicationId, applicationId);
-        
+
         if (isColdStart)
         {
             span?.SetTag(AlexaSemanticAttributes.FaasColdStart, AlexaSemanticValues.True);
         }
-        
+
         using var lambdaTimer = AlexaVoxCraftTelemetry.TimeLambda();
-        
+
         // Record Lambda memory limit as a metric for capacity planning and optimization
         AlexaVoxCraftTelemetry.LambdaMemoryUsed.Record(lambdaContext.MemoryLimitInMB,
             new(AlexaSemanticAttributes.FaasName, lambdaContext.FunctionName),
             new(AlexaSemanticAttributes.ApplicationId, applicationId));
-        
+
         using var serviceScope = _serviceProvider.CreateScope();
         var provider = serviceScope.ServiceProvider;
         var logger = provider.GetRequiredService<ILogger<AlexaSkillFunction<TRequest, TResponse>>>();
-        
+
         using var scope = logger.BeginScope<string, string, string, TimeSpan>(
             "ApplicationId", applicationId,
             "LambdaRequestId", requestId,
@@ -162,7 +162,7 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
             CreateContext(request);
             var handlerAsync = provider.GetRequiredService<HandlerDelegate<TRequest, TResponse>>();
             var response = await handlerAsync(request, lambdaContext, cancellationToken);
-            
+
             span?.SetStatus(ActivityStatusCode.Ok);
             logger.Information("Lambda execution completed successfully for skill {ApplicationId}", applicationId);
             return response;
@@ -181,7 +181,7 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
             span?.RecordException(ex);
 #endif
             span?.SetStatus(ActivityStatusCode.Error, ex.Message);
-            
+
             logger.Error(ex, "Lambda execution failed for skill {ApplicationId}", applicationId);
             throw;
         }

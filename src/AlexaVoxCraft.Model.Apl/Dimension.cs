@@ -23,7 +23,7 @@ public class Dimension
 
         if (int.TryParse(value, out var intvalue))
         {
-            return (AbsoluteDimension) intvalue;
+            return (AbsoluteDimension)intvalue;
         }
 
         if (value.Last() == '%')

@@ -11,7 +11,7 @@ public class CardConverter : BasePolymorphicConverter<ICard>
         { LinkAccountCard.CardType, typeof(LinkAccountCard) },
         { AskForPermissionsConsentCard.CardType, typeof(AskForPermissionsConsentCard) }
     };
-    
+
     protected override Func<JsonElement, string?> KeyResolver => element =>
     {
         static string? GetProp(JsonElement el, string name) =>

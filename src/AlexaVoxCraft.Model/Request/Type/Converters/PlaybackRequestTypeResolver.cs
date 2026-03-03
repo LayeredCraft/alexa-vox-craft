@@ -9,6 +9,6 @@ public class PlaybackRequestTypeResolver : IRequestTypeResolver
 
     public System.Type? Resolve(string requestType)
     {
-        return  typeof(PlaybackControllerRequest);
+        return typeof(PlaybackControllerRequest);
     }
 }

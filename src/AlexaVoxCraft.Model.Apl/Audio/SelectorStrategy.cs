@@ -7,12 +7,12 @@ namespace AlexaVoxCraft.Model.Apl.Audio;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<SelectorStrategy>))]
 public enum SelectorStrategy
 {
-    [EnumMember(Value="normal")]
+    [EnumMember(Value = "normal")]
     Normal,
-    [EnumMember(Value="randomItem")]
+    [EnumMember(Value = "randomItem")]
     RandomItem,
-    [EnumMember(Value="randomData")]
+    [EnumMember(Value = "randomData")]
     RandomData,
-    [EnumMember(Value="randomItemRandomData")]
+    [EnumMember(Value = "randomItemRandomData")]
     RandomItemRandomData
 }

@@ -17,7 +17,7 @@ public class Break : ICommonSsml
 
         if (!string.IsNullOrWhiteSpace(Strength))
         {
-            attributes.Add(new XAttribute("strength",Strength));
+            attributes.Add(new XAttribute("strength", Strength));
         }
         return new XElement("break", attributes);
     }

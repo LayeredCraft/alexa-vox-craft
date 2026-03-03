@@ -4,7 +4,7 @@ public class AskForPermissionDirective : ConnectionSendRequest<AskForPermissionP
 {
     public AskForPermissionDirective()
     {
-            
+
     }
 
     public AskForPermissionDirective(string permissionScope)

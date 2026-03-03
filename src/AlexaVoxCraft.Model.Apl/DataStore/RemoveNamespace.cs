@@ -6,7 +6,7 @@ public class RemoveNamespace : DataStoreCommand
 {
     public const string CommandType = "REMOVE_NAMESPACE";
 
-    public RemoveNamespace():base(CommandType){}
+    public RemoveNamespace() : base(CommandType) { }
 
     [JsonPropertyName("namespace")]
     public string Namespace { get; set; }

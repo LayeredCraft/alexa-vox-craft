@@ -3,7 +3,7 @@ using AlexaVoxCraft.Model.Request;
 
 namespace AlexaVoxCraft.Model.Response.Directive;
 
-public class DialogDelegate:IDirective
+public class DialogDelegate : IDirective
 {
     public const string DirectiveType = "Dialog.Delegate";
 

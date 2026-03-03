@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<RatingGraphicType>))]
 public enum RatingGraphicType
 {
-    [EnumMember(Value="AVG")]
+    [EnumMember(Value = "AVG")]
     AVG,
-    [EnumMember(Value="image")]
+    [EnumMember(Value = "image")]
     Image
 }

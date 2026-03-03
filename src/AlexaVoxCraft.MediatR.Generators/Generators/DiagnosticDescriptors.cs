@@ -27,7 +27,7 @@ internal static class DiagnosticDescriptors
     public static readonly DiagnosticDescriptor NoHandlersFound = new(
         id: "AVXC003",
         title: "No request handlers found",
-        messageFormat: "No implementations of IRequestHandler or IDefaultRequestHandler were found in the project.",
+        messageFormat: "No implementations of IRequestHandler or IDefaultRequestHandler were found in the project",
         category: Category,
         defaultSeverity: DiagnosticSeverity.Info,
         isEnabledByDefault: true,

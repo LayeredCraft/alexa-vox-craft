@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<TimeTextDirection>))]
 public enum TimeTextDirection
 {
-    [EnumMember(Value="none")]
+    [EnumMember(Value = "none")]
     None,
     [EnumMember(Value = "up")]
     Up,

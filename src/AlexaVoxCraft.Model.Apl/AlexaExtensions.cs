@@ -5,6 +5,7 @@ namespace AlexaVoxCraft.Model.Apl;
 
 public class AlexaExtensions
 {
-    [JsonPropertyName("available")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("available")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Dictionary<string, object> Available { get; set; }
 }

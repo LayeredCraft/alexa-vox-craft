@@ -32,7 +32,7 @@ public sealed class APLValueCollection<T> : APLValue, IList<T>, IReadOnlyList<T>
     /// </summary>
     public APLValueCollection(ReadOnlySpan<T> items)
     {
-        _items = [..items];
+        _items = [.. items];
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public sealed class APLValueCollection<T> : APLValue, IList<T>, IReadOnlyList<T>
     /// </summary>
     public APLValueCollection(IEnumerable<T> items)
     {
-        _items = [..items];
+        _items = [.. items];
     }
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿namespace AlexaVoxCraft.Model.Apl;
 
-public class RelativeDimension:Dimension
+public class RelativeDimension : Dimension
 {
     public RelativeDimension() { }
 

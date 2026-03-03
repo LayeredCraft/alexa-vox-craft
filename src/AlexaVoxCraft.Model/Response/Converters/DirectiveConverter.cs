@@ -48,7 +48,7 @@ public class DirectiveConverter : BasePolymorphicConverter<IDirective>
     {
         _directiveDataDrivenTypeFactories.TryAdd(key, factory);
     }
-    
+
     protected override string TypeDiscriminatorPropertyName => "type";
 
     protected override IDictionary<string, Type> DerivedTypes => _directiveDerivedTypes;

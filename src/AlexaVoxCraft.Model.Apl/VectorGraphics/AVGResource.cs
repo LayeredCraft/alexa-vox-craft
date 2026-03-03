@@ -8,7 +8,7 @@ public class AVGResource : Resource
 
     [JsonPropertyName("patterns")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Dictionary<string,AVG>? Patterns { get; set; }
+    public Dictionary<string, AVG>? Patterns { get; set; }
 
     public void AddPattern(string key, AVG graphic)
     {

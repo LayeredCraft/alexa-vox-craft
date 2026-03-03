@@ -23,7 +23,7 @@ public class TouchWrapper : TouchComponent, IJsonSerializable<TouchWrapper>
 
     public TouchWrapper(IEnumerable<APLComponent> item)
     {
-        Item = [..item];
+        Item = [.. item];
     }
 
     [JsonPropertyName("type")] public override string Type => nameof(TouchWrapper);

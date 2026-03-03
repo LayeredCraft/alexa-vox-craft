@@ -2,16 +2,16 @@
 
 namespace AlexaVoxCraft.Model.Response.Ssml;
 
-public class Sub:ICommonSsml
+public class Sub : ICommonSsml
 {
     public Sub(string text, string alias)
     {
-        if(string.IsNullOrWhiteSpace(text))
+        if (string.IsNullOrWhiteSpace(text))
         {
             throw new ArgumentNullException(nameof(text), "Text value required for Sub in Ssml");
         }
 
-        if(string.IsNullOrWhiteSpace(alias))
+        if (string.IsNullOrWhiteSpace(alias))
         {
             throw new ArgumentNullException(nameof(alias), "Alias value required for Sub in Ssml");
         }

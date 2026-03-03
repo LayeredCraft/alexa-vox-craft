@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.Commands;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<HighlightMode>))]
 public enum HighlightMode
 {
-    [EnumMember(Value="line")]
+    [EnumMember(Value = "line")]
     Line,
     [EnumMember(Value = "block")]
     Block

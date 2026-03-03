@@ -10,7 +10,7 @@ public class OutputSpeechConverter : BasePolymorphicConverter<IOutputSpeech>
         { SsmlOutputSpeech.SpeechType, typeof(SsmlOutputSpeech) },
         { PlainTextOutputSpeech.SpeechType, typeof(PlainTextOutputSpeech) },
     };
-    
+
     protected override Func<JsonElement, string?> KeyResolver => element =>
     {
         static string? GetProp(JsonElement el, string name) =>

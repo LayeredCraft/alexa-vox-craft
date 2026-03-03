@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Filters;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<NoiseKind>))]
 public enum NoiseKind
 {
-    [EnumMember(Value="gaussian")]
+    [EnumMember(Value = "gaussian")]
     Gaussian,
-    [EnumMember(Value="uniform")]
+    [EnumMember(Value = "uniform")]
     Uniform
 }

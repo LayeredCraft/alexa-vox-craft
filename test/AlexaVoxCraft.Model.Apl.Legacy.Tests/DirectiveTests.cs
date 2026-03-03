@@ -59,10 +59,27 @@ public class DirectiveTests
 
         var rawJson = """
                       {
-                        "test": "random"
+                        "textListData": {
+                          "headerTitle": "Alexa text list header title",
+                          "headerSubtitle": "Header subtitle",
+                          "headerAttributionImage": "https://s3.amazonaws.com/ask-skills-assets/apl-layout-assets/attribution_dark_hub_prime.png",
+                          "backgroundImageSource": "https://dev.unofficialdisneytrivia.com/images/background_mickey.png",
+                          "listItemsToShow": [
+                            {
+                              "primaryText": "Player16695",
+                              "tertiaryText": "20714",
+                              "tertiaryTextPosition": "right"
+                            },
+                            {
+                              "primaryText": "Player17124",
+                              "tertiaryText": "10225",
+                              "tertiaryTextPosition": "right"
+                            }
+                          ]
+                        }
                       }
                       """;
-        
+
         var random = System.Text.Json.JsonSerializer.Deserialize<APLDataSource>(rawJson, AlexaJsonOptions.DefaultOptions);
         Assert.IsType<KeyValueDataSource>(random);
         Assert.Single(((KeyValueDataSource)random).Properties);
@@ -125,23 +142,23 @@ public class DirectiveTests
 
         Assert.Equal(5, updateDirective.Operations.Count);
         var ii = Assert.IsType<InsertItem>(updateDirective.Operations[0]);
-        Assert.Equal(10,ii.Index);
+        Assert.Equal(10, ii.Index);
 
         var imi = Assert.IsType<InsertMultipleItems>(updateDirective.Operations[1]);
-        Assert.Equal(12,imi.Index);
-        Assert.Equal(3,imi.Items.Length);
+        Assert.Equal(12, imi.Index);
+        Assert.Equal(3, imi.Items.Length);
 
         var si = Assert.IsType<SetItem>(updateDirective.Operations[2]);
-        Assert.Equal(14,si.Index);
+        Assert.Equal(14, si.Index);
         Assert.NotNull(si.Item);
 
         var di = Assert.IsType<DeleteItem>(updateDirective.Operations[3]);
-        Assert.Equal(16,di.Index);
+        Assert.Equal(16, di.Index);
 
         var dmi = Assert.IsType<DeleteMultipleItems>(updateDirective.Operations[4]);
-        Assert.Equal(17,dmi.Index);
-        Assert.Equal(2,dmi.Count);
+        Assert.Equal(17, dmi.Index);
+        Assert.Equal(2, dmi.Count);
 
-        Assert.True(Utility.CompareJson(updateDirective,"UpdateIndexListData.json", null));
+        Assert.True(Utility.CompareJson(updateDirective, "UpdateIndexListData.json", null));
     }
 }

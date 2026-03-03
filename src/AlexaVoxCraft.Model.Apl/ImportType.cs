@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ImportType>))]
 public enum ImportType
 {
-    [EnumMember(Value="package")]
+    [EnumMember(Value = "package")]
     Package,
     [EnumMember(Value = "oneOf")]
     OneOf,

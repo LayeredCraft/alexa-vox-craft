@@ -7,7 +7,7 @@ public class PutObject : DataStoreCommand
 {
     public const string CommandType = "PUT_OBJECT";
 
-    public PutObject():base(CommandType){}
+    public PutObject() : base(CommandType) { }
 
     [JsonPropertyName("content")]
     public JsonElement Content { get; set; }

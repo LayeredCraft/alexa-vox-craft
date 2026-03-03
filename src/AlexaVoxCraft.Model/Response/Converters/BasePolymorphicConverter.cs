@@ -66,7 +66,7 @@ public abstract class BasePolymorphicConverter<T> : JsonConverter<T>
 
         // Allow subclasses to mutate the element
         var transformed = TransformJson(root);
-        
+
         return (T)JsonSerializer.Deserialize(transformed.GetRawText(), resultType, options)!;
     }
 
@@ -74,7 +74,7 @@ public abstract class BasePolymorphicConverter<T> : JsonConverter<T>
     {
         JsonSerializer.Serialize(writer, value, value.GetType(), options);
     }
-    
+
     private bool IsEmptyObject(JsonElement element)
     {
         return element.ValueKind == JsonValueKind.Object && !element.EnumerateObject().Any();

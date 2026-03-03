@@ -8,7 +8,7 @@ using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl;
 
-public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
+public class APLDocument : APLDocumentBase, IJsonSerializable<APLDocument>
 {
     public const string DocumentType = "APL";
     [JsonPropertyName("type")]
@@ -16,7 +16,7 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
 
     public APLDocument()
     {
-            
+
     }
 
     public APLDocument(APLDocumentVersion version) : base(version)
@@ -46,7 +46,7 @@ public class APLDocument: APLDocumentBase, IJsonSerializable<APLDocument>
 
     [JsonPropertyName("graphics")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Dictionary<string,AVG>? Graphics { get; set; }
+    public Dictionary<string, AVG>? Graphics { get; set; }
 
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

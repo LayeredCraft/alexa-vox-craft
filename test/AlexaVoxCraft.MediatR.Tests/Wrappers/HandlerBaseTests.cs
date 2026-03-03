@@ -24,12 +24,12 @@ public class HandlerBaseTests : TestBase
         // Arrange
         services.AddSingleton(handler1);
         services.AddSingleton(handler2);
-        
+
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Act
         var result = TestHandlerBase.TestGetHandlers<ITestHandler>(serviceProvider);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Should().Contain(handler1);
@@ -43,10 +43,10 @@ public class HandlerBaseTests : TestBase
     {
         // Arrange - No handlers registered
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Act
         var result = TestHandlerBase.TestGetHandlers<ITestHandler>(serviceProvider);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Should().BeEmpty();
@@ -59,13 +59,13 @@ public class HandlerBaseTests : TestBase
     {
         // Arrange
         services.AddSingleton<ITestHandler, FailingTestHandler>();
-        
+
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Act & Assert
-        var exception = Record.Exception(() => 
+        var exception = Record.Exception(() =>
             TestHandlerBase.TestGetHandlers<ITestHandler>(serviceProvider).ToList());
-        
+
         exception.Should().BeOfType<InvalidOperationException>();
         exception.Message.Should().Contain("Error constructing handler for request of type");
         exception.InnerException.Should().NotBeNull();
