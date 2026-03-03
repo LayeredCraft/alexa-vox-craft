@@ -68,7 +68,7 @@ public class Container : APLComponent, IJsonSerializable<Container>
         {
             var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
             dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
-            
+
             var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
             itemsProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
 

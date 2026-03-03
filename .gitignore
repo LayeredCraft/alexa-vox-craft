@@ -401,6 +401,9 @@ FodyWeavers.xsd
 
 .config
 
+# Local scripts (not for source control)
+scripts/
+
 # macOS
 .DS_Store
 .DS_Store?

@@ -1,3 +1,4 @@
+using AlexaVoxCraft.Http.Clients;
 using AlexaVoxCraft.Smapi.Models.InteractionModel;
 using Microsoft.Extensions.Logging;
 

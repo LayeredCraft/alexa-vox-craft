@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Apl.Commands;
 
-public class SetPage:APLCommand
+public class SetPage : APLCommand
 {
     [JsonPropertyName("type")]
     public override string Type => nameof(SetPage);

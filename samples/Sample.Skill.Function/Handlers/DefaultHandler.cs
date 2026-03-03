@@ -23,20 +23,20 @@ public class DefaultHandler : IDefaultRequestHandler
     {
         var requestType = input.RequestEnvelope.Request.Type;
         var locale = input.RequestEnvelope.Request.Locale;
-        
+
         using var scope = _logger.BeginScope("RequestType", requestType, "Locale", locale);
-        
+
         _logger.Debug("Handling default request of type {RequestType} in locale {Locale}", requestType, locale);
-        
+
         using var _ = _logger.TimeOperation("Default response generation");
-        
+
         var response = await input.ResponseBuilder
             .Speak("Hello world!")
             .WithShouldEndSession(true)
             .GetResponse(cancellationToken);
-            
+
         _logger.Debug("Generated default response with speech output");
-        
+
         return response;
     }
 }

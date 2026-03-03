@@ -21,7 +21,7 @@ namespace AlexaVoxCraft.MediatR.Generator.Tests;
 internal sealed class GeneratorTestHelpers
 {
     private const string GlobalUsingsRelPath = "Cases/GlobalUsings.g.cs";
-    
+
     /// <summary>
     /// Runs <paramref name="generator"/> against one or more C# files on disk.
     /// Files should live under <c>Cases/</c> and be copied to bin (see .csproj).
@@ -105,9 +105,9 @@ internal sealed class GeneratorTestHelpers
         {
             // Expect FULL keys like "build_property.EnableMediatRGeneratorInterceptor"
             optionsProvider = new InMemoryAnalyzerConfigOptionsProvider(msbuildProperties);
-        }        
+        }
         var classic = generator.AsSourceGenerator();
-        var driver  = CSharpGeneratorDriver.Create(generators: [classic], optionsProvider: optionsProvider).RunGenerators(compilation);
+        var driver = CSharpGeneratorDriver.Create(generators: [classic], optionsProvider: optionsProvider).RunGenerators(compilation);
         return (driver, compilation, parse);
     }
 
@@ -178,11 +178,11 @@ internal sealed class VerifyGlue
 
         driver.Should().NotBeNull();
 
-        var result   = driver.GetRunResult();
+        var result = driver.GetRunResult();
         result.Should().NotBeNull();
 
         var compiled = GeneratorTestHelpers.RecompileWithGeneratedTrees(original, parse, result);
-        var errors   = compiled.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error).ToArray();
+        var errors = compiled.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error).ToArray();
 
         errors.Should().BeEmpty(
             "generated code should compile without errors, but found:\n" +

@@ -1,0 +1,11 @@
+﻿{
+  "ProductId": "amzn1.adg.product.unique-id-1",
+  "Name": "Friendly Name",
+  "Type": "ENTITLEMENT",
+  "Summary": "Description of the product.",
+  "Purchasable": "PURCHASABLE",
+  "EntitlementReason": "NOT_PURCHASED",
+  "ReferenceName": "your_product_name_1",
+  "ActiveEntitlementCount": 1,
+  "PurchaseMode": "TEST"
+}

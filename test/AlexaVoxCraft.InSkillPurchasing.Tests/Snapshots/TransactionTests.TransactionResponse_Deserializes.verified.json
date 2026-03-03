@@ -1,0 +1,37 @@
+﻿{
+  "Results": [
+    {
+      "ProductId": "amzn1.adg.product.unique-id-4",
+      "CreatedTime": "DateTimeOffset_1",
+      "LastModifiedTime": "DateTimeOffset_1"
+    },
+    {
+      "ProductId": "amzn1.adg.product.unique-id-3",
+      "CreatedTime": "DateTimeOffset_2",
+      "LastModifiedTime": "DateTimeOffset_2"
+    },
+    {
+      "Status": "EXPIRED_NO_ACTION_BY_PARENT",
+      "ProductId": "amzn1.adg.product.unique-id-3",
+      "CreatedTime": "DateTimeOffset_3",
+      "LastModifiedTime": "DateTimeOffset_4"
+    },
+    {
+      "Status": "DENIED_BY_PARENT",
+      "ProductId": "amzn1.adg.product.unique-id-2",
+      "CreatedTime": "DateTimeOffset_5",
+      "LastModifiedTime": "DateTimeOffset_6"
+    },
+    {
+      "Status": "APPROVED_BY_PARENT",
+      "ProductId": "amzn1.adg.product.unique-id-1",
+      "CreatedTime": "DateTimeOffset_7",
+      "LastModifiedTime": "DateTimeOffset_8"
+    }
+  ],
+  "Metadata": {
+    "ResultSet": {
+      "NextToken": "EXAMPLE123456789ABCDEFGHI"
+    }
+  }
+}

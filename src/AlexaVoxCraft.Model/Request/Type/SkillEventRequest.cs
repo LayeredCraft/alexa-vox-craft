@@ -3,7 +3,7 @@ using AlexaVoxCraft.Model.Helpers;
 
 namespace AlexaVoxCraft.Model.Request.Type;
 
-public class SkillEventRequest:Request
+public class SkillEventRequest : Request
 {
     [JsonPropertyName("eventCreationTime")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

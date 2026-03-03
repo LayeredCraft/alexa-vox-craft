@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<AVGParameterType>))]
 public enum AVGParameterType
 {
-    [EnumMember(Value="any")]
+    [EnumMember(Value = "any")]
     Any,
     [EnumMember(Value = "string")]
     String,

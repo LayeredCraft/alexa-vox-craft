@@ -1,6 +1,6 @@
 ﻿namespace AlexaVoxCraft.Model.Apl;
 
-public class SpecialDimension:Dimension
+public class SpecialDimension : Dimension
 {
     public SpecialDimension(string value)
     {

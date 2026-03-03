@@ -1,99 +1,80 @@
-﻿using AlexaVoxCraft.MediatR.Attributes.Persistence;
+using System.Text.Json;
+using AlexaVoxCraft.MediatR.Attributes.Persistence;
 using AlexaVoxCraft.Model.Request;
 
 namespace AlexaVoxCraft.MediatR.Attributes;
 
+/// <summary>
+/// Default implementation of <see cref="IAttributesManager"/> that manages session, request,
+/// and persistent attributes for a single Alexa skill request lifecycle.
+/// </summary>
 public class AttributesManager : IAttributesManager
 {
     private readonly SkillRequest _eventRequest;
-    private IDictionary<string, object> _requestAttributes = new Dictionary<string, object>();
-    private IDictionary<string, object> _persistentAttributes = new Dictionary<string, object>();
-    private IDictionary<string, object>? _sessionAttributes;
     private readonly IPersistenceAdapter? _persistenceAdapter;
-    private bool _persistentAttributeSet = false;
+    private bool _persistentLoaded;
+    private Dictionary<string, JsonElement> _persistentAttributes = [];
+    private JsonAttributeBag? _persistentBag;
 
+    /// <inheritdoc/>
+    public JsonAttributeBag Session { get; }
+
+    /// <inheritdoc/>
+    public JsonAttributeBag Request { get; }
+
+    /// <summary>
+    /// Initializes a new instance of <see cref="AttributesManager"/>.
+    /// </summary>
+    /// <param name="skillRequestFactory">A factory delegate that returns the current <see cref="SkillRequest"/>.</param>
+    /// <param name="persistenceAdapter">
+    /// An optional persistence adapter for loading and saving persistent attributes.
+    /// Required only when calling <see cref="GetPersistentAsync"/> or <see cref="SavePersistentAttributes"/>.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="skillRequestFactory"/> is <see langword="null"/> or returns <see langword="null"/>.
+    /// </exception>
     public AttributesManager(SkillRequestFactory skillRequestFactory, IPersistenceAdapter? persistenceAdapter = null)
     {
         ArgumentNullException.ThrowIfNull(skillRequestFactory);
         _persistenceAdapter = persistenceAdapter;
         _eventRequest = skillRequestFactory() ?? throw new ArgumentNullException(nameof(_eventRequest));
-        if (_eventRequest.Session is not null)
-            _sessionAttributes = _eventRequest.Session.Attributes ?? new Dictionary<string, object>();
+
+        var sessionDict = _eventRequest.Session?.Attributes ?? new Dictionary<string, JsonElement>();
+        Session = new JsonAttributeBag(sessionDict);
+        Request = new JsonAttributeBag(new Dictionary<string, JsonElement>());
     }
 
-    public Task<IDictionary<string, object>> GetRequestAttributes(CancellationToken cancellationToken = default)
-    {
-        return Task.FromResult(_requestAttributes);
-    }
-
-    public Task<IDictionary<string, object>> GetSessionAttributes(CancellationToken cancellationToken = default)
-    {
-        if (_sessionAttributes is null)
-            throw new MissingMemberException(nameof(SkillRequest), nameof(SkillRequest.Session));
-
-        return Task.FromResult(_sessionAttributes);
-    }
-
-    public async Task<IDictionary<string, object>> GetPersistentAttributes(
-        CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    public async Task<JsonAttributeBag> GetPersistentAsync(CancellationToken ct = default)
     {
         if (_persistenceAdapter is null)
-            throw new MissingMemberException(nameof(AttributesManager), nameof(_persistenceAdapter));
+            throw new InvalidOperationException(
+                $"{nameof(IPersistenceAdapter)} is required but was not registered.");
 
-        if (_persistentAttributeSet) return _persistentAttributes;
-        _persistentAttributes = await _persistenceAdapter.GetAttributes(_eventRequest, cancellationToken);
-        _persistentAttributeSet = true;
+        if (!_persistentLoaded)
+        {
+            _persistentAttributes = (await _persistenceAdapter.GetAttributes(_eventRequest, ct)).ToDictionary();
+            _persistentBag = new JsonAttributeBag(_persistentAttributes);
+            _persistentLoaded = true;
+        }
 
-        return _persistentAttributes;
+        return _persistentBag!;
     }
 
-    public Task SetRequestAttributes(IDictionary<string, object> requestAttributes,
-        CancellationToken cancellationToken = default)
-    {
-        _requestAttributes = requestAttributes;
-
-        return Task.CompletedTask;
-    }
-
-    public Task SetSessionAttributes(IDictionary<string, object> sessionAttributes,
-        CancellationToken cancellationToken = default)
-    {
-        if (_sessionAttributes is null)
-            throw new MissingMemberException(nameof(SkillRequest), nameof(SkillRequest.Session));
-
-        _sessionAttributes = sessionAttributes;
-
-        return Task.CompletedTask;
-    }
-
-    public Task SetPersistentAttributes(IDictionary<string, object> persistentAttributes,
-        CancellationToken cancellationToken = default)
-    {
-        if (_persistenceAdapter is null)
-            throw new MissingMemberException(nameof(AttributesManager), nameof(_persistenceAdapter));
-
-        _persistentAttributes = persistentAttributes;
-        _persistentAttributeSet = true;
-
-        return Task.CompletedTask;
-    }
-
+    /// <inheritdoc/>
     public async Task SavePersistentAttributes(CancellationToken cancellationToken = default)
     {
         if (_persistenceAdapter is null)
-            throw new MissingMemberException(nameof(AttributesManager), nameof(_persistenceAdapter));
+            throw new InvalidOperationException(
+                $"{nameof(IPersistenceAdapter)} is required but was not registered.");
 
-        if (_persistentAttributeSet)
+        if (_persistentLoaded)
         {
             await _persistenceAdapter.SaveAttribute(_eventRequest, _persistentAttributes, cancellationToken);
         }
     }
 
-    public async Task<Session> GetSession(CancellationToken cancellationToken = default)
-    {
-        var attributes = await GetSessionAttributes(cancellationToken);
-        var session = _eventRequest.Session;
-        session!.Attributes = attributes.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        return session;
-    }
+    /// <inheritdoc/>
+    public Task<Session?> GetSession(CancellationToken cancellationToken = default) =>
+        Task.FromResult(_eventRequest.Session);
 }

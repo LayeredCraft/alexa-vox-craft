@@ -12,7 +12,7 @@ public class AnimatedPropertyConverter : BasePolymorphicConverter<AnimatedProper
     {
         return typeof(AnimatedProperty).GetTypeInfo().IsAssignableFrom(typeof(AnimatedProperty));
     }
-    
+
     protected override string TypeDiscriminatorPropertyName => "property";
 
     protected override IDictionary<string, Type> DerivedTypes => new Dictionary<string, Type>

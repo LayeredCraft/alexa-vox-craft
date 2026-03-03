@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.ConnectionTasks.Inputs;
 
-public class PrintWebPageV1:IConnectionTask
+public class PrintWebPageV1 : IConnectionTask
 {
     public const string ConnectionType = "PrintWebPageRequest";
     public const string VersionNumber = "1";

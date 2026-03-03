@@ -4,8 +4,8 @@ namespace AlexaVoxCraft.Model.Request;
 
 public enum SlotValueType
 {
-    [EnumMember(Value="Simple")]
+    [EnumMember(Value = "Simple")]
     Simple,
-    [EnumMember(Value="List")]
+    [EnumMember(Value = "List")]
     List
 }

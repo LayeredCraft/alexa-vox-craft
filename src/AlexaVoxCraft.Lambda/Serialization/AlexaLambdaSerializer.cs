@@ -35,16 +35,16 @@ public sealed class AlexaLambdaSerializer : ILambdaSerializer
     public T? Deserialize<T>(Stream requestStream)
     {
         using var _ = _logger.TimeOperation("Request deserialization");
-        
+
         var streamLength = requestStream.Length;
         var typeName = typeof(T).Name;
 
 
         var obj = JsonSerializer.Deserialize<T>(requestStream, _options);
-            
-            
+
+
         _logger.Debug("Deserialized {RequestType} payload ({PayloadSize} bytes)", typeName, streamLength);
-            
+
         if (_logger.IsEnabled(LogLevel.Debug))
         {
             _logger.Debug("📥 Raw JSON Input: {@RawRequest}", obj);
@@ -62,10 +62,10 @@ public sealed class AlexaLambdaSerializer : ILambdaSerializer
     public void Serialize<T>(T response, Stream responseStream)
     {
         using var _ = _logger.TimeOperation("Response serialization");
-        
+
         var typeName = typeof(T).Name;
-        
-        
+
+
         if (_logger.IsEnabled(LogLevel.Debug))
         {
             _logger.Debug("📤 Serialized JSON Output: {@RawResponse}", response);
@@ -74,9 +74,9 @@ public sealed class AlexaLambdaSerializer : ILambdaSerializer
         var initialPosition = responseStream.Position;
         JsonSerializer.Serialize(responseStream, response, _options);
         var serializedSize = responseStream.Position - initialPosition;
-            
-            
-            
+
+
+
         _logger.Debug("Serialized {ResponseType} payload ({PayloadSize} bytes)", typeName, serializedSize);
     }
 }

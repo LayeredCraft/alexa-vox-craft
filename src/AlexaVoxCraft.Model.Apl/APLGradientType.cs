@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<APLGradientType>))]
 public enum APLGradientType
 {
-    [EnumMember(Value="linear")]
+    [EnumMember(Value = "linear")]
     Linear,
     [EnumMember(Value = "radial")]
     Radial

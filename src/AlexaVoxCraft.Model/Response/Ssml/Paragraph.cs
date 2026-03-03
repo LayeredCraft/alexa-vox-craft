@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Response.Ssml;
 
 public class Paragraph : ISsml
 {
-    public List<IParagraphSsml> Elements {get;set;} = [];
+    public List<IParagraphSsml> Elements { get; set; } = [];
 
     public Paragraph() { }
 

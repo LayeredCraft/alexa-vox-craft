@@ -10,7 +10,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     public void Constructor_WithValidAccessor_InitializesCorrectly(ISkillContextAccessor accessor)
     {
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         factory.Should().NotBeNull();
     }
 
@@ -21,9 +21,9 @@ public class DefaultSkillContextFactoryTests : TestBase
         SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         var context = factory.Create(skillRequest);
-        
+
         context.Should().NotBeNull();
         context.Should().BeOfType<DefaultSkillContext>();
         context.Request.Should().Be(skillRequest);
@@ -36,9 +36,9 @@ public class DefaultSkillContextFactoryTests : TestBase
         SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         var context = factory.Create(skillRequest);
-        
+
         accessor.Received(1).SkillContext = context;
     }
 
@@ -47,9 +47,9 @@ public class DefaultSkillContextFactoryTests : TestBase
     public void Create_WithNullAccessor_DoesNotThrow(SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(null!);
-        
+
         var exception = Record.Exception(() => factory.Create(skillRequest));
-        
+
         exception.Should().BeNull();
     }
 
@@ -58,9 +58,9 @@ public class DefaultSkillContextFactoryTests : TestBase
     public void Create_WithNullAccessor_ReturnsValidContext(SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(null!);
-        
+
         var context = factory.Create(skillRequest);
-        
+
         context.Should().NotBeNull();
         context.Request.Should().Be(skillRequest);
     }
@@ -70,9 +70,9 @@ public class DefaultSkillContextFactoryTests : TestBase
     {
         var accessor = CreateSubstitute<ISkillContextAccessor>();
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         var exception = Record.Exception(() => factory.Create(null!));
-        
+
         exception.Should().BeNull();
     }
 
@@ -81,9 +81,9 @@ public class DefaultSkillContextFactoryTests : TestBase
     {
         var accessor = CreateSubstitute<ISkillContextAccessor>();
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         var context = factory.Create(null!);
-        
+
         context.Should().NotBeNull();
         context.Request.Should().BeNull();
     }
@@ -96,9 +96,9 @@ public class DefaultSkillContextFactoryTests : TestBase
     {
         var factory = new DefaultSkillContextFactory(accessor);
         var context = factory.Create(skillRequest);
-        
+
         factory.Dispose(context);
-        
+
         accessor.Received(1).SkillContext = null;
     }
 
@@ -108,9 +108,9 @@ public class DefaultSkillContextFactoryTests : TestBase
     {
         var factory = new DefaultSkillContextFactory(null!);
         var context = factory.Create(skillRequest);
-        
+
         var exception = Record.Exception(() => factory.Dispose(context));
-        
+
         exception.Should().BeNull();
     }
 
@@ -119,9 +119,9 @@ public class DefaultSkillContextFactoryTests : TestBase
     public void Dispose_WithNullContext_DoesNotThrow(ISkillContextAccessor accessor)
     {
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         var exception = Record.Exception(() => factory.Dispose(null!));
-        
+
         exception.Should().BeNull();
     }
 
@@ -132,17 +132,17 @@ public class DefaultSkillContextFactoryTests : TestBase
         SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         // Create context
         var context = factory.Create(skillRequest);
-        
+
         // Verify creation
         context.Should().NotBeNull();
         accessor.Received(1).SkillContext = context;
-        
+
         // Dispose context
         factory.Dispose(context);
-        
+
         // Verify disposal
         accessor.Received(1).SkillContext = null;
     }
@@ -155,10 +155,10 @@ public class DefaultSkillContextFactoryTests : TestBase
         SkillRequest skillRequest2)
     {
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         var context1 = factory.Create(skillRequest1);
         var context2 = factory.Create(skillRequest2);
-        
+
         context1.Should().NotBe(context2);
         accessor.Received(1).SkillContext = context1;
         accessor.Received(1).SkillContext = context2;
@@ -171,9 +171,9 @@ public class DefaultSkillContextFactoryTests : TestBase
     {
         var accessor = CreateSubstitute<ISkillContextAccessor>();
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         var context = factory.Create(skillRequest);
-        
+
         context.Request.Should().BeSameAs(skillRequest);
         context.Request.Request.Type.Should().Be(skillRequest.Request.Type);
         context.Request.Context.Should().Be(skillRequest.Context);
@@ -187,10 +187,10 @@ public class DefaultSkillContextFactoryTests : TestBase
     {
         var factory = new DefaultSkillContextFactory(accessor);
         var context = factory.Create(skillRequest);
-        
+
         factory.Dispose(context);
         factory.Dispose(context);
-        
+
         // Should only set to null once per dispose call
         accessor.Received(2).SkillContext = null;
     }
@@ -204,11 +204,11 @@ public class DefaultSkillContextFactoryTests : TestBase
         SkillRequest sessionEndRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
-        
+
         var launchContext = factory.Create(launchRequest);
         var intentContext = factory.Create(intentRequest);
         var sessionEndContext = factory.Create(sessionEndRequest);
-        
+
         launchContext.Request.Request.Type.Should().Be("LaunchRequest");
         intentContext.Request.Request.Type.Should().Be("IntentRequest");
         sessionEndContext.Request.Request.Type.Should().Be("SessionEndedRequest");

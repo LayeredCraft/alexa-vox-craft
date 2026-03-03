@@ -16,14 +16,14 @@ public interface IHandlerInput
     /// </summary>
     /// <value>The skill request envelope received from the Alexa service.</value>
     SkillRequest RequestEnvelope { get; }
-    
+
     /// <summary>
     /// Gets the attributes manager for reading and writing persistent and session attributes.
     /// Use this to maintain state across skill sessions and requests.
     /// </summary>
     /// <value>The attributes manager instance for state management.</value>
     IAttributesManager AttributesManager { get; }
-    
+
     /// <summary>
     /// Gets the response builder for constructing Alexa skill responses.
     /// Use this to build speech output, cards, directives, and other response elements.

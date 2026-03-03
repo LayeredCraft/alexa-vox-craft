@@ -18,15 +18,15 @@ public class ServiceProviderSpecimenBuilder(IRequestSpecification requestSpecifi
             return new NoSpecimen();
 
         var services = new ServiceCollection();
-        
+
         // Add substituted logger
         var logger = (ILogger<SkillMediator>)context.Resolve(typeof(ILogger<SkillMediator>));
         services.AddSingleton(logger);
-        
+
         // Add IHandlerInput
         var handlerInput = (IHandlerInput)context.Resolve(typeof(IHandlerInput));
         services.AddSingleton(handlerInput);
-        
+
         // Build and return the actual service provider
         return services.BuildServiceProvider();
     }

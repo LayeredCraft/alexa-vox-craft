@@ -19,7 +19,7 @@ public class AlexaName : ICommonSsml
 
     public XNode ToXml()
     {
-        return new XElement(Namespaces.TempAlexa + "name", 
-            new XAttribute("type", "first"), new XAttribute("personId",PersonId));
+        return new XElement(Namespaces.TempAlexa + "name",
+            new XAttribute("type", "first"), new XAttribute("personId", PersonId));
     }
 }

@@ -21,7 +21,7 @@ public class APLDocumentSettings
     public bool? SupportsResizing { get; set; }
 
     [JsonExtensionData]
-    public Dictionary<string,object> OtherSettings { get; set; }
+    public Dictionary<string, object> OtherSettings { get; set; }
 
     public void Add(string name, object settings)
     {

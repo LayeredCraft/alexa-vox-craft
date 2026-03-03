@@ -15,10 +15,10 @@ public class RequestExceptionProcessBehaviorTests : TestBase
     {
         // Arrange
         next.Invoke().Returns(Task.FromResult(expectedResponse));
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         await next.Received(1).Invoke();
@@ -35,17 +35,17 @@ public class RequestExceptionProcessBehaviorTests : TestBase
         // Arrange
         var testException = new InvalidOperationException("Test exception");
         next.Invoke().Returns(Task.FromException<SkillResponse>(testException));
-        
+
         exceptionHandler.CanHandle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(true));
         exceptionHandler.Handle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(handledResponse));
-        
+
         var behavior = new RequestExceptionProcessBehavior(new[] { exceptionHandler });
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(handledResponse);
         await exceptionHandler.Received(1).CanHandle(handlerInput, testException, Arg.Any<CancellationToken>());
@@ -62,16 +62,16 @@ public class RequestExceptionProcessBehaviorTests : TestBase
         // Arrange
         var testException = new InvalidOperationException("Test exception");
         next.Invoke().Returns(Task.FromException<SkillResponse>(testException));
-        
+
         exceptionHandler.CanHandle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(false));
-        
+
         var behavior = new RequestExceptionProcessBehavior(new[] { exceptionHandler });
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
-        
+
         exception.Should().Be(testException);
         await exceptionHandler.Received(1).CanHandle(handlerInput, testException, Arg.Any<CancellationToken>());
         await exceptionHandler.DidNotReceive().Handle(Arg.Any<IHandlerInput>(), Arg.Any<Exception>(), Arg.Any<CancellationToken>());
@@ -89,22 +89,22 @@ public class RequestExceptionProcessBehaviorTests : TestBase
         // Arrange
         var testException = new InvalidOperationException("Test exception");
         next.Invoke().Returns(Task.FromException<SkillResponse>(testException));
-        
+
         // First handler can handle the exception
         firstHandler.CanHandle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(true));
         firstHandler.Handle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(firstHandlerResponse));
-        
+
         // Second handler would also be able to handle it but shouldn't be called
         secondHandler.CanHandle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(true));
-        
+
         var behavior = new RequestExceptionProcessBehavior(new[] { firstHandler, secondHandler });
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(firstHandlerResponse);
         await firstHandler.Received(1).CanHandle(handlerInput, testException, Arg.Any<CancellationToken>());
@@ -125,22 +125,22 @@ public class RequestExceptionProcessBehaviorTests : TestBase
         // Arrange
         var testException = new InvalidOperationException("Test exception");
         next.Invoke().Returns(Task.FromException<SkillResponse>(testException));
-        
+
         // First handler cannot handle the exception
         firstHandler.CanHandle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(false));
-        
+
         // Second handler can handle it
         secondHandler.CanHandle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(true));
         secondHandler.Handle(handlerInput, testException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(secondHandlerResponse));
-        
+
         var behavior = new RequestExceptionProcessBehavior(new[] { firstHandler, secondHandler });
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(secondHandlerResponse);
         await firstHandler.Received(1).CanHandle(handlerInput, testException, Arg.Any<CancellationToken>());
@@ -158,13 +158,13 @@ public class RequestExceptionProcessBehaviorTests : TestBase
         // Arrange
         var testException = new InvalidOperationException("Test exception");
         next.Invoke().Returns(Task.FromException<SkillResponse>(testException));
-        
+
         var behavior = new RequestExceptionProcessBehavior(Enumerable.Empty<IExceptionHandler>());
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             behavior.Handle(handlerInput, CancellationToken, next));
-        
+
         exception.Should().Be(testException);
     }
 
@@ -174,7 +174,7 @@ public class RequestExceptionProcessBehaviorTests : TestBase
     {
         // Act & Assert
         var exception = Record.Exception(() => new RequestExceptionProcessBehavior(null!));
-        
+
         exception.Should().BeNull();
     }
 
@@ -190,21 +190,21 @@ public class RequestExceptionProcessBehaviorTests : TestBase
         // Arrange
         var argumentException = new ArgumentException("Argument exception");
         next.Invoke().Returns(Task.FromException<SkillResponse>(argumentException));
-        
+
         // Setup handlers for different exception types
         argumentHandler.CanHandle(handlerInput, Arg.Is<ArgumentException>(e => e == argumentException), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(true));
         argumentHandler.Handle(handlerInput, argumentException, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(argumentHandlerResponse));
-        
+
         invalidOpHandler.CanHandle(handlerInput, Arg.Is<InvalidOperationException>(e => true), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(true));
-        
+
         var behavior = new RequestExceptionProcessBehavior(new[] { argumentHandler, invalidOpHandler });
-        
+
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
-        
+
         // Assert
         result.Should().Be(argumentHandlerResponse);
         await argumentHandler.Received(1).CanHandle(handlerInput, argumentException, Arg.Any<CancellationToken>());

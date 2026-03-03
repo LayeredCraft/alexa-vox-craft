@@ -134,7 +134,8 @@ public class APLEnumerableValueConverter<TValue, TList> : JsonConverter<APLValue
         if (!string.IsNullOrEmpty(value.Expression))
         {
             obj = value.Expression;
-        } else if (value.IsSingle)
+        }
+        else if (value.IsSingle)
         {
             obj = value.Value!.First();
         }
@@ -205,7 +206,7 @@ public class APLValueConverterFactory : JsonConverterFactory
     {
         return _converterCache.GetOrAdd(typeToConvert, CreateConverterInternal);
     }
-    
+
     private System.Text.Json.Serialization.JsonConverter? CreateConverterInternal(Type typeToConvert)
     {
         if (_dimensionTypes.Contains(typeToConvert))

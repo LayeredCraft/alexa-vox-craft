@@ -3,7 +3,7 @@ using AlexaVoxCraft.Model.Helpers;
 
 namespace AlexaVoxCraft.Model.ConnectionTasks.Inputs;
 
-public class ScheduleFoodEstablishmentReservation:IConnectionTask
+public class ScheduleFoodEstablishmentReservation : IConnectionTask
 {
     public const string ConnectionType = "ScheduleFoodEstablishmentReservationRequest";
     public const string VersionNumber = "1";

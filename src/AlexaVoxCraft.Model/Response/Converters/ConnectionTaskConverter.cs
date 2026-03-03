@@ -30,7 +30,7 @@ public class ConnectionTaskConverter : BasePolymorphicConverter<IConnectionTask>
 
         if (string.IsNullOrWhiteSpace(typeName) || string.IsNullOrWhiteSpace(versionName))
             return null;
-        
+
         return $"{typeName}/{versionName}";
     };
 

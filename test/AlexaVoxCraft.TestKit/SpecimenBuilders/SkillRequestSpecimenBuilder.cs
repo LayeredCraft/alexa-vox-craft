@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.TestKit.RequestSpecifications;
@@ -26,7 +27,7 @@ public class SkillRequestSpecimenBuilder(IRequestSpecification requestSpecificat
             Type type => (type, ""),
             _ => throw new ArgumentException("Invalid request type", nameof(request))
         };
-        
+
         // Create request based on parameter name using as we will always need a Request
         Request requestInstance = requestType switch
         {
@@ -39,22 +40,22 @@ public class SkillRequestSpecimenBuilder(IRequestSpecification requestSpecificat
             _ when requestType == typeof(SystemExceptionRequest) || parameterName.Contains("system") => CreateSystemExceptionRequest(),
             _ => CreateLaunchRequest() // Default to launch request
         };
-        
+
         if (requestType == typeof(Request)) return requestInstance;
-        
+
         // Create real objects instead of substitutes to avoid virtual member issues
         var application = new Application { ApplicationId = "amzn1.ask.skill.test-skill-id" };
         var system = new AlexaSystem { Application = application };
         var skillContext = new Context { System = system };
-        var session = new Session { Attributes = new Dictionary<string, object>() };
+        var session = new Session { Attributes = new Dictionary<string, JsonElement>() };
 
-        var skillRequest = new SkillRequest 
-        { 
+        var skillRequest = new SkillRequest
+        {
             Context = skillContext,
             Request = requestInstance,
             Session = session
         };
-        
+
         return skillRequest;
     }
     private static LaunchRequest CreateLaunchRequest()
@@ -73,14 +74,14 @@ public class SkillRequestSpecimenBuilder(IRequestSpecification requestSpecificat
         var intentName = parameterName switch
         {
             _ when parameterName.Contains("help") => "AMAZON.HelpIntent",
-            _ when parameterName.Contains("stop") => "AMAZON.StopIntent", 
+            _ when parameterName.Contains("stop") => "AMAZON.StopIntent",
             _ when parameterName.Contains("cancel") => "AMAZON.CancelIntent",
             _ when parameterName.Contains("yes") => "AMAZON.YesIntent",
             _ when parameterName.Contains("no") => "AMAZON.NoIntent",
             _ when parameterName.Contains("custom") => "CustomIntent",
             _ => "TestIntent"
         };
-        
+
         return new IntentRequest
         {
             Type = "IntentRequest",

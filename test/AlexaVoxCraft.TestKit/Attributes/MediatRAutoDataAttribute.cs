@@ -10,6 +10,8 @@ public class MediatRAutoDataAttribute() : AutoDataAttribute(CreateFixture)
         return BaseFixtureFactory.CreateFixture(fixture =>
         {
             // Add specimen builders for SkillRequest and related types
+            fixture.Customizations.Add(new JsonElementSpecimenBuilder());
+            fixture.Customizations.Add(new JsonAttributeBagSpecimenBuilder());
             fixture.Customizations.Add(new SkillRequestSpecimenBuilder());
             fixture.Customizations.Add(new SkillRequestFactorySpecimenBuilder());
             fixture.Customizations.Add(new SkillServiceConfigurationSpecimenBuilder());
@@ -17,7 +19,7 @@ public class MediatRAutoDataAttribute() : AutoDataAttribute(CreateFixture)
             fixture.Customizations.Add(new ServiceCollectionSpecimenBuilder());
             fixture.Customizations.Add(new OptionsSpecimenBuilder());
             fixture.Customizations.Add(new RequestHandlerDelegateSpecimenBuilder());
-            
+
             // Register all ILogger<T> to use TestLogger<T> with Debug level
             fixture.Customize(new TestLoggerCustomization());
         });

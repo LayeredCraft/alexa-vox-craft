@@ -23,27 +23,27 @@ public class TestLoggerSpecimenBuilder(IRequestSpecification requestSpecificatio
             var genericArgument = type.GetGenericArguments()[0];
             var testLoggerType = typeof(TestLogger<>).MakeGenericType(genericArgument);
             var testLogger = Activator.CreateInstance(testLoggerType)!;
-            
+
             // Set minimum log level to Debug to ensure debug logs are captured
             var minLevelProperty = testLoggerType.GetProperty("MinimumLogLevel");
             minLevelProperty?.SetValue(testLogger, LogLevel.Debug);
-            
+
             return testLogger;
         }
 
         // Check if it's a parameter with generic ILogger<T>
-        if (request is ParameterInfo parameter && 
-            parameter.ParameterType.IsGenericType && 
+        if (request is ParameterInfo parameter &&
+            parameter.ParameterType.IsGenericType &&
             parameter.ParameterType.GetGenericTypeDefinition() == typeof(ILogger<>))
         {
             var genericArgument = parameter.ParameterType.GetGenericArguments()[0];
             var testLoggerType = typeof(TestLogger<>).MakeGenericType(genericArgument);
             var testLogger = Activator.CreateInstance(testLoggerType)!;
-            
+
             // Set minimum log level to Debug to ensure debug logs are captured
             var minLevelProperty = testLoggerType.GetProperty("MinimumLogLevel");
             minLevelProperty?.SetValue(testLogger, LogLevel.Debug);
-            
+
             return testLogger;
         }
 

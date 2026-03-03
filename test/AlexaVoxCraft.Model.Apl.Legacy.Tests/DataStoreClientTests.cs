@@ -42,7 +42,7 @@ public class DataStoreClientTests
     [Fact]
     public async Task QueryResultSendsCorrectly()
     {
-        var client = new DataStoreClient(new HttpClient(new ActionHandler( hr =>
+        var client = new DataStoreClient(new HttpClient(new ActionHandler(hr =>
         {
             Assert.Equal(HttpMethod.Get, hr.Method);
             Assert.Equal("https://example.com/v1/datastore/queue/x?maxResults=5&nextToken=zzz", hr.RequestUri.ToString());
@@ -51,23 +51,23 @@ public class DataStoreClientTests
 
         }, Utility.ExampleFileContent<QueuedResultResponse>("DataStore_QueryResult.json"))), "https://example.com", "xxx");
 
-        var result = await client.QueuedResultQuery("x",5,"zzz");
-        Assert.Equal(2,result.Items.Length);
-        Assert.Equal(227,result.PaginationContext.TotalCount);
+        var result = await client.QueuedResultQuery("x", 5, "zzz");
+        Assert.Equal(2, result.Items.Length);
+        Assert.Equal(227, result.PaginationContext.TotalCount);
     }
 
     [Fact]
     public async Task CancelMethodSendsCorrectly()
     {
-        var client = new DataStoreClient(new HttpClient(new ActionHandler( hr =>
+        var client = new DataStoreClient(new HttpClient(new ActionHandler(hr =>
         {
             Assert.Equal(HttpMethod.Post, hr.Method);
             Assert.Equal("https://example.com/v1/datastore/queue/x/cancel", hr.RequestUri.ToString());
-            Assert.Equal("application/json",hr.Content.Headers.ContentType.MediaType);
+            Assert.Equal("application/json", hr.Content.Headers.ContentType.MediaType);
             Assert.Equal("Bearer", hr.Headers.Authorization.Scheme);
             Assert.Equal("xxx", hr.Headers.Authorization.Parameter);
 
-        }, HttpStatusCode.NoContent)),"https://example.com","xxx");
+        }, HttpStatusCode.NoContent)), "https://example.com", "xxx");
 
         var result = await client.Cancel("x");
         Assert.True(result);

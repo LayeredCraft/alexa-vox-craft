@@ -67,4 +67,4 @@ public class JsonStringEnumConverterWithEnumMemberAttrSupport<
     {
         writer.WriteStringValue(EnumHelper.ToEnumString(value));
     }
-} 
+}

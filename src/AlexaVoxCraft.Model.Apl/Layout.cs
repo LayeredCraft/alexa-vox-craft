@@ -30,7 +30,7 @@ public class Layout
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IList<Parameter>? Parameters { get; set; }
 
-    [JsonPropertyName("items")] 
+    [JsonPropertyName("items")]
     public IList<APLComponent> Items { get; set; }
 
     public Layout AsMain(string dataSourceKey = "payload")

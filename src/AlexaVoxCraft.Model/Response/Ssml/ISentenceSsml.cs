@@ -1,5 +1,5 @@
 ﻿namespace AlexaVoxCraft.Model.Response.Ssml;
 
-public interface ISentenceSsml:ISsml
+public interface ISentenceSsml : ISsml
 {
 }

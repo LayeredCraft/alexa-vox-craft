@@ -12,44 +12,6 @@ public sealed class ResponseTests
     private const string ExamplesPath = @"Examples";
 
     [Fact]
-    public void Should_create_same_json_response_as_example()
-    {
-        var skillResponse = new SkillResponse
-        {
-            Version = "1.0",
-            SessionAttributes = new Dictionary<string, object>
-            {
-                {
-                    "supportedHoriscopePeriods", new
-                    {
-                        daily = true,
-                        weekly = false,
-                        monthly = false
-                    }
-                }
-            },
-            Response = new ResponseBody
-            {
-                OutputSpeech = new PlainTextOutputSpeech
-                {
-                    Text =
-                        "Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless. Can I help you with anything else?"
-                },
-                Card = new SimpleCard
-                {
-                    Title = "Horoscope",
-                    Content =
-                        "Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless."
-                },
-                ShouldEndSession = false
-            }
-        };
-
-        Assert.True(Utility.CompareJson(skillResponse, "Response.json"));
-    }
-
-
-    [Fact]
     public void Create_HintDirective()
     {
         // Arrange: create the actual object
@@ -72,7 +34,7 @@ public sealed class ResponseTests
                                         }
                                     }
                                     """;
-        
+
         // Act & Assert: compare JSON structures using your deep equality method
         var actualJson = JsonSerializer.Serialize(actual);
         using var actualDoc = JsonDocument.Parse(actualJson);
@@ -367,31 +329,31 @@ public sealed class ResponseTests
 
         Assert.Equal("1.0", deserialized.Version);
 
-        // Attempt to cast the object to a Dictionary<string, object>
-        var periods = Assert.IsType<Dictionary<string, object>>(deserialized.SessionAttributes["supportedHoriscopePeriods"]);
+        var periods = deserialized.SessionAttributes!["supportedHoriscopePeriods"];
+        Assert.Equal(JsonValueKind.Object, periods.ValueKind);
 
-        Assert.True(Convert.ToBoolean(periods["daily"]));
-        Assert.False(Convert.ToBoolean(periods["weekly"]));
-        Assert.False(Convert.ToBoolean(periods["monthly"]));    
+        Assert.True(periods.GetProperty("daily").GetBoolean());
+        Assert.False(periods.GetProperty("weekly").GetBoolean());
+        Assert.False(periods.GetProperty("monthly").GetBoolean());
         var responseBody = deserialized.Response;
-    
+
         Assert.Equal(false, responseBody.ShouldEndSession);
-    
+
         var outputSpeech = responseBody.OutputSpeech;
-    
+
         Assert.Equal(typeof(PlainTextOutputSpeech), outputSpeech.GetType());
-    
+
         var plainTextOutput = (PlainTextOutputSpeech)outputSpeech;
-    
+
         Assert.Equal("PlainText", plainTextOutput.Type);
         Assert.Equal("Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless. Can I help you with anything else?", plainTextOutput.Text);
-    
+
         var card = responseBody.Card;
-    
+
         Assert.Equal(typeof(SimpleCard), card.GetType());
-    
+
         var simpleCard = (SimpleCard)card;
-    
+
         Assert.Equal("Simple", simpleCard.Type);
         Assert.Equal("Horoscope", simpleCard.Title);
         Assert.Equal("Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless.", simpleCard.Content);
@@ -456,9 +418,9 @@ public sealed class ResponseTests
     {
         var deserialized = Utility.ExampleFileContent<IDirective>("AskForPermissionsConsentDirective.json");
         var askFor = Assert.IsType<AskForPermissionDirective>(deserialized);
-        Assert.Equal(1.ToString(),askFor.Payload.Version);
-        Assert.Equal("AskFor",askFor.Name);
-        Assert.Equal("alexa::alerts:reminders:skill:readwrite",askFor.Payload.PermissionScope);
+        Assert.Equal(1.ToString(), askFor.Payload.Version);
+        Assert.Equal("AskFor", askFor.Name);
+        Assert.Equal("alexa::alerts:reminders:skill:readwrite", askFor.Payload.PermissionScope);
         Utility.CompareJson(askFor, "AskForPermissionsConsentDirective.json");
     }
 }

@@ -11,7 +11,7 @@ public class AudioItemStream
     [JsonRequired]
     [JsonPropertyName("token")]
     public string Token { get; set; }
-        
+
     [JsonPropertyName("expectedPreviousToken")]
     public string ExpectedPreviousToken { get; set; }
 

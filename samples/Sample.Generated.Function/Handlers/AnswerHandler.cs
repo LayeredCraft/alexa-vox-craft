@@ -28,20 +28,20 @@ public class AnswerHandler : IRequestHandler<IntentRequest>, IRequestHandler<Use
     {
         var requestType = input.RequestEnvelope.Request.Type;
         var locale = input.RequestEnvelope.Request.Locale;
-        
+
         using var scope = _logger.BeginScope("RequestType", requestType, "Locale", locale);
-        
+
         _logger.Debug("Handling answer request of type {RequestType} in locale {Locale}", requestType, locale);
-        
+
         using var _ = _logger.TimeOperation("Answer response generation");
-        
+
         var response = await input.ResponseBuilder
             .Speak("Hello world from the Answer Request Handler!")
             .WithShouldEndSession(false)
             .GetResponse(cancellationToken);
-            
+
         _logger.Debug("Generated answer response with speech output");
-        
+
         return response;
     }
 }

@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Audio;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<AudioDuration>))]
 public enum AudioDuration
 {
-    [EnumMember(Value="auto")]
+    [EnumMember(Value = "auto")]
     Auto,
-    [EnumMember(Value="trimToParent")]
+    [EnumMember(Value = "trimToParent")]
     TrimToParent
 }

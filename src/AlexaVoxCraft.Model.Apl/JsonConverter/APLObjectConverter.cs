@@ -11,7 +11,7 @@ public class APLObjectConverter : JsonConverter<APLValue<object>>
     public override APLValue<object>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var returnValue = new APLValue<object>();
-        
+
         returnValue.Value = _innerConverter.Read(ref reader, typeToConvert, options);
 
         return returnValue;

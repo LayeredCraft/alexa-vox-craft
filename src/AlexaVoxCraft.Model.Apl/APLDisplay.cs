@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<APLDisplay>))]
 public enum APLDisplay
 {
-    [EnumMember(Value="none")]
+    [EnumMember(Value = "none")]
     None,
     [EnumMember(Value = "normal")]
     Normal,

@@ -7,10 +7,10 @@ namespace AlexaVoxCraft.Model.Apl.Extensions.SmartMotion;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<WakeWordResponse>))]
 public enum WakeWordResponse
 {
-    [EnumMember(Value="doNotMoveOnWakeWord")]
+    [EnumMember(Value = "doNotMoveOnWakeWord")]
     DoNotMoveOnWakeWord,
-    [EnumMember(Value="followOnWakeWord")]
+    [EnumMember(Value = "followOnWakeWord")]
     FollowOnWakeWord,
-    [EnumMember(Value="turnToWakeWord")]
+    [EnumMember(Value = "turnToWakeWord")]
     TurnToWakeWord
 }

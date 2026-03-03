@@ -13,7 +13,7 @@ public class GlobalTestFramework : ITestFramework
     {
         // ✅ Your global setup logic here
         GlobalTestInitializer.EnsureInitialized(); // 👈 Your static setup
-        
+
         // ✅ Delegate to built-in framework
         _framework = new XunitTestFramework();
     }
@@ -21,7 +21,7 @@ public class GlobalTestFramework : ITestFramework
     public string TestFrameworkDisplayName => _framework.TestFrameworkDisplayName;
 
     public ITestFrameworkDiscoverer GetDiscoverer(Assembly assembly) => _framework.GetDiscoverer(assembly);
-    
+
     public ITestFrameworkExecutor GetExecutor(Assembly assembly) => _framework.GetExecutor(assembly);
 
     public void SetTestPipelineStartup(ITestPipelineStartup testPipelineStartup) => _framework.SetTestPipelineStartup(testPipelineStartup);

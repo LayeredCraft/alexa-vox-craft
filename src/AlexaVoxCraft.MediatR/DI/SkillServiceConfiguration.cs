@@ -13,18 +13,18 @@ public class SkillServiceConfiguration
     /// The configuration section name used for binding this configuration from appsettings.json.
     /// </summary>
     public const string SectionName = "SkillConfiguration";
-    
+
     /// <summary>
     /// Gets or sets a custom user agent string to include in HTTP requests made by the skill.
     /// </summary>
     public string? CustomUserAgent { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the Alexa skill ID used for request validation.
     /// This should match the skill ID configured in the Alexa Developer Console.
     /// </summary>
     public string? SkillId { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the default voice name to use for speech synthesis in responses.
     /// When set, all speech output from <see cref="Response.IResponseBuilder.Speak(string?)"/>
@@ -67,7 +67,7 @@ public class SkillServiceConfiguration
     /// A larger buffer provides more safety but reduces available execution time.
     /// </remarks>
     public int CancellationTimeoutBufferMilliseconds { get; set; } = 250;
-    
+
     /// <summary>
     /// Gets the list of assemblies to scan for request handlers and other skill components.
     /// </summary>
@@ -80,7 +80,7 @@ public class SkillServiceConfiguration
     /// <returns>This configuration instance for method chaining.</returns>
     public SkillServiceConfiguration RegisterServicesFromAssemblyContaining<T>()
         => RegisterServicesFromAssemblyContaining(typeof(T));
-    
+
     /// <summary>
     /// Registers request handlers and services from the assembly containing the specified type.
     /// </summary>
@@ -88,7 +88,7 @@ public class SkillServiceConfiguration
     /// <returns>This configuration instance for method chaining.</returns>
     public SkillServiceConfiguration RegisterServicesFromAssemblyContaining(Type type)
         => RegisterServicesFromAssembly(type.Assembly);
-    
+
     /// <summary>
     /// Registers request handlers and services from the specified assembly.
     /// </summary>
@@ -100,7 +100,7 @@ public class SkillServiceConfiguration
 
         return this;
     }
-    
+
     /// <summary>
     /// Registers request handlers and services from multiple assemblies.
     /// </summary>

@@ -12,6 +12,6 @@ public class ExampleTaskResolver : IConnectionTaskResolver
 
     public Type? Resolve(JsonElement element)
     {
-        return  typeof(ExampleTask);
+        return typeof(ExampleTask);
     }
 }

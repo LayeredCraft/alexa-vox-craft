@@ -7,10 +7,10 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<SliderType>))]
 public enum SliderType
 {
-    [EnumMember(Value="default")]
+    [EnumMember(Value = "default")]
     Default,
-    [EnumMember(Value="icon")]
+    [EnumMember(Value = "icon")]
     Icon,
-    [EnumMember(Value="text")]
+    [EnumMember(Value = "text")]
     Text
 }

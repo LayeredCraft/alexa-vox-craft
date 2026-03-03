@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Commands;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<SetPagePosition>))]
 public enum SetPagePosition
 {
-    [EnumMember(Value="absolute")]
+    [EnumMember(Value = "absolute")]
     Absolute,
-    [EnumMember(Value="relative")]
+    [EnumMember(Value = "relative")]
     Relative
 }

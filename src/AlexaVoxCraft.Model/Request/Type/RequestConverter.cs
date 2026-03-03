@@ -48,7 +48,7 @@ public class RequestConverter : JsonConverter<Request>
         {
             throw new JsonException("'type' property is null or empty.");
         }
-       
+
         var typeResolver = RequestTypeResolvers.FirstOrDefault(c => c.CanResolve(requestType));
 
         if (typeResolver is null)

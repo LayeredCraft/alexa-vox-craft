@@ -22,16 +22,16 @@ public class RequestHandlerWrapperTests : TestBase
         // Arrange
         handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
         handler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
-        
+
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
-        
+
         var serviceProvider = services.BuildServiceProvider();
         var wrapper = new RequestHandlerWrapperImpl<LaunchRequest>();
-        
+
         // Act
         var result = await wrapper.Handle(skillRequest, serviceProvider, CancellationToken);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         await handler.Received(1).CanHandle(handlerInput, Arg.Any<CancellationToken>());
@@ -52,17 +52,17 @@ public class RequestHandlerWrapperTests : TestBase
         handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
         defaultHandler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
         defaultHandler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
-        
+
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
         services.AddSingleton(defaultHandler);
-        
+
         var serviceProvider = services.BuildServiceProvider();
         var wrapper = new RequestHandlerWrapperImpl<LaunchRequest>();
-        
+
         // Act
         var result = await wrapper.Handle(skillRequest, serviceProvider, CancellationToken);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         await defaultHandler.Received(1).CanHandle(handlerInput, Arg.Any<CancellationToken>());
@@ -79,18 +79,18 @@ public class RequestHandlerWrapperTests : TestBase
     {
         // Arrange
         handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
-        
+
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
         // No default handler registered
-        
+
         var serviceProvider = services.BuildServiceProvider();
         var wrapper = new RequestHandlerWrapperImpl<LaunchRequest>();
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             wrapper.Handle(skillRequest, serviceProvider, CancellationToken));
-        
+
         exception.Should().BeOfType<InvalidOperationException>();
         exception.Message.Should().Contain("Handler was not found for request of type");
     }
@@ -107,18 +107,18 @@ public class RequestHandlerWrapperTests : TestBase
         // Arrange
         handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
         defaultHandler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
-        
+
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
         services.AddSingleton(defaultHandler);
-        
+
         var serviceProvider = services.BuildServiceProvider();
         var wrapper = new RequestHandlerWrapperImpl<LaunchRequest>();
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             wrapper.Handle(skillRequest, serviceProvider, CancellationToken));
-        
+
         exception.Should().BeOfType<InvalidOperationException>();
         exception.Message.Should().Contain("Handler was not found for request of type");
     }
@@ -137,9 +137,9 @@ public class RequestHandlerWrapperTests : TestBase
         // Arrange
         handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
         handler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
-        
+
         var executionOrder = new List<string>();
-        
+
         behavior1.Handle(handlerInput, Arg.Any<CancellationToken>(), Arg.Any<RequestHandlerDelegate>())
             .Returns(async call =>
             {
@@ -148,7 +148,7 @@ public class RequestHandlerWrapperTests : TestBase
                 executionOrder.Add("Behavior1-End");
                 return result;
             });
-        
+
         behavior2.Handle(handlerInput, Arg.Any<CancellationToken>(), Arg.Any<RequestHandlerDelegate>())
             .Returns(async call =>
             {
@@ -157,18 +157,18 @@ public class RequestHandlerWrapperTests : TestBase
                 executionOrder.Add("Behavior2-End");
                 return result;
             });
-        
+
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
         services.AddSingleton(behavior2);
         services.AddSingleton(behavior1);
-        
+
         var serviceProvider = services.BuildServiceProvider();
         var wrapper = new RequestHandlerWrapperImpl<LaunchRequest>();
-        
+
         // Act
         var result = await wrapper.Handle(skillRequest, serviceProvider, CancellationToken);
-        
+
         // Assert
         result.Should().Be(expectedResponse);
         // Behaviors should execute in reverse order (behavior2 wraps behavior1)
@@ -184,11 +184,11 @@ public class RequestHandlerWrapperTests : TestBase
         // Arrange - Intentionally not registering IHandlerInput
         var serviceProvider = services.BuildServiceProvider();
         var wrapper = new RequestHandlerWrapperImpl<LaunchRequest>();
-        
+
         // Act & Assert
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             wrapper.Handle(skillRequest, serviceProvider, CancellationToken));
-        
+
         exception.Should().BeOfType<InvalidOperationException>();
     }
 }

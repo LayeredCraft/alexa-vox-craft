@@ -1,6 +1,6 @@
 ﻿namespace AlexaVoxCraft.Model.Request.Type.Converters;
 
-public class SkillConnectionRequestTypeResolver:IRequestTypeResolver
+public class SkillConnectionRequestTypeResolver : IRequestTypeResolver
 {
     public bool CanResolve(string requestType)
     {

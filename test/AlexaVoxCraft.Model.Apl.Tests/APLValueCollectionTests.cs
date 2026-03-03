@@ -4,7 +4,7 @@ using AlexaVoxCraft.Model.Apl.JsonConverter;
 
 namespace AlexaVoxCraft.Model.Apl.Tests;
 
-public class AplValueCollectionTests : TestBase
+public class AplValueCollectionTests : TestBase<AplValueCollectionTests>
 {
     private static JsonSerializerOptions CreateOptions(bool alwaysOutputArray)
     {

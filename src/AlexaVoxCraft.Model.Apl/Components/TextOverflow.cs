@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<TextOverflow>))]
 public enum TextOverflow
 {
-    [EnumMember(Value= "marquee")]
+    [EnumMember(Value = "marquee")]
     Marquee,
-    [EnumMember(Value="wrap")]
+    [EnumMember(Value = "wrap")]
     Wrap
 }

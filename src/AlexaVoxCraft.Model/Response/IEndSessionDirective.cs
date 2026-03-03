@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Response;
 
-public interface IEndSessionDirective: IDirective
+public interface IEndSessionDirective : IDirective
 {
     [JsonIgnore]
     bool? ShouldEndSession { get; }

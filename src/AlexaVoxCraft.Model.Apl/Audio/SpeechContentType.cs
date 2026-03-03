@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Audio;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<SpeechContentType>))]
 public enum SpeechContentType
 {
-    [EnumMember(Value="PlainText")]
+    [EnumMember(Value = "PlainText")]
     PlainText,
-    [EnumMember(Value="SSML")]
+    [EnumMember(Value = "SSML")]
     Ssml
 }

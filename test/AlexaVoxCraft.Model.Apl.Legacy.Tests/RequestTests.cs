@@ -47,8 +47,8 @@ public class RequestTests
         Assert.Equal("1.0.0", installedRequest.Payload.PackageVersion);
 
         var usage = Assert.Single(installedRequest.Payload.Usages);
-        Assert.Equal("amzn1.ask.package.v1.instance.v1.{uuid}",usage.InstanceId);
-        Assert.Equal("FAVORITE",usage.Location);
+        Assert.Equal("amzn1.ask.package.v1.instance.v1.{uuid}", usage.InstanceId);
+        Assert.Equal("FAVORITE", usage.Location);
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public class RequestTests
         var touchWrapper = Assert.IsType<APLCommandSource>(typedReq.Source);
         Assert.Equal("Press", touchWrapper.Handler);
     }
-    
+
     [Fact]
     public void CanReadSessionAttributes()
     {

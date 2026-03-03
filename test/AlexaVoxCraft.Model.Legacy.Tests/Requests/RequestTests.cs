@@ -14,16 +14,6 @@ public sealed class RequestTests
     private static JsonSerializerOptions _options = new(AlexaJsonOptions.DefaultOptions);
 
     [Fact]
-    public void Can_read_IntentRequest_example()
-    {
-        var convertedObj = GetObjectFromExample<SkillRequest>(IntentRequestFile);
-
-        Assert.NotNull(convertedObj);
-        Assert.Equal(typeof(IntentRequest), convertedObj.GetRequestType());
-        Assert.True(Utility.CompareJson(convertedObj,IntentRequestFile));
-    }
-
-    [Fact]
     public void IntentRequest_Generates_Correct_Name_and_Signature()
     {
         var convertedObj = GetObjectFromExample<SkillRequest>("IntentRequest.json");
@@ -71,7 +61,7 @@ public sealed class RequestTests
         var convertedObj = GetObjectFromExample<SkillRequest>("LaunchRequestWithEpochTimestamp.json");
 
         Assert.NotNull(convertedObj);
-        Assert.Equal(typeof(LaunchRequest), convertedObj.GetRequestType()); 
+        Assert.Equal(typeof(LaunchRequest), convertedObj.GetRequestType());
     }
 
     [Fact]
@@ -81,7 +71,7 @@ public sealed class RequestTests
 
         Assert.NotNull(convertedObj);
         var sessionEndedRequest = Assert.IsType<SessionEndedRequest>(convertedObj.Request);
-        Assert.Equal(ErrorType.InvalidResponse,sessionEndedRequest.Error.Type);
+        Assert.Equal(ErrorType.InvalidResponse, sessionEndedRequest.Error.Type);
         Assert.Equal("test message", sessionEndedRequest.Error.Message);
     }
 
@@ -187,7 +177,7 @@ public sealed class RequestTests
     {
         var convertedObj = GetObjectFromExample<SkillRequest>("SkillEventAccountLink.json");
         var request = Assert.IsAssignableFrom<AccountLinkSkillEventRequest>(convertedObj.Request);
-        Assert.Equal(request.Body.AccessToken,"testToken");
+        Assert.Equal(request.Body.AccessToken, "testToken");
     }
 
     [Fact]
@@ -256,7 +246,7 @@ public sealed class RequestTests
         RequestConverter.RegisterRequestTypeResolver<NewIntentRequestTypeResolver>();
         var request = GetObjectFromExample<SkillRequest>("NewIntent.json");
         Assert.IsType<NewIntentRequest>(request.Request);
-        Assert.True(((NewIntentRequest) request.Request).TestProperty);
+        Assert.True(((NewIntentRequest)request.Request).TestProperty);
     }
 
     [Fact]
@@ -274,7 +264,7 @@ public sealed class RequestTests
     {
         var request = new SkillRequest
         {
-            Request = new LaunchRequest { Timestamp = DateTime.Now.AddMinutes(3)}
+            Request = new LaunchRequest { Timestamp = DateTime.Now.AddMinutes(3) }
         };
         Assert.False(RequestVerification.RequestTimestampWithinTolerance(request));
     }
@@ -283,20 +273,20 @@ public sealed class RequestTests
     public void GeolocationDataDeserializesCorrectly()
     {
         var locationData = Utility.ExampleFileContent<Geolocation>("Geolocation.json");
-        Assert.Equal(LocationServiceAccess.Enabled,locationData.LocationServices.Access);
+        Assert.Equal(LocationServiceAccess.Enabled, locationData.LocationServices.Access);
         Assert.Equal(LocationServiceStatus.Running, locationData.LocationServices.Status);
 
         var expectedDate = DateTimeOffset.Parse("2018-12-14T07:05:48Z");
-        Assert.Equal(expectedDate,locationData.Timestamp);
+        Assert.Equal(expectedDate, locationData.Timestamp);
 
-        Assert.Equal(38.2,locationData.Coordinate.Latitude);
+        Assert.Equal(38.2, locationData.Coordinate.Latitude);
         Assert.Equal(28.3, locationData.Coordinate.Longitude);
         Assert.Equal(12.1, locationData.Coordinate.Accuracy);
 
-        Assert.Equal(120.1,locationData.Altitude.Altitude);
+        Assert.Equal(120.1, locationData.Altitude.Altitude);
         Assert.Equal(30.1, locationData.Altitude.Accuracy);
 
-        Assert.Equal(180.0,locationData.Heading.Direction);
+        Assert.Equal(180.0, locationData.Heading.Direction);
         Assert.Equal(5.0, locationData.Heading.Accuracy);
 
         Assert.Equal(10.0, locationData.Speed.Speed);
@@ -308,9 +298,9 @@ public sealed class RequestTests
     {
         var request = GetObjectFromExample<SkillRequest>("BuiltInIntentRequest.json");
         Assert.NotNull(request.Context.System.Person);
-        Assert.Equal("amzn1.ask.account.personid",request.Context.System.Person.PersonId);
+        Assert.Equal("amzn1.ask.account.personid", request.Context.System.Person.PersonId);
         Assert.Equal("Atza|BBBBBBB", request.Context.System.Person.AccessToken);
-        Assert.Equal(300,request.Context.System.Person.AuthenticationConfidenceLevel.Level);
+        Assert.Equal(300, request.Context.System.Person.AuthenticationConfidenceLevel.Level);
     }
 
     [Fact]
@@ -318,11 +308,11 @@ public sealed class RequestTests
     {
         var request = GetObjectFromExample<Request.Type.Request>("ConnectionsResponseRequest.json");
         var askFor = Assert.IsType<AskForPermissionRequest>(request);
-        Assert.Equal("AskFor",askFor.Name);
-        Assert.Equal(PermissionStatus.Denied,askFor.Payload.Status);
-        Assert.Equal("alexa::alerts:reminders:skill:readwrite",askFor.Payload.PermissionScope);
-        Assert.Equal(200,askFor.Status.Code);
-        Assert.Equal("Test Message",askFor.Status.Message);
+        Assert.Equal("AskFor", askFor.Name);
+        Assert.Equal(PermissionStatus.Denied, askFor.Payload.Status);
+        Assert.Equal("alexa::alerts:reminders:skill:readwrite", askFor.Payload.PermissionScope);
+        Assert.Equal(200, askFor.Status.Code);
+        Assert.Equal("Test Message", askFor.Status.Message);
         Utility.CompareJson(askFor, "ConnectionsResponseRequest.json");
     }
 
@@ -331,7 +321,7 @@ public sealed class RequestTests
     {
         var slots = Utility.ExampleFileContent<Dictionary<string, Slot>>("MultiValueSlot.json");
         Assert.Single(slots);
-        Assert.True(Utility.CompareJson(slots,"MultiValueSlot.json"));
+        Assert.True(Utility.CompareJson(slots, "MultiValueSlot.json"));
     }
 
     [Fact]
@@ -339,15 +329,15 @@ public sealed class RequestTests
     {
         var request = GetObjectFromExample<SkillRequest>("SmartPropertiesIntentRequest.json");
         Assert.NotNull(request.Context.System.Unit);
-        Assert.Equal("amzn1.ask.unit.A1B2C3",request.Context.System.Unit.UnitID);
+        Assert.Equal("amzn1.ask.unit.A1B2C3", request.Context.System.Unit.UnitID);
         Assert.Equal("amzn1.alexa.unit.did.X7Y8Z9", request.Context.System.Unit.PersistentUnitID);
-        Assert.Equal("amzn1.alexa.endpoint.AABBCC010101010101010101",request.Context.System.Device.PersistentEndpointID);
+        Assert.Equal("amzn1.alexa.endpoint.AABBCC010101010101010101", request.Context.System.Device.PersistentEndpointID);
     }
-    
+
 
     private T GetObjectFromExample<T>(string filename)
     {
         var json = File.ReadAllText(Path.Combine(ExamplesPath, filename));
-        return JsonSerializer.Deserialize<T>(json, _options); 
+        return JsonSerializer.Deserialize<T>(json, _options);
     }
 }

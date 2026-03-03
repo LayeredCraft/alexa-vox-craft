@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.Commands;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ItemAlignment>))]
 public enum ItemAlignment
 {
-    [EnumMember(Value="first")]
+    [EnumMember(Value = "first")]
     First,
     [EnumMember(Value = "center")]
     Center,

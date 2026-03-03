@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.Commands;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ControlMediaCommand>))]
 public enum ControlMediaCommand
 {
-    [EnumMember(Value="play")]
+    [EnumMember(Value = "play")]
     Play,
     [EnumMember(Value = "pause")]
     Pause,

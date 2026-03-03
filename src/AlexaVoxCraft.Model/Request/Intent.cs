@@ -7,9 +7,11 @@ public class Intent
     private string _name;
 
     [JsonPropertyName("name")]
-    public string Name {
+    public string Name
+    {
         get { return _name; }
-        set {
+        set
+        {
             _name = value;
             Signature = value;
         }

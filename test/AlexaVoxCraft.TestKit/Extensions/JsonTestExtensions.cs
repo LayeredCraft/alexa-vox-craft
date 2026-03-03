@@ -9,13 +9,13 @@ public static class JsonTestExtensions
     {
         // Serialize to JSON
         var originalJson = JsonSerializer.Serialize(actual, AlexaJsonOptions.DefaultOptions);
-        
+
         // Deserialize back to object
         var deserialized = JsonSerializer.Deserialize<T>(originalJson, AlexaJsonOptions.DefaultOptions);
-        
+
         // Verify they match
         var deserializedJson = JsonSerializer.Serialize(deserialized, AlexaJsonOptions.DefaultOptions);
-        
+
         deserializedJson.Should().Be(originalJson);
     }
 }

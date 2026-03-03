@@ -11,19 +11,24 @@ public class VideoSource : IJsonSerializable<VideoSource>
 {
     [JsonPropertyName("url")] public APLValue<Uri> Uri { get; set; }
 
-    [JsonPropertyName("description")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("description")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string> Description { get; set; }
 
-    [JsonPropertyName("duration")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("duration")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int?> DurationMilliseconds { get; set; }
 
-    [JsonPropertyName("repeatCount")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("repeatCount")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int?> RepeatCount { get; set; }
 
-    [JsonPropertyName("offset")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("offset")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int?> Offset { get; set; }
 
-    [JsonPropertyName("textTrack")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("textTrack")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<TextTrack> TextTrack { get; set; }
 
     public static List<VideoSource> FromUrl(string url)

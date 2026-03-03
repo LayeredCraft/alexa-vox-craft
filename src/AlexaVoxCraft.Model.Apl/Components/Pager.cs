@@ -18,7 +18,7 @@ public class Pager : ActionableComponent, IJsonSerializable<Pager>
 
     public Pager(IEnumerable<APLComponent> items)
     {
-        Items = [..items];
+        Items = [.. items];
     }
 
     [JsonPropertyName("type")]

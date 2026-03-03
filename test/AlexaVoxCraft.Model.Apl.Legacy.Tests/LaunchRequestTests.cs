@@ -25,7 +25,7 @@ public class LaunchRequestTests
     public void APLInterfaceDetailsReturnsVersion()
     {
         var request = Utility.ExampleFileContent<SkillRequest>("LaunchRequest.json");
-        Assert.Equal(APLDocumentVersion.Unknown,request.APLInterfaceDetails().Runtime.MaxVersion);
+        Assert.Equal(APLDocumentVersion.Unknown, request.APLInterfaceDetails().Runtime.MaxVersion);
         Assert.Equal("1.21", request.APLInterfaceDetails().Runtime.MaxVersionString);
     }
 
@@ -41,7 +41,7 @@ public class LaunchRequestTests
     public void ViewportArrayTypeDeserializesCorrectly()
     {
         var request = Utility.ExampleFileContent<APLSkillRequest>("LaunchRequest.json");
-        Assert.Equal(2,request.Context.Viewports.Length);
+        Assert.Equal(2, request.Context.Viewports.Length);
         Assert.Single(request.Context.Viewports.OfType<APLViewport>());
         Assert.Single(request.Context.Viewports.OfType<APLTViewport>());
     }
@@ -51,7 +51,7 @@ public class LaunchRequestTests
     {
         var request = Utility.ExampleFileContent<APLSkillRequest>("LaunchRequest.json");
         var viewport = request.Context.Viewports.OfType<APLViewport>().First();
-        Assert.Equal(ViewportShape.Rectangle,viewport.Shape);
+        Assert.Equal(ViewportShape.Rectangle, viewport.Shape);
         Assert.Equal(160, viewport.DPI);
         Assert.Equal("STANDARD", viewport.PresentationType);
         Assert.False(viewport.CanRotate);
@@ -59,9 +59,9 @@ public class LaunchRequestTests
         Assert.NotNull(viewport.Configuration.Current);
         var config = viewport.Configuration.Current;
         Assert.NotNull(config.Video);
-        Assert.Equal(2,config.Video.Codecs.Length);
+        Assert.Equal(2, config.Video.Codecs.Length);
 
-        Assert.Equal("DISCRETE",config.Size.Type);
+        Assert.Equal("DISCRETE", config.Size.Type);
         Assert.Equal(1024, config.Size.PixelWidth);
         Assert.Equal(600, config.Size.PixelHeight);
     }
@@ -71,16 +71,16 @@ public class LaunchRequestTests
     {
         var request = Utility.ExampleFileContent<APLSkillRequest>("LaunchRequest.json");
         var viewport = request.Context.Viewports.OfType<APLTViewport>().First();
-            
+
         var profile = Assert.Single(viewport.SupportedProfiles);
-        Assert.Equal(APLTProfile.FourCharacterClock,profile);
-        Assert.Equal(4,viewport.LineLength);
-        Assert.Equal(1,viewport.LineCount);
-        Assert.Equal(APLTFormat.SevenSegment,viewport.Format);
+        Assert.Equal(APLTProfile.FourCharacterClock, profile);
+        Assert.Equal(4, viewport.LineLength);
+        Assert.Equal(1, viewport.LineCount);
+        Assert.Equal(APLTFormat.SevenSegment, viewport.Format);
         var segment = Assert.Single(viewport.InterSegments);
-        Assert.Equal(2,segment.X);
-        Assert.Equal(0,segment.Y);
-        Assert.Equal(3,segment.Characters.Length);
+        Assert.Equal(2, segment.X);
+        Assert.Equal(0, segment.Y);
+        Assert.Equal(3, segment.Characters.Length);
     }
 
     [Fact(Skip = "Temporarily skipping due to CI issues")]
@@ -99,8 +99,8 @@ public class LaunchRequestTests
         Assert.Null(component.Tags.Viewport);
         var child = Assert.Single(component.Children);
 
-        Assert.Equal("fadeHelloTextButton",child.Id);
-        Assert.Equal(":1002",child.Uid);
+        Assert.Equal("fadeHelloTextButton", child.Id);
+        Assert.Equal(":1002", child.Uid);
         Assert.True(child.Tags.Clickable);
         Assert.False(child.Tags.Focused);
     }

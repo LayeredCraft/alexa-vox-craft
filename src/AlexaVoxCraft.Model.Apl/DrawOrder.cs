@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<DrawOrder>))]
 public enum DrawOrder
 {
-    [EnumMember(Value="nextAbove")]
+    [EnumMember(Value = "nextAbove")]
     NextAbove,
     [EnumMember(Value = "nextBelow")]
     NextBelow,

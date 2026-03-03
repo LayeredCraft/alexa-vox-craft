@@ -16,7 +16,7 @@ public static class ServiceRegistrar
         var assembliesToScan = settings.AssembliesToRegister.Distinct().ToArray();
 
         services.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<>), assembliesToScan, true);
-        
+
         // Single-pass enumeration with grouped filtering to minimize memory usage
         foreach (var type in assembliesToScan.SelectMany(a => a.DefinedTypes).Where(t => t.IsConcrete()))
         {
@@ -25,13 +25,13 @@ public static class ServiceRegistrar
             {
                 services.TryAddTransient(typeof(IDefaultRequestHandler), type);
             }
-            
+
             // Register persistence adapters
             if (type.CanBeCastTo(typeof(IPersistenceAdapter)))
             {
                 services.TryAddSingleton(typeof(IPersistenceAdapter), type);
             }
-            
+
             // Register pipeline behaviors
             if (type.CanBeCastTo(typeof(IExceptionHandler)))
             {
@@ -47,18 +47,18 @@ public static class ServiceRegistrar
             }
         }
     }
-    
+
     private static void ConnectImplementationsToTypesClosing(this IServiceCollection services,
         Type openRequestInterface, IEnumerable<Assembly> assembliesToScan, bool addIfAlreadyExists)
     {
         var concretions = new List<Type>();
         var interfaces = new List<Type>();
-        
+
         foreach (var type in assembliesToScan.SelectMany(a => a.DefinedTypes).Where(t => !t.IsOpenGeneric()))
         {
             var interfaceTypes = type.FindInterfacesThatClose(openRequestInterface);
             var hasInterfaces = false;
-            
+
             foreach (var interfaceType in interfaceTypes)
             {
                 hasInterfaces = true;
@@ -85,7 +85,7 @@ public static class ServiceRegistrar
                 // Single enumeration with compound predicate to avoid intermediate allocation
                 var candidateTypes = concretions.Where(x => x.CanBeCastTo(@interface));
                 var exactMatches = candidateTypes.ToList();
-                
+
                 // Apply additional filtering only if multiple matches exist
                 if (exactMatches.Count > 1)
                 {
@@ -155,7 +155,7 @@ public static class ServiceRegistrar
 
         return pluggedType == pluginType || pluginType.GetTypeInfo().IsAssignableFrom(pluggedType.GetTypeInfo());
     }
-    
+
     private static bool IsOpenGeneric(this Type type) =>
         type.GetTypeInfo().IsGenericTypeDefinition || type.GetTypeInfo().ContainsGenericParameters;
 
@@ -206,7 +206,7 @@ public static class ServiceRegistrar
         services.TryAddTransient<IHandlerInput, DefaultHandlerInput>();
         services.TryAddScoped<IAttributesManager, AttributesManager>();
         services.TryAddScoped<IResponseBuilder, DefaultResponseBuilder>();
-        services.TryAddTransientExact(typeof(IPipelineBehavior), typeof( PerformanceLoggingBehavior));
+        services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(PerformanceLoggingBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestInterceptorBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(ResponseInterceptorBehavior));
         services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestExceptionProcessBehavior));

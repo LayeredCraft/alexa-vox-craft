@@ -36,7 +36,7 @@ public class APLTransformer
 
     public static APLTransformer SsmlToSpeech(string inputPath, string outputName)
     {
-        return new APLTransformer("ssmlToSpeech",inputPath,outputName);
+        return new APLTransformer("ssmlToSpeech", inputPath, outputName);
     }
 
     public static APLTransformer SsmlToText(string inputPath, string outputName)
@@ -51,11 +51,11 @@ public class APLTransformer
 
     public static APLTransformer TextToSpeech(string inputPath, string outputName)
     {
-        return new APLTransformer("textToSpeech",inputPath,outputName);
+        return new APLTransformer("textToSpeech", inputPath, outputName);
     }
 
     public static APLTransformer AplAudioToSpeech(string template, string outputName)
     {
-        return new APLTransformer("aplAudioToSpeech", outputName){Template=template};
+        return new APLTransformer("aplAudioToSpeech", outputName) { Template = template };
     }
 }

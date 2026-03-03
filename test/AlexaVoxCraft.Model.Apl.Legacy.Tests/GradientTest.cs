@@ -11,12 +11,12 @@ public class GradientTest
     {
         _output = output;
     }
-    
+
     [Fact]
     public void LinearGradient()
     {
         // APLSupport.Add();
-        
+
         var expectedRaw = @"{
         ""type"": ""linear"",
         ""colorRange"": [""white"", ""transparent""],
@@ -40,7 +40,7 @@ public class GradientTest
         var diffs = new List<string>();
 
         var areEqual = expectedElement.JsonElementDeepEquals(actualElement, "", diffs);
-        
+
         if (!areEqual)
         {
             _output.WriteLine("❌ JSON DeepEquals failed. Differences:");

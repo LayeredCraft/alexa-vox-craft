@@ -24,15 +24,15 @@ public static class Utility
 
         var actualString = actualNode.ToJsonString();
         var expectedString = expectedNode.ToJsonString();
-        
+
         // Re-parse into JsonDocuments
         using var cleanedActual = JsonDocument.Parse(actualNode.ToJsonString());
         using var cleanedExpected = JsonDocument.Parse(expectedNode.ToJsonString());
 
         // Compare with deep diff
         var diffs = new List<string>();
-        var equal = cleanedActual.RootElement.JsonElementDeepEquals(cleanedExpected.RootElement, "", diffs);  
-        
+        var equal = cleanedActual.RootElement.JsonElementDeepEquals(cleanedExpected.RootElement, "", diffs);
+
         if (!equal && output is not null)
         {
             output.WriteLine("❌ JSON DeepEquals failed. Differences:");
@@ -74,7 +74,7 @@ public static class Utility
             root.RemovePath(path);
         }
     }
-    
+
     /// <summary>
     /// Removes a single path (dot-separated) from the JsonNode.
     /// </summary>

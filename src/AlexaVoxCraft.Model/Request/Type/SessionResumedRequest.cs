@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Request.Type;
 
-public class SessionResumedRequest:Request
+public class SessionResumedRequest : Request
 {
     [JsonPropertyName("originIpAddress")]
     public string OriginIpAddress { get; set; }

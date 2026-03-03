@@ -8,7 +8,7 @@ public class ConnectionResponseRequest<T> : ConnectionResponseRequest
     public T Payload { get; set; }
 }
 
-public class ConnectionResponseRequest:Request
+public class ConnectionResponseRequest : Request
 {
     [JsonPropertyName("name")]
     public string Name { get; set; }

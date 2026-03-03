@@ -16,6 +16,6 @@ public abstract class Request
     [JsonPropertyName("locale")]
     public string Locale { get; set; }
 
-    [JsonPropertyName("timestamp"),JsonConverter(typeof(MixedDateTimeConverter))]
+    [JsonPropertyName("timestamp"), JsonConverter(typeof(MixedDateTimeConverter))]
     public DateTime Timestamp { get; set; }
 }

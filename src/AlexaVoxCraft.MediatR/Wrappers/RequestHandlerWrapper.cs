@@ -25,11 +25,11 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
         {
             var handlers = GetHandlers<IRequestHandler<TRequestType>>(serviceProvider);
             var executionOrder = 0;
-            
+
             foreach (var handler in handlers)
             {
                 var handlerType = handler.GetType().Name;
-                
+
                 // Track handler resolution attempt
                 AlexaVoxCraftTelemetry.HandlerResolutionAttempts.Add(1,
                     new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerType, handlerType),
@@ -38,7 +38,7 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                 // Instrument CanHandle() call
                 using var resolutionSpan = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.HandlerResolution, ActivityKind.Internal);
                 using var resolutionTimer = AlexaVoxCraftTelemetry.TimeHandlerResolution();
-                
+
                 resolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerType, handlerType);
                 resolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerExecutionOrder, executionOrder);
                 resolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerIsDefault, false);
@@ -54,9 +54,9 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                     resolutionSpan?.SetStatus(ActivityStatusCode.Error, ex.Message);
                     throw;
                 }
-                
+
                 resolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerCanHandle, canHandle);
-                
+
                 if (canHandle)
                 {
                     // Track handler execution
@@ -67,7 +67,7 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                     // Instrument Handle() call
                     using var executionSpan = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.Handler, ActivityKind.Internal);
                     using var executionTimer = AlexaVoxCraftTelemetry.TimeHandlerExecution(handlerType, false);
-                    
+
                     executionSpan?.SetTag(AlexaSemanticAttributes.HandlerType, handlerType);
                     executionSpan?.SetTag(AlexaSemanticAttributes.HandlerIsDefault, false);
 
@@ -83,7 +83,7 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                         throw;
                     }
                 }
-                
+
                 executionOrder++;
             }
 
@@ -92,7 +92,7 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
             if (defaultHandler is not null)
             {
                 var defaultHandlerType = defaultHandler.GetType().Name;
-                
+
                 // Track default handler resolution attempt
                 AlexaVoxCraftTelemetry.HandlerResolutionAttempts.Add(1,
                     new KeyValuePair<string, object?>(AlexaSemanticAttributes.HandlerType, defaultHandlerType),
@@ -102,7 +102,7 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                 // Instrument default handler CanHandle() call
                 using var defaultResolutionSpan = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.HandlerResolution, ActivityKind.Internal);
                 using var defaultResolutionTimer = AlexaVoxCraftTelemetry.TimeHandlerResolution();
-                
+
                 defaultResolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerType, defaultHandlerType);
                 defaultResolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerExecutionOrder, executionOrder);
                 defaultResolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerIsDefault, true);
@@ -118,9 +118,9 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                     defaultResolutionSpan?.SetStatus(ActivityStatusCode.Error, ex.Message);
                     throw;
                 }
-                
+
                 defaultResolutionSpan?.SetTag(AlexaSemanticAttributes.HandlerCanHandle, canHandleDefault);
-                
+
                 if (canHandleDefault)
                 {
                     // Track default handler execution
@@ -131,7 +131,7 @@ public class RequestHandlerWrapperImpl<TRequestType> : RequestHandlerWrapper whe
                     // Instrument default handler Handle() call
                     using var defaultExecutionSpan = AlexaVoxCraftTelemetry.Source.StartActivity(AlexaSpanNames.Handler, ActivityKind.Internal);
                     using var defaultExecutionTimer = AlexaVoxCraftTelemetry.TimeHandlerExecution(defaultHandlerType, true);
-                    
+
                     defaultExecutionSpan?.SetTag(AlexaSemanticAttributes.HandlerType, defaultHandlerType);
                     defaultExecutionSpan?.SetTag(AlexaSemanticAttributes.HandlerIsDefault, true);
 

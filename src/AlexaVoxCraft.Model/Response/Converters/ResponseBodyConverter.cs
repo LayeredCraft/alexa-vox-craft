@@ -41,7 +41,7 @@ public class ResponseBodyConverter : JsonConverter<ResponseBody>
         {
             writer.WriteBoolean("shouldEndSession", value.ShouldEndSession.Value);
         }
-        
+
         // directives
         if (value.Directives is { Count: > 0 })
         {

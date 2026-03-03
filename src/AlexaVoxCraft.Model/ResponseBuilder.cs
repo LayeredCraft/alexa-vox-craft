@@ -77,12 +77,12 @@ public class ResponseBuilder
 
     public static SkillResponse TellWithReprompt(string speechResponse, Reprompt reprompt, Session sessionAttributes)
     {
-        return TellWithReprompt(new PlainTextOutputSpeech { Text = speechResponse }, reprompt,sessionAttributes);
+        return TellWithReprompt(new PlainTextOutputSpeech { Text = speechResponse }, reprompt, sessionAttributes);
     }
 
     public static SkillResponse TellWithReprompt(Response.Ssml.Speech speechResponse, Reprompt reprompt, Session sessionAttributes)
     {
-        return TellWithReprompt(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, reprompt,sessionAttributes);
+        return TellWithReprompt(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, reprompt, sessionAttributes);
     }
 
     public static SkillResponse TellWithCard(IOutputSpeech speechResponse, string title, string content)
@@ -117,12 +117,12 @@ public class ResponseBuilder
 
     public static SkillResponse TellWithCard(string speechResponse, string title, string content, Session sessionAttributes)
     {
-        return TellWithCard(new PlainTextOutputSpeech { Text = speechResponse }, title, content,sessionAttributes);
+        return TellWithCard(new PlainTextOutputSpeech { Text = speechResponse }, title, content, sessionAttributes);
     }
 
     public static SkillResponse TellWithCard(Response.Ssml.Speech speechResponse, string title, string content, Session sessionAttributes)
     {
-        return TellWithCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, title, content,sessionAttributes);
+        return TellWithCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, title, content, sessionAttributes);
     }
 
     public static SkillResponse TellWithLinkAccountCard(IOutputSpeech speechResponse)
@@ -151,33 +151,33 @@ public class ResponseBuilder
 
     public static SkillResponse TellWithLinkAccountCard(string speechResponse, Session sessionAttributes)
     {
-        return TellWithLinkAccountCard(new PlainTextOutputSpeech { Text = speechResponse },sessionAttributes);
+        return TellWithLinkAccountCard(new PlainTextOutputSpeech { Text = speechResponse }, sessionAttributes);
     }
 
     public static SkillResponse TellWithLinkAccountCard(Response.Ssml.Speech speechResponse, Session sessionAttributes)
     {
-        return TellWithLinkAccountCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() },sessionAttributes);
+        return TellWithLinkAccountCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, sessionAttributes);
     }
 
     public static SkillResponse TellWithAskForPermissionsConsentCard(IOutputSpeech speechResponse, IEnumerable<string> permissions)
     {
-        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = [.. permissions]};
+        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard { Permissions = [.. permissions] };
         return BuildResponse(speechResponse, true, null, null, card);
     }
 
     public static SkillResponse TellWithAskForPermissionConsentCard(string speechResponse, IEnumerable<string> permissions)
     {
-        return TellWithAskForPermissionsConsentCard(new PlainTextOutputSpeech { Text = speechResponse },permissions);
+        return TellWithAskForPermissionsConsentCard(new PlainTextOutputSpeech { Text = speechResponse }, permissions);
     }
 
     public static SkillResponse TellWithAskForPermissionConsentCard(Response.Ssml.Speech speechResponse, IEnumerable<string> permissions)
     {
-        return TellWithAskForPermissionsConsentCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() },permissions);
+        return TellWithAskForPermissionsConsentCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, permissions);
     }
 
     public static SkillResponse TellWithAskForPermissionsConsentCard(IOutputSpeech speechResponse, IEnumerable<string> permissions, Session sessionAttributes)
     {
-        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = [.. permissions]};
+        AskForPermissionsConsentCard card = new AskForPermissionsConsentCard { Permissions = [.. permissions] };
         return BuildResponse(speechResponse, true, sessionAttributes, null, card);
     }
 
@@ -186,9 +186,9 @@ public class ResponseBuilder
         return TellWithAskForPermissionsConsentCard(new PlainTextOutputSpeech { Text = speechResponse }, permissions, sessionAttributes);
     }
 
-    public static SkillResponse TellWithAskForPermissionConsentCard(Response.Ssml.Speech speechResponse, IEnumerable<string> permissions,Session sessionAttributes)
+    public static SkillResponse TellWithAskForPermissionConsentCard(Response.Ssml.Speech speechResponse, IEnumerable<string> permissions, Session sessionAttributes)
     {
-        return TellWithAskForPermissionsConsentCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, permissions,sessionAttributes);
+        return TellWithAskForPermissionsConsentCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, permissions, sessionAttributes);
     }
 
     #endregion
@@ -215,12 +215,12 @@ public class ResponseBuilder
     /// <returns>A skill response that asks for user input and keeps the session open.</returns>
     public static SkillResponse Ask(string speechResponse, Reprompt reprompt)
     {
-        return Ask(new PlainTextOutputSpeech {Text = speechResponse}, reprompt);
+        return Ask(new PlainTextOutputSpeech { Text = speechResponse }, reprompt);
     }
 
     public static SkillResponse Ask(Response.Ssml.Speech speechResponse, Reprompt reprompt)
     {
-        return Ask(new SsmlOutputSpeech {Ssml = speechResponse.ToXml()}, reprompt);
+        return Ask(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, reprompt);
     }
 
     public static SkillResponse Ask(IOutputSpeech speechResponse, Reprompt reprompt, Session sessionAttributes)
@@ -352,7 +352,7 @@ public class ResponseBuilder
         return response;
     }
 
-    public static SkillResponse DialogConfirmSlot(IOutputSpeech outputSpeech, string slotName, 
+    public static SkillResponse DialogConfirmSlot(IOutputSpeech outputSpeech, string slotName,
         Intent updatedIntent = null)
     {
         return DialogConfirmSlot(outputSpeech, slotName, null, updatedIntent);
@@ -387,7 +387,7 @@ public class ResponseBuilder
     #region Main Response Builder
     private static SkillResponse BuildResponse(IOutputSpeech outputSpeech, bool shouldEndSession, Session sessionAttributes, Reprompt reprompt, ICard card)
     {
-        SkillResponse response = new SkillResponse {Version = "1.0"};
+        SkillResponse response = new SkillResponse { Version = "1.0" };
         if (sessionAttributes is not null) response.SessionAttributes = sessionAttributes.Attributes;
 
         ResponseBody body = new ResponseBody

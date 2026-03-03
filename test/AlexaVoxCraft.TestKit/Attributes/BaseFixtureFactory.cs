@@ -15,18 +15,18 @@ public static class BaseFixtureFactory
     public static IFixture CreateFixture(Action<IFixture> customizeAction)
     {
         var fixture = new Fixture();
-        
+
         // Remove throwing recursion behavior and add omit on recursion behavior
         fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
             .ForEach(b => fixture.Behaviors.Remove(b));
         fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-        
+
         // Add AutoNSubstitute customization for automatic interface mocking
         fixture.Customize(new AutoNSubstituteCustomization { ConfigureMembers = true });
 
         // Allow customization with specific specimen builders
         customizeAction(fixture);
-        
+
         return fixture;
     }
 }

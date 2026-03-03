@@ -3,7 +3,7 @@ using AlexaVoxCraft.Model.Apl.Components;
 
 namespace AlexaVoxCraft.Model.Apl.Tests.Components;
 
-public class SpacerTests : TestBase
+public class SpacerTests : TestBase<SpacerTests>
 {
     [Fact]
     public async Task Spacer_WithHeight_Serializes()

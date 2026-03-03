@@ -1,0 +1,15 @@
+﻿{
+  "Payload": {
+    "PurchaseResult": "ACCEPTED",
+    "ProductId": "amzn1.productId",
+    "Message": "optional additional message"
+  },
+  "Name": "Upsell",
+  "Status": {
+    "Code": 200,
+    "Message": "test message"
+  },
+  "Token": "token",
+  "Type": "Connections.Response",
+  "RequestId": "string"
+}

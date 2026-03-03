@@ -7,16 +7,16 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<KeyboardType>))]
 public enum KeyboardType
 {
-    [EnumMember(Value="decimalPad")]
+    [EnumMember(Value = "decimalPad")]
     DecimalPad,
-    [EnumMember(Value="emailAddress")]
+    [EnumMember(Value = "emailAddress")]
     EmailAddress,
-    [EnumMember(Value="normal")]
+    [EnumMember(Value = "normal")]
     Normal,
-    [EnumMember(Value="numberPad")]
+    [EnumMember(Value = "numberPad")]
     NumberPad,
-    [EnumMember(Value="phonePad")]
+    [EnumMember(Value = "phonePad")]
     PhonePad,
-    [EnumMember(Value="url")]
+    [EnumMember(Value = "url")]
     Url
 }

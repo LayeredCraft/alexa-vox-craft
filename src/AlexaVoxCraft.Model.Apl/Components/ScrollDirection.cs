@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ScrollDirection>))]
 public enum ScrollDirection
 {
-    [EnumMember(Value="horizontal")]
+    [EnumMember(Value = "horizontal")]
     Horizontal,
-    [EnumMember(Value="vertical")]
+    [EnumMember(Value = "vertical")]
     Vertical
 }

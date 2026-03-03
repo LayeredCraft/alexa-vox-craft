@@ -7,10 +7,10 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<MediaTagState>))]
 public enum MediaTagState
 {
-    [EnumMember(Value="idle")]
+    [EnumMember(Value = "idle")]
     Idle,
-    [EnumMember(Value="paused")]
+    [EnumMember(Value = "paused")]
     Paused,
-    [EnumMember(Value="playing")]
+    [EnumMember(Value = "playing")]
     Playing
 }

@@ -4,16 +4,16 @@ namespace AlexaVoxCraft.Model.Apl.Gestures;
 
 public enum SwipeDirection
 {
-    [EnumMember(Value="left")]
+    [EnumMember(Value = "left")]
     Left,
-    [EnumMember(Value="right")]
+    [EnumMember(Value = "right")]
     Right,
-    [EnumMember(Value="up")]
+    [EnumMember(Value = "up")]
     Up,
-    [EnumMember(Value="down")]
+    [EnumMember(Value = "down")]
     Down,
-    [EnumMember(Value="forward")]
+    [EnumMember(Value = "forward")]
     Forward,
-    [EnumMember(Value="backward")]
+    [EnumMember(Value = "backward")]
     Backward
 }

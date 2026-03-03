@@ -36,7 +36,7 @@ public class AlexaVoxCraftDiGeneratorTests
             msbuildProperties: AnalyzerOpts
         );
     }
-    
+
     /// <summary>
     /// Verifies that the generator produces a single interceptor method with multiple InterceptsLocation attributes
     /// when AddSkillMediator is called multiple times, demonstrating proper deduplication.

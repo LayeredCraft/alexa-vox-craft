@@ -18,7 +18,7 @@ public static class RequestVerification
         return Math.Abs(DateTimeOffset.Now.Subtract(timestamp).TotalSeconds) <= AllowedTimestampToleranceInSeconds;
     }
 
-    public static async Task<bool> Verify(string encodedSignature, Uri certificatePath, string body, Func<Uri,Task<X509Certificate2>> getCertificate = null)
+    public static async Task<bool> Verify(string encodedSignature, Uri certificatePath, string body, Func<Uri, Task<X509Certificate2>> getCertificate = null)
     {
         if (!VerifyCertificateUrl(certificatePath))
         {
@@ -49,7 +49,7 @@ public static class RequestVerification
         var signature = Convert.FromBase64String(encodedSignature);
         var rsa = certificate.GetRSAPublicKey();
 
-        return rsa.VerifyData(Encoding.UTF8.GetBytes(body), signature,HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
+        return rsa.VerifyData(Encoding.UTF8.GetBytes(body), signature, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
     }
 
     public static async Task<X509Certificate2> GetCertificate(Uri certificatePath)

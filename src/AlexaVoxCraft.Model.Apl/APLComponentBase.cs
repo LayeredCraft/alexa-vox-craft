@@ -19,7 +19,7 @@ public abstract class APLComponentBase : IJsonSerializable<APLComponentBase>
     [JsonPropertyName("bind")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IList<Binding>? Bindings { get; set; }
-    
+
     [JsonPropertyName("when")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<bool?>? When { get; set; }
@@ -35,7 +35,7 @@ public abstract class APLComponentBase : IJsonSerializable<APLComponentBase>
     [JsonPropertyName("duration")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public AudioDuration? Duration { get; set; }
-    
+
     public static void RegisterTypeInfo<T>() where T : APLComponentBase
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>

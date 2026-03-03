@@ -10,7 +10,7 @@ public static class JsonExtensions
     {
         return JsonNode.Parse(element.GetRawText())!.AsObject();
     }
-    
+
     public static void AssertJsonEqual(this JsonElement actual, JsonElement expected, string? messagePrefix = null)
     {
         var diffs = new List<string>();

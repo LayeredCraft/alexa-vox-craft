@@ -75,7 +75,7 @@ public class ObjectConverter : JsonConverter<object>
             _ => throw new JsonException("Failed to determine numeric type.")
         };
     }
-    
+
     public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
     {
         JsonSerializer.Serialize(writer, value, value.GetType(), options);

@@ -7,9 +7,9 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<LayoutDirection>))]
 public enum LayoutDirection
 {
-    [EnumMember(Value="inherit")]
+    [EnumMember(Value = "inherit")]
     Inherit,
-    [EnumMember(Value="LTR")]
+    [EnumMember(Value = "LTR")]
     LTR,
     [EnumMember(Value = "RTL")]
     RTL

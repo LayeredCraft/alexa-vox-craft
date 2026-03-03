@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ProgressBarType>))]
 public enum ProgressBarType
 {
-    [EnumMember(Value="determinate")]
+    [EnumMember(Value = "determinate")]
     Determinate,
-    [EnumMember(Value="indeterminate")]
+    [EnumMember(Value = "indeterminate")]
     Indeterminate
 }

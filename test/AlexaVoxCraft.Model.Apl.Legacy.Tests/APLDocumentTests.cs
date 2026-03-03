@@ -201,30 +201,30 @@ public class APLDocumentTests
     [Fact]
     public void ListDataSource()
     {
-        var list = new ListDataSource {ListId = "lt1Sample", TotalNumberOfItems = 10};
-        list.ListPage.ListItems.Add(new TestListItem("gouda",1));
-        list.ListPage.ListItems.Add(new TestListItem("cheddar",2));
-        list.ListPage.ListItems.Add(new TestListItem("blue",3));
-        list.ListPage.ListItems.Add(new TestListItem("brie",4));
-        list.ListPage.ListItems.Add(new TestListItem("cheddar",5));
-        list.ListPage.ListItems.Add(new TestListItem("parm",6));
+        var list = new ListDataSource { ListId = "lt1Sample", TotalNumberOfItems = 10 };
+        list.ListPage.ListItems.Add(new TestListItem("gouda", 1));
+        list.ListPage.ListItems.Add(new TestListItem("cheddar", 2));
+        list.ListPage.ListItems.Add(new TestListItem("blue", 3));
+        list.ListPage.ListItems.Add(new TestListItem("brie", 4));
+        list.ListPage.ListItems.Add(new TestListItem("cheddar", 5));
+        list.ListPage.ListItems.Add(new TestListItem("parm", 6));
         Assert.True(Utility.CompareJson(list, "ListDataSource.json", null));
     }
 
     [Fact]
     public void DynamicIndexList()
     {
-        var list = new DynamicIndexList("my-list-id", 0) {MinimumInclusiveIndex = 0, MaximumExclusiveIndex = 200};
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 1"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 2"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 3"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 4"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 5"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 6"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 7"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 8"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 9"});
-        list.Items.Add(new DynamicListItem { PrimaryText = "item 10"});
+        var list = new DynamicIndexList("my-list-id", 0) { MinimumInclusiveIndex = 0, MaximumExclusiveIndex = 200 };
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 1" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 2" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 3" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 4" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 5" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 6" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 7" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 8" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 9" });
+        list.Items.Add(new DynamicListItem { PrimaryText = "item 10" });
         Assert.True(Utility.CompareJson(list, "DynamicSourceExample.json", _output));
         var source = Utility.ExampleFileContent<APLDataSource>("DynamicSourceExample.json");
         Assert.IsType<DynamicIndexList>(source);
@@ -240,7 +240,7 @@ public class APLDocumentTests
     [Fact]
     public void RenderDocumentLink()
     {
-            
+
         Utility.AssertSerialization<RenderDocumentDirective>("RenderDocumentLink.json");
     }
 

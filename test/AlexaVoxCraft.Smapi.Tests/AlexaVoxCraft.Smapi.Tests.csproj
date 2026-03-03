@@ -22,7 +22,7 @@
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj" />
+    <ProjectReference Include="..\AlexaVoxCraft.Http.TestKit\AlexaVoxCraft.Http.TestKit.csproj" />
     <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
   </ItemGroup>
 

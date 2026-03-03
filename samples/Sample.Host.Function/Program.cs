@@ -36,7 +36,7 @@ try
     app.MapHandler(AlexaHandler.Invoke<SkillRequest, SkillResponse>);
 
     await app.RunAsync();
-    
+
     return 0;
 }
 catch (Exception ex)

@@ -12,7 +12,7 @@ public class SkillMediatorTests : TestBase
         IOptions<SkillServiceConfiguration> validConfiguration)
     {
         var exception = Record.Exception(() => new SkillMediator(null!, validConfiguration));
-        
+
         exception.Should().BeOfType<ArgumentNullException>().Subject.ParamName.Should().Be("serviceProvider");
     }
 
@@ -22,7 +22,7 @@ public class SkillMediatorTests : TestBase
         IServiceProvider serviceProvider)
     {
         var exception = Record.Exception(() => new SkillMediator(serviceProvider, null!));
-        
+
         exception.Should().BeOfType<NullReferenceException>();
     }
 
@@ -33,7 +33,7 @@ public class SkillMediatorTests : TestBase
         IOptions<SkillServiceConfiguration> nullConfigurationValue)
     {
         var exception = Record.Exception(() => new SkillMediator(serviceProvider, nullConfigurationValue));
-        
+
         exception.Should().BeOfType<ArgumentNullException>().Subject.ParamName.Should().Be("serviceConfiguration");
     }
 
@@ -44,7 +44,7 @@ public class SkillMediatorTests : TestBase
         IOptions<SkillServiceConfiguration> validConfiguration)
     {
         var mediator = new SkillMediator(serviceProvider, validConfiguration);
-        
+
         mediator.Should().NotBeNull();
     }
 
@@ -56,9 +56,9 @@ public class SkillMediatorTests : TestBase
         IOptions<SkillServiceConfiguration> nullConfiguration)
     {
         var mediator = new SkillMediator(serviceProvider, nullConfiguration);
-        
+
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
-        
+
         exception.Should().BeOfType<ArgumentException>().Subject.Message.Should().Be("Skill ID verification failed!");
     }
 
@@ -70,9 +70,9 @@ public class SkillMediatorTests : TestBase
         IOptions<SkillServiceConfiguration> emptyConfiguration)
     {
         var mediator = new SkillMediator(serviceProvider, emptyConfiguration);
-        
+
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
-        
+
         exception.Should().BeOfType<ArgumentException>().Subject.Message.Should().Be("Skill ID verification failed!");
     }
 
@@ -84,9 +84,9 @@ public class SkillMediatorTests : TestBase
         IOptions<SkillServiceConfiguration> whitespaceConfiguration)
     {
         var mediator = new SkillMediator(serviceProvider, whitespaceConfiguration);
-        
+
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
-        
+
         exception.Should().BeOfType<ArgumentException>().Subject.Message.Should().Be("Skill ID verification failed!");
     }
 
@@ -98,9 +98,9 @@ public class SkillMediatorTests : TestBase
         IOptions<SkillServiceConfiguration> invalidConfiguration)
     {
         var mediator = new SkillMediator(serviceProvider, invalidConfiguration);
-        
+
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
-        
+
         exception.Should().BeOfType<ArgumentException>().Subject.Message.Should().Be("Skill ID verification failed!");
     }
 
@@ -113,11 +113,11 @@ public class SkillMediatorTests : TestBase
     {
         // Ensure skill IDs match using the specimen builder's valid configuration
         skillRequest.Context.System.Application.ApplicationId = validConfiguration.Value.SkillId!;
-        
+
         var mediator = new SkillMediator(serviceProvider, validConfiguration);
-        
+
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
-        
+
         // Should not be the skill ID verification exception
         exception.Should().NotBeOfType<ArgumentException>();
         exception.Message.Should().NotBe("Skill ID verification failed!");
@@ -131,11 +131,11 @@ public class SkillMediatorTests : TestBase
         IOptions<SkillServiceConfiguration> validConfiguration)
     {
         skillRequest.Context.System.Application.ApplicationId = validConfiguration.Value.SkillId!;
-        
+
         var mediator = new SkillMediator(serviceProvider, validConfiguration);
-        
+
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
-        
+
         // The exception thrown when trying to create the wrapper for unsupported request types
         exception.Should().BeOfType<InvalidOperationException>();
         exception.Should().BeOfType<InvalidOperationException>().Subject.Message.Should().Contain("Handler was not found for request of type");

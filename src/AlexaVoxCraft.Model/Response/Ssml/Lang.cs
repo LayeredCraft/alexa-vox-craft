@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Response.Ssml;
 
-public class Lang:ICommonSsml
+public class Lang : ICommonSsml
 {
     public string LanguageCode { get; set; }
 

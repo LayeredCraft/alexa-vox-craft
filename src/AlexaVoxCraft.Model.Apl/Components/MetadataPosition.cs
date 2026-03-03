@@ -7,10 +7,10 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<MetadataPosition>))]
 public enum MetadataPosition
 {
-    [EnumMember(Value="above_right")]
+    [EnumMember(Value = "above_right")]
     AboveRight,
-    [EnumMember(Value="above_left_right")]
+    [EnumMember(Value = "above_left_right")]
     AboveLeftRight,
-    [EnumMember(Value="below_left_right")]
+    [EnumMember(Value = "below_left_right")]
     BelowLeftRight
 }

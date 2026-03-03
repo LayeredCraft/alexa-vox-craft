@@ -15,7 +15,7 @@ public class MediatRLambdaAutoDataAttribute() : AutoDataAttribute(CreateFixture)
         {
             // Add abstract class mappings
             fixture.Customizations.Add(new TypeRelay(typeof(SkillContext), typeof(DefaultSkillContext)));
-            
+
             fixture.Customizations.Add(new LambdaContextSpecimenBuilder());
             fixture.Customizations.Add(new SkillRequestSpecimenBuilder());
             fixture.Customizations.Add(new SkillResponseSpecimenBuilder());

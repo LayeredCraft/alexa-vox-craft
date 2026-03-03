@@ -21,6 +21,7 @@ public class Sequential : APLCommand, IJsonSerializable<Sequential>
     {
     }
 
+    [JsonPropertyName("type")]
     public override string Type => nameof(Sequential);
 
     [JsonPropertyName("finally")]

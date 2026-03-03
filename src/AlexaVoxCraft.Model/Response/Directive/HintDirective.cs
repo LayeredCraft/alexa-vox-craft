@@ -3,7 +3,7 @@ using AlexaVoxCraft.Model.Response.Directive.Templates;
 
 namespace AlexaVoxCraft.Model.Response.Directive;
 
-public class HintDirective:IDirective
+public class HintDirective : IDirective
 {
     public const string DirectiveType = "Hint";
 
@@ -18,7 +18,7 @@ public class HintDirective:IDirective
 
     [JsonPropertyName("type")]
     public string Type => DirectiveType;
-        
+
     [JsonPropertyName("hint")]
     public Hint Hint { get; set; }
 }

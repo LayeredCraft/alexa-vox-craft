@@ -29,7 +29,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="LayeredCraft.Logging.CompactJsonFormatter" />
-        <PackageReference Include="Serilog.AspNetCore" VersionOverride="10.0.0"/>
+        <PackageReference Include="Serilog.AspNetCore"/>
         <PackageReference Include="Serilog.Sinks.Console" />
         <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3"/>
         <PackageReference Include="Microsoft.ICU.ICU4C.Runtime"/>

@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<AVGScaleType>))]
 public enum AVGScaleType
 {
-    [EnumMember(Value="none")]
+    [EnumMember(Value = "none")]
     None,
     [EnumMember(Value = "grow")]
     Grow,

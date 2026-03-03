@@ -14,10 +14,10 @@ public class AskForPermissionPayload
         PermissionScope = permissionScope;
     }
 
-    [JsonPropertyName("@type")] 
+    [JsonPropertyName("@type")]
     public string Type { get; set; } = "AskForPermissionsConsentRequest";
 
-    [JsonPropertyName("@version")] 
+    [JsonPropertyName("@version")]
     public string Version { get; set; } = "1";
 
     [JsonPropertyName("permissionScope")]

@@ -63,7 +63,7 @@ public sealed class InteractionModelBuilder
         _description = description;
         return this;
     }
-    
+
     /// <summary>
     /// Adds or configures an intent in the interaction model.
     /// </summary>
@@ -166,7 +166,7 @@ public sealed class InteractionModelBuilder
         return new InteractionModelDefinition
         {
             InteractionModel = body,
-            Version =  _version,
+            Version = _version,
             Description = _description
         };
     }

@@ -7,6 +7,6 @@ namespace AlexaVoxCraft.Model.Apl.Package;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<TargetViewport>))]
 public enum TargetViewport
 {
-    [EnumMember(Value="WIDGET_M")]
+    [EnumMember(Value = "WIDGET_M")]
     WidgetM
 }

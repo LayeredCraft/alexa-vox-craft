@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Request;
@@ -11,7 +12,7 @@ public class Session
     public string SessionId { get; set; }
 
     [JsonPropertyName("attributes")]
-    public Dictionary<string, object> Attributes { get; set; }
+    public Dictionary<string, JsonElement>? Attributes { get; set; }
 
     [JsonPropertyName("application")]
     public Application Application { get; set; }

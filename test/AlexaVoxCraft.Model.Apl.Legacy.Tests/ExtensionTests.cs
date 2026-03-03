@@ -92,7 +92,7 @@ public class ExtensionTests
                            "type": "SmartMotion:FollowPrimaryUser"
                        }
                        """;
-            
+
         var followPrimaryUser = FollowPrimaryUserCommand.For(new SmartMotionExtension("SmartMotion"));
         followPrimaryUser.AssertJsonEqual(expected);
     }
@@ -104,7 +104,7 @@ public class ExtensionTests
                        {
                            "type": "SmartMotion:GoToCenter"
                        }
-                       """; 
+                       """;
         var goToCenter = GoToCenterCommand.For(new SmartMotionExtension("SmartMotion"));
         goToCenter.AssertJsonEqual(expected);
     }
@@ -130,7 +130,7 @@ public class ExtensionTests
                        {
                            "type": "SmartMotion:StopMotion"
                        }
-                       """; 
+                       """;
         var stopMotion = StopMotionCommand.For(new SmartMotionExtension("SmartMotion"));
         stopMotion.AssertJsonEqual(expected);
     }
@@ -142,7 +142,7 @@ public class ExtensionTests
                        {
                            "type": "SmartMotion:TurnToPrimaryUser"
                        }
-                       """; 
+                       """;
         var turnToPrimaryUser = TurnToPrimaryUserCommand.For(new SmartMotionExtension("SmartMotion"));
         turnToPrimaryUser.AssertJsonEqual(expected);
     }
@@ -155,7 +155,7 @@ public class ExtensionTests
                            "type": "SmartMotion:PlayNamedChoreo",
                            "name": "ScreenImpactCenter"
                        }
-                       """; 
+                       """;
         var playNamedChoreo = PlayNamedChoreoCommand.For(new SmartMotionExtension("SmartMotion"), "ScreenImpactCenter");
         playNamedChoreo.AssertJsonEqual(expected);
     }
@@ -234,7 +234,7 @@ public class ExtensionTests
                            "key": "weather",
                            "token": "thisIsADummyToken"
                        }
-                       """; 
+                       """;
         var getObject = GetObjectCommand.For(new DataStoreExtension("DataStore"), "LocationWeather",
             "weather", "thisIsADummyToken");
         getObject.AssertJsonEqual(expected);
@@ -249,7 +249,7 @@ public class ExtensionTests
                            "namespace": "LocationWeather",
                            "key": "weather"
                        }
-                       """; 
+                       """;
         var watchObject = WatchObjectCommand.For(new DataStoreExtension("DataStore"), "LocationWeather", "weather");
         watchObject.AssertJsonEqual(expected);
     }
@@ -263,7 +263,7 @@ public class ExtensionTests
                            "namespace": "LocationWeather",
                            "key": "weather"
                        }
-                       """; 
+                       """;
         var unwatchObject = UnwatchObjectCommand.For(new DataStoreExtension("DataStore"), "LocationWeather", "weather");
         unwatchObject.AssertJsonEqual(expected);
     }
@@ -278,7 +278,7 @@ public class ExtensionTests
                            "startIndex": "${test}",
                            "endIndex": 5
                        }
-                       """; 
+                       """;
         var updateArrayBindingRange = UpdateArrayBindingRangeCommand.For(new DataStoreExtension("DataStore"), "ToDoNotes",
             APLValue.To<int?>("${test}"), 5);
         updateArrayBindingRange.AssertJsonEqual(expected);

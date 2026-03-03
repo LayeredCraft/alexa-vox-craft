@@ -175,7 +175,7 @@ public sealed class SkillConnectionTests
         var directive = new ScheduleFoodEstablishmentReservation
         {
             PartySize = 2,
-            StartTime = new DateTime(2018,04,08,01,15,46),
+            StartTime = new DateTime(2018, 04, 08, 01, 15, 46),
             Restaurant = new Restaurant
             {
                 Name = "Amazon Day 1 Restaurant",
@@ -208,8 +208,8 @@ public sealed class SkillConnectionTests
         var task = new PinConfirmation();
         var request = Utility.ExampleFileContent<SessionResumedRequest>("PinConfirmationSessionResumed.json");
         var result = PinConfirmationResolver.ResultFromSessionResumed(request);
-        Assert.Equal(PinConfirmationStatus.NotAchieved,result.Status);
-        Assert.Equal(PinConfirmationReason.VerificationMethodNotSetup,result.Reason);
+        Assert.Equal(PinConfirmationStatus.NotAchieved, result.Status);
+        Assert.Equal(PinConfirmationReason.VerificationMethodNotSetup, result.Reason);
     }
 
 }

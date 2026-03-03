@@ -10,7 +10,8 @@ public abstract class AVGItem : IAVGItem, IJsonSerializable<AVGItem>
 {
     [JsonPropertyName("type")] public abstract string Type { get; }
 
-    [JsonPropertyName("filters")][JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("filters")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<IAVGFilter> Filters { get; set; }
 
     public static void RegisterTypeInfo<T>() where T : AVGItem

@@ -7,7 +7,7 @@ using AlexaVoxCraft.Model.Response.Converters;
 
 namespace AlexaVoxCraft.Model.Apl.JsonConverter;
 
-public class APLAComponentConverter: BasePolymorphicConverter<APLAComponent>
+public class APLAComponentConverter : BasePolymorphicConverter<APLAComponent>
 {
     private static IDictionary<string, Type> _derivedTypes = new Dictionary<string, Type>
     {
@@ -22,7 +22,7 @@ public class APLAComponentConverter: BasePolymorphicConverter<APLAComponent>
     {
         throw new NotImplementedException();
     }
-    
+
     protected override JsonElement TransformJson(JsonElement original)
     {
         var node = JsonNode.Parse(original.GetRawText())!.AsObject();

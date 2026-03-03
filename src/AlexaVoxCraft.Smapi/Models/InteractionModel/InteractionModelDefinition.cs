@@ -20,7 +20,7 @@ public sealed record InteractionModelDefinition
     /// </summary>
     [JsonPropertyName("description")]
     public string Description { get; init; } = string.Empty;
-    
+
     /// <summary>
     /// Gets the interaction model body.
     /// </summary>

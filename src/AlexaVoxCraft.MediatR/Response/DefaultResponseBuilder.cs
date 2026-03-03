@@ -330,7 +330,7 @@ public class DefaultResponseBuilder : IResponseBuilder
         var response = new SkillResponse
         {
             Version = "1.0",
-            SessionAttributes = (await _attributesManager.GetSessionAttributes(cancellationToken)).ToDictionary(),
+            SessionAttributes = _attributesManager.Session?.Values,
             Response = _response
         };
         return response;

@@ -5,7 +5,7 @@ namespace AlexaVoxCraft.Model.Apl;
 public class APLDocumentLink : APLDocumentReference
 {
     public const string DocumentType = "Link";
-    public APLDocumentLink(){}
+    public APLDocumentLink() { }
 
     public APLDocumentLink(string source)
     {

@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ViewportShape>))]
 public enum ViewportShape
 {
-    [EnumMember(Value="SQUARE")]
+    [EnumMember(Value = "SQUARE")]
     Square,
     [EnumMember(Value = "RECTANGLE")]
     Rectangle,

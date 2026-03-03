@@ -21,7 +21,7 @@ public abstract class HandlerBase
         {
             throw new InvalidOperationException($"Handler was not found for request of type {typeof(THandler)}. Register your handlers with the container.");
         }
-        
+
         return handlers;
     }
 }

@@ -47,7 +47,7 @@ public class APLCommandConverter : BasePolymorphicConverter<APLCommand>
         [nameof(WatchObjectCommand)] = typeof(WatchObjectCommand),
         [nameof(UnwatchObjectCommand)] = typeof(UnwatchObjectCommand),
         [nameof(UpdateArrayBindingRangeCommand)] = typeof(UpdateArrayBindingRangeCommand),
-    };    
+    };
     protected override IDictionary<string, Type> DerivedTypes => _derivedTypes;
     protected override Type? DefaultType => typeof(CustomCommand);
 }

@@ -2,7 +2,7 @@
 
 namespace AlexaVoxCraft.Model.Response.Ssml;
 
-public class SayAs:ICommonSsml
+public class SayAs : ICommonSsml
 {
     public string Text { get; set; }
     public string InterpretAs { get; set; }
@@ -10,7 +10,7 @@ public class SayAs:ICommonSsml
 
     public SayAs(string text, string interpretAs)
     {
-        if(string.IsNullOrWhiteSpace(text))
+        if (string.IsNullOrWhiteSpace(text))
         {
             throw new ArgumentNullException(nameof(text), "Text value required for SayAs in Ssml");
         }
@@ -31,7 +31,7 @@ public class SayAs:ICommonSsml
         objects.Add(new XText(Text));
         objects.Add(new XAttribute("interpret-as", InterpretAs));
 
-        if(!string.IsNullOrWhiteSpace(Format))
+        if (!string.IsNullOrWhiteSpace(Format))
         {
             objects.Add(new XAttribute("format", Format));
         }

@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Package;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<InstallStateChanges>))]
 public enum InstallStateChanges
 {
-    [EnumMember(Value="AUTOMATIC")]
+    [EnumMember(Value = "AUTOMATIC")]
     Automatic,
-    [EnumMember(Value="INFORM")]
+    [EnumMember(Value = "INFORM")]
     Inform
 }

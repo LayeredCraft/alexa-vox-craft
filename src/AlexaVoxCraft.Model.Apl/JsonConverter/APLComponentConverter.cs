@@ -8,7 +8,7 @@ using AlexaVoxCraft.Model.Response.Converters;
 
 namespace AlexaVoxCraft.Model.Apl.JsonConverter;
 
-public class APLComponentConverter :BasePolymorphicConverter<APLComponent>
+public class APLComponentConverter : BasePolymorphicConverter<APLComponent>
 {
     private static readonly ConcurrentDictionary<string, Type> AplComponentLookup = new()
     {

@@ -7,8 +7,9 @@
 - **🎯 MediatR Integration**: CQRS-style request handling with compile-time source-generated DI registration
 - **🎨 APL Support**: Complete Alexa Presentation Language implementation for rich visual interfaces
 - **⚡ Lambda Hosting**: Optimized AWS Lambda runtime with custom serialization and ReadyToRun publishing
-- **📊 Session Management**: Robust session attribute handling and game state persistence
+- **📊 Session Management**: Robust session attribute handling with typed attribute serialization
 - **🔧 Pipeline Behaviors**: Request/response interceptors for cross-cutting concerns like logging and validation
+- **💰 In-Skill Purchasing**: Full ISP support with buy/upsell/cancel directives and entitlement checks
 - **🧪 Testing Support**: Comprehensive testing utilities with AutoFixture integration and property-based testing
 
 ## 📦 Packages
@@ -23,6 +24,8 @@
 | **AlexaVoxCraft.MediatR.Lambda**    | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda)     | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.MediatR.Lambda.svg)](https://www.nuget.org/packages/AlexaVoxCraft.MediatR.Lambda/)             |
 | **AlexaVoxCraft.Observability**     | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability)       | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Observability.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Observability/)               |
 | **AlexaVoxCraft.Smapi**             | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi)                        | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi/)                               |
+| **AlexaVoxCraft.Model.InSkillPurchasing** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.InSkillPurchasing) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.InSkillPurchasing/) |
+| **AlexaVoxCraft.InSkillPurchasing** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.InSkillPurchasing) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.InSkillPurchasing/)         |
 
 [![Build Status](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml/badge.svg)](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml)
 
@@ -40,6 +43,9 @@ dotnet add package AlexaVoxCraft.Model.Apl
 
 # OpenTelemetry observability (optional)
 dotnet add package AlexaVoxCraft.Observability
+
+# In-Skill Purchasing support (optional)
+dotnet add package AlexaVoxCraft.InSkillPurchasing
 
 # CloudWatch-compatible JSON logging (optional)
 dotnet add package LayeredCraft.Logging.CompactJsonFormatter
@@ -138,13 +144,16 @@ AlexaVoxCraft/
 │   ├── 📦 AlexaVoxCraft.MinimalLambda/        # MinimalLambda-based hosting for Alexa skills
 │   ├── 📦 AlexaVoxCraft.MediatR.Lambda/       # Legacy Lambda hosting (AlexaSkillFunction)
 │   ├── 📦 AlexaVoxCraft.Observability/        # OpenTelemetry instrumentation & telemetry
-│   └── 📦 AlexaVoxCraft.Smapi/                # Skill Management API (SMAPI) client
+│   ├── 📦 AlexaVoxCraft.Smapi/                # Skill Management API (SMAPI) client
+│   ├── 📦 AlexaVoxCraft.Model.InSkillPurchasing/ # ISP model objects: directives, response types, payment types
+│   └── 📦 AlexaVoxCraft.InSkillPurchasing/    # ISP runtime client (IInSkillPurchasingClient) for entitlement checks
 │
 ├── 📂 samples/                                # Working example projects
 │   ├── 📱 Sample.Skill.Function/              # Basic skill (legacy hosting)
 │   ├── 📱 Sample.Host.Function/               # Modern minimal API hosting
 │   ├── 📱 Sample.Generated.Function/          # Source-generated DI demonstration
-│   └── 📱 Sample.Apl.Function/                # APL skill with visual interfaces
+│   ├── 📱 Sample.Apl.Function/                # APL skill with visual interfaces
+│   └── 📱 Sample.Fact.InSkill.Purchases/      # Premium Fact skill demonstrating ISP buy/upsell/cancel flows
 │
 ├── 📂 test/                                   # Comprehensive test coverage
 │   ├── 🧪 AlexaVoxCraft.Model.Tests/          # Core model & serialization tests
@@ -177,6 +186,8 @@ Skills use the MediatR pattern where:
 | **AlexaVoxCraft.MinimalLambda** | MinimalLambda hosting | Minimal API-style hosting for Alexa skills, custom serialization, handler mapping |
 | **AlexaVoxCraft.MediatR.Lambda** | Legacy Lambda hosting | AWS Lambda functions, context management, custom serialization, hosting extensions |
 | **AlexaVoxCraft.Observability** | OpenTelemetry integration | Opt-in telemetry, metrics, spans, semantic attributes, ADOT/CloudWatch support |
+| **AlexaVoxCraft.Model.InSkillPurchasing** | ISP model objects | `BuyDirective`, `UpsellDirective`, `CancelDirective`, `ConnectionResponsePayload`, `PaymentType` |
+| **AlexaVoxCraft.InSkillPurchasing** | ISP runtime client | `IInSkillPurchasingClient` with `GetProductsAsync`/`GetProductAsync`, DI registration via `AddInSkillPurchasing()` |
 
 ## 🧪 Testing
 
@@ -449,7 +460,7 @@ To adopt the new minimal API-style hosting:
 
 For detailed migration guidance, see the [Lambda Hosting documentation](https://layeredcraft.github.io/alexa-vox-craft/components/lambda-hosting/).
 
-## 📋 Version 6.0.0 Breaking Changes
+## 📋 Version 6.0.0+ Breaking Changes
 
 ### APL Collection Type System Overhaul
 
@@ -624,6 +635,174 @@ collection.Add(new Text());  // Expression is now null
 - Most skill code using the document builder API
 - Code that only reads from collections
 - Expression-based data binding (still works)
+
+## 📋 Version 7.0.0+ Breaking Changes
+
+### Attribute System Overhaul: JsonElement-Based Storage
+
+Version 7.0.0 replaces the untyped `Dictionary<string, object>` attribute system with a `System.Text.Json`-native `Dictionary<string, JsonElement>` model throughout. This is a **breaking change** affecting model types, `IAttributesManager`, and `IPersistenceAdapter`.
+
+#### What Changed
+
+**1. `Session.Attributes` and `SkillResponse.SessionAttributes` — `AlexaVoxCraft.Model`**
+
+Both properties changed from `Dictionary<string, object>` to `Dictionary<string, JsonElement>`:
+
+```csharp
+// ❌ Before (v6.x)
+Dictionary<string, object> attributes = request.Session.Attributes;
+Dictionary<string, object>? sessionAttributes = response.SessionAttributes;
+
+// ✅ After (v7.0+)
+Dictionary<string, JsonElement> attributes = request.Session.Attributes;
+Dictionary<string, JsonElement>? sessionAttributes = response.SessionAttributes;
+```
+
+Access values using the `JsonElement` API:
+
+```csharp
+// ❌ Before (v6.x)
+var score = (int)sessionAttributes["currentScore"];
+
+// ✅ After (v7.0+)
+var score = sessionAttributes["currentScore"].GetInt32();
+```
+
+**2. `IAttributesManager` — Complete Redesign — `AlexaVoxCraft.MediatR`**
+
+The old async get/set methods are replaced by synchronous `JsonAttributeBag` properties and explicit typed helpers:
+
+```csharp
+// ❌ Before (v6.x)
+var session = await input.AttributesManager.GetSessionAttributes(cancellationToken);
+session["currentScore"] = 42;
+await input.AttributesManager.SetSessionAttributes(session, cancellationToken);
+
+var request = await input.AttributesManager.GetRequestAttributes(cancellationToken);
+request["tempKey"] = "value";
+
+var persistent = await input.AttributesManager.GetPersistentAttributes(cancellationToken);
+persistent["totalGames"] = 10;
+await input.AttributesManager.SetPersistentAttributes(persistent, cancellationToken);
+
+// ✅ After (v7.0+)
+// Session — synchronous, typed
+input.AttributesManager.Session.Set("currentScore", 42);
+var score = input.AttributesManager.Session.Get<int>("currentScore");
+
+// Request — synchronous, typed
+input.AttributesManager.Request.Set("tempKey", "value");
+
+// Persistent — still async, returns JsonAttributeBag
+var persistent = await input.AttributesManager.GetPersistentAsync(cancellationToken);
+persistent.Set("totalGames", 10);
+await input.AttributesManager.SavePersistentAttributes(cancellationToken);
+```
+
+Shorthand typed session state methods are also available directly on `IAttributesManager`:
+
+```csharp
+input.AttributesManager.SetSessionState("gameStarted", true);
+var started = input.AttributesManager.GetSessionState<bool>("gameStarted");
+
+if (input.AttributesManager.TryGetSessionState<GameState>("state", out var state))
+{
+    // use state
+}
+
+input.AttributesManager.ClearSessionState("gameStarted");
+```
+
+**3. `IPersistenceAdapter` — `AlexaVoxCraft.MediatR`**
+
+Method signatures changed from `IDictionary<string, object>` to `IDictionary<string, JsonElement>`:
+
+```csharp
+// ❌ Before (v6.x)
+public interface IPersistenceAdapter
+{
+    Task<IDictionary<string, object>> GetAttributes(SkillRequest requestEnvelope, CancellationToken cancellationToken = default);
+    Task SaveAttribute(SkillRequest requestEnvelope, IDictionary<string, object> attributes, CancellationToken cancellationToken = default);
+}
+
+// ✅ After (v7.0+)
+public interface IPersistenceAdapter
+{
+    Task<IDictionary<string, JsonElement>> GetAttributes(SkillRequest requestEnvelope, CancellationToken cancellationToken = default);
+    Task SaveAttribute(SkillRequest requestEnvelope, IDictionary<string, JsonElement> attributes, CancellationToken cancellationToken = default);
+}
+```
+
+Any existing `IPersistenceAdapter` implementations must update their return type and parameter type, and serialize/deserialize values as `JsonElement`.
+
+**4. Removed Types**
+
+The following type has been removed with no replacement:
+
+| Removed Type | Package | Notes |
+|---|---|---|
+| `DictionaryExtensions` | `AlexaVoxCraft.Model.Apl` | Internal APL helper; no public replacement needed. |
+
+#### Migration Guide
+
+**Step 1: Update IPersistenceAdapter implementations**
+
+```csharp
+// Change return and parameter types
+public async Task<IDictionary<string, JsonElement>> GetAttributes(
+    SkillRequest requestEnvelope, CancellationToken cancellationToken = default)
+{
+    // Deserialize stored data to Dictionary<string, JsonElement>
+    var json = await _store.GetAsync(requestEnvelope.Session.User.UserId, cancellationToken);
+    return string.IsNullOrEmpty(json)
+        ? new Dictionary<string, JsonElement>()
+        : JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json)!;
+}
+
+public async Task SaveAttribute(SkillRequest requestEnvelope,
+    IDictionary<string, JsonElement> attributes, CancellationToken cancellationToken = default)
+{
+    var json = JsonSerializer.Serialize(attributes);
+    await _store.SaveAsync(requestEnvelope.Session.User.UserId, json, cancellationToken);
+}
+```
+
+**Step 2: Replace GetSessionAttributes / SetSessionAttributes calls**
+
+```csharp
+// ❌ Before
+var attrs = await input.AttributesManager.GetSessionAttributes(cancellationToken);
+attrs.TryGetAttribute<int>("score", out var score);
+attrs.SetAttribute("score", score + 1);
+await input.AttributesManager.SetSessionAttributes(attrs, cancellationToken);
+
+// ✅ After — session is auto-saved by DefaultResponseBuilder
+input.AttributesManager.TryGetSessionState<int>("score", out var score);
+input.AttributesManager.SetSessionState("score", score + 1);
+```
+
+**Step 3: Replace raw Session.Attributes access**
+
+```csharp
+// ❌ Before
+var value = (int)request.Session.Attributes["score"];
+var text = request.Session.Attributes["name"] as string;
+
+// ✅ After
+var value = request.Session.Attributes["score"].GetInt32();
+var text = request.Session.Attributes["name"].GetString();
+```
+
+#### Impact Summary
+
+**High Impact:**
+- Custom `IPersistenceAdapter` implementations
+- Code reading from or writing to `Session.Attributes` or `SkillResponse.SessionAttributes` directly
+- Code calling the old `IAttributesManager` get/set methods
+
+**Low Impact:**
+- Skills that only use `input.ResponseBuilder` and don't directly inspect session attributes
+- Code using `input.AttributesManager` only for persistent attributes (API shape is preserved, types updated)
 
 ## 🤝 Contributing
 

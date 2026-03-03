@@ -1,4 +1,5 @@
 using System.Text.Json;
+using AlexaVoxCraft.Http;
 using Microsoft.Extensions.Options;
 
 namespace AlexaVoxCraft.Smapi.Auth;
@@ -27,7 +28,7 @@ public sealed class SmapiDeveloperAccessTokenProvider : IAccessTokenProvider, ID
         ArgumentException.ThrowIfNullOrWhiteSpace(_options.ClientSecret);
         ArgumentException.ThrowIfNullOrWhiteSpace(_options.RefreshToken);
     }
-    
+
     /// <inheritdoc />
     public async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken = default)
     {
@@ -63,7 +64,7 @@ public sealed class SmapiDeveloperAccessTokenProvider : IAccessTokenProvider, ID
             request.Content = content;
 
             var httpClient = _httpClientFactory.CreateClient();
-            
+
             using var response = await httpClient.SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
 

@@ -19,7 +19,7 @@ public class AlexaSkillFunctionTests : TestBase
     public void Constructor_InitializesServiceProvider()
     {
         var function = new TestAlexaSkillFunction();
-        
+
         function.ServiceProvider.Should().NotBeNull();
     }
 
@@ -27,11 +27,11 @@ public class AlexaSkillFunctionTests : TestBase
     public void ServiceProvider_ContainsRequiredServices()
     {
         var function = new TestAlexaSkillFunction();
-        
+
         var skillContextFactory = function.ServiceProvider.GetService<ISkillContextFactory>();
         var lambdaSerializer = function.ServiceProvider.GetService<ILambdaSerializer>();
         var logger = function.ServiceProvider.GetService<ILogger<TestAlexaSkillFunction>>();
-        
+
         skillContextFactory.Should().NotBeNull();
         lambdaSerializer.Should().NotBeNull();
         logger.Should().NotBeNull();
@@ -41,9 +41,9 @@ public class AlexaSkillFunctionTests : TestBase
     public void CreateHostBuilder_ReturnsConfiguredBuilder()
     {
         var function = new TestAlexaSkillFunction();
-        
+
         var builder = function.CreateHostBuilder();
-        
+
         builder.Should().NotBeNull();
     }
 
@@ -51,11 +51,11 @@ public class AlexaSkillFunctionTests : TestBase
     public void CreateHostBuilder_ConfiguresLogging()
     {
         var function = new TestAlexaSkillFunction();
-        
+
         var builder = function.CreateHostBuilder();
         var host = builder.Build();
         var logger = host.Services.GetService<ILogger<TestAlexaSkillFunction>>();
-        
+
         logger.Should().NotBeNull();
     }
 
@@ -63,9 +63,9 @@ public class AlexaSkillFunctionTests : TestBase
     public void CreateHostBuilder_CallsInitMethod()
     {
         var function = new TestAlexaSkillFunction();
-        
+
         function.CreateHostBuilder();
-        
+
         function.InitCalled.Should().BeTrue();
     }
 
@@ -74,22 +74,22 @@ public class AlexaSkillFunctionTests : TestBase
     public void CreateContext_WithValidRequest_CallsFactory(SkillRequest launchRequest)
     {
         var function = new TestAlexaSkillFunction();
-        
+
         // This test verifies the context creation doesn't throw
         var exception = Record.Exception(() => function.CreateContext(launchRequest));
-        
+
         exception.Should().BeNull();
     }
 
     [Theory]
     [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_WithMissingHandler_ThrowsException(
-        SkillRequest skillRequest, 
+        SkillRequest skillRequest,
         ILambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunction();
 
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
@@ -102,7 +102,7 @@ public class AlexaSkillFunctionTests : TestBase
     {
         var function = new TestAlexaSkillFunction();
 
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             function.FunctionHandlerAsync(null!, lambdaContext, TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
@@ -114,7 +114,7 @@ public class AlexaSkillFunctionTests : TestBase
     {
         var function = new TestAlexaSkillFunction();
 
-        var exception = await Record.ExceptionAsync(() => 
+        var exception = await Record.ExceptionAsync(() =>
             function.FunctionHandlerAsync(skillRequest, null!, TestContext.Current.CancellationToken));
 
         exception.Should().NotBeNull();
@@ -123,13 +123,13 @@ public class AlexaSkillFunctionTests : TestBase
     [Theory]
     [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_WithValidHandler_ReturnsResponse(
-        SkillRequest skillRequest, 
+        SkillRequest skillRequest,
         ILambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithHandler();
-        
+
         var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
-        
+
         result.Should().NotBeNull();
         result.Should().BeOfType<SkillResponse>();
     }
@@ -137,12 +137,12 @@ public class AlexaSkillFunctionTests : TestBase
     [Theory]
     [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_WithHandlerException_PropagatesException(
-        SkillRequest skillRequest, 
+        SkillRequest skillRequest,
         ILambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithThrowingHandler();
 
-        var thrownException = await Record.ExceptionAsync(() => 
+        var thrownException = await Record.ExceptionAsync(() =>
             function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken));
 
         thrownException.Should().BeOfType<InvalidOperationException>();
@@ -153,9 +153,9 @@ public class AlexaSkillFunctionTests : TestBase
     public void Start_RegistersRequiredServices()
     {
         var function = new TestAlexaSkillFunction();
-        
+
         var services = function.ServiceProvider;
-        
+
         services.GetService<ISkillContextFactory>().Should().NotBeNull();
         services.GetService<ILambdaSerializer>().Should().NotBeNull();
         services.GetService<ISkillContextAccessor>().Should().NotBeNull();
@@ -208,12 +208,12 @@ public class AlexaSkillFunctionTests : TestBase
     [Theory]
     [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_CreatesLambdaSpan(
-        SkillRequest skillRequest, 
+        SkillRequest skillRequest,
         ILambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithHandler();
         var activities = new List<Activity>();
-        
+
         using var activityListener = new ActivityListener
         {
             ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
@@ -221,9 +221,9 @@ public class AlexaSkillFunctionTests : TestBase
             ActivityStarted = activity => activities.Add(activity)
         };
         ActivitySource.AddActivityListener(activityListener);
-        
+
         await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
-        
+
         activities.Should().NotBeEmpty();
         var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
         lambdaSpan.Should().NotBeNull();
@@ -233,12 +233,12 @@ public class AlexaSkillFunctionTests : TestBase
     [Theory]
     [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_HandlesColdStart(
-        SkillRequest skillRequest, 
+        SkillRequest skillRequest,
         ILambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithHandler();
         var activities = new List<Activity>();
-        
+
         using var activityListener = new ActivityListener
         {
             ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
@@ -246,18 +246,18 @@ public class AlexaSkillFunctionTests : TestBase
             ActivityStarted = activity => activities.Add(activity)
         };
         ActivitySource.AddActivityListener(activityListener);
-        
+
         // Reset cold start state by creating a new function instance
         var coldStartFunction = new TestAlexaSkillFunctionWithHandler();
         await coldStartFunction.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
-        
+
         // Second call should not be cold start
         activities.Clear();
         await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
-        
+
         var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
         lambdaSpan.Should().NotBeNull();
-        
+
         var tags = lambdaSpan!.Tags.ToDictionary(t => t.Key, t => t.Value);
         // Since cold start is tracked globally, we can't reliably test its presence
         // but we can verify the span was created properly
@@ -267,13 +267,13 @@ public class AlexaSkillFunctionTests : TestBase
     [Theory]
     [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_HandlesSpanOnException(
-        SkillRequest skillRequest, 
+        SkillRequest skillRequest,
         ILambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithThrowingHandler();
         var activities = new List<Activity>();
         var events = new List<ActivityEvent>();
-        
+
         using var activityListener = new ActivityListener
         {
             ShouldListenTo = source => source.Name == AlexaVoxCraftTelemetry.ActivitySourceName,
@@ -282,16 +282,16 @@ public class AlexaSkillFunctionTests : TestBase
             ActivityStopped = activity => events.AddRange(activity.Events)
         };
         ActivitySource.AddActivityListener(activityListener);
-        
-        var exception = await Record.ExceptionAsync(() => 
+
+        var exception = await Record.ExceptionAsync(() =>
             function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken));
-        
+
         exception.Should().NotBeNull();
-        
+
         var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
         lambdaSpan.Should().NotBeNull();
         lambdaSpan!.Status.Should().Be(ActivityStatusCode.Error);
-        
+
         var exceptionEvents = events.Where(e => e.Name == "exception");
         exceptionEvents.Should().NotBeEmpty();
     }
@@ -299,15 +299,15 @@ public class AlexaSkillFunctionTests : TestBase
     [Theory]
     [MediatRLambdaAutoData]
     public async Task FunctionHandlerAsync_TracksLambdaDuration(
-        SkillRequest skillRequest, 
+        SkillRequest skillRequest,
         ILambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithHandler();
-        
+
         // This test verifies that the timer scope is used without external metric collection
         // The actual duration tracking is handled by the TimerScope which we can't easily mock
         var result = await function.FunctionHandlerAsync(skillRequest, lambdaContext, TestContext.Current.CancellationToken);
-        
+
         result.Should().NotBeNull();
         result.Should().BeOfType<SkillResponse>();
     }

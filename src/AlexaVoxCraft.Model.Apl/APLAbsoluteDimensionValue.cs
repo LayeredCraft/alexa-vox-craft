@@ -15,7 +15,7 @@ public class APLAbsoluteDimensionValue : APLDimensionValue<AbsoluteDimension>
     {
     }
 
-    public APLAbsoluteDimensionValue(int number, string unit) : this(new AbsoluteDimension(number,unit))
+    public APLAbsoluteDimensionValue(int number, string unit) : this(new AbsoluteDimension(number, unit))
     {
     }
 
@@ -49,6 +49,6 @@ public class APLAbsoluteDimensionValue : APLDimensionValue<AbsoluteDimension>
 
     public static implicit operator APLAbsoluteDimensionValue(int value)
     {
-        return new APLAbsoluteDimensionValue(value,"dp");
+        return new APLAbsoluteDimensionValue(value, "dp");
     }
 }

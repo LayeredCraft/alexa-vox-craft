@@ -2,10 +2,11 @@
 
 namespace AlexaVoxCraft.Model.Response.Ssml;
 
-public class Sentence:IParagraphSsml
+public class Sentence : IParagraphSsml
 {
-    public Sentence(){}
-    public Sentence(string text):this(new PlainText(text)){
+    public Sentence() { }
+    public Sentence(string text) : this(new PlainText(text))
+    {
     }
 
     public Sentence(params ISentenceSsml[] elements)
@@ -17,6 +18,6 @@ public class Sentence:IParagraphSsml
 
     public XNode ToXml()
     {
-        return new XElement("s",Elements.Select(e => e.ToXml()));
+        return new XElement("s", Elements.Select(e => e.ToXml()));
     }
 }

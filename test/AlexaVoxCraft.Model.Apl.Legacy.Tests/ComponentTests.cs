@@ -17,7 +17,7 @@ public class ComponentTests
     {
         _output = output;
     }
-        
+
     [Fact]
     public void ComponentTypes()
     {
@@ -44,7 +44,7 @@ public class ComponentTests
         var second = component.Bindings.Skip(1).First();
         Assert.Equal("bar", second.Name);
         Assert.Equal("${foo + 23}", second.Value);
-            
+
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public class ComponentTests
 
         // Serialize the response with System.Text.Json
         var json = JsonSerializer.Serialize(response, AlexaJsonOptions.DefaultOptions);
-                
+
         // 👇 Optional: Output the JSON in test output
         _output.WriteLine(json);
     }
@@ -104,7 +104,7 @@ public class ComponentTests
         var sources = new Dictionary<string, ObjectDataSource>();
         foreach (var (key, dataSource) in dataSources)
             sources.Add(key, dataSource);
-            
+
         // Serialize dataSources to JsonElement
         var dataSourcesElement = JsonSerializer.SerializeToElement(sources, AlexaJsonOptions.DefaultOptions);
         directive.Properties.Add("datasources", dataSourcesElement);
@@ -200,7 +200,7 @@ public class ComponentTests
                 Value = APLValue.To<string>("${exampleData.imageStyleText}")
             }}.ToList()
         };
-        Assert.True(Utility.CompareJson(control,"AlexaIconButton.json", _output));
+        Assert.True(Utility.CompareJson(control, "AlexaIconButton.json", _output));
     }
 
     [Fact]
@@ -218,7 +218,7 @@ public class ComponentTests
             ImageAspectRatio = AlexaImageAspectRatio.Square,
             ImageSource = "${exampleData.imageSource}"
         };
-        Assert.True(Utility.CompareJson(control,"AlexaImageListItem.json", _output));
+        Assert.True(Utility.CompareJson(control, "AlexaImageListItem.json", _output));
     }
 
 
@@ -227,13 +227,13 @@ public class ComponentTests
     {
         var control = new AlexaRating
         {
-            RatingSlotPadding = new AbsoluteDimension(0,"dp"),
+            RatingSlotPadding = new AbsoluteDimension(0, "dp"),
             RatingSlotMode = RatingSlotMode.Multiple,
             RatingNumber = 3.5,
             RatingText = "509 ratings",
             Spacing = "@spacingMedium"
         };
-        Assert.True(Utility.CompareJson(control,"AlexaRating.json", _output));
+        Assert.True(Utility.CompareJson(control, "AlexaRating.json", _output));
     }
 
     [Fact]
@@ -252,7 +252,7 @@ public class ComponentTests
                 }
             }.ToList())
         };
-        Assert.True(Utility.CompareJson(control,"AlexaImageList.json", _output));
+        Assert.True(Utility.CompareJson(control, "AlexaImageList.json", _output));
     }
 
     [Fact]

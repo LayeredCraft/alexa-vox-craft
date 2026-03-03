@@ -4,7 +4,7 @@ using AlexaVoxCraft.Model.Response.Converters;
 
 namespace AlexaVoxCraft.Model.Response.Directive;
 
-public class StartConnectionDirective:IDirective
+public class StartConnectionDirective : IDirective
 {
     public const string DirectiveType = "Connections.StartConnection";
 
@@ -26,7 +26,7 @@ public class StartConnectionDirective:IDirective
     [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<OnCompleteAction>))]
     public OnCompleteAction? OnComplete { get; set; }
 
-    public StartConnectionDirective(){}
+    public StartConnectionDirective() { }
 
     public StartConnectionDirective(IConnectionTask input, string token)
     {

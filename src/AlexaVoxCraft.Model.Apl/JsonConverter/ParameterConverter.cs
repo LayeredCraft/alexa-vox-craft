@@ -80,5 +80,6 @@ public class ParameterConverter : JsonConverter<Parameter>
             JsonSerializer.Serialize(writer, value.Default, options);
         }
 
-        writer.WriteEndObject();    }
+        writer.WriteEndObject();
+    }
 }

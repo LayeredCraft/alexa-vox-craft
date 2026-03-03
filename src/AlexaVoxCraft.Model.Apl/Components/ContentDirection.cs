@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ContentDirection>))]
 public enum ContentDirection
 {
-    [EnumMember(Value="column")]
+    [EnumMember(Value = "column")]
     Column,
-    [EnumMember(Value="row")]
+    [EnumMember(Value = "row")]
     Row
 }

@@ -7,8 +7,8 @@ namespace AlexaVoxCraft.Model.Apl;
 [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ViewportTheme>))]
 public enum ViewportTheme
 {
-    [EnumMember(Value="dark")]
+    [EnumMember(Value = "dark")]
     Dark,
-    [EnumMember(Value="light")]
+    [EnumMember(Value = "light")]
     Light
 }

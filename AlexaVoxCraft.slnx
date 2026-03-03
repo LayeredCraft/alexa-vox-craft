@@ -22,6 +22,7 @@
     <File Path="docs/components/request-handling.md" />
     <File Path="docs/components/session-management.md" />
     <File Path="docs/components/source-generation.md" />
+    <File Path="docs\components\in-skill-purchasing.md" />
     <File Path="docs\components\observability.md" />
   </Folder>
   <Folder Name="/docs/examples/">
@@ -38,6 +39,7 @@
   </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/Sample.Apl.Function/Sample.Apl.Function.csproj" />
+    <Project Path="samples/Sample.Fact.InSkill.Purchases/Sample.Fact.InSkill.Purchases.csproj" />
     <Project Path="samples/Sample.Generated.Function/Sample.Generated.Function.csproj" />
     <Project Path="samples/Sample.Host.Function/Sample.Host.Function.csproj" />
     <Project Path="samples/Sample.Skill.Function/Sample.Skill.Function.csproj" />
@@ -46,6 +48,7 @@
     <File Path="CLAUDE.md" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
     <File Path="icon.png" />
     <File Path="LICENSE" />
     <File Path="NOTICE" />
@@ -59,6 +62,8 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
+    <Project Path="src/AlexaVoxCraft.Http/AlexaVoxCraft.Http.csproj" />
+    <Project Path="src/AlexaVoxCraft.InSkillPurchasing/AlexaVoxCraft.InSkillPurchasing.csproj" />
     <Project Path="src/AlexaVoxCraft.Lambda/AlexaVoxCraft.Lambda.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
@@ -83,6 +88,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
+    <Project Path="src/AlexaVoxCraft.Model.InSkillPurchasing/AlexaVoxCraft.Model.InSkillPurchasing.csproj" />
     <Project Path="src/AlexaVoxCraft.Model/AlexaVoxCraft.Model.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
@@ -104,6 +110,8 @@
     </Project>
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/AlexaVoxCraft.Http.TestKit/AlexaVoxCraft.Http.TestKit.csproj" />
+    <Project Path="test/AlexaVoxCraft.InSkillPurchasing.Tests/AlexaVoxCraft.InSkillPurchasing.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.MediatR.Generator.Tests/AlexaVoxCraft.MediatR.Generator.Tests.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
@@ -123,6 +131,7 @@
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
     <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj" />
+    <Project Path="test/AlexaVoxCraft.Model.InSkillPurchasing.Tests/AlexaVoxCraft.Model.InSkillPurchasing.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.Smapi.Tests/AlexaVoxCraft.Smapi.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj" />
     <Project Path="test\AlexaVoxCraft.Model.Apl.Legacy.Tests\AlexaVoxCraft.Model.Apl.Legacy.Tests.csproj">

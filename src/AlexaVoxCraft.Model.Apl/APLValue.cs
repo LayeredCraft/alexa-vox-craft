@@ -29,6 +29,6 @@ public class APLValue
         {
             throw new InvalidOperationException("Unable to use APLValue.To with Dimensions, please use new APLAbsoluteDimensionValue(string value) or new APLDimensionValue(string value) as appropriate");
         }
-        return new APLValue<T>{Expression=expression};
+        return new APLValue<T> { Expression = expression };
     }
 }

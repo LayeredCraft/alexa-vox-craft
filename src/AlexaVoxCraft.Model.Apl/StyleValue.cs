@@ -18,5 +18,5 @@ public class StyleValue
     public string When { get; set; }
 
     [JsonExtensionData]
-    public Dictionary<string,object> Properties { get; set; }
+    public Dictionary<string, object> Properties { get; set; }
 }

@@ -22,22 +22,22 @@ public class ProgressiveResponse
 
     public ProgressiveResponse(SkillRequest request) : this(request, new HttpClient())
     {
-            
+
     }
 
-    public ProgressiveResponse(SkillRequest request,HttpClient client) : this(
+    public ProgressiveResponse(SkillRequest request, HttpClient client) : this(
         request?.Request?.RequestId,
         request?.Context?.System?.ApiAccessToken,
-        request?.Context?.System?.ApiEndpoint,client)
+        request?.Context?.System?.ApiEndpoint, client)
     {
     }
 
-    public ProgressiveResponse(string requestId, string authToken, string baseAddress):this(requestId,authToken,baseAddress,new HttpClient())
+    public ProgressiveResponse(string requestId, string authToken, string baseAddress) : this(requestId, authToken, baseAddress, new HttpClient())
     {
 
     }
 
-    public ProgressiveResponse(string requestId, string authToken,string baseAddress, HttpClient client)
+    public ProgressiveResponse(string requestId, string authToken, string baseAddress, HttpClient client)
     {
         Client = client;
         if (!string.IsNullOrWhiteSpace(baseAddress))
@@ -56,7 +56,7 @@ public class ProgressiveResponse
         }
     }
 
-    public ProgressiveResponse(ProgressiveResponseHeader header,HttpClient client)
+    public ProgressiveResponse(ProgressiveResponseHeader header, HttpClient client)
     {
         Client = client;
         Header = header;
