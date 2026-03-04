@@ -36,6 +36,12 @@ public enum APLDocumentVersion
     V2023_1,
     [EnumMember(Value = "2023.2")]
     V2023_2,
+    [EnumMember(Value = "2023.3")]
+    V2023_3,
     [EnumMember(Value = "2024.1")]
-    V2024_1
+    V2024_1,
+    [EnumMember(Value = "2024.2")]
+    V2024_2,
+    [EnumMember(Value = "2024.3")]
+    V2024_3
 }
