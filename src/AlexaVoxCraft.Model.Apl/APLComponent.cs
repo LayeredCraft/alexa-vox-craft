@@ -208,6 +208,22 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<LayoutDirection?>? LayoutDirection { get; set; }
 
+    [JsonPropertyName("onLayout")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValueCollection<APLCommand>? OnLayout { get; set; }
+
+    [JsonPropertyName("pointerEvents")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValue<string>? PointerEvents { get; set; }
+
+    [JsonPropertyName("onCursorMove")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValueCollection<APLCommand>? OnCursorMove { get; set; }
+
+    [JsonPropertyName("trackChanges")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValueCollection<string>? TrackChanges { get; set; }
+
     public new static void RegisterTypeInfo<T>() where T : APLComponent
     {
         APLComponentBase.RegisterTypeInfo<T>();
@@ -239,6 +255,12 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
             var actionsProp = info.Properties.FirstOrDefault(p => p.Name == "actions");
             actionsProp?.CustomConverter = new APLValueCollectionConverter<APLAction>(false);
+
+            var onLayoutProp = info.Properties.FirstOrDefault(p => p.Name == "onLayout");
+            onLayoutProp?.CustomConverter = new APLCommandListConverter(false);
+            
+            var onCursorMoveProp = info.Properties.FirstOrDefault(p => p.Name == "onCursorMove");
+            onCursorMoveProp?.CustomConverter = new APLCommandListConverter(false);
         });
     }
 }

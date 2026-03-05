@@ -38,6 +38,14 @@ public class ScrollView : ActionableComponent, IJsonSerializable<ScrollView>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLCommand> OnScroll { get; set; }
 
+    [JsonPropertyName("allowForward")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValue<bool?>? AllowForward { get; set; }
+
+    [JsonPropertyName("allowBackwards")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValue<bool?>? AllowBackwards { get; set; }
+
     public new static void RegisterTypeInfo<T>() where T : ScrollView
     {
         ActionableComponent.RegisterTypeInfo<T>();

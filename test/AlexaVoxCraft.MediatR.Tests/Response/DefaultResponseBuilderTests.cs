@@ -2,7 +2,6 @@ using System.Text.Json;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.DI;
 using AlexaVoxCraft.MediatR.Response;
-using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Response.Ssml;

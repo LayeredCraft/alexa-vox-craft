@@ -131,5 +131,6 @@ public static class APLSupport
         AVGPath.RegisterTypeInfo<AVGPath>();
         AVGText.RegisterTypeInfo<AVGText>();
         APLPageMoveHandler.RegisterTypeInfo<APLPageMoveHandler>();
+        FlexSequence.RegisterTypeInfo<FlexSequence>();
     }
 }

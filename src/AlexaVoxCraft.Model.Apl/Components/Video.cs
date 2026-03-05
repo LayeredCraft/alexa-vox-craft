@@ -58,6 +58,10 @@ public class Video : APLComponent, IJsonSerializable<Video>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLCommand>? OnTrackFail { get; set; }
 
+    [JsonPropertyName("screenLock")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValue<bool?>? ScreenLock { get; set; }
+
     public new static void RegisterTypeInfo<T>() where T : Video
     {
         APLComponent.RegisterTypeInfo<T>();
