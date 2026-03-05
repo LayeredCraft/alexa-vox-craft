@@ -60,6 +60,7 @@ public class APLComponentConverter : BasePolymorphicConverter<APLComponent>
         [nameof(Sequence)] = typeof(Sequence),
         [nameof(Spacer)] = typeof(Spacer),
         [nameof(VectorGraphic)] = typeof(VectorGraphic),
+        [nameof(FlexSequence)] = typeof(FlexSequence),
     };
     protected override IDictionary<string, Type> DerivedTypes => AplComponentLookup;
     protected override JsonElement TransformJson(JsonElement original)

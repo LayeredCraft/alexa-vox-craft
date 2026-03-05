@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
-using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Apl.Traits;
 using AlexaVoxCraft.Model.Response.Converters;
-using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
-public class Container : APLComponent, IJsonSerializable<Container>
+public class Container : APLComponent, IJsonSerializable<Container>, IMultiChildComponent
 {
+    [JsonIgnore]
+    internal MultiChildComponentTrait MultiChild { get; } = new();
+
     public Container()
     {
     }
@@ -29,25 +30,9 @@ public class Container : APLComponent, IJsonSerializable<Container>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? AlignItems { get; set; }
 
-    [JsonPropertyName("data")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<object> Data { get; set; }
-
     [JsonPropertyName("direction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? Direction { get; set; }
-
-    [JsonPropertyName("firstItem")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLComponent>? FirstItem { get; set; }
-
-    [JsonPropertyName("lastItem")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLComponent> LastItem { get; set; }
-
-    [JsonPropertyName("items")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLComponent>? Items { get; set; }
 
     [JsonPropertyName("justifyContent")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -61,23 +46,51 @@ public class Container : APLComponent, IJsonSerializable<Container>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<ContainerWrap?> Wrap { get; set; }
 
+    // IMultiChildComponent
+    [JsonPropertyName("data")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValueCollection<object>? Data
+    {
+        get => MultiChild.Data;
+        set => MultiChild.Data = value;
+    }
+
+    [JsonPropertyName("firstItem")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValueCollection<APLComponent>? FirstItem
+    {
+        get => MultiChild.FirstItem;
+        set => MultiChild.FirstItem = value;
+    }
+
+    [JsonPropertyName("items")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValueCollection<APLComponent>? Items
+    {
+        get => MultiChild.Items;
+        set => MultiChild.Items = value;
+    }
+
+    [JsonPropertyName("lastItem")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValueCollection<APLComponent>? LastItem
+    {
+        get => MultiChild.LastItem;
+        set => MultiChild.LastItem = value;
+    }
+
+    [JsonPropertyName("onChildrenChanged")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public APLValueCollection<APLCommand>? OnChildrenChanged
+    {
+        get => MultiChild.OnChildrenChanged;
+        set => MultiChild.OnChildrenChanged = value;
+    }
+
     public new static void RegisterTypeInfo<T>() where T : Container
     {
         APLComponent.RegisterTypeInfo<T>();
-        AlexaJsonOptions.RegisterTypeModifier<T>(info =>
-        {
-            var dataProp = info.Properties.FirstOrDefault(p => p.Name == "data");
-            dataProp?.CustomConverter = new APLValueCollectionConverter<object>(false);
-
-            var itemsProp = info.Properties.FirstOrDefault(p => p.Name == "items");
-            itemsProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
-
-            var firstItemProp = info.Properties.FirstOrDefault(p => p.Name == "firstItem");
-            firstItemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
-
-            var lastItemProp = info.Properties.FirstOrDefault(p => p.Name == "lastItem");
-            lastItemProp?.CustomConverter = new APLValueCollectionConverter<APLComponent>(false);
-        });
+        MultiChildComponentTrait.RegisterTypeInfo<T>();
     }
 }
 
