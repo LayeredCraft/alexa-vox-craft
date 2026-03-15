@@ -24,7 +24,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 file static class AlexaVoxCraftInterceptors
 {
-    [InterceptsLocation(version: 1, data: "uuJo21P3SeBeoq+EmXfmNgUDAABGdW5jdGlvbi5jcw==")]
+    [InterceptsLocation(version: 1, data: "D5Lbk+htdYeWJebkTnNS5hkDAABGdW5jdGlvbi5jcw==")]
     internal static IServiceCollection AddSkillMediator(
         this IServiceCollection services,
         IConfiguration configuration,
