@@ -192,7 +192,8 @@ internal sealed class VerifyGlue
         await Verifier
             .Verify(driver)
             .UseDirectory("Snapshots")
-            .DisableDiff();
+            .DisableDiff()
+            .ScrubLinesContaining("[InterceptsLocation(");
     }
 }
 
