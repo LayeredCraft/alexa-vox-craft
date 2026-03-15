@@ -69,30 +69,30 @@ internal static class SymbolDiscovery
             // Check for IExceptionHandler
             if (ImplementsInterface(typeInfo, IExceptionHandlerName))
             {
-                exceptionHandlers.Add(new TypeRegistration(typeModel, lifetime));
+                exceptionHandlers.Add(new TypeRegistration(typeModel, lifetime, order));
             }
 
             // Check for IRequestInterceptor
             if (ImplementsInterface(typeInfo, IRequestInterceptorName))
             {
-                requestInterceptors.Add(new TypeRegistration(typeModel, lifetime));
+                requestInterceptors.Add(new TypeRegistration(typeModel, lifetime, order));
             }
 
             // Check for IResponseInterceptor
             if (ImplementsInterface(typeInfo, IResponseInterceptorName))
             {
-                responseInterceptors.Add(new TypeRegistration(typeModel, lifetime));
+                responseInterceptors.Add(new TypeRegistration(typeModel, lifetime, order));
             }
 
             // Check for IPersistenceAdapter
             if (ImplementsInterface(typeInfo, IPersistenceAdapterName))
             {
                 persistenceAdapterLocations.Add(typeInfo.Location);
-                persistenceAdapter = new TypeRegistration(typeModel, 2); // 2 = Singleton
+                persistenceAdapter = new TypeRegistration(typeModel, 2, 0); // 2 = Singleton
             }
         }
 
-        SortRegistrations(handlers, behaviors);
+        SortRegistrations(handlers, behaviors, requestInterceptors, responseInterceptors, exceptionHandlers);
 
         // Check for multiple default handlers
         if (defaultHandlerLocations.Count > 1)
@@ -131,7 +131,12 @@ internal static class SymbolDiscovery
         return new ModelWithDiagnostics(model, new EquatableArray<DiagnosticInfo>(diagnostics));
     }
 
-    private static void SortRegistrations(List<HandlerRegistration> handlers, List<BehaviorRegistration> behaviors)
+    private static void SortRegistrations(
+        List<HandlerRegistration> handlers,
+        List<BehaviorRegistration> behaviors,
+        List<TypeRegistration> requestInterceptors,
+        List<TypeRegistration> responseInterceptors,
+        List<TypeRegistration> exceptionHandlers)
     {
         handlers.Sort((a, b) =>
         {
@@ -140,6 +145,24 @@ internal static class SymbolDiscovery
         });
 
         behaviors.Sort((a, b) =>
+        {
+            var orderCompare = a.Order.CompareTo(b.Order);
+            return orderCompare != 0 ? orderCompare : string.CompareOrdinal(a.Type.FullyQualifiedName, b.Type.FullyQualifiedName);
+        });
+
+        requestInterceptors.Sort((a, b) =>
+        {
+            var orderCompare = a.Order.CompareTo(b.Order);
+            return orderCompare != 0 ? orderCompare : string.CompareOrdinal(a.Type.FullyQualifiedName, b.Type.FullyQualifiedName);
+        });
+
+        responseInterceptors.Sort((a, b) =>
+        {
+            var orderCompare = a.Order.CompareTo(b.Order);
+            return orderCompare != 0 ? orderCompare : string.CompareOrdinal(a.Type.FullyQualifiedName, b.Type.FullyQualifiedName);
+        });
+
+        exceptionHandlers.Sort((a, b) =>
         {
             var orderCompare = a.Order.CompareTo(b.Order);
             return orderCompare != 0 ? orderCompare : string.CompareOrdinal(a.Type.FullyQualifiedName, b.Type.FullyQualifiedName);

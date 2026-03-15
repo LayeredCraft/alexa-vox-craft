@@ -236,6 +236,29 @@ public class AlexaVoxCraftDiGeneratorTests
     }
 
     /// <summary>
+    /// Verifies that interceptors with AlexaHandlerAttribute Order are registered in Order-ascending sequence,
+    /// not alphabetical order. Interceptor class names (Z* before A*) deliberately conflict with alphabetical
+    /// ordering to prove the Order property controls registration sequence.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_ForInterceptorsWithExplicitOrder(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/013_OrderedInterceptors/Function.cs",
+                "Cases/013_OrderedInterceptors/LaunchHandler.cs",
+                "Cases/013_OrderedInterceptors/ZFirstRequestInterceptor.cs",
+                "Cases/013_OrderedInterceptors/ASecondRequestInterceptor.cs",
+                "Cases/013_OrderedInterceptors/ZFirstResponseInterceptor.cs",
+                "Cases/013_OrderedInterceptors/ASecondResponseInterceptor.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts
+        );
+    }
+
+    /// <summary>
     /// Verifies comprehensive trivia game skill with all generator features combined.
     /// Tests abstract base handler, multi-type handler, IDefaultRequestHandler, various lifetimes and ordering,
     /// excluded handler, dual interceptors, and persistence adapter in a single realistic scenario.
