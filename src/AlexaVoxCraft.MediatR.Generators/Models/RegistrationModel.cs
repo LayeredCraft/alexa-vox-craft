@@ -29,7 +29,8 @@ internal readonly record struct BehaviorRegistration(
 
 internal readonly record struct TypeRegistration(
     TypeInfo Type,
-    int Lifetime
+    int Lifetime,
+    int Order
 );
 
 internal readonly record struct DiagnosticInfo(
