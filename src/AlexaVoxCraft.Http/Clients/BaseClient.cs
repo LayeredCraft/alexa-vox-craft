@@ -33,17 +33,21 @@ public abstract class BaseClient
     /// </summary>
     /// <param name="client">The HTTP client instance.</param>
     /// <param name="logger">The logger instance.</param>
-    public BaseClient(HttpClient client, ILogger logger)
+    protected BaseClient(HttpClient client, ILogger logger) : this(client, logger, new JsonSerializerOptions
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    })
+    {
+    }
+
+    protected BaseClient(HttpClient client, ILogger logger, JsonSerializerOptions jsonSerializerOptions)
     {
         Client = client ?? throw new ArgumentNullException(nameof(client));
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        JsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        };
+        JsonSerializerOptions = jsonSerializerOptions ?? throw new ArgumentNullException(nameof(jsonSerializerOptions));
     }
 
     /// <summary>
