@@ -7,7 +7,7 @@ public class UpsellDirectiveTests : TestBase<UpsellDirectiveTests>
     [Fact]
     public async Task UpsellDirective_Serializes()
     {
-        var directive = new UpsellDirective("amzn1.adg.product", "correlationToken");
+        var directive = new UpsellDirective("amzn1.adg.product", "This is a great offer!", "correlationToken");
         await TestHelper.VerifySerializedObject(directive, AlexaJson, "UpsellDirective");
     }
 }

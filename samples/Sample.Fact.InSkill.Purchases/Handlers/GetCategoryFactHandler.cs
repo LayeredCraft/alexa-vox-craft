@@ -88,10 +88,7 @@ public class GetCategoryFactHandler : IRequestHandler<IntentRequest>
                     {
                         var upsellMessage = $"You don't currently own the {factCategory} pack. {categoryProduct.Summary} Want to learn more?";
                         return await input.ResponseBuilder
-                            .AddDirective(new UpsellDirective(categoryProduct.ProductId, "correlationToken")
-                            {
-                                Payload = new(categoryProduct.ProductId, upsellMessage)
-                            })
+                            .AddDirective(new UpsellDirective(categoryProduct.ProductId, upsellMessage, "correlationToken"))
                             .GetResponse(cancellationToken);
                     }
 
