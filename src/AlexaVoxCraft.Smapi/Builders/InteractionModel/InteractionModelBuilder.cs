@@ -41,6 +41,7 @@ public sealed class InteractionModelBuilder
         _invocationName = invocationName;
         return this;
     }
+
     /// <summary>
     /// Sets the locale for this interaction model.
     /// Required when calling <see cref="BuildLocalized"/>.

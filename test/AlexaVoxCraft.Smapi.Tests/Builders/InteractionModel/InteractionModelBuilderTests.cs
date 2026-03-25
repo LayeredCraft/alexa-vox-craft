@@ -4,7 +4,7 @@ using AlexaVoxCraft.Smapi.Models.InteractionModel;
 
 namespace AlexaVoxCraft.Smapi.Tests.Builders.InteractionModel;
 
-public class InteractionModelBuilderTests
+public sealed class InteractionModelBuilderTests
 {
     [Fact]
     public async Task ToJson_CreatesCorrectJson()

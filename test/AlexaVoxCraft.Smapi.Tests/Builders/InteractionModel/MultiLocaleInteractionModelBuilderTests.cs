@@ -3,7 +3,7 @@ using AlexaVoxCraft.Smapi.Builders.InteractionModel;
 
 namespace AlexaVoxCraft.Smapi.Tests.Builders.InteractionModel;
 
-public class MultiLocaleInteractionModelBuilderTests
+public sealed class MultiLocaleInteractionModelBuilderTests
 {
     [Fact]
     public async Task BuildAll_WithSingleDefaultLocale_ReturnsOneModel()

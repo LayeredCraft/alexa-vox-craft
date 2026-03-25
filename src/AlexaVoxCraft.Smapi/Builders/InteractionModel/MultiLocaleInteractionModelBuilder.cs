@@ -77,23 +77,18 @@ public sealed class MultiLocaleInteractionModelBuilder
     }
 
     /// <summary>
-    /// Adds or configures a custom slot type in the shared schema.
-    /// Slot values are locale-specific and should be set via <see cref="LocaleOverrideBuilder.WithSlotValues"/>.
+    /// Registers a custom slot type in the shared schema.
+    /// Slot values are locale-specific; provide them per locale via <see cref="LocaleOverrideBuilder.WithSlotValues"/>.
     /// </summary>
     /// <param name="name">The slot type name.</param>
-    /// <param name="configure">Optional configuration action.</param>
     /// <returns>The current <see cref="MultiLocaleInteractionModelBuilder"/>.</returns>
-    public MultiLocaleInteractionModelBuilder AddSlotType(string name, Action<SlotTypeBuilder>? configure = null)
+    public MultiLocaleInteractionModelBuilder AddSlotType(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        if (!_slotTypes.TryGetValue(name, out var builder))
-        {
-            builder = new SlotTypeBuilder(name);
-            _slotTypes[name] = builder;
-        }
+        if (!_slotTypes.ContainsKey(name))
+            _slotTypes[name] = new SlotTypeBuilder(name);
 
-        configure?.Invoke(builder);
         return this;
     }
 
@@ -183,6 +178,9 @@ public sealed class MultiLocaleInteractionModelBuilder
 
         foreach (var (locale, overrides) in _locales)
         {
+            if (locale == _defaultLocale)
+                continue;
+
             result.Add(new(locale, BuildDefinitionForLocale(overrides)));
         }
 

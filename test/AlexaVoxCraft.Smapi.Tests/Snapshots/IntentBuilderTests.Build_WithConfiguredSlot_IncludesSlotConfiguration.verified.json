@@ -1,0 +1,16 @@
+﻿{
+  "Name": "OrderIntent",
+  "Samples": [
+    "order {drink}"
+  ],
+  "Slots": [
+    {
+      "Name": "drink",
+      "Type": "DrinkType",
+      "IsRequired": true,
+      "Samples": [
+        "{drink}"
+      ]
+    }
+  ]
+}

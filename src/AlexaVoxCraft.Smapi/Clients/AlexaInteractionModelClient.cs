@@ -39,12 +39,16 @@ public sealed class AlexaInteractionModelClient : BaseClient, IAlexaInteractionM
 
     /// <inheritdoc />
     public Task UpdateAsync(string skillId, string stage, LocalizedInteractionModel model, CancellationToken ct)
-        => UpdateAsync(skillId, stage, model.Locale, model.Definition, ct);
+    {
+        ArgumentNullException.ThrowIfNull(model);
+        return UpdateAsync(skillId, stage, model.Locale, model.Definition, ct);
+    }
 
     /// <inheritdoc />
     public async Task UpdateAllAsync(string skillId, string stage, IEnumerable<LocalizedInteractionModel> models,
         CancellationToken ct)
     {
+        ArgumentNullException.ThrowIfNull(models);
         var errors = new List<Exception>();
         foreach (var model in models)
         {

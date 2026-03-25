@@ -1,0 +1,6 @@
+﻿{
+  "Name": "OrderIntent",
+  "Samples": [
+    "order {drink}"
+  ]
+}

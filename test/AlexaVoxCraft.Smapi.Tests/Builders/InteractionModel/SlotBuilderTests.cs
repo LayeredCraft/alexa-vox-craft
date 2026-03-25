@@ -10,7 +10,7 @@ public sealed class SlotBuilderTests
         var slot = new SlotBuilder("productCategory", "factType")
             .Build();
 
-        await Verify(slot);
+        await Verify(slot).DisableDiff();
     }
 
     [Fact]
@@ -20,7 +20,7 @@ public sealed class SlotBuilderTests
             .WithSample("{productCategory} pack")
             .Build();
 
-        await Verify(slot);
+        await Verify(slot).DisableDiff();
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public sealed class SlotBuilderTests
             .WithSample("Tell me about the {productCategory} pack")
             .Build();
 
-        await Verify(slot);
+        await Verify(slot).DisableDiff();
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public sealed class SlotBuilderTests
                 "Tell me about {productCategory} pack")
             .Build();
 
-        await Verify(slot);
+        await Verify(slot).DisableDiff();
     }
 
     [Fact]
@@ -57,6 +57,6 @@ public sealed class SlotBuilderTests
             .WithSamples("{productCategory} pack", "Tell me about a {productCategory} pack")
             .Build();
 
-        await Verify(slot);
+        await Verify(slot).DisableDiff();
     }
 }

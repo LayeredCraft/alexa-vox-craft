@@ -188,6 +188,18 @@ public sealed class AlexaInteractionModelClientTests
     }
 
     [Theory, SmapiClientAutoData]
+    public async Task UpdateAsync_WithNullLocalizedModel_ThrowsArgumentNullException(
+        AlexaInteractionModelClient client,
+        string skillId,
+        string stage)
+    {
+        var act = () => client.UpdateAsync(skillId, stage, (LocalizedInteractionModel)null!, TestContext.Current.CancellationToken);
+
+        await act.Should().ThrowAsync<ArgumentNullException>()
+            .WithParameterName("model");
+    }
+
+    [Theory, SmapiClientAutoData]
     public async Task UpdateAllAsync_WithMultipleModels_CallsEndpointForEach(
         [Frozen] HttpMessageHandler handler,
         AlexaInteractionModelClient client,

@@ -11,6 +11,7 @@ public sealed class IntentBuilder
     private readonly string _name;
     private readonly List<string> _samples = [];
     private readonly List<SlotBuilder> _slots = [];
+    private readonly HashSet<string> _slotNames = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntentBuilder"/> class.
@@ -66,6 +67,9 @@ public sealed class IntentBuilder
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(type);
 
+        if (!_slotNames.Add(name))
+            throw new InvalidOperationException($"Slot '{name}' has already been added to intent '{_name}'.");
+
         var builder = new SlotBuilder(name, type);
         configure?.Invoke(builder);
         _slots.Add(builder);
@@ -92,7 +96,7 @@ public sealed class IntentBuilder
 
     internal string Name => _name;
 
-    internal IReadOnlyCollection<string> SlotNames => _slots.Select(static s => s.Name).ToList();
+    internal IReadOnlyCollection<string> SlotNames => _slotNames;
 
     internal Intent BuildWithSamples(
         IReadOnlyList<string> intentSamples,

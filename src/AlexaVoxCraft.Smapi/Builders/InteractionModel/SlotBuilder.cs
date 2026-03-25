@@ -99,3 +99,4 @@ public sealed class SlotBuilder
             Samples = samples?.Count > 0 ? [.. samples] : null
         };
 }
+
