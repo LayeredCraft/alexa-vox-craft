@@ -117,37 +117,62 @@ public class SkillDeploymentService
         _client = client;
     }
 
-    public async Task<string> UpdateInteractionModelAsync(
+    public async Task UpdateAsync(
         string skillId,
         string locale,
         InteractionModelDefinition model,
         CancellationToken cancellationToken = default)
     {
-        return await _client.UpdateInteractionModelAsync(
-            skillId,
-            "development",
-            locale,
-            model,
-            cancellationToken);
+        await _client.UpdateAsync(skillId, "development", locale, model, cancellationToken);
     }
 
-    public async Task<InteractionModelDefinition?> GetInteractionModelAsync(
+    public async Task<InteractionModelDefinition?> GetAsync(
         string skillId,
         string locale,
         CancellationToken cancellationToken = default)
     {
-        return await _client.GetInteractionModelAsync(
-            skillId,
-            "development",
-            locale,
-            cancellationToken);
+        return await _client.GetAsync(skillId, "development", locale, cancellationToken);
     }
+}
+```
+
+#### Deploying a Single Localized Model
+
+Use the `LocalizedInteractionModel` overload when you already have a locale paired with its definition:
+
+```csharp
+var localizedModel = new LocalizedInteractionModel("en-US", definition);
+await _client.UpdateAsync(skillId, "development", localizedModel, cancellationToken);
+```
+
+#### Deploying Multiple Locales
+
+`UpdateAllAsync` attempts every locale and collects failures into an `AggregateException` rather than stopping at the first error, ensuring all locales are always attempted:
+
+```csharp
+var models = new[]
+{
+    new LocalizedInteractionModel("en-US", enUsDefinition),
+    new LocalizedInteractionModel("en-GB", enGbDefinition),
+    new LocalizedInteractionModel("en-CA", enCaDefinition),
+};
+
+try
+{
+    await _client.UpdateAllAsync(skillId, "development", models, cancellationToken);
+}
+catch (AggregateException ex)
+{
+    foreach (var inner in ex.InnerExceptions)
+        Console.Error.WriteLine(inner.Message);
 }
 ```
 
 ### Building Interaction Models
 
-Use the fluent builder API to construct interaction models:
+#### Single-Locale Builder
+
+Use `InteractionModelBuilder` to construct a model for a single locale:
 
 ```csharp
 using AlexaVoxCraft.Smapi.Builders.InteractionModel;
@@ -177,6 +202,71 @@ var model = InteractionModelBuilder.Create()
             .WithValue("cheese", v => v.WithSynonyms("plain")))
     .Build();
 ```
+
+Use `WithLocale` and `BuildLocalized` to produce a `LocalizedInteractionModel` directly, ready for upload:
+
+```csharp
+var localized = InteractionModelBuilder.Create()
+    .WithLocale("en-US")
+    .WithInvocationName("my skill")
+    .WithVersion("1")
+    .WithDescription("My skill interaction model")
+    .AddIntent(BuiltInIntent.Help)
+    .AddIntent(BuiltInIntent.Cancel)
+    .BuildLocalized(); // returns LocalizedInteractionModel("en-US", ...)
+
+await _client.UpdateAsync(skillId, "development", localized, cancellationToken);
+```
+
+#### Multi-Locale Builder
+
+`MultiLocaleInteractionModelBuilder` lets you define the shared interaction model schema once (intent names, slot structure, slot type names) and specify locale-specific text per locale. Any text not overridden in an additional locale falls back to the default locale — similar to how `.resx` resource files work.
+
+**Schema-level** elements (defined once on the builder):
+- Intent names and slot structure
+- Slot type names
+
+**Locale-level** elements (defined per locale via `LocaleOverrideBuilder`):
+- Invocation name
+- Intent sample utterances
+- Slot sample utterances
+- Slot type values
+
+```csharp
+using AlexaVoxCraft.Smapi.Builders.InteractionModel;
+using AlexaVoxCraft.Model.Request.Type;
+
+var models = MultiLocaleInteractionModelBuilder.Create()
+    .WithVersion("1")
+    .WithDescription("My multi-locale skill")
+    // Define the schema once — slot structure shared across all locales
+    .AddIntent("OrderIntent", i => i.WithSlot("drink", "DrinkType"))
+    .AddIntent(BuiltInIntent.Cancel)
+    .AddIntent(BuiltInIntent.Stop)
+    .AddSlotType("DrinkType")
+    // Default locale provides the base text all other locales fall back to
+    .WithDefaultLocale("en-US", locale => locale
+        .WithInvocationName("my skill")
+        .WithIntentSamples("OrderIntent", "order {drink}", "get me {drink}")
+        .WithSlotValues("DrinkType", v => v
+            .WithValue("coffee")
+            .WithValue("tea")))
+    // en-CA inherits everything from en-US
+    .ForLocale("en-CA")
+    // en-GB overrides only the samples that differ
+    .ForLocale("en-GB", locale => locale
+        .WithInvocationName("my british skill")
+        .WithIntentSamples("OrderIntent", "order {drink}", "I'd like {drink}")
+        .WithSlotValues("DrinkType", v => v
+            .WithValue("coffee")
+            .WithValue("tea")
+            .WithValue("biscuit")))
+    .BuildAll(); // IReadOnlyList<LocalizedInteractionModel>, default locale first
+
+await _client.UpdateAllAsync(skillId, "development", models, cancellationToken);
+```
+
+`BuildAll` always includes the default locale first, followed by additional locales in registration order. Calling `ForLocale` with no lambda inherits everything from the default locale. Calling `ForLocale` multiple times for the same locale merges the overrides.
 
 ### Name-Free Interactions
 
@@ -322,7 +412,7 @@ The client throws standard HTTP exceptions for API errors:
 ```csharp
 try
 {
-    await client.UpdateInteractionModelAsync(skillId, stage, locale, model);
+    await client.UpdateAsync(skillId, "development", locale, model, cancellationToken);
 }
 catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
 {
@@ -335,6 +425,21 @@ catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthoriz
 catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.TooManyRequests)
 {
     // Rate limited - implement retry with backoff
+}
+```
+
+When deploying multiple locales via `UpdateAllAsync`, individual locale failures are collected and thrown together as an `AggregateException` after all locales have been attempted. A `CancellationToken` cancellation propagates immediately:
+
+```csharp
+try
+{
+    await client.UpdateAllAsync(skillId, "development", models, cancellationToken);
+}
+catch (AggregateException ex)
+{
+    Console.Error.WriteLine($"Failed to update {ex.InnerExceptions.Count} locale(s):");
+    foreach (var inner in ex.InnerExceptions)
+        Console.Error.WriteLine($"  {inner.Message}");
 }
 ```
 
