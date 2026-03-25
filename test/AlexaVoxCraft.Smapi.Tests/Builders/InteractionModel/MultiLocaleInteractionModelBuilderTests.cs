@@ -213,4 +213,34 @@ public sealed class MultiLocaleInteractionModelBuilderTests
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("Slot type 'UnknownType' is not defined in the interaction model schema.");
     }
+
+    [Fact]
+    public void WithDefaultLocale_CalledTwiceWithDifferentLocale_ThrowsInvalidOperationException()
+    {
+        var act = () => MultiLocaleInteractionModelBuilder.Create()
+            .WithVersion("1")
+            .WithDescription("Double default locale test")
+            .AddIntent(BuiltInIntent.Cancel)
+            .WithDefaultLocale("en-US", locale => locale.WithInvocationName("my skill"))
+            .WithDefaultLocale("en-GB", locale => locale.WithInvocationName("my british skill"));
+
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Default locale is already set to 'en-US'.");
+    }
+
+    [Fact]
+    public void WithDefaultLocale_WhenForLocaleCalledFirstForSameLocale_PreservesOverrides()
+    {
+        var models = MultiLocaleInteractionModelBuilder.Create()
+            .WithVersion("1")
+            .WithDescription("ForLocale before WithDefaultLocale test")
+            .AddIntent(BuiltInIntent.Cancel)
+            .ForLocale("en-US", locale => locale.WithInvocationName("my skill"))
+            .WithDefaultLocale("en-US", _ => { })
+            .BuildAll();
+
+        models.Should().HaveCount(1);
+        models[0].Locale.Should().Be("en-US");
+        models[0].Definition.InteractionModel.LanguageModel.InvocationName.Should().Be("my skill");
+    }
 }

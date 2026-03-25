@@ -67,11 +67,13 @@ public sealed class IntentBuilder
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(type);
 
-        if (!_slotNames.Add(name))
+        if (_slotNames.Contains(name))
             throw new InvalidOperationException($"Slot '{name}' has already been added to intent '{_name}'.");
 
         var builder = new SlotBuilder(name, type);
         configure?.Invoke(builder);
+
+        _slotNames.Add(name);
         _slots.Add(builder);
         return this;
     }

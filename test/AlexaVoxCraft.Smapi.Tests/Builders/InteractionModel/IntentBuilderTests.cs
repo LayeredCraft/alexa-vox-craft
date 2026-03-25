@@ -90,4 +90,17 @@ public sealed class IntentBuilderTests
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("Slot 'drink' has already been added to intent 'OrderIntent'.");
     }
+
+    [Fact]
+    public void WithSlot_WhenConfigureThrows_SlotNameIsNotRetained()
+    {
+        var builder = new IntentBuilder("OrderIntent");
+
+        var act = () => builder.WithSlot("drink", "DrinkType", _ => throw new InvalidOperationException("configure failed"));
+
+        act.Should().Throw<InvalidOperationException>().WithMessage("configure failed");
+
+        var intent = builder.WithSlot("drink", "DrinkType").Build();
+        intent.Slots.Should().HaveCount(1);
+    }
 }

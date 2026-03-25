@@ -117,7 +117,17 @@ public sealed class MultiLocaleInteractionModelBuilder
         ArgumentException.ThrowIfNullOrWhiteSpace(locale);
         ArgumentNullException.ThrowIfNull(configure);
 
+        if (_defaultLocale is not null && _defaultLocale != locale)
+            throw new InvalidOperationException($"Default locale is already set to '{_defaultLocale}'.");
+
         _defaultLocale = locale;
+
+        if (_defaultOverrides is null && _locales.TryGetValue(locale, out var promoted))
+        {
+            _defaultOverrides = promoted;
+            _locales.Remove(locale);
+        }
+
         _defaultOverrides ??= new LocaleOverrideBuilder(_intents, _slotTypes);
         configure(_defaultOverrides);
         return this;
