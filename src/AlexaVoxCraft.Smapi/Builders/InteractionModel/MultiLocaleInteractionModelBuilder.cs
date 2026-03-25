@@ -57,10 +57,11 @@ public sealed class MultiLocaleInteractionModelBuilder
 
     /// <summary>
     /// Adds or configures an intent in the shared schema.
-    /// Sample utterances are not set here — provide them per locale via <see cref="WithDefaultLocale"/> and <see cref="ForLocale"/>.
+    /// Samples set here act as a global fallback used when neither the locale nor the default locale provides samples for this intent.
+    /// Prefer setting samples via <see cref="WithDefaultLocale"/> and <see cref="ForLocale"/> for locale-specific control.
     /// </summary>
     /// <param name="name">The intent name.</param>
-    /// <param name="configure">Optional structural configuration (slots only — samples are ignored at the schema level).</param>
+    /// <param name="configure">Optional configuration action for slots and schema-level fallback samples.</param>
     /// <returns>The current <see cref="MultiLocaleInteractionModelBuilder"/>.</returns>
     public MultiLocaleInteractionModelBuilder AddIntent(string name, Action<IntentBuilder>? configure = null)
     {
@@ -205,7 +206,7 @@ public sealed class MultiLocaleInteractionModelBuilder
         {
             var intentSamples = overrides.GetIntentSamples(intentBuilder.Name)
                 ?? _defaultOverrides!.GetIntentSamples(intentBuilder.Name)
-                ?? [];
+                ?? intentBuilder.Samples;
 
             var slotSampleOverrides = intentBuilder.SlotNames.ToDictionary(
                 slotName => slotName,

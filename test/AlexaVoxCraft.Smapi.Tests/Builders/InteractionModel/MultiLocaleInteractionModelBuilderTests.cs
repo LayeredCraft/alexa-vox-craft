@@ -215,6 +215,72 @@ public sealed class MultiLocaleInteractionModelBuilderTests
     }
 
     [Fact]
+    public void BuildAll_WithSchemaLevelIntentSamples_UsedAsFallbackWhenNoLocaleOverride()
+    {
+        var models = MultiLocaleInteractionModelBuilder.Create()
+            .WithVersion("1")
+            .WithDescription("Schema sample fallback test")
+            .AddIntent("GreetIntent", i => i.WithSamples("hello", "hi there"))
+            .WithDefaultLocale("en-US", locale => locale.WithInvocationName("my skill"))
+            .ForLocale("en-CA")
+            .BuildAll();
+
+        var enUs = models.Single(m => m.Locale == "en-US");
+        enUs.Definition.InteractionModel.LanguageModel.Intents
+            .Single(i => i.Name == "GreetIntent").Samples
+            .Should().BeEquivalentTo(["hello", "hi there"]);
+
+        var enCa = models.Single(m => m.Locale == "en-CA");
+        enCa.Definition.InteractionModel.LanguageModel.Intents
+            .Single(i => i.Name == "GreetIntent").Samples
+            .Should().BeEquivalentTo(["hello", "hi there"]);
+    }
+
+    [Fact]
+    public void BuildAll_WithSchemaLevelSlotSamples_UsedAsFallbackWhenNoLocaleOverride()
+    {
+        var models = MultiLocaleInteractionModelBuilder.Create()
+            .WithVersion("1")
+            .WithDescription("Schema slot sample fallback test")
+            .AddIntent("OrderIntent", i => i
+                .WithSamples("order {drink}")
+                .WithSlot("drink", "DrinkType", slot => slot.WithSamples("coffee", "tea")))
+            .WithDefaultLocale("en-US", locale => locale.WithInvocationName("my skill"))
+            .ForLocale("en-CA")
+            .BuildAll();
+
+        var enUs = models.Single(m => m.Locale == "en-US");
+        enUs.Definition.InteractionModel.LanguageModel.Intents
+            .Single(i => i.Name == "OrderIntent").Slots!
+            .Single(s => s.Name == "drink").Samples
+            .Should().BeEquivalentTo(["coffee", "tea"]);
+
+        var enCa = models.Single(m => m.Locale == "en-CA");
+        enCa.Definition.InteractionModel.LanguageModel.Intents
+            .Single(i => i.Name == "OrderIntent").Slots!
+            .Single(s => s.Name == "drink").Samples
+            .Should().BeEquivalentTo(["coffee", "tea"]);
+    }
+
+    [Fact]
+    public void BuildAll_WithLocaleOverride_TakesPrecedenceOverSchemaLevelSamples()
+    {
+        var models = MultiLocaleInteractionModelBuilder.Create()
+            .WithVersion("1")
+            .WithDescription("Override precedence test")
+            .AddIntent("GreetIntent", i => i.WithSamples("hello", "hi there"))
+            .WithDefaultLocale("en-US", locale => locale
+                .WithInvocationName("my skill")
+                .WithIntentSamples("GreetIntent", "good day"))
+            .BuildAll();
+
+        var enUs = models.Single(m => m.Locale == "en-US");
+        enUs.Definition.InteractionModel.LanguageModel.Intents
+            .Single(i => i.Name == "GreetIntent").Samples
+            .Should().BeEquivalentTo(["good day"]);
+    }
+
+    [Fact]
     public void WithDefaultLocale_CalledTwiceWithDifferentLocale_ThrowsInvalidOperationException()
     {
         var act = () => MultiLocaleInteractionModelBuilder.Create()

@@ -98,6 +98,8 @@ public sealed class IntentBuilder
 
     internal string Name => _name;
 
+    internal IReadOnlyList<string> Samples => _samples;
+
     internal IReadOnlyCollection<string> SlotNames => _slotNames;
 
     internal Intent BuildWithSamples(

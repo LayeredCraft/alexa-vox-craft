@@ -91,12 +91,15 @@ public sealed class SlotBuilder
     internal string Name => _name;
 
     internal IntentSlot BuildWithSamples(IReadOnlyList<string>? samples)
-        => new()
+    {
+        var effectiveSamples = samples ?? (IReadOnlyList<string>)_samples;
+        return new()
         {
             Name = _name,
             Type = _type,
             IsRequired = _isRequired,
-            Samples = samples?.Count > 0 ? [.. samples] : null
+            Samples = effectiveSamples.Count > 0 ? [.. effectiveSamples] : null
         };
+    }
 }
 
