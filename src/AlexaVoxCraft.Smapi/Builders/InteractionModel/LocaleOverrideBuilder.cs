@@ -49,7 +49,10 @@ public sealed class LocaleOverrideBuilder
         if (!_schemaIntents.ContainsKey(intentName))
             throw new InvalidOperationException($"Intent '{intentName}' is not defined in the interaction model schema.");
 
-        _intentSamples[intentName] = samples;
+        foreach (var sample in samples)
+            ArgumentException.ThrowIfNullOrWhiteSpace(sample, nameof(samples));
+
+        _intentSamples[intentName] = [..samples];
         return this;
     }
 
@@ -73,13 +76,16 @@ public sealed class LocaleOverrideBuilder
         if (!intentBuilder.SlotNames.Contains(slotName))
             throw new InvalidOperationException($"Slot '{slotName}' is not defined on intent '{intentName}'.");
 
+        foreach (var sample in samples)
+            ArgumentException.ThrowIfNullOrWhiteSpace(sample, nameof(samples));
+
         if (!_slotSamples.TryGetValue(intentName, out var slots))
         {
             slots = [];
             _slotSamples[intentName] = slots;
         }
 
-        slots[slotName] = samples;
+        slots[slotName] = [..samples];
         return this;
     }
 
