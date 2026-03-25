@@ -1,0 +1,26 @@
+﻿[
+  {
+    "Locale": "en-US",
+    "Definition": {
+      "Version": "1",
+      "Description": "Single locale skill",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "HelloIntent",
+              "Samples": [
+                "say hello",
+                "hello"
+              ]
+            },
+            {
+              "Name": "AMAZON.CancelIntent"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

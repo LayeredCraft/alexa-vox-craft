@@ -1,0 +1,64 @@
+﻿[
+  {
+    "Locale": "en-US",
+    "Definition": {
+      "Version": "1",
+      "Description": "Slot samples override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "OrderIntent",
+              "Samples": [
+                "order {item}"
+              ],
+              "Slots": [
+                {
+                  "Name": "item",
+                  "Type": "AMAZON.Food",
+                  "IsRequired": false,
+                  "Samples": [
+                    "coffee",
+                    "sandwich"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-GB",
+    "Definition": {
+      "Version": "1",
+      "Description": "Slot samples override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "OrderIntent",
+              "Samples": [
+                "order {item}"
+              ],
+              "Slots": [
+                {
+                  "Name": "item",
+                  "Type": "AMAZON.Food",
+                  "IsRequired": false,
+                  "Samples": [
+                    "tea",
+                    "biscuit"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

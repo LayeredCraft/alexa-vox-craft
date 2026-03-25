@@ -167,4 +167,88 @@ public sealed class AlexaInteractionModelClientTests
 
         handler.Received();
     }
+
+    [Theory, SmapiClientAutoData]
+    public async Task UpdateAsync_WithLocalizedModel_CallsCorrectEndpoint(
+        [Frozen] HttpMessageHandler handler,
+        AlexaInteractionModelClient client,
+        string skillId,
+        string stage,
+        string locale,
+        InteractionModelDefinition definition)
+    {
+        var model = new LocalizedInteractionModel(locale, definition);
+        var expectedUri = $"/v1/skills/{skillId}/stages/{stage}/interactionModel/locales/{locale}";
+        handler.ReturnsResponse(HttpStatusCode.NoContent,
+            predicate: req => req.RequestUri?.PathAndQuery == expectedUri && req.Method == HttpMethod.Put);
+
+        await client.UpdateAsync(skillId, stage, model, TestContext.Current.CancellationToken);
+
+        handler.Received();
+    }
+
+    [Theory, SmapiClientAutoData]
+    public async Task UpdateAllAsync_WithMultipleModels_CallsEndpointForEach(
+        [Frozen] HttpMessageHandler handler,
+        AlexaInteractionModelClient client,
+        string skillId,
+        string stage,
+        InteractionModelDefinition definition1,
+        InteractionModelDefinition definition2)
+    {
+        var models = new[]
+        {
+            new LocalizedInteractionModel("en-US", definition1),
+            new LocalizedInteractionModel("en-GB", definition2)
+        };
+        handler.ReturnsResponse(HttpStatusCode.NoContent);
+
+        await client.UpdateAllAsync(skillId, stage, models, TestContext.Current.CancellationToken);
+
+        handler.Received(2);
+    }
+
+    [Theory, SmapiClientAutoData]
+    public async Task UpdateAllAsync_WithEmptyModels_CompletesWithoutCalling(
+        [Frozen] HttpMessageHandler handler,
+        AlexaInteractionModelClient client,
+        string skillId,
+        string stage)
+    {
+        await client.UpdateAllAsync(skillId, stage, [], TestContext.Current.CancellationToken);
+
+        handler.DidNotReceive();
+    }
+
+    [Theory, SmapiClientAutoData]
+    public async Task UpdateAllAsync_WhenSomeLocalesFail_ThrowsAggregateExceptionAfterAttemptingAll(
+        [Frozen] HttpMessageHandler handler,
+        AlexaInteractionModelClient client,
+        string skillId,
+        string stage,
+        InteractionModelDefinition definition1,
+        InteractionModelDefinition definition2,
+        InteractionModelDefinition definition3)
+    {
+        var models = new[]
+        {
+            new LocalizedInteractionModel("en-US", definition1),
+            new LocalizedInteractionModel("en-CA", definition2),
+            new LocalizedInteractionModel("en-GB", definition3)
+        };
+
+        handler.ReturnsResponse(HttpStatusCode.NoContent, predicate: req =>
+            req.RequestUri!.PathAndQuery.EndsWith("/en-US"));
+
+        handler.ReturnsResponse(HttpStatusCode.InternalServerError, predicate: req =>
+            req.RequestUri!.PathAndQuery.EndsWith("/en-CA"));
+
+        handler.ReturnsResponse(HttpStatusCode.InternalServerError, predicate: req =>
+            req.RequestUri!.PathAndQuery.EndsWith("/en-GB"));
+
+        var act = () => client.UpdateAllAsync(skillId, stage, models, TestContext.Current.CancellationToken);
+
+        await act.Should().ThrowAsync<AggregateException>()
+            .WithMessage("Failed to update 2 locale(s).*");
+    }
 }

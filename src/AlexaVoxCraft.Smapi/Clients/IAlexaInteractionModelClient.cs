@@ -27,4 +27,25 @@ public interface IAlexaInteractionModelClient
     /// <param name="ct">The cancellation token.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     Task UpdateAsync(string skillId, string stage, string locale, InteractionModelDefinition model, CancellationToken ct);
+
+    /// <summary>
+    /// Updates the interaction model for a specific skill and stage using a <see cref="LocalizedInteractionModel"/>.
+    /// The locale is taken from the <see cref="LocalizedInteractionModel.Locale"/> property.
+    /// </summary>
+    /// <param name="skillId">The Alexa skill identifier.</param>
+    /// <param name="stage">The skill stage (e.g., "development", "live").</param>
+    /// <param name="model">The localized interaction model to upload.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task UpdateAsync(string skillId, string stage, LocalizedInteractionModel model, CancellationToken ct);
+
+    /// <summary>
+    /// Updates the interaction model for multiple locales sequentially.
+    /// </summary>
+    /// <param name="skillId">The Alexa skill identifier.</param>
+    /// <param name="stage">The skill stage (e.g., "development", "live").</param>
+    /// <param name="models">The localized interaction models to upload.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task UpdateAllAsync(string skillId, string stage, IEnumerable<LocalizedInteractionModel> models, CancellationToken ct);
 }

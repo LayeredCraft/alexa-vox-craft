@@ -36,4 +36,34 @@ public sealed class AlexaInteractionModelClient : BaseClient, IAlexaInteractionM
                 model, null, ct)
             .ConfigureAwait(false);
     }
+
+    /// <inheritdoc />
+    public Task UpdateAsync(string skillId, string stage, LocalizedInteractionModel model, CancellationToken ct)
+        => UpdateAsync(skillId, stage, model.Locale, model.Definition, ct);
+
+    /// <inheritdoc />
+    public async Task UpdateAllAsync(string skillId, string stage, IEnumerable<LocalizedInteractionModel> models,
+        CancellationToken ct)
+    {
+        var errors = new List<Exception>();
+        foreach (var model in models)
+        {
+            ct.ThrowIfCancellationRequested();
+            try
+            {
+                await UpdateAsync(skillId, stage, model, ct).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex);
+            }
+        }
+
+        if (errors.Count > 0)
+            throw new AggregateException($"Failed to update {errors.Count} locale(s).", errors);
+    }
 }

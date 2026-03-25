@@ -1,0 +1,155 @@
+﻿[
+  {
+    "Locale": "en-US",
+    "Definition": {
+      "Version": "1",
+      "Description": "Multi-locale skill",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "OrderIntent",
+              "Samples": [
+                "order {drink}",
+                "get {drink}"
+              ],
+              "Slots": [
+                {
+                  "Name": "drink",
+                  "Type": "DrinkType",
+                  "IsRequired": false
+                }
+              ]
+            },
+            {
+              "Name": "AMAZON.CancelIntent"
+            },
+            {
+              "Name": "AMAZON.StopIntent"
+            }
+          ],
+          "Types": [
+            {
+              "Name": "DrinkType",
+              "Values": [
+                {
+                  "Name": {
+                    "Value": "coffee"
+                  }
+                },
+                {
+                  "Name": {
+                    "Value": "tea"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-CA",
+    "Definition": {
+      "Version": "1",
+      "Description": "Multi-locale skill",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "OrderIntent",
+              "Samples": [
+                "order {drink}",
+                "get {drink}"
+              ],
+              "Slots": [
+                {
+                  "Name": "drink",
+                  "Type": "DrinkType",
+                  "IsRequired": false
+                }
+              ]
+            },
+            {
+              "Name": "AMAZON.CancelIntent"
+            },
+            {
+              "Name": "AMAZON.StopIntent"
+            }
+          ],
+          "Types": [
+            {
+              "Name": "DrinkType",
+              "Values": [
+                {
+                  "Name": {
+                    "Value": "coffee"
+                  }
+                },
+                {
+                  "Name": {
+                    "Value": "tea"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-GB",
+    "Definition": {
+      "Version": "1",
+      "Description": "Multi-locale skill",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "OrderIntent",
+              "Samples": [
+                "order {drink}",
+                "I'd like {drink}"
+              ],
+              "Slots": [
+                {
+                  "Name": "drink",
+                  "Type": "DrinkType",
+                  "IsRequired": false
+                }
+              ]
+            },
+            {
+              "Name": "AMAZON.CancelIntent"
+            },
+            {
+              "Name": "AMAZON.StopIntent"
+            }
+          ],
+          "Types": [
+            {
+              "Name": "DrinkType",
+              "Values": [
+                {
+                  "Name": {
+                    "Value": "coffee"
+                  }
+                },
+                {
+                  "Name": {
+                    "Value": "tea"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

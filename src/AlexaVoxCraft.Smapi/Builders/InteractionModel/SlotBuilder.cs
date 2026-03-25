@@ -87,4 +87,15 @@ public sealed class SlotBuilder
             IsRequired = _isRequired,
             Samples = _samples.Count > 0 ? [.. _samples] : null
         };
+
+    internal string Name => _name;
+
+    internal IntentSlot BuildWithSamples(IReadOnlyList<string>? samples)
+        => new()
+        {
+            Name = _name,
+            Type = _type,
+            IsRequired = _isRequired,
+            Samples = samples?.Count > 0 ? [.. samples] : null
+        };
 }

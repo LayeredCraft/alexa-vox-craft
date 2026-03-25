@@ -1,0 +1,74 @@
+﻿[
+  {
+    "Locale": "en-US",
+    "Definition": {
+      "Version": "1",
+      "Description": "Intent samples override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "GreetIntent",
+              "Samples": [
+                "say hello",
+                "greet me"
+              ]
+            },
+            {
+              "Name": "AMAZON.StopIntent"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-GB",
+    "Definition": {
+      "Version": "1",
+      "Description": "Intent samples override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "GreetIntent",
+              "Samples": [
+                "say hello",
+                "good day"
+              ]
+            },
+            {
+              "Name": "AMAZON.StopIntent"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-CA",
+    "Definition": {
+      "Version": "1",
+      "Description": "Intent samples override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "GreetIntent",
+              "Samples": [
+                "say hello",
+                "greet me"
+              ]
+            },
+            {
+              "Name": "AMAZON.StopIntent"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

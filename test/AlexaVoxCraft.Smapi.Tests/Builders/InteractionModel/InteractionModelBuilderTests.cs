@@ -1,5 +1,6 @@
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Smapi.Builders.InteractionModel;
+using AlexaVoxCraft.Smapi.Models.InteractionModel;
 
 namespace AlexaVoxCraft.Smapi.Tests.Builders.InteractionModel;
 
@@ -33,6 +34,38 @@ public class InteractionModelBuilderTests
                     .WithValue("attack", v => v.WithSynonyms("strike", "hit")))
             .ToJson();
         await Verify(json).DisableDiff();
+    }
+
+    [Fact]
+    public void BuildLocalized_WithLocale_ReturnsLocalizedModel()
+    {
+        var result = InteractionModelBuilder.Create()
+            .WithLocale("en-US")
+            .WithInvocationName("my skill")
+            .WithVersion("1")
+            .WithDescription("Test")
+            .AddIntent(BuiltInIntent.Cancel)
+            .BuildLocalized();
+
+        result.Should().BeOfType<LocalizedInteractionModel>();
+        result.Locale.Should().Be("en-US");
+        result.Definition.Should().NotBeNull();
+        result.Definition.InteractionModel.LanguageModel.InvocationName.Should().Be("my skill");
+    }
+
+    [Fact]
+    public void BuildLocalized_WithoutLocale_ThrowsInvalidOperationException()
+    {
+        var builder = InteractionModelBuilder.Create()
+            .WithInvocationName("my skill")
+            .WithVersion("1")
+            .WithDescription("Test")
+            .AddIntent(BuiltInIntent.Cancel);
+
+        var act = () => builder.BuildLocalized();
+
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("A locale must be specified using WithLocale.");
     }
 
     [Fact]

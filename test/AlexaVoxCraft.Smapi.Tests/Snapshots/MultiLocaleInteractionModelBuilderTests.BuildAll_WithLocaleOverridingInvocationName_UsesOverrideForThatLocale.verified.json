@@ -1,0 +1,53 @@
+﻿[
+  {
+    "Locale": "en-US",
+    "Definition": {
+      "Version": "1",
+      "Description": "Invocation name override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "AMAZON.CancelIntent"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-GB",
+    "Definition": {
+      "Version": "1",
+      "Description": "Invocation name override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my british skill",
+          "Intents": [
+            {
+              "Name": "AMAZON.CancelIntent"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-CA",
+    "Definition": {
+      "Version": "1",
+      "Description": "Invocation name override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "AMAZON.CancelIntent"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

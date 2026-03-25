@@ -14,6 +14,7 @@ public sealed class InteractionModelBuilder
     private string _invocationName = string.Empty;
     private string? _version;
     private string? _description;
+    private string? _locale;
 
     private readonly Dictionary<string, IntentBuilder> _intents = [];
     private readonly Dictionary<string, SlotTypeBuilder> _slotTypes = [];
@@ -40,6 +41,19 @@ public sealed class InteractionModelBuilder
         _invocationName = invocationName;
         return this;
     }
+    /// <summary>
+    /// Sets the locale for this interaction model.
+    /// Required when calling <see cref="BuildLocalized"/>.
+    /// </summary>
+    /// <param name="locale">The locale code (e.g., "en-US", "en-GB").</param>
+    /// <returns>The current <see cref="InteractionModelBuilder"/>.</returns>
+    public InteractionModelBuilder WithLocale(string locale)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(locale);
+        _locale = locale;
+        return this;
+    }
+
     /// <summary>
     /// Sets the interaction model version.
     /// </summary>
@@ -169,6 +183,19 @@ public sealed class InteractionModelBuilder
             Version = _version,
             Description = _description
         };
+    }
+
+    /// <summary>
+    /// Builds the interaction model definition paired with the configured locale.
+    /// </summary>
+    /// <returns>A <see cref="LocalizedInteractionModel"/> containing the locale and built definition.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if no locale has been set via <see cref="WithLocale"/>.</exception>
+    public LocalizedInteractionModel BuildLocalized()
+    {
+        if (string.IsNullOrWhiteSpace(_locale))
+            throw new InvalidOperationException("A locale must be specified using WithLocale.");
+
+        return new LocalizedInteractionModel(_locale, Build());
     }
 
     /// <summary>

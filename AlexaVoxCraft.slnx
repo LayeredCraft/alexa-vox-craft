@@ -9,6 +9,14 @@
     <File Path="mkdocs.yml" />
     <File Path="requirements.txt" />
   </Folder>
+  <Folder Name="/docs/adr/">
+    <File Path="docs/adr/README.md" />
+    <File Path="docs/adr/0000-adr-template.md" />
+    <File Path="docs/adr/0001-multi-locale-interaction-model-builder.md" />
+  </Folder>
+  <Folder Name="/docs/plans/">
+    <File Path="docs/plans/multi-locale-interaction-model-builder-plan.md" />
+  </Folder>
   <Folder Name="/docs/assets/">
     <File Path="docs/assets/icon.png" />
   </Folder>
@@ -133,6 +141,7 @@
     <Project Path="test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.Model.InSkillPurchasing.Tests/AlexaVoxCraft.Model.InSkillPurchasing.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.Smapi.Tests/AlexaVoxCraft.Smapi.Tests.csproj" />
+    <File Path="test/AlexaVoxCraft.Smapi.Tests/Builders/InteractionModel/MultiLocaleInteractionModelBuilderTests.cs" />
     <Project Path="test/AlexaVoxCraft.TestKit/AlexaVoxCraft.TestKit.csproj" />
     <Project Path="test\AlexaVoxCraft.Model.Apl.Legacy.Tests\AlexaVoxCraft.Model.Apl.Legacy.Tests.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />

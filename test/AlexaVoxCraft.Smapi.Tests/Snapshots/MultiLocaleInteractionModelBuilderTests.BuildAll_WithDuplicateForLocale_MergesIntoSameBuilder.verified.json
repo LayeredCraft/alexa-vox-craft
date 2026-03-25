@@ -1,0 +1,54 @@
+﻿[
+  {
+    "Locale": "en-US",
+    "Definition": {
+      "Version": "1",
+      "Description": "Duplicate locale merge test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "FooIntent",
+              "Samples": [
+                "do foo"
+              ]
+            },
+            {
+              "Name": "BarIntent",
+              "Samples": [
+                "do bar"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-GB",
+    "Definition": {
+      "Version": "1",
+      "Description": "Duplicate locale merge test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my british skill",
+          "Intents": [
+            {
+              "Name": "FooIntent",
+              "Samples": [
+                "do foo differently"
+              ]
+            },
+            {
+              "Name": "BarIntent",
+              "Samples": [
+                "do bar"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

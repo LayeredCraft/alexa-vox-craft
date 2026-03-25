@@ -1,0 +1,65 @@
+﻿[
+  {
+    "Locale": "en-US",
+    "Definition": {
+      "Version": "1",
+      "Description": "Inherit all from default",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "HelloIntent",
+              "Samples": [
+                "say hello",
+                "hello there"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-CA",
+    "Definition": {
+      "Version": "1",
+      "Description": "Inherit all from default",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "HelloIntent",
+              "Samples": [
+                "say hello",
+                "hello there"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-AU",
+    "Definition": {
+      "Version": "1",
+      "Description": "Inherit all from default",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "HelloIntent",
+              "Samples": [
+                "say hello",
+                "hello there"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

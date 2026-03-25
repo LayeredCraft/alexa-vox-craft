@@ -1,0 +1,90 @@
+﻿[
+  {
+    "Locale": "en-US",
+    "Definition": {
+      "Version": "1",
+      "Description": "Slot values override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "OrderIntent",
+              "Samples": [
+                "order {drink}"
+              ],
+              "Slots": [
+                {
+                  "Name": "drink",
+                  "Type": "DrinkType",
+                  "IsRequired": false
+                }
+              ]
+            }
+          ],
+          "Types": [
+            {
+              "Name": "DrinkType",
+              "Values": [
+                {
+                  "Name": {
+                    "Value": "soda"
+                  }
+                },
+                {
+                  "Name": {
+                    "Value": "coffee"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Locale": "en-GB",
+    "Definition": {
+      "Version": "1",
+      "Description": "Slot values override test",
+      "InteractionModel": {
+        "LanguageModel": {
+          "InvocationName": "my skill",
+          "Intents": [
+            {
+              "Name": "OrderIntent",
+              "Samples": [
+                "order {drink}"
+              ],
+              "Slots": [
+                {
+                  "Name": "drink",
+                  "Type": "DrinkType",
+                  "IsRequired": false
+                }
+              ]
+            }
+          ],
+          "Types": [
+            {
+              "Name": "DrinkType",
+              "Values": [
+                {
+                  "Name": {
+                    "Value": "fizzy drink"
+                  }
+                },
+                {
+                  "Name": {
+                    "Value": "coffee"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

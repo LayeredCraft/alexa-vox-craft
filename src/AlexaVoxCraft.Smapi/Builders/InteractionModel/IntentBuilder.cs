@@ -89,4 +89,26 @@ public sealed class IntentBuilder
             Slots = slots
         };
     }
+
+    internal string Name => _name;
+
+    internal IReadOnlyCollection<string> SlotNames => _slots.Select(static s => s.Name).ToList();
+
+    internal Intent BuildWithSamples(
+        IReadOnlyList<string> intentSamples,
+        Dictionary<string, IReadOnlyList<string>?> slotSampleOverrides)
+    {
+        var slots = _slots.Select(s =>
+        {
+            slotSampleOverrides.TryGetValue(s.Name, out var slotSamples);
+            return s.BuildWithSamples(slotSamples);
+        }).ToImmutableArray();
+
+        return new Intent
+        {
+            Name = _name,
+            Samples = [.. intentSamples],
+            Slots = slots
+        };
+    }
 }
