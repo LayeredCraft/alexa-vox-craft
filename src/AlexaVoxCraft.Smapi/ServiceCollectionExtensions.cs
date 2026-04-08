@@ -57,7 +57,7 @@ public static class ServiceCollectionExtensions
                     client.BaseAddress = new Uri("https://api.amazonalexa.com/");
                 })
                 .AddAuthorizationForwarding();
-            services.AddSingleton<IAccessTokenProvider, SmapiDeveloperAccessTokenProvider>();
+            services.AddScoped<IAccessTokenProvider, SmapiDeveloperAccessTokenProvider>();
             return services;
         }
 
@@ -105,7 +105,7 @@ public static class ServiceCollectionExtensions
                     client.BaseAddress = new Uri("https://api.amazonalexa.com/");
                 })
                 .AddAuthorizationForwarding();
-            services.AddSingleton<IAccessTokenProvider, SmapiDeveloperAccessTokenProvider>();
+            services.AddScoped<IAccessTokenProvider, SmapiDeveloperAccessTokenProvider>();
             return services;
         }
     }

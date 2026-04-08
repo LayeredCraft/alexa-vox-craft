@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
                 })
                 .AddLocale()
                 .AddAuthorizationForwarding();
-            services.AddSingleton<IAccessTokenProvider, AlexaRequestAccessTokenProvider>();
+            services.AddScoped<IAccessTokenProvider, AlexaRequestAccessTokenProvider>();
             return services;
         }
     }
