@@ -382,4 +382,49 @@ public class AlexaVoxCraftDiGeneratorTests
             ]
         );
     }
+
+    /// <summary>
+    /// Verifies that internal handlers in referenced assemblies are excluded when no InternalsVisibleTo exists.
+    /// Public handlers from the same referenced assembly should still be included.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_ExcludesInternalReferencedHandlers_WithoutInternalsVisibleTo(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/018_ReferencedAssemblyInternalNoIvt/Function.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts,
+            referencedAssemblyCasePaths:
+            [
+                [
+                    "Cases/018_ReferencedAssemblyInternalNoIvt/ReferencedAssemblyTypes.cs"
+                ]
+            ]
+        );
+    }
+
+    /// <summary>
+    /// Verifies that internal handlers in referenced assemblies are included when InternalsVisibleTo grants access.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_IncludesInternalReferencedHandlers_WithInternalsVisibleTo(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/019_ReferencedAssemblyInternalWithIvt/Function.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts,
+            referencedAssemblyCasePaths:
+            [
+                [
+                    "Cases/019_ReferencedAssemblyInternalWithIvt/ReferencedAssemblyTypes.cs"
+                ]
+            ]
+        );
+    }
 }

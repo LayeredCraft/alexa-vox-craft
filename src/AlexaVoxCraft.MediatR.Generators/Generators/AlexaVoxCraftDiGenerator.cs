@@ -276,37 +276,106 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
                 continue;
             }
 
-            DiscoverTypesFromNamespace(assembly.GlobalNamespace, discoveredTypes);
+            var canAccessInternals = HasInternalsVisibleTo(assembly, compilation.Assembly);
+            DiscoverTypesFromNamespace(
+                assembly.GlobalNamespace,
+                discoveredTypes,
+                canAccessInternals);
         }
 
         return new EquatableArray<DiscoveredTypeInfo>(discoveredTypes);
     }
 
-    private static void DiscoverTypesFromNamespace(INamespaceSymbol namespaceSymbol, List<DiscoveredTypeInfo> discoveredTypes)
+    private static void DiscoverTypesFromNamespace(
+        INamespaceSymbol namespaceSymbol,
+        List<DiscoveredTypeInfo> discoveredTypes,
+        bool canAccessInternals)
     {
         foreach (var typeSymbol in namespaceSymbol.GetTypeMembers())
         {
-            DiscoverTypeAndNestedTypes(typeSymbol, discoveredTypes);
+            DiscoverTypeAndNestedTypes(typeSymbol, discoveredTypes, canAccessInternals);
         }
 
         foreach (var childNamespace in namespaceSymbol.GetNamespaceMembers())
         {
-            DiscoverTypesFromNamespace(childNamespace, discoveredTypes);
+            DiscoverTypesFromNamespace(childNamespace, discoveredTypes, canAccessInternals);
         }
     }
 
-    private static void DiscoverTypeAndNestedTypes(INamedTypeSymbol typeSymbol, List<DiscoveredTypeInfo> discoveredTypes)
+    private static void DiscoverTypeAndNestedTypes(
+        INamedTypeSymbol typeSymbol,
+        List<DiscoveredTypeInfo> discoveredTypes,
+        bool canAccessInternals)
     {
-        var typeInfo = ExtractTypeInfo(typeSymbol);
-        if (typeInfo.HasValue)
+        if (IsTypeAccessibleFromReferencingAssembly(typeSymbol, canAccessInternals))
         {
-            discoveredTypes.Add(typeInfo.Value);
+            var typeInfo = ExtractTypeInfo(typeSymbol);
+            if (typeInfo.HasValue)
+            {
+                discoveredTypes.Add(typeInfo.Value);
+            }
         }
 
         foreach (var nestedType in typeSymbol.GetTypeMembers())
         {
-            DiscoverTypeAndNestedTypes(nestedType, discoveredTypes);
+            DiscoverTypeAndNestedTypes(nestedType, discoveredTypes, canAccessInternals);
         }
+    }
+
+    private static bool HasInternalsVisibleTo(IAssemblySymbol referencedAssembly, IAssemblySymbol requestingAssembly)
+    {
+        var requestingAssemblyName = requestingAssembly.Identity.Name;
+
+        foreach (var attribute in referencedAssembly.GetAttributes())
+        {
+            if (attribute.AttributeClass?.ToDisplayString() != "System.Runtime.CompilerServices.InternalsVisibleToAttribute")
+            {
+                continue;
+            }
+
+            if (attribute.ConstructorArguments.Length == 0)
+            {
+                continue;
+            }
+
+            var value = attribute.ConstructorArguments[0].Value as string;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                continue;
+            }
+
+            var friendAssemblyName = value!.Split(',')[0].Trim();
+            if (string.Equals(friendAssemblyName, requestingAssemblyName, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsTypeAccessibleFromReferencingAssembly(INamedTypeSymbol typeSymbol, bool canAccessInternals)
+    {
+        for (INamedTypeSymbol? current = typeSymbol; current is not null; current = current.ContainingType)
+        {
+            if (!IsDeclaredAccessibilitySupported(current.DeclaredAccessibility, canAccessInternals))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool IsDeclaredAccessibilitySupported(Accessibility accessibility, bool canAccessInternals)
+    {
+        return accessibility switch
+        {
+            Accessibility.Public => true,
+            Accessibility.Internal => canAccessInternals,
+            Accessibility.ProtectedOrInternal => canAccessInternals,
+            _ => false,
+        };
     }
 
     private static DiscoveredTypeInfo? ExtractTypeInfo(GeneratorSyntaxContext ctx)
