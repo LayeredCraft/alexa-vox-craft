@@ -337,6 +337,34 @@ public class FallbackHandler : IDefaultRequestHandler
 services.AddTransient<IDefaultRequestHandler, CustomDefaultHandler>();
 ```
 
+## Referenced Assembly Discovery
+
+When source generation is enabled, you can explicitly include handlers from referenced assemblies by using `settingsAction` in `AddSkillMediator(...)`.
+
+The generator supports these forms:
+
+```csharp
+// Positional settingsAction + generic form
+services.AddSkillMediator(context.Configuration, cfg =>
+{
+    cfg.RegisterServicesFromAssemblyContaining<ExternalProject.Marker>();
+});
+
+// Named settingsAction + generic form
+services.AddSkillMediator(context.Configuration, settingsAction: cfg =>
+{
+    cfg.RegisterServicesFromAssemblyContaining<ExternalProject.Marker>();
+});
+
+// Positional settingsAction + typeof form
+services.AddSkillMediator(context.Configuration, cfg =>
+{
+    cfg.RegisterServicesFromAssemblyContaining(typeof(ExternalProject.Marker));
+});
+```
+
+Use this when handlers live in a separate class library and you want them included in compile-time generated registrations.
+
 ## Diagnostics
 
 The source generator provides compile-time diagnostics:
@@ -398,7 +426,11 @@ You can inspect this file to see exactly what registrations are being generated.
 // ✅ Good - source generation enabled (default)
 services.AddSkillMediator(context.Configuration);
 
-// ❌ Avoid - assembly scanning (only if source generation disabled)
+// ✅ Good - explicit referenced assembly inclusion with source generation enabled
+services.AddSkillMediator(context.Configuration, cfg =>
+    cfg.RegisterServicesFromAssemblyContaining<ExternalProject.Marker>());
+
+// ❌ Avoid - fallback runtime assembly scanning (only if source generation disabled)
 services.AddSkillMediator(context.Configuration, cfg =>
     cfg.RegisterServicesFromAssemblyContaining<Program>());
 ```
@@ -478,8 +510,14 @@ public class AnswerHandler : IRequestHandler<IntentRequest> { }
 **Solutions**:
 1. Check handler implements correct interface (`IRequestHandler<T>`)
 2. Verify handler is not marked `[AlexaHandler(Exclude = true)]`
-3. Check `CanHandle()` logic returns `true` for expected requests
-4. Review generated code in `obj/` folder to confirm registration
+3. If handler is in a referenced assembly, include it via `settingsAction` and `RegisterServicesFromAssemblyContaining(...)`
+4. Confirm `settingsAction` registration can be resolved (positional or named lambda are both supported)
+5. Check `CanHandle()` logic returns `true` for expected requests
+6. Review generated code in `obj/` folder to confirm registration and ordering
+
+### Mixed Assembly Ordering Questions
+
+`[AlexaHandler(Order = ...)]` is applied across both source and referenced assemblies. Registration order follows `Order` values, not alphabetical class names.
 
 ### Build Errors with Interceptors
 

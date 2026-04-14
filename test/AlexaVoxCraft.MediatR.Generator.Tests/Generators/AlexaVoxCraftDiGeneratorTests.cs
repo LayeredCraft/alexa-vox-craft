@@ -289,4 +289,142 @@ public class AlexaVoxCraftDiGeneratorTests
             msbuildProperties: AnalyzerOpts
         );
     }
+
+    /// <summary>
+    /// Verifies that handlers in explicitly registered referenced assemblies are discovered and registered.
+    /// Tests RegisterServicesFromAssemblyContaining&lt;T&gt; parsing and that Exclude=true is honored for referenced types.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/014_ReferencedAssembly/Function.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts,
+            referencedAssemblyCasePaths:
+            [
+                [
+                    "Cases/014_ReferencedAssembly/ReferencedAssemblyTypes.cs"
+                ]
+            ]
+        );
+    }
+
+    /// <summary>
+    /// Verifies that handlers in explicitly registered referenced assemblies are discovered
+    /// when settingsAction is passed as a named argument.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly_WithNamedSettingsAction(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/015_ReferencedAssemblyNamed/Function.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts,
+            referencedAssemblyCasePaths:
+            [
+                [
+                    "Cases/014_ReferencedAssembly/ReferencedAssemblyTypes.cs"
+                ]
+            ]
+        );
+    }
+
+    /// <summary>
+    /// Verifies that handlers in explicitly registered referenced assemblies are discovered
+    /// when RegisterServicesFromAssemblyContaining is called with typeof(T).
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly_WithTypeOfRegistration(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/016_ReferencedAssemblyTypeOf/Function.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts,
+            referencedAssemblyCasePaths:
+            [
+                [
+                    "Cases/014_ReferencedAssembly/ReferencedAssemblyTypes.cs"
+                ]
+            ]
+        );
+    }
+
+    /// <summary>
+    /// Verifies that AlexaHandler Order is respected across mixed source and referenced assemblies.
+    /// Referenced handler has lower order (10) than source handler (20), so registration should be 10 then 20.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_ForMixedAssemblyHandlersWithExplicitOrder(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/017_MixedAssemblyOrderedHandlers/Function.cs",
+                "Cases/017_MixedAssemblyOrderedHandlers/SourceOrderedLaunchHandler.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts,
+            referencedAssemblyCasePaths:
+            [
+                [
+                    "Cases/017_MixedAssemblyOrderedHandlers/ReferencedOrderedHandlers.cs"
+                ]
+            ]
+        );
+    }
+
+    /// <summary>
+    /// Verifies that internal handlers in referenced assemblies are excluded when no InternalsVisibleTo exists.
+    /// Public handlers from the same referenced assembly should still be included.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_ExcludesInternalReferencedHandlers_WithoutInternalsVisibleTo(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/018_ReferencedAssemblyInternalNoIvt/Function.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts,
+            referencedAssemblyCasePaths:
+            [
+                [
+                    "Cases/018_ReferencedAssemblyInternalNoIvt/ReferencedAssemblyTypes.cs"
+                ]
+            ]
+        );
+    }
+
+    /// <summary>
+    /// Verifies that internal handlers in referenced assemblies are included when InternalsVisibleTo grants access.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_IncludesInternalReferencedHandlers_WithInternalsVisibleTo(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/019_ReferencedAssemblyInternalWithIvt/Function.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts,
+            referencedAssemblyCasePaths:
+            [
+                [
+                    "Cases/019_ReferencedAssemblyInternalWithIvt/ReferencedAssemblyTypes.cs"
+                ]
+            ]
+        );
+    }
 }

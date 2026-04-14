@@ -32,9 +32,22 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
         var callSiteProvider = context.SyntaxProvider
             .CreateSyntaxProvider(
                 static (node, _) => IsAddSkillMediatorInvocation(node),
-                static (ctx, _) => GetCallSiteLocation(ctx))
-            .Where(static loc => loc.HasValue)
-            .Select(static (loc, _) => loc!.Value);
+                static (ctx, _) => GetCallSiteData(ctx))
+            .Where(static callSite => callSite.HasValue)
+            .Select(static (callSite, _) => callSite!.Value);
+
+        var explicitAssemblyNamesProvider = callSiteProvider
+            .Collect()
+            .Select(static (callSites, _) =>
+            {
+                var assemblyNames = callSites
+                    .SelectMany(x => x.ExplicitAssemblyNames)
+                    .Distinct(StringComparer.Ordinal)
+                    .OrderBy(x => x, StringComparer.Ordinal)
+                    .ToArray();
+
+                return new EquatableArray<string>(assemblyNames);
+            });
 
         var allTypes = context.SyntaxProvider
             .CreateSyntaxProvider(
@@ -43,9 +56,14 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
             .Where(static t => t.HasValue)
             .Select(static (t, _) => t!.Value);
 
+        var referencedAssemblyTypes = context.CompilationProvider
+            .Combine(explicitAssemblyNamesProvider)
+            .Select(static (data, _) => DiscoverReferencedAssemblyTypes(data.Left, data.Right));
+
         var modelWithDiagnostics = allTypes
             .Collect()
-            .Select(static (types, _) => SymbolDiscovery.BuildModel(types));
+            .Combine(referencedAssemblyTypes)
+            .Select(static (data, _) => BuildRegistrationModel(data.Left, data.Right));
 
         var combined = callSiteProvider
             .Collect()
@@ -67,7 +85,9 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
                 spc.ReportDiagnostic(Diagnostic.Create(diagnosticInfo.Descriptor, diagnosticInfo.Location));
             }
 
-            var interceptorSource = InterceptorEmitter.EmitInterceptors(callSites.ToImmutableArray(), modelData.Model);
+            var interceptorSource = InterceptorEmitter.EmitInterceptors(
+                callSites.Select(c => c.Location).ToImmutableArray(),
+                modelData.Model);
             spc.AddSource("__AlexaVoxCraft_Interceptors.g.cs",
                 SourceText.From(interceptorSource, System.Text.Encoding.UTF8));
         });
@@ -82,7 +102,7 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
             }
         };
 
-    private static InterceptorLocation? GetCallSiteLocation(GeneratorSyntaxContext ctx)
+    private static AddSkillMediatorCallSite? GetCallSiteData(GeneratorSyntaxContext ctx)
     {
         var invocation = (InvocationExpressionSyntax)ctx.Node;
 
@@ -115,16 +135,258 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
         if (il is null)
             return null;
 
-        return new InterceptorLocation(il.Data);
+        var explicitAssemblyNames = GetExplicitAssemblyNames(ctx, invocation, op);
+
+        return new AddSkillMediatorCallSite(new InterceptorLocation(il.Data), explicitAssemblyNames);
+    }
+
+    private static EquatableArray<string> GetExplicitAssemblyNames(
+        GeneratorSyntaxContext ctx,
+        InvocationExpressionSyntax invocation,
+        IInvocationOperation invocationOperation)
+    {
+        var settingsActionExpression = ResolveSettingsActionExpression(invocation, invocationOperation);
+
+        if (settingsActionExpression is null)
+        {
+            return new EquatableArray<string>(Array.Empty<string>());
+        }
+
+        LambdaExpressionSyntax? lambda = settingsActionExpression switch
+        {
+            ParenthesizedLambdaExpressionSyntax parenthesized => parenthesized,
+            SimpleLambdaExpressionSyntax simple => simple,
+            _ => null
+        };
+
+        if (lambda is null)
+        {
+            return new EquatableArray<string>(Array.Empty<string>());
+        }
+
+        var assemblyNames = new HashSet<string>(StringComparer.Ordinal);
+        var registerCalls = lambda.Body
+            .DescendantNodesAndSelf()
+            .OfType<InvocationExpressionSyntax>()
+            .Where(static call => call.Expression is MemberAccessExpressionSyntax
+            {
+                Name.Identifier.ValueText: "RegisterServicesFromAssemblyContaining"
+            });
+
+        foreach (var registerCall in registerCalls)
+        {
+            if (registerCall.Expression is not MemberAccessExpressionSyntax { Name: var memberName })
+            {
+                continue;
+            }
+
+            INamedTypeSymbol? typeSymbol = memberName switch
+            {
+                GenericNameSyntax { TypeArgumentList.Arguments.Count: 1 } genericName
+                    => ctx.SemanticModel.GetTypeInfo(genericName.TypeArgumentList.Arguments[0]).Type as INamedTypeSymbol,
+                IdentifierNameSyntax when registerCall.ArgumentList.Arguments.Count == 1
+                    && registerCall.ArgumentList.Arguments[0].Expression is TypeOfExpressionSyntax typeOfExpression
+                    => ctx.SemanticModel.GetTypeInfo(typeOfExpression.Type).Type as INamedTypeSymbol,
+                _ => null
+            };
+
+            var assemblyName = typeSymbol?.ContainingAssembly?.Identity.Name;
+            if (!string.IsNullOrWhiteSpace(assemblyName))
+            {
+                assemblyNames.Add(assemblyName!);
+            }
+        }
+
+        return new EquatableArray<string>(assemblyNames.OrderBy(x => x, StringComparer.Ordinal).ToArray());
+    }
+
+    private static ExpressionSyntax? ResolveSettingsActionExpression(
+        InvocationExpressionSyntax invocation,
+        IInvocationOperation invocationOperation)
+    {
+        var semanticMatch = invocationOperation.Arguments
+            .FirstOrDefault(a => a.Parameter?.Name == "settingsAction");
+
+        if (semanticMatch is not null && semanticMatch.Parameter is not null)
+        {
+            var semanticValue = semanticMatch.Value;
+            if (semanticValue is not null && semanticValue.Syntax is ExpressionSyntax semanticExpression)
+            {
+                return semanticExpression;
+            }
+        }
+
+        var namedArgument = invocation.ArgumentList.Arguments
+            .FirstOrDefault(a => a.NameColon?.Name.Identifier.ValueText == "settingsAction");
+        if (namedArgument is not null)
+        {
+            return namedArgument.Expression;
+        }
+
+        if (invocation.ArgumentList.Arguments.Count >= 2)
+        {
+            return invocation.ArgumentList.Arguments[1].Expression;
+        }
+
+        return null;
+    }
+
+    private static ModelWithDiagnostics BuildRegistrationModel(
+        ImmutableArray<DiscoveredTypeInfo> sourceTypes,
+        EquatableArray<DiscoveredTypeInfo> referencedAssemblyTypes)
+    {
+        var merged = new List<DiscoveredTypeInfo>(sourceTypes.Length + referencedAssemblyTypes.Count);
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var typeInfo in sourceTypes)
+        {
+            if (seen.Add(typeInfo.FullyQualifiedTypeName))
+            {
+                merged.Add(typeInfo);
+            }
+        }
+
+        foreach (var typeInfo in referencedAssemblyTypes)
+        {
+            if (seen.Add(typeInfo.FullyQualifiedTypeName))
+            {
+                merged.Add(typeInfo);
+            }
+        }
+
+        return SymbolDiscovery.BuildModel(merged.ToImmutableArray());
+    }
+
+    private static EquatableArray<DiscoveredTypeInfo> DiscoverReferencedAssemblyTypes(
+        Compilation compilation,
+        EquatableArray<string> explicitAssemblyNames)
+    {
+        if (explicitAssemblyNames.Count == 0)
+        {
+            return new EquatableArray<DiscoveredTypeInfo>(Array.Empty<DiscoveredTypeInfo>());
+        }
+
+        var requestedAssemblyNames = new HashSet<string>(explicitAssemblyNames, StringComparer.Ordinal);
+        var discoveredTypes = new List<DiscoveredTypeInfo>();
+
+        foreach (var assembly in compilation.SourceModule.ReferencedAssemblySymbols)
+        {
+            if (!requestedAssemblyNames.Contains(assembly.Identity.Name))
+            {
+                continue;
+            }
+
+            var canAccessInternals = HasInternalsVisibleTo(assembly, compilation.Assembly);
+            DiscoverTypesFromNamespace(
+                assembly.GlobalNamespace,
+                discoveredTypes,
+                canAccessInternals);
+        }
+
+        return new EquatableArray<DiscoveredTypeInfo>(discoveredTypes);
+    }
+
+    private static void DiscoverTypesFromNamespace(
+        INamespaceSymbol namespaceSymbol,
+        List<DiscoveredTypeInfo> discoveredTypes,
+        bool canAccessInternals)
+    {
+        foreach (var typeSymbol in namespaceSymbol.GetTypeMembers())
+        {
+            DiscoverTypeAndNestedTypes(typeSymbol, discoveredTypes, canAccessInternals);
+        }
+
+        foreach (var childNamespace in namespaceSymbol.GetNamespaceMembers())
+        {
+            DiscoverTypesFromNamespace(childNamespace, discoveredTypes, canAccessInternals);
+        }
+    }
+
+    private static void DiscoverTypeAndNestedTypes(
+        INamedTypeSymbol typeSymbol,
+        List<DiscoveredTypeInfo> discoveredTypes,
+        bool canAccessInternals)
+    {
+        if (IsTypeAccessibleFromReferencingAssembly(typeSymbol, canAccessInternals))
+        {
+            var typeInfo = ExtractTypeInfo(typeSymbol);
+            if (typeInfo.HasValue)
+            {
+                discoveredTypes.Add(typeInfo.Value);
+            }
+        }
+
+        foreach (var nestedType in typeSymbol.GetTypeMembers())
+        {
+            DiscoverTypeAndNestedTypes(nestedType, discoveredTypes, canAccessInternals);
+        }
+    }
+
+    private static bool HasInternalsVisibleTo(IAssemblySymbol referencedAssembly, IAssemblySymbol requestingAssembly)
+    {
+        var requestingAssemblyName = requestingAssembly.Identity.Name;
+
+        foreach (var attribute in referencedAssembly.GetAttributes())
+        {
+            if (attribute.AttributeClass?.ToDisplayString() != "System.Runtime.CompilerServices.InternalsVisibleToAttribute")
+            {
+                continue;
+            }
+
+            if (attribute.ConstructorArguments.Length == 0)
+            {
+                continue;
+            }
+
+            var value = attribute.ConstructorArguments[0].Value as string;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                continue;
+            }
+
+            var friendAssemblyName = value!.Split(',')[0].Trim();
+            if (string.Equals(friendAssemblyName, requestingAssemblyName, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsTypeAccessibleFromReferencingAssembly(INamedTypeSymbol typeSymbol, bool canAccessInternals)
+    {
+        for (INamedTypeSymbol? current = typeSymbol; current is not null; current = current.ContainingType)
+        {
+            if (!IsDeclaredAccessibilitySupported(current.DeclaredAccessibility, canAccessInternals))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool IsDeclaredAccessibilitySupported(Accessibility accessibility, bool canAccessInternals)
+    {
+        return accessibility switch
+        {
+            Accessibility.Public => true,
+            Accessibility.Internal => canAccessInternals,
+            Accessibility.ProtectedOrInternal => canAccessInternals,
+            _ => false,
+        };
     }
 
     private static DiscoveredTypeInfo? ExtractTypeInfo(GeneratorSyntaxContext ctx)
     {
-        const string AlexaHandlerAttributeName = "AlexaVoxCraft.MediatR.Annotations.AlexaHandlerAttribute";
-
         var symbol = ctx.SemanticModel.GetDeclaredSymbol((TypeDeclarationSyntax)ctx.Node) as INamedTypeSymbol;
-        if (symbol is null)
-            return null;
+        return symbol is null ? null : ExtractTypeInfo(symbol);
+    }
+
+    private static DiscoveredTypeInfo? ExtractTypeInfo(INamedTypeSymbol symbol)
+    {
+        const string AlexaHandlerAttributeName = "AlexaVoxCraft.MediatR.Annotations.AlexaHandlerAttribute";
 
         var fullyQualifiedName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         var location = symbol.Locations.FirstOrDefault() ?? Location.None;
@@ -180,3 +442,8 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
 }
 
 internal readonly record struct InterceptorLocation(string Data);
+
+internal readonly record struct AddSkillMediatorCallSite(
+    InterceptorLocation Location,
+    EquatableArray<string> ExplicitAssemblyNames
+);
