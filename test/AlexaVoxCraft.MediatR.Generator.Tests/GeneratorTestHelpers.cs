@@ -32,26 +32,14 @@ internal sealed class GeneratorTestHelpers
             Dictionary<string, ReportDiagnostic>? diagnosticsToSuppress = null,
             Dictionary<string, string>? featureFlags = null,
             LanguageVersion languageVersion = LanguageVersion.Preview,
-            IDictionary<string, string>? msbuildProperties = null)
+            IDictionary<string, string>? msbuildProperties = null,
+            IEnumerable<IEnumerable<string>>? referencedAssemblyCasePaths = null)
     {
         var parse = CSharpParseOptions.Default
             .WithLanguageVersion(languageVersion)
             .WithFeatures(featureFlags);
 
-        // Always include the single global-usings file first, if present
-        var trees = new List<SyntaxTree>();
-
-        var globalUsingsPath = ResolveCasePath(GlobalUsingsRelPath);
-        if (File.Exists(globalUsingsPath))
-        {
-            var guText = File.ReadAllText(globalUsingsPath);
-            trees.Add(CSharpSyntaxTree.ParseText(guText, parse, path: NormalizeForDiagnostics(globalUsingsPath)));
-        }
-
-        // Then include the case files passed in
-        trees.AddRange(caseRelativePaths
-            .Select(ResolveCasePath)
-            .Select(p => CSharpSyntaxTree.ParseText(File.ReadAllText(p), parse, path: NormalizeForDiagnostics(p))));
+        var trees = BuildCaseTrees(caseRelativePaths, parse);
 
         var references = GetBclReferences().ToList();
         references.AddRange([
@@ -67,6 +55,21 @@ internal sealed class GeneratorTestHelpers
             MetadataReference.CreateFromFile(typeof(ServiceLifetime).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(UserEventRequest).Assembly.Location),
         ]);
+
+        if (referencedAssemblyCasePaths is not null)
+        {
+            var index = 0;
+            foreach (var referencedCasePaths in referencedAssemblyCasePaths)
+            {
+                var metadataReference = BuildReferencedAssemblyReference(
+                    referencedCasePaths,
+                    parse,
+                    references,
+                    $"GeneratorTests.Reference{index++}");
+
+                references.Add(metadataReference);
+            }
+        }
 
         var options = new CSharpCompilationOptions(
             OutputKind.DynamicallyLinkedLibrary,
@@ -109,6 +112,57 @@ internal sealed class GeneratorTestHelpers
         var classic = generator.AsSourceGenerator();
         var driver = CSharpGeneratorDriver.Create(generators: [classic], optionsProvider: optionsProvider).RunGenerators(compilation);
         return (driver, compilation, parse);
+    }
+
+    private static List<SyntaxTree> BuildCaseTrees(IEnumerable<string> caseRelativePaths, CSharpParseOptions parse)
+    {
+        var trees = new List<SyntaxTree>();
+
+        var globalUsingsPath = ResolveCasePath(GlobalUsingsRelPath);
+        if (File.Exists(globalUsingsPath))
+        {
+            var guText = File.ReadAllText(globalUsingsPath);
+            trees.Add(CSharpSyntaxTree.ParseText(guText, parse, path: NormalizeForDiagnostics(globalUsingsPath)));
+        }
+
+        trees.AddRange(caseRelativePaths
+            .Select(ResolveCasePath)
+            .Select(p => CSharpSyntaxTree.ParseText(File.ReadAllText(p), parse, path: NormalizeForDiagnostics(p))));
+
+        return trees;
+    }
+
+    private static MetadataReference BuildReferencedAssemblyReference(
+        IEnumerable<string> caseRelativePaths,
+        CSharpParseOptions parse,
+        IReadOnlyCollection<MetadataReference> references,
+        string assemblyName)
+    {
+        var trees = BuildCaseTrees(caseRelativePaths, parse);
+
+        var compilation = CSharpCompilation.Create(
+            assemblyName: assemblyName,
+            syntaxTrees: trees,
+            references: references,
+            options: new CSharpCompilationOptions(
+                OutputKind.DynamicallyLinkedLibrary,
+                nullableContextOptions: NullableContextOptions.Enable));
+
+        using var stream = new MemoryStream();
+        var emitResult = compilation.Emit(stream);
+        if (!emitResult.Success)
+        {
+            var errors = emitResult.Diagnostics
+                .Where(d => d.Severity == DiagnosticSeverity.Error)
+                .Select(d => $"{d.Id}: {d.GetMessage()}")
+                .ToArray();
+
+            throw new InvalidOperationException(
+                $"Failed to compile referenced assembly '{assemblyName}'.\n" +
+                string.Join("\n", errors));
+        }
+
+        return MetadataReference.CreateFromImage(stream.ToArray());
     }
 
     /// <summary>
@@ -165,7 +219,8 @@ internal sealed class VerifyGlue
         Dictionary<string, string>? featureFlags = null,
         Dictionary<string, ReportDiagnostic>? diagnosticsToSuppress = null,
         LanguageVersion languageVersion = LanguageVersion.Preview,
-        IDictionary<string, string>? msbuildProperties = null)
+        IDictionary<string, string>? msbuildProperties = null,
+        IEnumerable<IEnumerable<string>>? referencedAssemblyCasePaths = null)
     {
         var (driver, original, parse) = GeneratorTestHelpers.RunFromCases(
             generator,
@@ -173,7 +228,8 @@ internal sealed class VerifyGlue
             diagnosticsToSuppress,
             featureFlags,
             languageVersion,
-            msbuildProperties
+            msbuildProperties,
+            referencedAssemblyCasePaths
         );
 
         driver.Should().NotBeNull();
