@@ -101,6 +101,63 @@ builder.Services.AddSmapiDeveloperClient(options =>
 });
 ```
 
+### Customizing the HttpClient Builder
+
+Both SMAPI registration overloads support optional `IHttpClientBuilder` customization via `configureHttpClientBuilder`:
+
+```csharp
+using AlexaVoxCraft.Smapi;
+
+builder.Services.AddSmapiDeveloperClient(
+    builder.Configuration,
+    configureHttpClientBuilder: httpClient =>
+    {
+        httpClient.SetHandlerLifetime(TimeSpan.FromMinutes(5));
+    });
+
+builder.Services.AddSmapiDeveloperClient(
+    options =>
+    {
+        options.ClientId = Environment.GetEnvironmentVariable("SMAPI_CLIENT_ID")!;
+        options.ClientSecret = Environment.GetEnvironmentVariable("SMAPI_CLIENT_SECRET")!;
+        options.RefreshToken = Environment.GetEnvironmentVariable("SMAPI_REFRESH_TOKEN")!;
+    },
+    configureHttpClientBuilder: httpClient =>
+    {
+        httpClient.SetHandlerLifetime(TimeSpan.FromMinutes(5));
+    });
+```
+
+### Skill Invocation Client Registration
+
+`AddSkillInvocationClient(...)` supports the same registration patterns and optional `configureHttpClientBuilder` callback:
+
+```csharp
+using AlexaVoxCraft.Smapi;
+
+builder.Services.AddSkillInvocationClient(builder.Configuration);
+
+builder.Services.AddSkillInvocationClient(
+    builder.Configuration,
+    sectionName: "AlexaSkillInvocation",
+    configureHttpClientBuilder: httpClient =>
+    {
+        httpClient.SetHandlerLifetime(TimeSpan.FromMinutes(5));
+    });
+
+builder.Services.AddSkillInvocationClient(
+    options =>
+    {
+        options.ClientId = Environment.GetEnvironmentVariable("SMAPI_CLIENT_ID")!;
+        options.ClientSecret = Environment.GetEnvironmentVariable("SMAPI_CLIENT_SECRET")!;
+        options.RefreshToken = Environment.GetEnvironmentVariable("SMAPI_REFRESH_TOKEN")!;
+    },
+    configureHttpClientBuilder: httpClient =>
+    {
+        httpClient.SetHandlerLifetime(TimeSpan.FromMinutes(5));
+    });
+```
+
 ## Usage
 
 ### Interaction Model Client
