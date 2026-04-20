@@ -288,10 +288,9 @@ public class AlexaSkillFunctionTests : TestBase
 
         exception.Should().NotBeNull();
 
-        var lambdaSpan = activities.FirstOrDefault(a =>
-            a.OperationName == AlexaSpanNames.LambdaExecution &&
-            a.Status == ActivityStatusCode.Error);
-        lambdaSpan.Should().NotBeNull("expected a LambdaExecution span with Error status after handler exception");
+        var lambdaSpan = activities.FirstOrDefault(a => a.OperationName == AlexaSpanNames.LambdaExecution);
+        lambdaSpan.Should().NotBeNull();
+        lambdaSpan!.Status.Should().Be(ActivityStatusCode.Error);
 
         var exceptionEvents = events.Where(e => e.Name == "exception");
         exceptionEvents.Should().NotBeEmpty();
