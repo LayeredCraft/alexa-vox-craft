@@ -188,6 +188,8 @@ internal sealed class GeneratorTestHelpers
         return Net90.References.All;
 #elif NET10_0
         return Net100.References.All;
+#elif NET11_0
+        return Net110.References.All;
 #else
         // Fallback so the file still compiles if a new TFM is added.
         return Net90.References.All;
