@@ -12,7 +12,7 @@ permissions: write-all
 
 jobs:
   publish:
-    uses: LayeredCraft/devops-templates/.github/workflows/publish-preview.yml@v8.0
+    uses: LayeredCraft/devops-templates/.github/workflows/publish-preview.yml@main
     with:
       solution: AlexaVoxCraft.slnx
       dotnetVersion: |
