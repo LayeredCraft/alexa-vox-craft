@@ -427,4 +427,40 @@ public class AlexaVoxCraftDiGeneratorTests
             ]
         );
     }
+
+    /// <summary>
+    /// Verifies that internal handlers and interceptors declared in the consuming assembly are discovered and registered.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_IncludesInternalSourceAssemblyTypes(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/020_SourceAssemblyInternal/Function.cs",
+                "Cases/020_SourceAssemblyInternal/InternalLaunchHandler.cs",
+                "Cases/020_SourceAssemblyInternal/InternalRequestInterceptor.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts
+        );
+    }
+
+    /// <summary>
+    /// Verifies that inaccessible source types are excluded even though they are syntactically visible to source discovery.
+    /// </summary>
+    [Theory]
+    [GeneratorAutoData]
+    public async Task GeneratesInterceptor_ExcludesInaccessibleSourceAssemblyTypes(AlexaVoxCraftDiGenerator sut)
+    {
+        await VerifyGlue.VerifySourcesAsync(sut,
+            [
+                "Cases/021_SourceAssemblyInaccessible/Function.cs",
+                "Cases/021_SourceAssemblyInaccessible/PublicLaunchHandler.cs",
+                "Cases/021_SourceAssemblyInaccessible/PrivateNestedHandlers.cs"
+            ],
+            featureFlags: FeatureFlags,
+            msbuildProperties: AnalyzerOpts
+        );
+    }
 }
