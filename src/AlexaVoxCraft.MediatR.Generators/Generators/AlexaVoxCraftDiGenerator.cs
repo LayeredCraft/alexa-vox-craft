@@ -358,6 +358,11 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
     {
         for (INamedTypeSymbol? current = typeSymbol; current is not null; current = current.ContainingType)
         {
+            if (current.IsFileLocal)
+            {
+                return false;
+            }
+
             if (!IsDeclaredAccessibilitySupported(current.DeclaredAccessibility, canAccessInternals))
             {
                 return false;

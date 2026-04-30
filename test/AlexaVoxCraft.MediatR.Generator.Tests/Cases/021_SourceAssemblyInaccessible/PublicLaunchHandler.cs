@@ -29,3 +29,19 @@ file sealed class FileLocalLaunchHandler : IRequestHandler<LaunchRequest>
         throw new NotImplementedException();
     }
 }
+
+file sealed class FileLocalContainer
+{
+    internal sealed class NestedFileLocalContainerLaunchHandler : IRequestHandler<LaunchRequest>
+    {
+        public Task<bool> CanHandle(IHandlerInput input, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
