@@ -358,6 +358,11 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
     {
         for (INamedTypeSymbol? current = typeSymbol; current is not null; current = current.ContainingType)
         {
+            if (current.IsFileLocal)
+            {
+                return false;
+            }
+
             if (!IsDeclaredAccessibilitySupported(current.DeclaredAccessibility, canAccessInternals))
             {
                 return false;
@@ -380,8 +385,21 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
 
     private static DiscoveredTypeInfo? ExtractTypeInfo(GeneratorSyntaxContext ctx)
     {
-        var symbol = ctx.SemanticModel.GetDeclaredSymbol((TypeDeclarationSyntax)ctx.Node) as INamedTypeSymbol;
-        return symbol is null ? null : ExtractTypeInfo(symbol);
+        var declaration = (TypeDeclarationSyntax)ctx.Node;
+        if (declaration.Modifiers.Any(static modifier => modifier.IsKind(SyntaxKind.FileKeyword)))
+        {
+            return null;
+        }
+
+        var symbol = ctx.SemanticModel.GetDeclaredSymbol(declaration) as INamedTypeSymbol;
+        if (symbol is null)
+        {
+            return null;
+        }
+
+        return IsTypeAccessibleFromReferencingAssembly(symbol, canAccessInternals: true)
+            ? ExtractTypeInfo(symbol)
+            : null;
     }
 
     private static DiscoveredTypeInfo? ExtractTypeInfo(INamedTypeSymbol symbol)
