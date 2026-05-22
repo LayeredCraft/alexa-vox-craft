@@ -3,8 +3,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup Label="AWS Lambda">
-    <PackageVersion Include="Amazon.Lambda.Core" Version="3.0.0" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.0.0" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="3.1.0" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.1.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup Label="LayeredCraft">
@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup Label="Verify">
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.16.3" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.17.0" />
   </ItemGroup>
   <ItemGroup Label="Testing">
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
@@ -73,10 +73,10 @@
     <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
   </ItemGroup>
   <ItemGroup Label="Reference Assemblies">
-    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.7" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.7" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.7" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.7" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.8" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.8" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.8" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.8" />
   </ItemGroup>
   <ItemGroup Label="Utilities">
     <PackageVersion Include="MinimalLambda" Version="2.5.0" />
