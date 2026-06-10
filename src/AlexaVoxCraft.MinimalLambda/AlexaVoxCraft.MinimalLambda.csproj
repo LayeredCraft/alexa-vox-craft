@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
       <PackageReference Include="MinimalLambda" />
     </ItemGroup>
 
