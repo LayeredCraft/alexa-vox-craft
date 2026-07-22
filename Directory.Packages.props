@@ -13,7 +13,6 @@
   </ItemGroup>
   <ItemGroup Label="Serilog">
     <PackageVersion Include="Serilog" Version="4.3.1" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Activity" Version="1.0.0.3" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
   </ItemGroup>
@@ -22,37 +21,53 @@
     <PackageVersion Include="OpenTelemetry.Api" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.InMemory" Version="1.16.0" />
   </ItemGroup>
+  <ItemGroup Label="Serilog.AspNetCore (net8.0)" Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
+    <PackageVersion Include="Serilog.AspNetCore" Version="[8.0.3, 9.0.0)" />
+  </ItemGroup>
+  <ItemGroup Label="Serilog.AspNetCore (net9.0)" Condition="'$(TargetFramework)' == 'net9.0'">
+    <PackageVersion Include="Serilog.AspNetCore" Version="[9.0.0, 10.0.0)" />
+  </ItemGroup>
+  <ItemGroup Label="Serilog.AspNetCore (net10.0+)" Condition="'$(TargetFramework)' == 'net10.0' or '$(TargetFramework)' == 'net11.0'">
+    <PackageVersion Include="Serilog.AspNetCore" Version="[10.0.0, 11.0.0)" />
+  </ItemGroup>
   <ItemGroup Label="Microsoft">
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.300" />
   </ItemGroup>
+  <!-- Microsoft.Extensions.* packages ship parallel stable and preview build lines.
+       Pin each per-TargetFramework with bounded ranges so Dependabot can raise
+       lower bounds without crossing into the next major/preview line. -->
   <ItemGroup Label="Microsoft Extensions (net8.0)" Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="[8.0.2, 9.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[8.0.2, 9.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[8.0.1, 9.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="[8.0.1, 9.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="[8.0.2, 9.0.0)" />
   </ItemGroup>
   <ItemGroup Label="Microsoft Extensions (net9.0)" Condition="'$(TargetFramework)' == 'net9.0'">
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.17" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.17" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.17" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.17" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.17" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="[9.0.17, 10.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[9.0.17, 10.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[9.0.17, 10.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="[9.0.17, 10.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="[9.0.17, 10.0.0)" />
   </ItemGroup>
   <ItemGroup Label="Microsoft Extensions (net10.0)" Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="[10.0.9, 11.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.9, 11.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[10.0.9, 11.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="[10.0.9, 11.0.0)" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="[10.0.9, 11.0.0)" />
   </ItemGroup>
+  <!-- Lower bound is a prerelease, which causes NuGet to consider prerelease
+       candidates for these package IDs. Use a letter-led prerelease marker on
+       the exclusive upper bound so the ranges stay below all 12.0.0 previews
+       as well as 12.0.0 stable. -->
   <ItemGroup Label="Microsoft Extensions (net11.0)" Condition="'$(TargetFramework)' == 'net11.0'">
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="11.0.0-preview.5.26302.115" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="11.0.0-preview.5.26302.115" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="11.0.0-preview.5.26302.115" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="11.0.0-preview.5.26302.115" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="11.0.0-preview.5.26302.115" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="[11.0.0-preview.5.26302.115, 12.0.0-a)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[11.0.0-preview.5.26302.115, 12.0.0-a)" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[11.0.0-preview.5.26302.115, 12.0.0-a)" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="[11.0.0-preview.5.26302.115, 12.0.0-a)" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="[11.0.0-preview.5.26302.115, 12.0.0-a)" />
   </ItemGroup>
   <ItemGroup Label="Roslyn / Source Generators">
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0" />
