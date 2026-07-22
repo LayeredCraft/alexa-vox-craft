@@ -13,7 +13,6 @@
   </ItemGroup>
   <ItemGroup Label="Serilog">
     <PackageVersion Include="Serilog" Version="4.3.1" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Activity" Version="1.0.0.3" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
   </ItemGroup>
@@ -21,6 +20,15 @@
     <PackageVersion Include="OpenTelemetry" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Api" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.InMemory" Version="1.16.0" />
+  </ItemGroup>
+  <ItemGroup Label="Serilog.AspNetCore (net8.0)" Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
+    <PackageVersion Include="Serilog.AspNetCore" Version="[8.0.3, 9.0.0)" />
+  </ItemGroup>
+  <ItemGroup Label="Serilog.AspNetCore (net9.0)" Condition="'$(TargetFramework)' == 'net9.0'">
+    <PackageVersion Include="Serilog.AspNetCore" Version="[9.0.0, 10.0.0)" />
+  </ItemGroup>
+  <ItemGroup Label="Serilog.AspNetCore (net10.0+)" Condition="'$(TargetFramework)' == 'net10.0' or '$(TargetFramework)' == 'net11.0'">
+    <PackageVersion Include="Serilog.AspNetCore" Version="[10.0.0, 11.0.0)" />
   </ItemGroup>
   <ItemGroup Label="Microsoft">
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
