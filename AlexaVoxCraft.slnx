@@ -7,7 +7,8 @@
   <Folder Name="/docs/">
     <File Path="docs/index.md" />
     <File Path="mkdocs.yml" />
-    <File Path="requirements.txt" />
+    <File Path="pyproject.toml" />
+    <File Path="uv.lock" />
   </Folder>
   <Folder Name="/docs/assets/">
     <File Path="docs/assets/icon.png" />
@@ -32,6 +33,8 @@
     <File Path="docs/smapi/developer-client.md" />
   </Folder>
   <Folder Name="/git/">
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/workflows/dependabot-auto-merge.yml" />
     <File Path=".github/workflows/docs.yml" />
     <File Path=".github/workflows/pr-build.yaml" />
     <File Path=".github\workflows\pr-title-check.yaml" />

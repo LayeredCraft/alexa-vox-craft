@@ -6,12 +6,16 @@ on:
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
       - '.github/workflows/docs.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
       - '.github/workflows/docs.yml'
 
 permissions:
@@ -35,28 +39,22 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version-file: pyproject.toml
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
-          key: mkdocs-material-${{ hashFiles('requirements.txt') }}
-          path: ~/.cache/pip
-          restore-keys: |
-            mkdocs-material-
+          enable-cache: true
 
       - name: Install dependencies
-        run: |
-          pip install mkdocs-material
-          pip install mkdocs-minify-plugin
+        run: uv sync --locked
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
 
       - name: Build documentation
-        run: |
-          mkdocs build --clean
+        run: uv run mkdocs build --clean
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
