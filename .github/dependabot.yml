@@ -34,6 +34,13 @@ updates:
           - "major"
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "Serilog.AspNetCore"
+      - dependency-name: "Microsoft.Extensions.Configuration.Binder"
+      - dependency-name: "Microsoft.Extensions.DependencyInjection.Abstractions"
+      - dependency-name: "Microsoft.Extensions.Hosting"
+      - dependency-name: "Microsoft.Extensions.Http"
+      - dependency-name: "Microsoft.Extensions.Options"
 
   - package-ecosystem: "github-actions"
     directory: "/"
