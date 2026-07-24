@@ -15,7 +15,9 @@
       <PackageReference Include="AutoFixture.AutoNSubstitute" />
       <PackageReference Include="AutoFixture.Xunit3" />
       <PackageReference Include="AwesomeAssertions" />
-      <PackageReference Include="NSubstitute" />
+        <PackageReference Include="NSubstitute">
+            <NoWarn>NU1608</NoWarn>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
