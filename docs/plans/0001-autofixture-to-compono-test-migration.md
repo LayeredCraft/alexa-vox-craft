@@ -71,16 +71,16 @@ test(model-legacy): complete Compono migration
 
 ### Commit 2: Finish MediatR Lambda TestKit removal
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Inventory remaining `AlexaVoxCraft.TestKit` global-using reliance in `AlexaVoxCraft.MediatR.Lambda.Tests`.
-- [ ] Move/replace any required non-AutoFixture helpers locally, especially logging/test JSON helpers.
-- [ ] Remove the `AlexaVoxCraft.TestKit` project reference from `AlexaVoxCraft.MediatR.Lambda.Tests`.
-- [ ] Add explicit direct package/project references for anything previously only transitively available through TestKit.
-- [ ] Validate `dotnet test test/AlexaVoxCraft.MediatR.Lambda.Tests/AlexaVoxCraft.MediatR.Lambda.Tests.csproj --no-build --no-restore`.
-- [ ] Validate solution build.
+- [x] Inventory remaining `AlexaVoxCraft.TestKit` global-using reliance in `AlexaVoxCraft.MediatR.Lambda.Tests`.
+- [x] Move/replace any required non-AutoFixture helpers locally, especially logging/test JSON helpers.
+- [x] Remove the `AlexaVoxCraft.TestKit` project reference from `AlexaVoxCraft.MediatR.Lambda.Tests`.
+- [x] Add explicit direct package/project references for anything previously only transitively available through TestKit.
+- [x] Validate `dotnet test test/AlexaVoxCraft.MediatR.Lambda.Tests/AlexaVoxCraft.MediatR.Lambda.Tests.csproj --no-build --no-restore`.
+- [x] Validate solution build (`dotnet build AlexaVoxCraft.slnx --no-restore` passed; existing warnings remain outside this slice).
 
 Suggested commit message:
 
