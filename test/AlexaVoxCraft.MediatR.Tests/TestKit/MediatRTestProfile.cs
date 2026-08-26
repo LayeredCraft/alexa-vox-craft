@@ -15,17 +15,13 @@ using Microsoft.Extensions.Options;
 namespace AlexaVoxCraft.MediatR.Tests.TestKit;
 
 /// <summary>
-/// PLAN-0051 (Compono ecosystem migration, TestKit slice 1, Stage 2): the shared composition
-/// profile for AlexaVoxCraft.MediatR.Tests - replaces the old AutoFixture-based
-/// MediatRAutoDataAttribute chain (BaseFixtureFactory + this project's 9 specimen builders +
-/// TestLoggerCustomization). Applied via <c>[Compose&lt;MediatRTestProfile&gt;]</c>.
+/// Shared composition profile for AlexaVoxCraft.MediatR.Tests.
+/// Applied via <c>[Compose&lt;MediatRTestProfile&gt;]</c>.
 ///
-/// Uses Compono.TestDoubles' <c>UseGeneratedTestDoubles()</c> - the required target per product
-/// direction (no NSubstitute/Compono.NSubstitute in this project's resolved dependency graph).
+/// Uses Compono.TestDoubles' <c>UseGeneratedTestDoubles()</c> for interface dependencies.
 /// The two delegate types this project needs (<see cref="RequestHandlerDelegate"/>,
-/// <see cref="SkillRequestFactory"/>) use <c>FakeDelegates.cs</c> instead - Compono.TestDoubles
-/// deliberately does not generate doubles for delegate types (ADR-0042 Non-Goals), an already-
-/// decided intentional design difference, not new evidence.
+/// <see cref="SkillRequestFactory"/>) use <c>FakeDelegates.cs</c> instead because
+/// Compono.TestDoubles deliberately does not generate doubles for delegate types.
 /// </summary>
 public sealed class MediatRTestProfile : ICompositionProfile
 {
@@ -51,8 +47,8 @@ public sealed class MediatRTestProfile : ICompositionProfile
                 return next;
             })
             // Same reasoning as above - SkillRequest is composed directly elsewhere in this
-            // project (e.g. DefaultHandlerInputTests' own [Frozen] SkillRequest parameters), so
-            // this is not Finding B's shape either.
+            // project (e.g. DefaultHandlerInputTests' own SkillRequest parameters), so this is
+            // not Finding B's shape either.
             .Register<SkillRequestFactory>(context =>
             {
                 var factory = new FakeSkillRequestFactory();
@@ -61,10 +57,8 @@ public sealed class MediatRTestProfile : ICompositionProfile
             })
             // ServiceCollection/ServiceProvider need to be *real*, stateful DI container objects
             // (AddSingleton/BuildServiceProvider must actually work), not a test-double provider's
-            // generated fake of the IServiceCollection/IServiceProvider interface shape - matches
-            // the old ServiceCollectionSpecimenBuilder/ServiceProviderSpecimenBuilder's own reason
-            // for existing (a hand-written override of AutoNSubstitute's default mocking for these
-            // two specific types).
+            // generated fake of the IServiceCollection/IServiceProvider interface shape; tests
+            // exercise AddSingleton/BuildServiceProvider behavior directly for these two types.
             .Register<IServiceCollection>(() => new ServiceCollection())
             // Correction to an earlier (incorrect) comment here claiming ILogger<SkillMediator>
             // "resolves cleanly" as a nested context.Resolve<T>() with no registration - a real
@@ -101,16 +95,15 @@ public sealed class MediatRTestProfile : ICompositionProfile
                 attributesManager.Configure().Session().Returns(new JsonAttributeBag(new Dictionary<string, JsonElement>()));
                 return attributesManager;
             })
-            // No Register<IHandlerInput> here (Stage 1 had one, backed by NSubstitute's blanket
-            // ConfigureMembers-equivalent workaround). Compono.TestDoubles can't be preconfigured
-            // from inside a Register<T> factory - context.Resolve<IHandlerInput>() for the very
+            // No Register<IHandlerInput> here. Compono.TestDoubles can't be preconfigured from
+            // inside a Register<T> factory - context.Resolve<IHandlerInput>() for the very
             // type being registered would be circular - and doesn't need to be: RequestEnvelope
             // (a non-nullable SkillRequest return with no deterministic default) generates as
             // *configuration-required* (ADR-0045) instead of silently null. Every test that
             // dereferences handlerInput.RequestEnvelope now calls
             // handlerInput.Configure().RequestEnvelope().Returns(...) explicitly - more honest
-            // than either AutoFixture's implicit auto-population or NSubstitute's silent-null
-            // default, at the cost of one explicit line per test that needs it.
+            // than implicit auto-population or silent-null defaults, at the cost of one explicit
+            // line per test that needs it.
             //
             // IOptions<SkillServiceConfiguration>.Value: unlike IHandlerInput above, the old
             // OptionsSpecimenBuilder was NOT a blanket ConfigureMembers default - it inspected the
@@ -159,8 +152,8 @@ public sealed class MediatRTestProfile : ICompositionProfile
             // parameter or a `required` member - Compono's generated default construction (per
             // docs/concepts/composition-model.md: "the type's own shape (constructor, required
             // members)") only sets constructor parameters/required members, not ordinary settable
-            // properties, so it stays null. AutoFixture set every public settable property by
-            // default; Compono deliberately does not. Project-local default, same shape as
+            // properties, so it stays null. Compono deliberately does not populate every public
+            // settable property. Project-local default, same shape as
             // SkillRequest above - ResponseBody's own nullable members (OutputSpeech/Card/Reprompt)
             // and field-initialized Directives/ShouldEndSession are already safe at their own
             // defaults, so only Response itself needs to be non-null.

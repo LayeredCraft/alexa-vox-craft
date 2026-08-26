@@ -94,9 +94,8 @@ public sealed class SmapiDeveloperAccessTokenProviderTests
     }
 
     // AllowMultiple = false on ComposeAttribute (unlike [InlineData]) means the three null/empty/
-    // whitespace cases the original InlineSmapiClientAutoDataAttribute-based theory covered in one
-    // method each need their own [Compose<SmapiHttpTestProfile>(value)] - one inline value per
-    // attribute instance, one attribute instance per method.
+    // whitespace cases each need their own [Compose<SmapiHttpTestProfile>(value)] - one inline
+    // value per attribute instance, one attribute instance per method.
     [Theory, Compose<SmapiHttpTestProfile>((string?)null)]
     public async Task GetAccessTokenAsync_WhenResponseMissingAccessToken_Null_ThrowsInvalidOperationException(
         string? token,

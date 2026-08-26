@@ -152,20 +152,30 @@ test: remove AutoFixture and NSubstitute infrastructure
 
 ### Commit 6: Documentation and cleanup
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Remove stale migration comments that are no longer useful after the final cutover.
-- [ ] Add/update test documentation if the repo has a suitable location for test composition conventions.
-- [ ] Document when to use explicit construction vs. Compono profiles vs. purpose-built fakes.
-- [ ] Validate solution build and full test suite.
+- [x] Remove stale migration comments that are no longer useful after the final cutover.
+- [x] Add/update test documentation if the repo has a suitable location for test composition conventions.
+- [x] Document when to use explicit construction vs. Compono profiles vs. purpose-built fakes.
+- [x] Validate solution build and full test suite.
 
 Suggested commit message:
 
 ```text
 docs(testing): document Compono test migration patterns
 ```
+
+## Resulting test composition guidance
+
+- Prefer explicit construction for simple SUTs and values, especially parameterless objects.
+- Use a Compono profile when multiple tests share meaningful setup for constructor dependencies,
+  shared HTTP handlers, loggers, generated test doubles, or semantic data.
+- Use purpose-built fakes for behavior-rich seams, delegates, or assertions that are clearer as
+  small local types than as generated/configured doubles.
+- Keep Verify/source-generator glue project-local unless repeated cross-project friction proves a
+  shared package is warranted.
 
 ## Current remaining usage inventory
 
@@ -175,13 +185,11 @@ Refresh this before each phase with:
 rg "AutoFixture|AutoData|InlineAutoData|ModelAutoData|GeneratorAutoData|MediatRLambdaAutoData|Frozen|Substitute\.For|NSubstitute|Received\(|Arg\." test -g '!bin/**' -g '!obj/**'
 ```
 
-As of plan creation, remaining matches include:
+After Commit 6, remaining matches are intentional historical/capability-gap comments plus `Received` as part of APL model API member names:
 
-- `test/Directory.Build.props` global AutoFixture/NSubstitute usings.
-- `test/AlexaVoxCraft.TestKit/**` AutoFixture/NSubstitute infrastructure.
-- `test/AlexaVoxCraft.Model.Apl.Legacy.Tests/ExtensionTests.cs`.
-- Migration comments in already-converted projects.
-- MediatR test comments documenting known Compono capability gaps.
+- `test/AlexaVoxCraft.Model.Apl.Legacy.Tests/ExtensionTests.cs` uses `OnObjectReceived`, an AlexaVoxCraft API name unrelated to NSubstitute.
+- MediatR test comments document known Compono.TestDoubles capability gaps that guided the migration.
+- This plan intentionally records the completed AutoFixture/NSubstitute migration history.
 
 ## Validation policy
 

@@ -9,13 +9,11 @@ using Microsoft.Extensions.Options;
 namespace AlexaVoxCraft.Smapi.Tests.TestKit;
 
 /// <summary>
-/// PLAN-0051 (Compono ecosystem migration): the shared composition profile for every
-/// AlexaVoxCraft.Smapi.Tests test that needs a real <see cref="HttpClient"/> backed by a
-/// <see cref="HttpTestHarness"/> - replaces the old AutoFixture-based
-/// SmapiClientAutoDataAttribute/ClientAutoDataAttribute/HttpClientSpecimenBuilder chain.
+/// Shared composition profile for every AlexaVoxCraft.Smapi.Tests test that needs a real
+/// <see cref="HttpClient"/> backed by a <see cref="HttpTestHarness"/>.
 /// Applied via <c>[Compose&lt;SmapiHttpTestProfile&gt;]</c>; pair with a
 /// <c>[Shared] HttpTestHarness handler</c> theory parameter so the test's own configuration and
-/// the SUT's injected <see cref="HttpClient"/> share the exact same handler instance (ADR-0051).
+/// the SUT's injected <see cref="HttpClient"/> share the exact same handler instance.
 /// </summary>
 public sealed class SmapiHttpTestProfile : ICompositionProfile
 {

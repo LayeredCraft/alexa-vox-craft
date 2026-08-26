@@ -15,11 +15,6 @@
       <ProjectReference Include="..\..\src\AlexaVoxCraft.InSkillPurchasing\AlexaVoxCraft.InSkillPurchasing.csproj" />
     </ItemGroup>
 
-    <!-- PLAN-0051 (Compono ecosystem migration): replaces the old AlexaVoxCraft.Http.TestKit
-         ProjectReference (reflection-based HttpMessageHandler fake + AutoFixture wiring, removed) -
-         Compono.Http's TestHttpHandler + Compono.XunitV3's [Compose]/[Shared]. No Compono.NSubstitute
-         - nothing composed here needs a substitute; the HTTP client tests compose the SUT via
-         IspHttpTestProfile and a shared Compono.Http-backed handler. -->
     <ItemGroup>
       <PackageReference Include="Compono" />
       <PackageReference Include="Compono.XunitV3" />
