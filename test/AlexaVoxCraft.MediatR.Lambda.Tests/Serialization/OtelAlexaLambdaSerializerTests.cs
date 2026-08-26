@@ -7,7 +7,6 @@
 // using AlexaVoxCraft.Model.Serialization;
 // using AwesomeAssertions;
 // using Microsoft.Extensions.Logging;
-// using NSubstitute;
 // using OpenTelemetry;
 // using OpenTelemetry.Metrics;
 //
@@ -44,7 +43,6 @@
 //             .Build();
 //
 //         // Setup serializer
-//         _logger = Substitute.For<ILogger<AlexaLambdaSerializer>>();
 //         _serializer = new AlexaLambdaSerializer(_logger, AlexaJsonOptions.DefaultOptions);
 //     }
 //

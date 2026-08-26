@@ -8,7 +8,6 @@
 // using AwesomeAssertions;
 // using Microsoft.Extensions.DependencyInjection;
 // using Microsoft.Extensions.Hosting;
-// using NSubstitute;
 // using OpenTelemetry;
 // using OpenTelemetry.Metrics;
 //
@@ -143,7 +142,6 @@
 //     public async Task FunctionHandlerAsync_WithDifferentMemoryLimits_RecordsCorrectMemoryMetrics()
 //     {
 //         // Arrange
-//         var highMemoryContext = Substitute.For<ILambdaContext>();
 //         highMemoryContext.FunctionName.Returns("test-function");
 //         highMemoryContext.FunctionVersion.Returns("1.0");
 //         highMemoryContext.AwsRequestId.Returns("test-request-id");
@@ -211,7 +209,6 @@
 //         var customRequest = CreateSkillRequest();
 //         customRequest.Context.System.Application.ApplicationId = applicationId;
 //         
-//         var customContext = Substitute.For<ILambdaContext>();
 //         customContext.FunctionName.Returns(functionName);
 //         customContext.FunctionVersion.Returns(functionVersion);
 //         customContext.AwsRequestId.Returns(requestId);
@@ -264,7 +261,6 @@
 //
 //     private ILambdaContext CreateLambdaContext()
 //     {
-//         var context = Substitute.For<ILambdaContext>();
 //         context.FunctionName.Returns("test-function");
 //         context.FunctionVersion.Returns("1.0");
 //         context.AwsRequestId.Returns("test-request-id");

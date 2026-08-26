@@ -16,7 +16,7 @@ AlexaVoxCraft is a modular C# .NET library for building Amazon Alexa skills usin
 - **⚡ Lambda Hosting**: Optimized AWS Lambda runtime with custom serialization and ReadyToRun publishing
 - **📊 Session Management**: Robust session attribute handling and game state persistence
 - **🔧 Pipeline Behaviors**: Request/response interceptors for cross-cutting concerns like logging and validation
-- **🧪 Testing Support**: Comprehensive testing utilities with AutoFixture integration and property-based testing
+- **🧪 Testing Support**: Comprehensive tests using explicit fixtures, focused fakes, and Compono-based composition
 
 ## Installation
 

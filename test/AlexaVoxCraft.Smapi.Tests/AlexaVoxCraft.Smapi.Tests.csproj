@@ -21,9 +21,18 @@
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AlexaVoxCraft.Http.TestKit\AlexaVoxCraft.Http.TestKit.csproj" />
-    <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
+    <PackageReference Include="Compono" />
+    <PackageReference Include="Compono.XunitV3" />
+    <PackageReference Include="Compono.Http" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AwesomeAssertions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
+    <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+  </ItemGroup>
 
 </Project>

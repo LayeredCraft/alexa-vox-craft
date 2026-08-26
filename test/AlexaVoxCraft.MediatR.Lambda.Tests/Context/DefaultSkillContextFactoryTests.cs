@@ -1,23 +1,23 @@
 using AlexaVoxCraft.MediatR.Lambda.Context;
 using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.MediatR.Lambda.Tests.TestKit;
+using Compono.XunitV3;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests.Context;
 
 public class DefaultSkillContextFactoryTests : TestBase
 {
-    [Theory]
-    [MediatRLambdaAutoData]
-    public void Constructor_WithValidAccessor_InitializesCorrectly(ISkillContextAccessor accessor)
+    [Theory, Compose<LambdaTestProfile>]
+    public void Constructor_WithValidAccessor_InitializesCorrectly(FakeSkillContextAccessor accessor)
     {
         var factory = new DefaultSkillContextFactory(accessor);
 
         factory.Should().NotBeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Create_WithValidRequest_ReturnsDefaultSkillContext(
-        ISkillContextAccessor accessor,
+        FakeSkillContextAccessor accessor,
         SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
@@ -29,21 +29,19 @@ public class DefaultSkillContextFactoryTests : TestBase
         context.Request.Should().Be(skillRequest);
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Create_SetsContextInAccessor(
-        ISkillContextAccessor accessor,
+        FakeSkillContextAccessor accessor,
         SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
 
         var context = factory.Create(skillRequest);
 
-        accessor.Received(1).SkillContext = context;
+        accessor.Assignments.Should().ContainSingle().Which.Should().BeSameAs(context);
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Create_WithNullAccessor_DoesNotThrow(SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(null!);
@@ -53,8 +51,7 @@ public class DefaultSkillContextFactoryTests : TestBase
         exception.Should().BeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Create_WithNullAccessor_ReturnsValidContext(SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(null!);
@@ -68,7 +65,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     [Fact]
     public void Create_WithNullRequest_DoesNotThrow()
     {
-        var accessor = CreateSubstitute<ISkillContextAccessor>();
+        var accessor = new FakeSkillContextAccessor();
         var factory = new DefaultSkillContextFactory(accessor);
 
         var exception = Record.Exception(() => factory.Create(null!));
@@ -79,7 +76,7 @@ public class DefaultSkillContextFactoryTests : TestBase
     [Fact]
     public void Create_WithNullRequest_ReturnsContextWithNullRequest()
     {
-        var accessor = CreateSubstitute<ISkillContextAccessor>();
+        var accessor = new FakeSkillContextAccessor();
         var factory = new DefaultSkillContextFactory(accessor);
 
         var context = factory.Create(null!);
@@ -88,10 +85,9 @@ public class DefaultSkillContextFactoryTests : TestBase
         context.Request.Should().BeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Dispose_WithValidAccessor_ClearsContextInAccessor(
-        ISkillContextAccessor accessor,
+        FakeSkillContextAccessor accessor,
         SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
@@ -99,11 +95,10 @@ public class DefaultSkillContextFactoryTests : TestBase
 
         factory.Dispose(context);
 
-        accessor.Received(1).SkillContext = null;
+        accessor.Assignments.Where(x => x is null).Should().ContainSingle();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Dispose_WithNullAccessor_DoesNotThrow(SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(null!);
@@ -114,9 +109,8 @@ public class DefaultSkillContextFactoryTests : TestBase
         exception.Should().BeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
-    public void Dispose_WithNullContext_DoesNotThrow(ISkillContextAccessor accessor)
+    [Theory, Compose<LambdaTestProfile>]
+    public void Dispose_WithNullContext_DoesNotThrow(FakeSkillContextAccessor accessor)
     {
         var factory = new DefaultSkillContextFactory(accessor);
 
@@ -125,10 +119,9 @@ public class DefaultSkillContextFactoryTests : TestBase
         exception.Should().BeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void CreateAndDispose_Lifecycle_WorksCorrectly(
-        ISkillContextAccessor accessor,
+        FakeSkillContextAccessor accessor,
         SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
@@ -138,19 +131,18 @@ public class DefaultSkillContextFactoryTests : TestBase
 
         // Verify creation
         context.Should().NotBeNull();
-        accessor.Received(1).SkillContext = context;
+        accessor.Assignments.Should().ContainSingle().Which.Should().BeSameAs(context);
 
         // Dispose context
         factory.Dispose(context);
 
         // Verify disposal
-        accessor.Received(1).SkillContext = null;
+        accessor.Assignments.Where(x => x is null).Should().NotBeEmpty();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Create_MultipleCalls_EachSetsContextInAccessor(
-        ISkillContextAccessor accessor,
+        FakeSkillContextAccessor accessor,
         SkillRequest skillRequest1,
         SkillRequest skillRequest2)
     {
@@ -160,16 +152,15 @@ public class DefaultSkillContextFactoryTests : TestBase
         var context2 = factory.Create(skillRequest2);
 
         context1.Should().NotBe(context2);
-        accessor.Received(1).SkillContext = context1;
-        accessor.Received(1).SkillContext = context2;
-        accessor.Received(2).SkillContext = Arg.Any<SkillContext>();
+        accessor.Assignments.Should().Contain(context1);
+        accessor.Assignments.Should().Contain(context2);
+        accessor.Assignments.Should().HaveCount(2);
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Create_PreservesRequestData(SkillRequest skillRequest)
     {
-        var accessor = CreateSubstitute<ISkillContextAccessor>();
+        var accessor = new FakeSkillContextAccessor();
         var factory = new DefaultSkillContextFactory(accessor);
 
         var context = factory.Create(skillRequest);
@@ -179,10 +170,9 @@ public class DefaultSkillContextFactoryTests : TestBase
         context.Request.Context.Should().Be(skillRequest.Context);
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Dispose_MultipleCallsWithSameContext_OnlySetNullOnce(
-        ISkillContextAccessor accessor,
+        FakeSkillContextAccessor accessor,
         SkillRequest skillRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
@@ -191,19 +181,21 @@ public class DefaultSkillContextFactoryTests : TestBase
         factory.Dispose(context);
         factory.Dispose(context);
 
-        // Should only set to null once per dispose call
-        accessor.Received(2).SkillContext = null;
+        // Should set to null once per dispose call
+        accessor.Assignments.Where(x => x is null).Should().HaveCount(2);
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Create_WithDifferentRequestTypes_HandlesAllCorrectly(
-        ISkillContextAccessor accessor,
+        FakeSkillContextAccessor accessor,
         SkillRequest launchRequest,
         SkillRequest intentRequest,
         SkillRequest sessionEndRequest)
     {
         var factory = new DefaultSkillContextFactory(accessor);
+        launchRequest = LambdaTestProfile.CreateSkillRequest(new AlexaVoxCraft.Model.Request.Type.LaunchRequest { Type = "LaunchRequest", Locale = "en-US" });
+        intentRequest = LambdaTestProfile.CreateSkillRequest(new AlexaVoxCraft.Model.Request.Type.IntentRequest { Type = "IntentRequest", Locale = "en-US" });
+        sessionEndRequest = LambdaTestProfile.CreateSkillRequest(new AlexaVoxCraft.Model.Request.Type.SessionEndedRequest { Type = "SessionEndedRequest", Locale = "en-US" });
 
         var launchContext = factory.Create(launchRequest);
         var intentContext = factory.Create(intentRequest);

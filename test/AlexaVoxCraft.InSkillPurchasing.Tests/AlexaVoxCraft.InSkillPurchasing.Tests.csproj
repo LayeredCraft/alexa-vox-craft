@@ -13,12 +13,19 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\AlexaVoxCraft.InSkillPurchasing\AlexaVoxCraft.InSkillPurchasing.csproj" />
-      <ProjectReference Include="..\AlexaVoxCraft.Http.TestKit\AlexaVoxCraft.Http.TestKit.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Compono" />
+      <PackageReference Include="Compono.XunitV3" />
+      <PackageReference Include="Compono.Http" />
+      <PackageReference Include="AwesomeAssertions" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Verify.XunitV3" />
     </ItemGroup>
+
     <ItemGroup>
         <!-- Embed all JSON fixtures under Examples/ -->
         <EmbeddedResource Include="Examples\**\*.json"/>

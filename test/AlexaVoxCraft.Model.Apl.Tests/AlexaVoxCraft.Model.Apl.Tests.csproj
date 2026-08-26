@@ -17,6 +17,7 @@
   </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AwesomeAssertions" />
         <PackageReference Include="Verify.XunitV3" />
     </ItemGroup>
     <ItemGroup>
@@ -24,7 +25,7 @@
         <EmbeddedResource Include="Examples\**\*.json"/>
     </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj" />
+    <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
     <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
   </ItemGroup>
 

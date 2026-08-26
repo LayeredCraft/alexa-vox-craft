@@ -1,3 +1,6 @@
+using Compono;
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using System.Diagnostics;
 using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.MediatR.Wrappers;
@@ -40,17 +43,17 @@ public class OtelRequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithMatchingHandler_RecordsHandlerResolutionAndExecutionTelemetry(
         SkillRequest skillRequest,
         SkillResponse expectedResponse,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler)
     {
         // Arrange
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
-        handler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(true));
+        handler.Configure().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(expectedResponse));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -107,19 +110,19 @@ public class OtelRequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNonMatchingHandler_RecordsResolutionWithoutExecution(
         SkillRequest skillRequest,
         SkillResponse expectedResponse,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler,
         IDefaultRequestHandler defaultHandler)
     {
         // Arrange
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
-        defaultHandler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
-        defaultHandler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(false));
+        defaultHandler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(true));
+        defaultHandler.Configure().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(expectedResponse));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -174,21 +177,21 @@ public class OtelRequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithMultipleHandlers_RecordsCorrectExecutionOrder(
         SkillRequest skillRequest,
         SkillResponse expectedResponse,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler1,
         IRequestHandler<LaunchRequest> handler2,
         IRequestHandler<LaunchRequest> handler3)
     {
         // Arrange
-        handler1.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
-        handler2.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
-        handler3.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
-        handler3.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
+        handler1.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(false));
+        handler2.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(false));
+        handler3.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(true));
+        handler3.Configure().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(expectedResponse));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler1);
@@ -235,16 +238,16 @@ public class OtelRequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithHandlerResolutionException_RecordsErrorTelemetry(
         SkillRequest skillRequest,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler)
     {
         // Arrange
         var exception = new InvalidOperationException("Handler resolution failed");
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(Task.FromException<bool>(exception));
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromException<bool>(exception));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -273,17 +276,17 @@ public class OtelRequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithHandlerExecutionException_RecordsErrorTelemetry(
         SkillRequest skillRequest,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler)
     {
         // Arrange
         var exception = new ArgumentException("Handler execution failed");
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
-        handler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(Task.FromException<SkillResponse>(exception));
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(true));
+        handler.Configure().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromException<SkillResponse>(exception));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -327,19 +330,19 @@ public class OtelRequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithDefaultHandlerException_RecordsDefaultHandlerErrorTelemetry(
         SkillRequest skillRequest,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler,
         IDefaultRequestHandler defaultHandler)
     {
         // Arrange
         var exception = new TimeoutException("Default handler execution failed");
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
-        defaultHandler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
-        defaultHandler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(Task.FromException<SkillResponse>(exception));
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(false));
+        defaultHandler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(true));
+        defaultHandler.Configure().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromException<SkillResponse>(exception));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -368,11 +371,11 @@ public class OtelRequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNoHandlers_RecordsNoHandlerTelemetryAndThrows(
         SkillRequest skillRequest,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services)
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services)
     {
         // Arrange - No handlers registered
         services.AddSingleton(handlerInput);

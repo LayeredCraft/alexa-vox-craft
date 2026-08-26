@@ -5,5 +5,4 @@ namespace AlexaVoxCraft.MediatR.Lambda.Tests;
 /// </summary>
 public abstract class TestBase
 {
-    protected T CreateSubstitute<T>() where T : class => Substitute.For<T>();
 }

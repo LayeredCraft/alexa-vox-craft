@@ -1,6 +1,8 @@
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Tests.Infrastructure;
+using Compono.XunitV3;
+using AlexaVoxCraft.Model.Tests.TestKit;
 
 namespace AlexaVoxCraft.Model.Tests.Directives;
 
@@ -128,9 +130,8 @@ public sealed class AudioPlayerDirectiveTests
         Assert.Equal("AudioPlayer.Stop", directive.Type);
     }
 
-    // AutoFixture-based tests
-    [Theory]
-    [ModelAutoData]
+    // Compono-generated model-shape tests
+    [Theory, Compose<ModelLegacyProfile>]
     public void AudioPlayerPlayDirective_WithGeneratedData_HasValidProperties(AudioPlayerPlayDirective directive)
     {
         directive.Type.Should().Be("AudioPlayer.Play");
@@ -142,23 +143,20 @@ public sealed class AudioPlayerDirectiveTests
         directive.AudioItem.Stream.OffsetInMilliseconds.Should().BeGreaterThanOrEqualTo(0);
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void ClearQueueDirective_WithGeneratedData_HasValidProperties(ClearQueueDirective directive)
     {
         directive.Type.Should().Be("AudioPlayer.ClearQueue");
         directive.ClearBehavior.Should().BeOneOf(ClearBehavior.ClearAll, ClearBehavior.ClearEnqueued);
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void StopDirective_WithGeneratedData_HasValidProperties(StopDirective directive)
     {
         directive.Type.Should().Be("AudioPlayer.Stop");
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AudioItem_WithGeneratedData_HasValidStream(AudioItem audioItem)
     {
         audioItem.Stream.Should().NotBeNull();
@@ -167,8 +165,7 @@ public sealed class AudioPlayerDirectiveTests
         audioItem.Stream.OffsetInMilliseconds.Should().BeGreaterThanOrEqualTo(0);
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AudioItemStream_WithGeneratedData_HasValidProperties(AudioItemStream stream)
     {
         stream.Url.Should().NotBeNullOrEmpty();
@@ -176,8 +173,7 @@ public sealed class AudioPlayerDirectiveTests
         stream.OffsetInMilliseconds.Should().BeGreaterThanOrEqualTo(0);
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AudioItemMetadata_WithGeneratedData_HasValidProperties(AudioItemMetadata metadata)
     {
         metadata.Title.Should().NotBeNullOrEmpty();
@@ -188,8 +184,7 @@ public sealed class AudioPlayerDirectiveTests
         metadata.BackgroundImage.Sources.Should().NotBeEmpty();
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AudioItemSources_WithGeneratedData_HasValidSources(AudioItemSources sources)
     {
         sources.Sources.Should().NotBeEmpty();
@@ -197,8 +192,7 @@ public sealed class AudioPlayerDirectiveTests
         sources.Sources.Should().OnlyContain(source => !string.IsNullOrEmpty(source.Url));
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AudioItemSource_WithGeneratedData_HasValidUrl(AudioItemSource source)
     {
         source.Url.Should().NotBeNullOrEmpty();

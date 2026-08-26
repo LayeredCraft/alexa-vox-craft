@@ -17,8 +17,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
     </ItemGroup>
 
@@ -26,6 +28,10 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
         <PackageReference Include="Verify.SourceGenerators" />
         <PackageReference Include="Verify.XunitV3" />
+        <PackageReference Include="AwesomeAssertions" />
+        <PackageReference Include="Amazon.Lambda.Core" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
     </ItemGroup>
 
     <ItemGroup>
@@ -39,6 +45,7 @@
     <ItemGroup>
       <Folder Include="Snapshots\" />
     </ItemGroup>
+
     
     <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
       <PackageReference Include="Basic.Reference.Assemblies.Net100" />

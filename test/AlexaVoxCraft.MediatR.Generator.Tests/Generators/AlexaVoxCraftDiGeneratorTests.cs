@@ -1,4 +1,3 @@
-using AlexaVoxCraft.MediatR.Generator.Tests.TestKit.Attributes;
 using AlexaVoxCraft.MediatR.Generators.Generators;
 
 namespace AlexaVoxCraft.MediatR.Generator.Tests.Generators;
@@ -24,10 +23,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator produces an interceptor for a single AddSkillMediator call.
     /// The generated interceptor should have one InterceptsLocation attribute.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForSingleAddSkillMediatorCall(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForSingleAddSkillMediatorCall()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/001_Simple/Function.cs"
@@ -41,10 +40,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator produces a single interceptor method with multiple InterceptsLocation attributes
     /// when AddSkillMediator is called multiple times, demonstrating proper deduplication.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForMultipleAddSkillMediatorCalls_WithMultipleInterceptsLocations(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForMultipleAddSkillMediatorCalls_WithMultipleInterceptsLocations()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/002_MultiRegister/Function.cs"
@@ -58,10 +57,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator produces an interceptor for a standard skill with request handlers and exception handlers.
     /// Tests that handler registration works correctly when handlers are present in the assembly.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForStandardSkillWithHandlers(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForStandardSkillWithHandlers()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/003_Standard/Function.cs",
@@ -78,10 +77,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator produces an interceptor for a skill with handlers and both request and response interceptors.
     /// Tests that the generator properly registers all pipeline components including request/response interceptors.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForSkillWithHandlersAndInterceptors(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForSkillWithHandlersAndInterceptors()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/004_WithInterceptors/Function.cs",
@@ -99,10 +98,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator produces an interceptor for a complete skill with all components.
     /// Tests registration of handlers, exception handler, request/response interceptors, and persistence adapter.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForCompleteSkillWithPersistence(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForCompleteSkillWithPersistence()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/005_WithPersistence/Function.cs",
@@ -122,10 +121,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator properly handles a handler implementing IRequestHandler for multiple request types.
     /// Tests that handlers implementing multiple IRequestHandler interfaces are registered correctly.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForHandlerWithMultipleRequestTypes(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForHandlerWithMultipleRequestTypes()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/006_MultiTypeHandler/Function.cs",
@@ -140,10 +139,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator properly handles a class implementing both IRequestInterceptor and IResponseInterceptor.
     /// Tests that dual-purpose interceptors are registered correctly for both pipeline stages.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForDualPurposeInterceptor(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForDualPurposeInterceptor()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/007_DualInterceptor/Function.cs",
@@ -158,10 +157,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator properly handles handlers with AlexaHandlerAttribute specifying execution order.
     /// Tests that handlers are registered with their explicit Order property values.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForHandlersWithExplicitOrder(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForHandlersWithExplicitOrder()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/008_OrderedHandlers/Function.cs",
@@ -178,10 +177,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator properly handles handlers with different ServiceLifetime values.
     /// Tests that handlers are registered with Transient, Scoped, and Singleton lifetimes as specified.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForHandlersWithDifferentLifetimes(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForHandlersWithDifferentLifetimes()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/009_DifferentLifetimes/Function.cs",
@@ -198,10 +197,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator properly excludes handlers marked with Exclude = true.
     /// Tests that handlers with AlexaHandlerAttribute(Exclude = true) are not registered automatically.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ExcludesHandlersMarkedWithExclude(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ExcludesHandlersMarkedWithExclude()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/010_ExcludedHandler/Function.cs",
@@ -218,10 +217,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that the generator properly handles handlers inheriting from an abstract base handler class.
     /// Tests that concrete handlers deriving from BaseHandler&lt;TRequest&gt; are registered, but the abstract base is not.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForHandlersInheritingFromAbstractBase(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForHandlersInheritingFromAbstractBase()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/011_AbstractBaseHandler/Function.cs",
@@ -240,10 +239,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// not alphabetical order. Interceptor class names (Z* before A*) deliberately conflict with alphabetical
     /// ordering to prove the Order property controls registration sequence.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForInterceptorsWithExplicitOrder(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForInterceptorsWithExplicitOrder()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/013_OrderedInterceptors/Function.cs",
@@ -263,10 +262,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Tests abstract base handler, multi-type handler, IDefaultRequestHandler, various lifetimes and ordering,
     /// excluded handler, dual interceptors, and persistence adapter in a single realistic scenario.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForComprehensiveTriviaGame(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForComprehensiveTriviaGame()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/012_TriviaGame/Function.cs",
@@ -294,10 +293,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that handlers in explicitly registered referenced assemblies are discovered and registered.
     /// Tests RegisterServicesFromAssemblyContaining&lt;T&gt; parsing and that Exclude=true is honored for referenced types.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/014_ReferencedAssembly/Function.cs"
@@ -317,10 +316,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that handlers in explicitly registered referenced assemblies are discovered
     /// when settingsAction is passed as a named argument.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly_WithNamedSettingsAction(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly_WithNamedSettingsAction()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/015_ReferencedAssemblyNamed/Function.cs"
@@ -340,10 +339,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that handlers in explicitly registered referenced assemblies are discovered
     /// when RegisterServicesFromAssemblyContaining is called with typeof(T).
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly_WithTypeOfRegistration(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForHandlersFromExplicitReferencedAssembly_WithTypeOfRegistration()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/016_ReferencedAssemblyTypeOf/Function.cs"
@@ -363,10 +362,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that AlexaHandler Order is respected across mixed source and referenced assemblies.
     /// Referenced handler has lower order (10) than source handler (20), so registration should be 10 then 20.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ForMixedAssemblyHandlersWithExplicitOrder(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ForMixedAssemblyHandlersWithExplicitOrder()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/017_MixedAssemblyOrderedHandlers/Function.cs",
@@ -387,10 +386,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// Verifies that internal handlers in referenced assemblies are excluded when no InternalsVisibleTo exists.
     /// Public handlers from the same referenced assembly should still be included.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ExcludesInternalReferencedHandlers_WithoutInternalsVisibleTo(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ExcludesInternalReferencedHandlers_WithoutInternalsVisibleTo()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/018_ReferencedAssemblyInternalNoIvt/Function.cs"
@@ -409,10 +408,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// <summary>
     /// Verifies that internal handlers in referenced assemblies are included when InternalsVisibleTo grants access.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_IncludesInternalReferencedHandlers_WithInternalsVisibleTo(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_IncludesInternalReferencedHandlers_WithInternalsVisibleTo()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/019_ReferencedAssemblyInternalWithIvt/Function.cs"
@@ -431,10 +430,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// <summary>
     /// Verifies that internal handlers and interceptors declared in the consuming assembly are discovered and registered.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_IncludesInternalSourceAssemblyTypes(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_IncludesInternalSourceAssemblyTypes()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/020_SourceAssemblyInternal/Function.cs",
@@ -449,10 +448,10 @@ public class AlexaVoxCraftDiGeneratorTests
     /// <summary>
     /// Verifies that inaccessible source types are excluded even though they are syntactically visible to source discovery.
     /// </summary>
-    [Theory]
-    [GeneratorAutoData]
-    public async Task GeneratesInterceptor_ExcludesInaccessibleSourceAssemblyTypes(AlexaVoxCraftDiGenerator sut)
+    [Fact]
+    public async Task GeneratesInterceptor_ExcludesInaccessibleSourceAssemblyTypes()
     {
+        var sut = new AlexaVoxCraftDiGenerator();
         await VerifyGlue.VerifySourcesAsync(sut,
             [
                 "Cases/021_SourceAssemblyInaccessible/Function.cs",

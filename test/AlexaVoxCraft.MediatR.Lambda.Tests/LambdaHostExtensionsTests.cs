@@ -1,9 +1,13 @@
 using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MediatR.Lambda.Serialization;
+using Microsoft.Extensions.Logging.Abstractions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using AlexaVoxCraft.MediatR.Lambda.Tests.TestKit;
+using Compono.XunitV3;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests;
 
@@ -56,7 +60,7 @@ public class LambdaHostExtensionsTests : TestBase
     public void RunAlexaSkill_WithCustomSerializerFactory_UsesCustomSerializer()
     {
         var customSerializerCalled = false;
-        var mockSerializer = CreateSubstitute<ILambdaSerializer>();
+        var mockSerializer = new AlexaLambdaSerializer(NullLogger<AlexaLambdaSerializer>.Instance, null);
 
         Func<IServiceProvider, ILambdaSerializer> serializerFactory = _ =>
         {
@@ -104,11 +108,10 @@ public class LambdaHostExtensionsTests : TestBase
         exception.Should().BeOfType<InvalidOperationException>();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task RunAlexaSkill_HandlerBuilder_CreatesValidHandler(
         SkillRequest skillRequest,
-        ILambdaContext lambdaContext)
+        FakeLambdaContext lambdaContext)
     {
         var function = new TestRunAlexaSkillFunctionWithHandler();
         var services = function.ServiceProvider;

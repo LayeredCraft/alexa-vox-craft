@@ -1,3 +1,6 @@
+using Compono;
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.Model.Response;
 
@@ -6,14 +9,14 @@ namespace AlexaVoxCraft.MediatR.Tests.Pipeline;
 public class ResponseInterceptorBehaviorTests : TestBase
 {
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNoInterceptors_CallsNextAndReturnsResult(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillResponse expectedResponse)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        next.Returns(Task.FromResult(expectedResponse));
         var behavior = new ResponseInterceptorBehavior(Enumerable.Empty<IResponseInterceptor>());
 
         // Act
@@ -21,19 +24,19 @@ public class ResponseInterceptorBehaviorTests : TestBase
 
         // Assert
         result.Should().Be(expectedResponse);
-        await next.Received(1).Invoke();
+        next.CallCount.Should().Be(1);
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithSingleInterceptor_CallsNextThenProcessesResponse(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         IResponseInterceptor interceptor,
         SkillResponse expectedResponse)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        next.Returns(Task.FromResult(expectedResponse));
         var behavior = new ResponseInterceptorBehavior(new[] { interceptor });
 
         // Act
@@ -41,29 +44,30 @@ public class ResponseInterceptorBehaviorTests : TestBase
 
         // Assert
         result.Should().Be(expectedResponse);
-        await next.Received(1).Invoke();
-        await interceptor.Received(1).Process(handlerInput, expectedResponse, Arg.Any<CancellationToken>());
+        next.CallCount.Should().Be(1);
+        interceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == expectedResponse), Match.Any<CancellationToken>()).Once();
 
-        // Verify next was called before interceptor
-        Received.InOrder(async () =>
-        {
-            await next.Invoke();
-            await interceptor.Process(handlerInput, expectedResponse, Arg.Any<CancellationToken>());
-        });
+        // GAP (ADR-0029, recorded in RESEARCH-0011 Stage 2): the old NSubstitute
+        // Received.InOrder(...) call-order verification (next called before interceptor.Process)
+        // has no Compono.TestDoubles equivalent - "no call-order verification" is an explicit,
+        // deliberate non-goal (docs/packages/compono-testdoubles.md's "What it deliberately
+        // doesn't do"). Both calls happening is still verified above (.Once() each); their
+        // relative order is not currently verifiable without reverting to NSubstitute for this
+        // one assertion, which the product direction for this project rules out.
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithMultipleInterceptors_ProcessesAllInOrder(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         IResponseInterceptor firstInterceptor,
         IResponseInterceptor secondInterceptor,
         IResponseInterceptor thirdInterceptor,
         SkillResponse expectedResponse)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        next.Returns(Task.FromResult(expectedResponse));
         var behavior = new ResponseInterceptorBehavior(new[] { firstInterceptor, secondInterceptor, thirdInterceptor });
 
         // Act
@@ -71,31 +75,27 @@ public class ResponseInterceptorBehaviorTests : TestBase
 
         // Assert
         result.Should().Be(expectedResponse);
-        await next.Received(1).Invoke();
-        await firstInterceptor.Received(1).Process(handlerInput, expectedResponse, Arg.Any<CancellationToken>());
-        await secondInterceptor.Received(1).Process(handlerInput, expectedResponse, Arg.Any<CancellationToken>());
-        await thirdInterceptor.Received(1).Process(handlerInput, expectedResponse, Arg.Any<CancellationToken>());
+        next.CallCount.Should().Be(1);
+        firstInterceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == expectedResponse), Match.Any<CancellationToken>()).Once();
+        secondInterceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == expectedResponse), Match.Any<CancellationToken>()).Once();
+        thirdInterceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == expectedResponse), Match.Any<CancellationToken>()).Once();
 
-        // Verify order of execution
-        Received.InOrder(async () =>
-        {
-            await next.Invoke();
-            await firstInterceptor.Process(handlerInput, expectedResponse, Arg.Any<CancellationToken>());
-            await secondInterceptor.Process(handlerInput, expectedResponse, Arg.Any<CancellationToken>());
-            await thirdInterceptor.Process(handlerInput, expectedResponse, Arg.Any<CancellationToken>());
-        });
+        // GAP (ADR-0029, recorded in RESEARCH-0011 Stage 2) - same as
+        // Handle_WithSingleInterceptor_CallsNextThenProcessesResponse above: no
+        // Compono.TestDoubles call-order verification equivalent exists. Each interceptor's
+        // exactly-once call is still verified above; their relative order is not.
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNextException_DoesNotCallInterceptors(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         IResponseInterceptor interceptor)
     {
         // Arrange
         var testException = new InvalidOperationException("Next failed");
-        next.Invoke().Returns(Task.FromException<SkillResponse>(testException));
+        next.Returns(Task.FromException<SkillResponse>(testException));
         var behavior = new ResponseInterceptorBehavior(new[] { interceptor });
 
         // Act & Assert
@@ -103,23 +103,23 @@ public class ResponseInterceptorBehaviorTests : TestBase
             behavior.Handle(handlerInput, CancellationToken, next));
 
         exception.Should().Be(testException);
-        await next.Received(1).Invoke();
-        await interceptor.DidNotReceive().Process(Arg.Any<IHandlerInput>(), Arg.Any<SkillResponse>(), Arg.Any<CancellationToken>());
+        next.CallCount.Should().Be(1);
+        interceptor.Verify().Process(Match.Any<IHandlerInput>(), Match.Any<SkillResponse>(), Match.Any<CancellationToken>()).Never();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithInterceptorException_PropagatesException(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         IResponseInterceptor faultyInterceptor,
         IResponseInterceptor normalInterceptor,
         SkillResponse response)
     {
         // Arrange
         var testException = new InvalidOperationException("Interceptor failed");
-        next.Invoke().Returns(Task.FromResult(response));
-        faultyInterceptor.Process(handlerInput, response, Arg.Any<CancellationToken>())
+        next.Returns(Task.FromResult(response));
+        faultyInterceptor.Configure().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == response), Match.Any<CancellationToken>())
             .Returns(Task.FromException(testException));
 
         var behavior = new ResponseInterceptorBehavior(new[] { faultyInterceptor, normalInterceptor });
@@ -129,16 +129,16 @@ public class ResponseInterceptorBehaviorTests : TestBase
             behavior.Handle(handlerInput, CancellationToken, next));
 
         exception.Should().Be(testException);
-        await next.Received(1).Invoke();
-        await faultyInterceptor.Received(1).Process(handlerInput, response, Arg.Any<CancellationToken>());
-        await normalInterceptor.DidNotReceive().Process(Arg.Any<IHandlerInput>(), Arg.Any<SkillResponse>(), Arg.Any<CancellationToken>());
+        next.CallCount.Should().Be(1);
+        faultyInterceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == response), Match.Any<CancellationToken>()).Once();
+        normalInterceptor.Verify().Process(Match.Any<IHandlerInput>(), Match.Any<SkillResponse>(), Match.Any<CancellationToken>()).Never();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithSecondInterceptorException_PropagatesAfterFirst(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         IResponseInterceptor firstInterceptor,
         IResponseInterceptor faultyInterceptor,
         IResponseInterceptor thirdInterceptor,
@@ -146,8 +146,8 @@ public class ResponseInterceptorBehaviorTests : TestBase
     {
         // Arrange
         var testException = new InvalidOperationException("Second interceptor failed");
-        next.Invoke().Returns(Task.FromResult(response));
-        faultyInterceptor.Process(handlerInput, response, Arg.Any<CancellationToken>())
+        next.Returns(Task.FromResult(response));
+        faultyInterceptor.Configure().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == response), Match.Any<CancellationToken>())
             .Returns(Task.FromException(testException));
 
         var behavior = new ResponseInterceptorBehavior(new[] { firstInterceptor, faultyInterceptor, thirdInterceptor });
@@ -157,14 +157,14 @@ public class ResponseInterceptorBehaviorTests : TestBase
             behavior.Handle(handlerInput, CancellationToken, next));
 
         exception.Should().Be(testException);
-        await next.Received(1).Invoke();
-        await firstInterceptor.Received(1).Process(handlerInput, response, Arg.Any<CancellationToken>());
-        await faultyInterceptor.Received(1).Process(handlerInput, response, Arg.Any<CancellationToken>());
-        await thirdInterceptor.DidNotReceive().Process(Arg.Any<IHandlerInput>(), Arg.Any<SkillResponse>(), Arg.Any<CancellationToken>());
+        next.CallCount.Should().Be(1);
+        firstInterceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == response), Match.Any<CancellationToken>()).Once();
+        faultyInterceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == response), Match.Any<CancellationToken>()).Once();
+        thirdInterceptor.Verify().Process(Match.Any<IHandlerInput>(), Match.Any<SkillResponse>(), Match.Any<CancellationToken>()).Never();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithNullInterceptors_DoesNotThrow()
     {
         // Act & Assert
@@ -174,17 +174,17 @@ public class ResponseInterceptorBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithCancellationToken_PassesToInterceptors(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         IResponseInterceptor interceptor,
         SkillResponse expectedResponse)
     {
         // Arrange
         using var cts = new CancellationTokenSource();
         var cancellationToken = cts.Token;
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        next.Returns(Task.FromResult(expectedResponse));
         var behavior = new ResponseInterceptorBehavior(new[] { interceptor });
 
         // Act
@@ -192,19 +192,19 @@ public class ResponseInterceptorBehaviorTests : TestBase
 
         // Assert
         result.Should().Be(expectedResponse);
-        await interceptor.Received(1).Process(handlerInput, expectedResponse, cancellationToken);
+        interceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == expectedResponse), Match.Is<CancellationToken>(t => t == cancellationToken)).Once();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_ReturnsOriginalResponse_EvenAfterInterceptorProcessing(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         IResponseInterceptor interceptor,
         SkillResponse originalResponse)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(originalResponse));
+        next.Returns(Task.FromResult(originalResponse));
         var behavior = new ResponseInterceptorBehavior(new[] { interceptor });
 
         // Act
@@ -212,18 +212,18 @@ public class ResponseInterceptorBehaviorTests : TestBase
 
         // Assert
         result.Should().Be(originalResponse);
-        await interceptor.Received(1).Process(handlerInput, originalResponse, Arg.Any<CancellationToken>());
+        interceptor.Verify().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == originalResponse), Match.Any<CancellationToken>()).Once();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithEmptyEnumerable_WorksCorrectly(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillResponse expectedResponse)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        next.Returns(Task.FromResult(expectedResponse));
         var emptyInterceptors = new List<IResponseInterceptor>();
         var behavior = new ResponseInterceptorBehavior(emptyInterceptors);
 
@@ -232,24 +232,29 @@ public class ResponseInterceptorBehaviorTests : TestBase
 
         // Assert
         result.Should().Be(expectedResponse);
-        await next.Received(1).Invoke();
+        next.CallCount.Should().Be(1);
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithResponseModification_StillReturnsOriginalResponse(
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] FakeRequestHandlerDelegate next,
         IResponseInterceptor interceptor,
         SkillResponse originalResponse)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(originalResponse));
+        next.Returns(Task.FromResult(originalResponse));
 
-        // Setup interceptor to potentially modify response (but behavior should still return original)
-        interceptor.Process(handlerInput, originalResponse, Arg.Any<CancellationToken>())
-            .Returns(Task.CompletedTask)
-            .AndDoes(_ => originalResponse.Version = "modified"); // Simulate modification
+        // Setup interceptor to potentially modify response (but behavior should still return original).
+        // GAP (ADR-0029, recorded in RESEARCH-0011 Stage 2): NSubstitute's .AndDoes(...) callback
+        // has no Compono.TestDoubles equivalent ("no Returns(Func<...>) callback responses" is an
+        // explicit non-goal) - mutating originalResponse directly here is equivalent for this
+        // test's actual intent (proving Handle returns the same object reference, so a mutation
+        // is visible regardless of exactly when it happens), not a workaround that loses coverage.
+        interceptor.Configure().Process(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Is<SkillResponse>(x => x == originalResponse), Match.Any<CancellationToken>())
+            .Returns(Task.CompletedTask);
+        originalResponse.Version = "modified"; // Simulate modification
 
         var behavior = new ResponseInterceptorBehavior(new[] { interceptor });
 
