@@ -1,3 +1,5 @@
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using System.Text.Json;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.DI;
@@ -12,7 +14,7 @@ namespace AlexaVoxCraft.MediatR.Tests.Response;
 public class DefaultResponseBuilderTests : TestBase
 {
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithValidAttributesManager_CreatesInstance(
         IAttributesManager attributesManager,
         IOptions<SkillServiceConfiguration> skillServiceConfiguration)
@@ -25,7 +27,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithNullAttributesManager_ThrowsArgumentNullException(
         IOptions<SkillServiceConfiguration> skillServiceConfiguration)
     {
@@ -37,7 +39,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Speak_WithPlainText_SetsOutputSpeech(DefaultResponseBuilder builder, string speechText)
     {
         // Act
@@ -51,7 +53,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Speak_WithSsmlElements_SetsOutputSpeech(DefaultResponseBuilder builder)
     {
         // Arrange
@@ -70,7 +72,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task SpeakAudio_WithUrl_SetsAudioOutputSpeech(DefaultResponseBuilder builder, string audioUrl)
     {
         // Act
@@ -84,7 +86,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Reprompt_WithPlainText_SetsReprompt(DefaultResponseBuilder builder, string repromptText)
     {
         // Act
@@ -99,7 +101,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Reprompt_WithSsmlElements_SetsReprompt(DefaultResponseBuilder builder)
     {
         // Arrange
@@ -116,7 +118,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task WithSimpleCard_SetsSimpleCard(DefaultResponseBuilder builder, string title, string content)
     {
         // Act
@@ -131,7 +133,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task WithStandardCard_WithoutImages_SetsStandardCard(DefaultResponseBuilder builder, string title,
         string content)
     {
@@ -148,7 +150,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task WithStandardCard_WithImages_SetsStandardCardWithImages(DefaultResponseBuilder builder,
         string title, string content, string smallImageUrl, string largeImageUrl)
     {
@@ -167,7 +169,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task WithLinkAccountCard_SetsLinkAccountCard(DefaultResponseBuilder builder)
     {
         // Act
@@ -180,7 +182,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task WithAskForPermissionsConsentCard_SetsPermissionsCard(DefaultResponseBuilder builder,
         List<string> permissions)
     {
@@ -195,7 +197,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task AddAudioPlayerPlayDirective_AddsPlayDirective(DefaultResponseBuilder builder, string url,
         string token, int offset)
     {
@@ -215,7 +217,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task AddAudioPlayerPlayDirective_WithExpectedPreviousToken_SetsExpectedToken(
         DefaultResponseBuilder builder, string url, string token, string expectedToken, int offset)
     {
@@ -230,7 +232,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task WithShouldEndSession_True_SetsEndSession(DefaultResponseBuilder builder)
     {
         // Act
@@ -242,7 +244,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task WithShouldEndSession_False_SetsEndSession(DefaultResponseBuilder builder)
     {
         // Act
@@ -254,13 +256,13 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task GetResponse_PopulatesSessionAttributesFromSessionBag(
-        [Frozen] IAttributesManager attributesManager, DefaultResponseBuilder builder)
+        [Shared] IAttributesManager attributesManager, DefaultResponseBuilder builder)
     {
         // Arrange
         var sessionBag = new JsonAttributeBag(new Dictionary<string, JsonElement>());
-        attributesManager.Session.Returns(sessionBag);
+        attributesManager.Configure().Session().Returns(sessionBag);
 
         // Act
         var response = await builder.GetResponse(TestContext.Current.CancellationToken);
@@ -270,7 +272,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task GetResponse_ReturnsCompleteSkillResponse(DefaultResponseBuilder builder, string speechText)
     {
         // Act
@@ -285,7 +287,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void FluentInterface_AllMethodsReturnBuilder(DefaultResponseBuilder builder, string text)
     {
         // Act & Assert
@@ -296,13 +298,13 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Speak_WithDefaultVoice_WrapsOutputInVoiceElement(
         IAttributesManager attributesManager,
-        IOptions<SkillServiceConfiguration> voicedConfiguration,
         string speechText)
     {
-        // Arrange
+        // Arrange - a config with a default voice set
+        var voicedConfiguration = TestHelper.SkillOptions(defaultVoiceName: AlexaSupportedVoices.EnglishUS.Matthew);
         var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
 
         // Act
@@ -317,12 +319,12 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Speak_WithDefaultVoice_AndSsmlElements_WrapsInVoiceElement(
-        IAttributesManager attributesManager,
-        IOptions<SkillServiceConfiguration> voicedConfiguration)
+        IAttributesManager attributesManager)
     {
-        // Arrange
+        // Arrange - a config with a default voice set
+        var voicedConfiguration = TestHelper.SkillOptions(defaultVoiceName: AlexaSupportedVoices.EnglishUS.Matthew);
         var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
         var plainText = new PlainText("Hello world");
 
@@ -337,13 +339,13 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Reprompt_WithDefaultVoice_WrapsOutputInVoiceElement(
         IAttributesManager attributesManager,
-        IOptions<SkillServiceConfiguration> voicedConfiguration,
         string repromptText)
     {
-        // Arrange
+        // Arrange - a config with a default voice set
+        var voicedConfiguration = TestHelper.SkillOptions(defaultVoiceName: AlexaSupportedVoices.EnglishUS.Matthew);
         var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
 
         // Act
@@ -358,12 +360,12 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Reprompt_WithDefaultVoice_AndSsmlElements_WrapsInVoiceElement(
-        IAttributesManager attributesManager,
-        IOptions<SkillServiceConfiguration> voicedConfiguration)
+        IAttributesManager attributesManager)
     {
-        // Arrange
+        // Arrange - a config with a default voice set
+        var voicedConfiguration = TestHelper.SkillOptions(defaultVoiceName: AlexaSupportedVoices.EnglishUS.Matthew);
         var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
         var plainText = new PlainText("Please respond");
 
@@ -378,7 +380,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Speak_WithoutDefaultVoice_DoesNotWrapInVoiceElement(
         DefaultResponseBuilder builder,
         string speechText)
@@ -394,7 +396,7 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Reprompt_WithoutDefaultVoice_DoesNotWrapInVoiceElement(
         DefaultResponseBuilder builder,
         string repromptText)
@@ -410,13 +412,13 @@ public class DefaultResponseBuilderTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task SpeakAudio_WithDefaultVoice_WrapsAudioInVoiceElement(
         IAttributesManager attributesManager,
-        IOptions<SkillServiceConfiguration> voicedConfiguration,
         string audioUrl)
     {
-        // Arrange
+        // Arrange - a config with a default voice set
+        var voicedConfiguration = TestHelper.SkillOptions(defaultVoiceName: AlexaSupportedVoices.EnglishUS.Matthew);
         var builder = new DefaultResponseBuilder(attributesManager, voicedConfiguration);
 
         // Act

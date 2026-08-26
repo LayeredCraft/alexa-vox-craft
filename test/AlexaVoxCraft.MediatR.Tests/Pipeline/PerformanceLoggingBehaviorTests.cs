@@ -1,3 +1,6 @@
+using Compono;
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
@@ -10,16 +13,18 @@ namespace AlexaVoxCraft.MediatR.Tests.Pipeline;
 public class PerformanceLoggingBehaviorTests : TestBase
 {
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithSuccessfulRequest_LogsDebugMessages(
-        [Frozen] ILogger<PerformanceLoggingBehavior> logger,
+        [Shared] ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillResponse expectedResponse)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse,
+        SkillRequest skillRequest)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -35,16 +40,18 @@ public class PerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithException_LogsErrorAndRethrows(
-        [Frozen] ILogger<PerformanceLoggingBehavior> logger,
+        [Shared] ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillRequest skillRequest)
     {
         // Arrange
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
         var expectedException = new InvalidOperationException("Test exception");
-        next.Invoke().Returns(Task.FromException<SkillResponse>(expectedException));
+        next.Returns(Task.FromException<SkillResponse>(expectedException));
 
         // Act & Assert
         var exception = await Record.ExceptionAsync(() =>
@@ -60,18 +67,18 @@ public class PerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithIntentRequest_LogsIntentName(
-        [Frozen] ILogger<PerformanceLoggingBehavior> logger,
+        [Shared] ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillResponse expectedResponse,
-        SkillRequest intentRequest)
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse)
     {
         // Arrange
-        handlerInput.RequestEnvelope.Returns(intentRequest);
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        var intentRequest = TestHelper.ForRequest(TestHelper.IntentRequest("TestIntent"));
+        handlerInput.Configure().RequestEnvelope().Returns(intentRequest);
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
@@ -84,17 +91,18 @@ public class PerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNonIntentRequest_LogsWithoutIntentName(
-        [Frozen] ILogger<PerformanceLoggingBehavior> logger,
+        [Shared] ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillResponse expectedResponse,
         SkillRequest launchRequest)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(launchRequest);
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
@@ -106,35 +114,39 @@ public class PerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_CallsNextDelegate_ExactlyOnce(
-        [Frozen] TestLogger<PerformanceLoggingBehavior> logger,
+        [Shared] TestLogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillResponse expectedResponse)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse,
+        SkillRequest skillRequest)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
 
         // Assert
-        await next.Received(1).Invoke();
+        next.CallCount.Should().Be(1);
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_CreatesProperScope_WithRequestContext(
-        [Frozen] ILogger<PerformanceLoggingBehavior> logger,
+        [Shared] ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillResponse expectedResponse)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse,
+        SkillRequest skillRequest)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);
@@ -147,7 +159,7 @@ public class PerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
         // Act & Assert
@@ -157,17 +169,18 @@ public class PerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_LogsRequestTypeAndApplicationId(
-        [Frozen] ILogger<PerformanceLoggingBehavior> logger,
+        [Shared] ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillResponse expectedResponse,
-        [Frozen] SkillRequest launchRequest)
+        [Shared] SkillRequest launchRequest)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(launchRequest);
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         await behavior.Handle(handlerInput, CancellationToken, next);

@@ -17,7 +17,21 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj"/>
-        <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Compono" />
+        <PackageReference Include="Compono.XunitV3" />
+        <PackageReference Include="Compono.Bogus" />
+        <PackageReference Include="AwesomeAssertions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Remove="AutoFixture" />
+        <Using Remove="AutoFixture.Xunit3" />
+        <Using Remove="NSubstitute" />
+        <Using Remove="AlexaVoxCraft.TestKit" />
+        <Using Remove="AlexaVoxCraft.TestKit.Attributes" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Examples\AskForPermissionConsent.json"/>

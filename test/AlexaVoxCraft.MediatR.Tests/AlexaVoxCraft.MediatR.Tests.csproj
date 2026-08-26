@@ -9,6 +9,9 @@
         <LangVersion>default</LangVersion>
         <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
         <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+        <!-- Required for Compono.TestDoubles - without it, Compono.Generators never emits a
+             double for any interface regardless of the UseGeneratedTestDoubles() runtime call. -->
+        <ComponoGeneratedTestDoubles>true</ComponoGeneratedTestDoubles>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,8 +22,43 @@
         <PackageReference Include="OpenTelemetry.Exporter.InMemory" />
     </ItemGroup>
 
+    <!-- PLAN-0051 (Compono ecosystem migration, TestKit slice 1, Stage 2): replaces the old
+         AlexaVoxCraft.TestKit ProjectReference (MediatRAutoDataAttribute + this project's 9
+         specimen builders + TestLoggerCustomization, removed) - Compono.XunitV3's
+         [Compose]/[Shared] and Compono.TestDoubles' UseGeneratedTestDoubles() for every interface
+         this project's SUTs depend on. No NSubstitute/Compono.NSubstitute anywhere in this
+         project's resolved dependency graph - the required target per product direction (Stage 1
+         used Compono.NSubstitute as a temporary investigative baseline; see
+         RESEARCH-0011's "Stage 2" section). The two delegate types this project needs
+         (RequestHandlerDelegate/SkillRequestFactory) use TestKit/FakeDelegates.cs instead -
+         Compono.TestDoubles deliberately doesn't generate doubles for delegates. -->
     <ItemGroup>
-        <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
+        <PackageReference Include="Compono" />
+        <PackageReference Include="Compono.XunitV3" />
+        <PackageReference Include="Compono.TestDoubles" />
+    </ItemGroup>
+
+    <!-- Previously only transitive via AlexaVoxCraft.TestKit (now-removed reference chain). -->
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+    </ItemGroup>
+
+    <!-- This project no longer references AutoFixture/AutoFixture.Xunit3/AlexaVoxCraft.TestKit
+         (PLAN-0051 migration slice 1) or NSubstitute/Compono.NSubstitute (Stage 2 - every
+         interface double is now Compono.TestDoubles-generated; TestBase.CreateSubstitute<T>()
+         removed, it had gone unused since Stage 1). AwesomeAssertions stays for the same reason
+         as ADR-0051's Smapi.Tests precedent. -->
+    <ItemGroup>
+        <Using Remove="AutoFixture" />
+        <Using Remove="AutoFixture.Xunit3" />
+        <Using Remove="NSubstitute" />
+        <Using Remove="AlexaVoxCraft.TestKit" />
+        <Using Remove="AlexaVoxCraft.TestKit.Attributes" />
     </ItemGroup>
 
 </Project>

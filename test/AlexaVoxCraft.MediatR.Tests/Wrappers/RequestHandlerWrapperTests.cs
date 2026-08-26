@@ -1,3 +1,6 @@
+using Compono;
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.MediatR.Wrappers;
 using AlexaVoxCraft.Model.Request;
@@ -11,17 +14,17 @@ namespace AlexaVoxCraft.MediatR.Tests.Wrappers;
 public class RequestHandlerWrapperTests : TestBase
 {
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithMatchingHandler_CallsHandler(
         SkillRequest skillRequest,
         SkillResponse expectedResponse,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler)
     {
         // Arrange
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
-        handler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(true));
+        handler.Configure().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(expectedResponse));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -34,24 +37,24 @@ public class RequestHandlerWrapperTests : TestBase
 
         // Assert
         result.Should().Be(expectedResponse);
-        await handler.Received(1).CanHandle(handlerInput, Arg.Any<CancellationToken>());
-        await handler.Received(1).Handle(handlerInput, Arg.Any<CancellationToken>());
+        handler.Verify().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Once();
+        handler.Verify().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Once();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNonMatchingHandler_CallsDefaultHandler(
         SkillRequest skillRequest,
         SkillResponse expectedResponse,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler,
         IDefaultRequestHandler defaultHandler)
     {
         // Arrange
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
-        defaultHandler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
-        defaultHandler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(false));
+        defaultHandler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(true));
+        defaultHandler.Configure().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(expectedResponse));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -65,20 +68,20 @@ public class RequestHandlerWrapperTests : TestBase
 
         // Assert
         result.Should().Be(expectedResponse);
-        await defaultHandler.Received(1).CanHandle(handlerInput, Arg.Any<CancellationToken>());
-        await defaultHandler.Received(1).Handle(handlerInput, Arg.Any<CancellationToken>());
+        defaultHandler.Verify().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Once();
+        defaultHandler.Verify().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Once();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNoMatchingHandlers_ThrowsInvalidOperationException(
         SkillRequest skillRequest,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler)
     {
         // Arrange
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(false));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -96,17 +99,17 @@ public class RequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNonMatchingDefaultHandler_ThrowsInvalidOperationException(
         SkillRequest skillRequest,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
         IRequestHandler<LaunchRequest> handler,
-        [Frozen] IDefaultRequestHandler defaultHandler)
+        [Shared] IDefaultRequestHandler defaultHandler)
     {
         // Arrange
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
-        defaultHandler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(false);
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(false));
+        defaultHandler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(false));
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -124,39 +127,27 @@ public class RequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithPipelineBehaviors_ExecutesBehaviorsInReverseOrder(
         SkillRequest skillRequest,
         SkillResponse expectedResponse,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] IServiceCollection services,
-        [Frozen] IRequestHandler<LaunchRequest> handler,
-        IPipelineBehavior behavior1,
-        IPipelineBehavior behavior2)
+        [Shared] IHandlerInput handlerInput,
+        [Shared] IServiceCollection services,
+        [Shared] IRequestHandler<LaunchRequest> handler)
     {
         // Arrange
-        handler.CanHandle(handlerInput, Arg.Any<CancellationToken>()).Returns(true);
-        handler.Handle(handlerInput, Arg.Any<CancellationToken>()).Returns(expectedResponse);
+        handler.Configure().CanHandle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(true));
+        handler.Configure().Handle(Match.Is<IHandlerInput>(x => x == handlerInput), Match.Any<CancellationToken>()).Returns(Task.FromResult(expectedResponse));
 
+        // GAP (ADR-0029, recorded in RESEARCH-0011 Stage 2): Compono.TestDoubles has no callback
+        // response equivalent (no Returns(Func<CallInfo, T>), an explicit non-goal), so a
+        // TestDoubles-generated IPipelineBehavior double can't invoke the RequestHandlerDelegate
+        // argument passed to it. FakePipelineBehavior (TestKit/FakeDelegates.cs) is a small
+        // hand-written IPipelineBehavior implementation reproducing exactly the behavior this test
+        // needs - not a double at all, an ordinary class.
         var executionOrder = new List<string>();
-
-        behavior1.Handle(handlerInput, Arg.Any<CancellationToken>(), Arg.Any<RequestHandlerDelegate>())
-            .Returns(async call =>
-            {
-                executionOrder.Add("Behavior1-Start");
-                var result = await call.Arg<RequestHandlerDelegate>()();
-                executionOrder.Add("Behavior1-End");
-                return result;
-            });
-
-        behavior2.Handle(handlerInput, Arg.Any<CancellationToken>(), Arg.Any<RequestHandlerDelegate>())
-            .Returns(async call =>
-            {
-                executionOrder.Add("Behavior2-Start");
-                var result = await call.Arg<RequestHandlerDelegate>()();
-                executionOrder.Add("Behavior2-End");
-                return result;
-            });
+        IPipelineBehavior behavior1 = new FakePipelineBehavior("Behavior1", executionOrder);
+        IPipelineBehavior behavior2 = new FakePipelineBehavior("Behavior2", executionOrder);
 
         services.AddSingleton(handlerInput);
         services.AddSingleton(handler);
@@ -176,10 +167,10 @@ public class RequestHandlerWrapperTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_MissingHandlerInput_ThrowsInvalidOperationException(
         SkillRequest skillRequest,
-        [Frozen] IServiceCollection services)
+        [Shared] IServiceCollection services)
     {
         // Arrange - Intentionally not registering IHandlerInput
         var serviceProvider = services.BuildServiceProvider();

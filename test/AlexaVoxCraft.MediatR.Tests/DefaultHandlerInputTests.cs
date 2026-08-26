@@ -1,3 +1,5 @@
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.Response;
 using AlexaVoxCraft.Model.Request;
@@ -7,9 +9,9 @@ namespace AlexaVoxCraft.MediatR.Tests;
 public class DefaultHandlerInputTests : TestBase
 {
     [Theory]
-    [MediatRAutoData]
-    public void Constructor_WithValidInputs_CreatesInstance([Frozen] SkillRequest skillRequest,
-        [Frozen] IAttributesManager attributesManager, [Frozen] IResponseBuilder responseBuilder,
+    [Compose<MediatRTestProfile>]
+    public void Constructor_WithValidInputs_CreatesInstance([Shared] SkillRequest skillRequest,
+        [Shared] IAttributesManager attributesManager, [Shared] IResponseBuilder responseBuilder,
         DefaultHandlerInput handlerInput)
     {
         // Assert
@@ -19,7 +21,7 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithNullFactory_ThrowsArgumentNullException(IAttributesManager attributesManager,
         IResponseBuilder responseBuilder)
     {
@@ -31,9 +33,9 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithNullAttributesManager_ThrowsArgumentNullException(
-        [Frozen] IResponseBuilder responseBuilder, [Frozen] SkillRequestFactory factory)
+        [Shared] IResponseBuilder responseBuilder, [Shared] SkillRequestFactory factory)
     {
         // Act & Assert
         var exception = Record.Exception(() => new DefaultHandlerInput(factory, null!, responseBuilder));
@@ -43,9 +45,9 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
-    public void Constructor_WithNullResponseBuilder_ThrowsArgumentNullException([Frozen] SkillRequestFactory factory,
-        [Frozen] IAttributesManager attributesManager)
+    [Compose<MediatRTestProfile>]
+    public void Constructor_WithNullResponseBuilder_ThrowsArgumentNullException([Shared] SkillRequestFactory factory,
+        [Shared] IAttributesManager attributesManager)
     {
         // Act & Assert
         var exception = Record.Exception(() => new DefaultHandlerInput(factory, attributesManager, null!));
@@ -55,7 +57,7 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithFactoryReturningNull_ThrowsArgumentNullException(IAttributesManager attributesManager,
         IResponseBuilder responseBuilder)
     {
@@ -70,8 +72,8 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
-    public void RequestEnvelope_ReturnsFactoryResult([Frozen] SkillRequest skillRequest,
+    [Compose<MediatRTestProfile>]
+    public void RequestEnvelope_ReturnsFactoryResult([Shared] SkillRequest skillRequest,
         DefaultHandlerInput handlerInput)
     {
         // Act
@@ -82,8 +84,8 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
-    public void AttributesManager_ReturnsProvidedInstance([Frozen] IAttributesManager attributesManager,
+    [Compose<MediatRTestProfile>]
+    public void AttributesManager_ReturnsProvidedInstance([Shared] IAttributesManager attributesManager,
         DefaultHandlerInput handlerInput)
     {
         // Act
@@ -94,8 +96,8 @@ public class DefaultHandlerInputTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
-    public void ResponseBuilder_ReturnsProvidedInstance([Frozen] IResponseBuilder responseBuilder,
+    [Compose<MediatRTestProfile>]
+    public void ResponseBuilder_ReturnsProvidedInstance([Shared] IResponseBuilder responseBuilder,
         DefaultHandlerInput handlerInput)
     {
         // Act

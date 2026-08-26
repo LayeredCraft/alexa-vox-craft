@@ -116,7 +116,6 @@
     </Project>
   </Folder>
   <Folder Name="/test/">
-    <Project Path="test/AlexaVoxCraft.Http.TestKit/AlexaVoxCraft.Http.TestKit.csproj" />
     <Project Path="test/AlexaVoxCraft.InSkillPurchasing.Tests/AlexaVoxCraft.InSkillPurchasing.Tests.csproj" />
     <Project Path="test/AlexaVoxCraft.MediatR.Generator.Tests/AlexaVoxCraft.MediatR.Generator.Tests.csproj">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />

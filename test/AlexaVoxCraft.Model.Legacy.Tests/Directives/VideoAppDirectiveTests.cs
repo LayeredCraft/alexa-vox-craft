@@ -1,6 +1,8 @@
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.Model.Tests.Infrastructure;
+using Compono.XunitV3;
+using AlexaVoxCraft.Model.Tests.TestKit;
 
 namespace AlexaVoxCraft.Model.Tests.Directives;
 
@@ -84,8 +86,7 @@ public sealed class VideoAppDirectiveTests
     }
 
     // AutoFixture-based tests
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void VideoAppDirective_WithGeneratedData_HasValidProperties(VideoAppDirective directive)
     {
         directive.Type.Should().Be("VideoApp.Launch");
@@ -94,24 +95,21 @@ public sealed class VideoAppDirectiveTests
         directive.VideoItem.Source.Should().StartWith("https://");
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void VideoItem_WithGeneratedData_HasValidSource(VideoItem videoItem)
     {
         videoItem.Source.Should().NotBeNullOrEmpty();
         videoItem.Source.Should().StartWith("https://");
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void VideoItemMetadata_WithGeneratedData_HasValidProperties(VideoItemMetadata metadata)
     {
         metadata.Title.Should().NotBeNullOrEmpty();
         metadata.Subtitle.Should().NotBeNullOrEmpty();
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void VideoAppDirective_ShouldEndSessionBehavior_IsNull(VideoAppDirective directive)
     {
         directive.ShouldEndSession.Should().BeNull();

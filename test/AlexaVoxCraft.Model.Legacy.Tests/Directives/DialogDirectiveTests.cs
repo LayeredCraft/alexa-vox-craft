@@ -1,13 +1,14 @@
-﻿using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response.Directive;
 using AlexaVoxCraft.TestKit.Extensions;
+using Compono.XunitV3;
+using AlexaVoxCraft.Model.Tests.TestKit;
 
 namespace AlexaVoxCraft.Model.Tests.Directives;
 
 public sealed class DialogDirectiveTests
 {
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void DialogDelegate_WithGeneratedData_SerializesCorrectly(DialogDelegate directive)
     {
         directive.Type.Should().Be("Dialog.Delegate");
@@ -18,8 +19,7 @@ public sealed class DialogDirectiveTests
         directive.ShouldRoundTripSerialize();
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void DialogElicitSlot_WithGeneratedData_SerializesCorrectly(DialogElicitSlot directive)
     {
         directive.Type.Should().Be("Dialog.ElicitSlot");
@@ -30,8 +30,7 @@ public sealed class DialogDirectiveTests
         directive.ShouldRoundTripSerialize();
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void DialogConfirmSlot_WithGeneratedData_SerializesCorrectly(DialogConfirmSlot directive)
     {
         directive.Type.Should().Be("Dialog.ConfirmSlot");
@@ -42,8 +41,7 @@ public sealed class DialogDirectiveTests
         directive.ShouldRoundTripSerialize();
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void DialogConfirmIntent_WithGeneratedData_SerializesCorrectly(DialogConfirmIntent directive)
     {
         directive.Type.Should().Be("Dialog.ConfirmIntent");
@@ -54,8 +52,7 @@ public sealed class DialogDirectiveTests
         directive.ShouldRoundTripSerialize();
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void DialogUpdateDynamicEntities_WithGeneratedData_SerializesCorrectly(DialogUpdateDynamicEntities directive)
     {
         directive.Type.Should().Be("Dialog.UpdateDynamicEntities");
@@ -78,8 +75,7 @@ public sealed class DialogDirectiveTests
         directive.ShouldRoundTripSerialize();
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Intent_WithGeneratedData_HasValidStructure(Intent intent)
     {
         intent.Name.Should().NotBeNullOrEmpty();
@@ -102,8 +98,7 @@ public sealed class DialogDirectiveTests
         intent.ShouldRoundTripSerialize();
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void SlotType_WithGeneratedData_HasValidStructure(SlotType slotType)
     {
         slotType.Name.Should().NotBeNullOrEmpty();

@@ -1,3 +1,5 @@
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using AlexaVoxCraft.MediatR.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,9 +17,9 @@ public class HandlerBaseTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void GetHandlers_WithRegisteredServices_ReturnsHandlers(
-        [Frozen] IServiceCollection services,
+        [Shared] IServiceCollection services,
         ITestHandler handler1,
         ITestHandler handler2)
     {
@@ -37,9 +39,9 @@ public class HandlerBaseTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void GetHandlers_WithNoRegisteredServices_ReturnsEmptyCollection(
-        [Frozen] IServiceCollection services)
+        [Shared] IServiceCollection services)
     {
         // Arrange - No handlers registered
         var serviceProvider = services.BuildServiceProvider();
@@ -53,9 +55,9 @@ public class HandlerBaseTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void GetHandlers_WithServiceConstructionException_ThrowsInvalidOperationException(
-        [Frozen] IServiceCollection services)
+        [Shared] IServiceCollection services)
     {
         // Arrange
         services.AddSingleton<ITestHandler, FailingTestHandler>();

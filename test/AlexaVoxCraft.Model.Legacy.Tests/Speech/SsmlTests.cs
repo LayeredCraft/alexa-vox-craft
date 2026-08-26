@@ -1,7 +1,9 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 using AlexaVoxCraft.Model.Response.Ssml;
 using DomainName = AlexaVoxCraft.Model.Response.Ssml.DomainName;
 using SsmlSpeech = AlexaVoxCraft.Model.Response.Ssml.Speech;
+using Compono.XunitV3;
+using AlexaVoxCraft.Model.Tests.TestKit;
 
 namespace AlexaVoxCraft.Model.Tests.Speech;
 
@@ -283,8 +285,7 @@ public sealed class SsmlTests
     }
 
     // AutoFixture-based tests
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Speech_WithGeneratedData_GeneratesValidXml(SsmlSpeech speech)
     {
         speech.Elements.Should().NotBeEmpty();
@@ -295,8 +296,7 @@ public sealed class SsmlTests
         xml.Should().EndWith("</speak>");
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void PlainText_WithGeneratedData_HasValidContent(PlainText plainText)
     {
         var xml = plainText.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -306,8 +306,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Break_WithGeneratedData_GeneratesValidXml(Break breakElement)
     {
         var xml = breakElement.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -316,8 +315,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void SayAs_WithGeneratedData_HasValidAttributes(SayAs sayAs)
     {
         var xml = sayAs.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -327,8 +325,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Word_WithGeneratedData_HasValidRole(Word word)
     {
         var xml = word.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -338,8 +335,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Sub_WithGeneratedData_HasValidAlias(Sub sub)
     {
         var xml = sub.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -349,8 +345,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Prosody_WithGeneratedData_HasValidAttributes(Prosody prosody)
     {
         prosody.Elements.Should().NotBeEmpty();
@@ -361,8 +356,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Emphasis_WithGeneratedData_HasValidLevel(Emphasis emphasis)
     {
         var xml = emphasis.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -372,8 +366,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Phoneme_WithGeneratedData_HasValidAttributes(Phoneme phoneme)
     {
         var xml = phoneme.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -384,8 +377,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Audio_WithGeneratedData_HasValidSrc(Audio audio)
     {
         var xml = audio.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -396,8 +388,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Voice_WithGeneratedData_HasValidName(Voice voice)
     {
         var xml = voice.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -407,8 +398,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void Lang_WithGeneratedData_HasValidLanguage(Lang lang)
     {
         var xml = lang.ToXml().ToString(SaveOptions.DisableFormatting);
@@ -418,8 +408,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AmazonEffect_WithGeneratedData_GeneratesValidXml(AmazonEffect effect)
     {
         var speech = new SsmlSpeech();
@@ -431,8 +420,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AmazonDomain_WithGeneratedData_HasValidDomain(AmazonDomain domain)
     {
         domain.Elements.Should().NotBeEmpty();
@@ -447,8 +435,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AmazonEmotion_WithGeneratedData_HasValidAttributes(AmazonEmotion emotion)
     {
         emotion.Elements.Should().NotBeEmpty();
@@ -464,8 +451,7 @@ public sealed class SsmlTests
 
     }
 
-    [Theory]
-    [ModelAutoData]
+    [Theory, Compose<ModelLegacyProfile>]
     public void AlexaName_WithGeneratedData_HasValidPersonId(AlexaName alexaName)
     {
         var speech = new SsmlSpeech();

@@ -1,3 +1,5 @@
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using System.Reflection;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.DI;
@@ -11,7 +13,7 @@ namespace AlexaVoxCraft.MediatR.Tests.Registration;
 public class ServiceRegistrarTests : TestBase
 {
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddSkillMediatorClasses_WithEmptyAssemblies_DoesNotThrow(
         IServiceCollection services,
         SkillServiceConfiguration emptyConfiguration)
@@ -22,7 +24,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddSkillMediatorClasses_WithValidConfiguration_DoesNotThrow(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -37,7 +39,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddSkillMediatorClasses_WithDuplicateAssemblies_DeduplicatesCorrectly(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -53,7 +55,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddSkillMediatorClasses_WithMediatRAssembly_RegistersPipelineTypes(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -74,7 +76,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddRequiredServices_RegistersAllRequiredServices(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -94,7 +96,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddRequiredServices_WithMultipleCalls_DoesNotDuplicateServices(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -110,7 +112,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddRequiredServices_RegistersCorrectServiceLifetimes(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -131,7 +133,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddRequiredServices_RegistersAllPipelineBehaviors(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -149,7 +151,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddRequiredServices_RegistersImplementationTypes(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -171,7 +173,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddRequiredServices_DoesNotRegisterDuplicatePipelineBehaviors(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -187,7 +189,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddSkillMediatorClasses_WithAssemblyContainingRequestHandlers_RegistersHandlers(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)
@@ -204,7 +206,7 @@ public class ServiceRegistrarTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void AddSkillMediatorClasses_WithNullAssemblies_HandlesGracefully(
         IServiceCollection services,
         SkillServiceConfiguration validConfiguration)

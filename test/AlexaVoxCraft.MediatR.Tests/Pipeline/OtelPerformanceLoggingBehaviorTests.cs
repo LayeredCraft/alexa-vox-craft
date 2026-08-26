@@ -1,3 +1,6 @@
+using Compono;
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using System.Diagnostics;
 using AlexaVoxCraft.MediatR.Observability;
 using AlexaVoxCraft.MediatR.Pipeline;
@@ -39,15 +42,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithSuccessfulRequest_LogsDebugMessages(
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillResponse expectedResponse)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse,
+        SkillRequest skillRequest)
     {
         // Arrange
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -97,15 +102,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithArgumentException_RecordsValidationError(
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillRequest skillRequest)
     {
         // Arrange
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
         var exception = new ArgumentException("Invalid argument");
-        next.Invoke().Returns(Task.FromException<SkillResponse>(exception));
+        next.Returns(Task.FromException<SkillResponse>(exception));
 
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() =>
@@ -133,15 +140,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithInvalidOperationException_RecordsBusinessError(
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillRequest skillRequest)
     {
         // Arrange
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
         var exception = new InvalidOperationException("Invalid operation");
-        next.Invoke().Returns(Task.FromException<SkillResponse>(exception));
+        next.Returns(Task.FromException<SkillResponse>(exception));
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
@@ -161,15 +170,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithTimeoutException_RecordsTimeoutError(
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillRequest skillRequest)
     {
         // Arrange
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
         var exception = new TimeoutException("Operation timed out");
-        next.Invoke().Returns(Task.FromException<SkillResponse>(exception));
+        next.Returns(Task.FromException<SkillResponse>(exception));
 
         // Act & Assert
         await Assert.ThrowsAsync<TimeoutException>(() =>
@@ -189,15 +200,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithUnknownException_RecordsUnhandledError(
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillRequest skillRequest)
     {
         // Arrange
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
         var exception = new NotImplementedException("Unknown error type");
-        next.Invoke().Returns(Task.FromException<SkillResponse>(exception));
+        next.Returns(Task.FromException<SkillResponse>(exception));
 
         // Act & Assert
         await Assert.ThrowsAsync<NotImplementedException>(() =>
@@ -217,16 +230,18 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithColdStart_RecordsColdStartMetrics(
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillResponse expectedResponse)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse,
+        SkillRequest skillRequest)
     {
         // Arrange
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
         AlexaVoxCraftTelemetry.ResetForTesting(); // Ensure this is a cold start
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -255,16 +270,18 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithWarmStart_DoesNotRecordColdStartMetrics(
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillResponse expectedResponse)
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse,
+        SkillRequest skillRequest)
     {
         // Arrange - Simulate warm start by calling IsColdStart() first
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
         AlexaVoxCraftTelemetry.IsColdStart(); // This call makes subsequent calls return false
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
+        next.Returns(Task.FromResult(expectedResponse));
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -293,17 +310,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithIntentRequest_RecordsIntentSpecificTelemetry(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillRequest intentRequest,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillResponse expectedResponse)
     {
-        // Arrange - parameter named "intentRequest" will create IntentRequest
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(intentRequest);
+        // Arrange - an intent request with a generic (non-Built-In) intent name
+        var intentRequest = TestHelper.ForRequest(TestHelper.IntentRequest("TestIntent"));
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(intentRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -327,17 +344,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithHelpIntentRequest_RecordsHelpIntentTelemetry(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillRequest helpIntentRequest,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillResponse expectedResponse)
     {
-        // Arrange - parameter named "helpIntentHandlerInput" will create HelpIntent
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(helpIntentRequest);
+        // Arrange - an intent request for the built-in Help intent
+        var helpIntentRequest = TestHelper.ForRequest(TestHelper.IntentRequest("AMAZON.HelpIntent"));
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(helpIntentRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -355,17 +372,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithSessionEndedRequest_RecordsSessionEndTelemetry(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillRequest sessionEndRequest,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillResponse expectedResponse)
     {
-        // Arrange - parameter named "sessionEndRequest" will create SessionEndedRequest
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(sessionEndRequest);
+        // Arrange - a session-ended request
+        var sessionEndRequest = TestHelper.ForRequest(TestHelper.SessionEndedRequest());
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(sessionEndRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -381,17 +398,17 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithAudioPlayerRequest_RecordsAudioTelemetry(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
-        SkillRequest audioRequest,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillResponse expectedResponse)
     {
-        // Arrange - parameter named "audioRequest" will create AudioPlayerRequest
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(audioRequest);
+        // Arrange - an AudioPlayer request
+        var audioRequest = TestHelper.ForRequest(TestHelper.AudioPlayerRequest());
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(audioRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -407,11 +424,11 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithDisplayRequest_RecordsScreenDeviceCapability(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillRequest displayRequest,
         SkillResponse expectedResponse)
     {
@@ -429,8 +446,8 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         }
         displayRequest.Context.System.Device.SupportedInterfaces = supportedInterfaces;
 
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(displayRequest);
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(displayRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -446,11 +463,11 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithLaunchRequest_RecordsNonScreenDeviceCapability(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillRequest launchRequest,
         SkillResponse expectedResponse)
     {
@@ -462,8 +479,8 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
         }
         launchRequest.Context.System.Device.SupportedInterfaces = new Dictionary<string, object>();
 
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(launchRequest);
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(launchRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -479,19 +496,19 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithNewSession_RecordsNewSessionAttribute(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillRequest intentRequest,
         SkillResponse expectedResponse)
     {
         // Arrange - Set session as new
         intentRequest.Session.New = true;
 
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(intentRequest);
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(intentRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -507,19 +524,19 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithExistingSession_RecordsExistingSessionAttribute(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillRequest intentRequest,
         SkillResponse expectedResponse)
     {
         // Arrange - Set session as existing (not new)
         intentRequest.Session.New = false;
 
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(intentRequest);
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(intentRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);
@@ -535,19 +552,19 @@ public class OtelPerformanceLoggingBehaviorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Handle_WithSessionlessRequest_DoesNotRecordSessionAttribute(
         PerformanceLoggingBehavior behavior,
-        [Frozen] IHandlerInput handlerInput,
-        [Frozen] RequestHandlerDelegate next,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
         SkillRequest audioRequest,
         SkillResponse expectedResponse)
     {
         // Arrange - AudioPlayerRequest typically doesn't have a session
         audioRequest.Session = null!;
 
-        next.Invoke().Returns(Task.FromResult(expectedResponse));
-        handlerInput.RequestEnvelope.Returns(audioRequest);
+        next.Returns(Task.FromResult(expectedResponse));
+        handlerInput.Configure().RequestEnvelope().Returns(audioRequest);
 
         // Act
         var result = await behavior.Handle(handlerInput, CancellationToken, next);

@@ -1,3 +1,6 @@
+using Compono;
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using System.Text.Json;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.Attributes.Persistence;
@@ -9,7 +12,7 @@ namespace AlexaVoxCraft.MediatR.Tests.Attributes;
 public class AttributesManagerTests : TestBase
 {
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithValidFactory_CreatesInstance(SkillRequestFactory factory)
     {
         var manager = new AttributesManager(factory);
@@ -27,7 +30,7 @@ public class AttributesManagerTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithFactoryReturningNull_ThrowsArgumentNullException(IPersistenceAdapter persistenceAdapter)
     {
         SkillRequestFactory factory = () => null!;
@@ -39,9 +42,9 @@ public class AttributesManagerTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Session_WhenSkillRequestHasSessionAttributes_ContainsThoseAttributes(
-        [Frozen] SkillRequest skillRequest, SkillRequestFactory factory)
+        [Shared] SkillRequest skillRequest, SkillRequestFactory factory)
     {
         var key = "greeting";
         var element = JsonSerializer.SerializeToElement("hello", AlexaJsonOptions.DefaultOptions);
@@ -52,9 +55,9 @@ public class AttributesManagerTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Session_WhenSkillRequestHasNoSession_IsEmpty(
-        [Frozen] SkillRequest skillRequest, SkillRequestFactory factory)
+        [Shared] SkillRequest skillRequest, SkillRequestFactory factory)
     {
         skillRequest.Session = null!;
         var manager = new AttributesManager(factory);
@@ -63,14 +66,14 @@ public class AttributesManagerTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Request_IsInitiallyEmpty(AttributesManager manager)
     {
         manager.Request.Values.Should().BeEmpty();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task GetPersistentAsync_WithoutPersistenceAdapter_ThrowsInvalidOperationException(
         SkillRequestFactory factory)
     {
@@ -83,46 +86,46 @@ public class AttributesManagerTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task GetPersistentAsync_WithPersistenceAdapter_ReturnsAttributesFromAdapter(
-        [Frozen] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
+        [Shared] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
     {
         var key = "savedKey";
         var element = JsonSerializer.SerializeToElement(42, AlexaJsonOptions.DefaultOptions);
         IDictionary<string, JsonElement> adapterData = new Dictionary<string, JsonElement> { [key] = element };
-        persistenceAdapter.GetAttributes(Arg.Any<SkillRequest>(), Arg.Any<CancellationToken>())
-            .Returns(adapterData);
+        persistenceAdapter.Configure().GetAttributes(Match.Any<SkillRequest>(), Match.Any<CancellationToken>())
+            .Returns(Task.FromResult(adapterData));
 
         var result = await manager.GetPersistentAsync(TestContext.Current.CancellationToken);
 
         result.Should().NotBeNull();
         result.Values.Should().ContainKey(key);
-        await persistenceAdapter.Received(1).GetAttributes(Arg.Any<SkillRequest>(), Arg.Any<CancellationToken>());
+        persistenceAdapter.Verify().GetAttributes(Match.Any<SkillRequest>(), Match.Any<CancellationToken>()).Once();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task GetPersistentAsync_CalledMultipleTimes_CallsAdapterOnlyOnce(
-        [Frozen] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
+        [Shared] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
     {
         IDictionary<string, JsonElement> adapterData = new Dictionary<string, JsonElement>();
-        persistenceAdapter.GetAttributes(Arg.Any<SkillRequest>(), Arg.Any<CancellationToken>())
-            .Returns(adapterData);
+        persistenceAdapter.Configure().GetAttributes(Match.Any<SkillRequest>(), Match.Any<CancellationToken>())
+            .Returns(Task.FromResult(adapterData));
 
         await manager.GetPersistentAsync(TestContext.Current.CancellationToken);
         await manager.GetPersistentAsync(TestContext.Current.CancellationToken);
 
-        await persistenceAdapter.Received(1).GetAttributes(Arg.Any<SkillRequest>(), Arg.Any<CancellationToken>());
+        persistenceAdapter.Verify().GetAttributes(Match.Any<SkillRequest>(), Match.Any<CancellationToken>()).Once();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task GetPersistentAsync_CalledMultipleTimes_ReturnsSameBagInstance(
-        [Frozen] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
+        [Shared] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
     {
         IDictionary<string, JsonElement> adapterData = new Dictionary<string, JsonElement>();
-        persistenceAdapter.GetAttributes(Arg.Any<SkillRequest>(), Arg.Any<CancellationToken>())
-            .Returns(adapterData);
+        persistenceAdapter.Configure().GetAttributes(Match.Any<SkillRequest>(), Match.Any<CancellationToken>())
+            .Returns(Task.FromResult(adapterData));
 
         var first = await manager.GetPersistentAsync(TestContext.Current.CancellationToken);
         var second = await manager.GetPersistentAsync(TestContext.Current.CancellationToken);
@@ -131,7 +134,7 @@ public class AttributesManagerTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task SavePersistentAttributes_WithoutPersistenceAdapter_ThrowsInvalidOperationException(
         SkillRequestFactory factory)
     {
@@ -144,35 +147,35 @@ public class AttributesManagerTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task SavePersistentAttributes_WithoutLoadingFirst_DoesNotCallAdapter(
-        [Frozen] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
+        [Shared] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
     {
         await manager.SavePersistentAttributes(TestContext.Current.CancellationToken);
 
-        await persistenceAdapter.DidNotReceive().SaveAttribute(Arg.Any<SkillRequest>(),
-            Arg.Any<IDictionary<string, JsonElement>>(), Arg.Any<CancellationToken>());
+        persistenceAdapter.Verify().SaveAttribute(Match.Any<SkillRequest>(),
+            Match.Any<IDictionary<string, JsonElement>>(), Match.Any<CancellationToken>()).Never();
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task SavePersistentAttributes_AfterLoadingAttributes_CallsAdapter(
-        [Frozen] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
+        [Shared] IPersistenceAdapter persistenceAdapter, AttributesManager manager)
     {
         IDictionary<string, JsonElement> adapterData = new Dictionary<string, JsonElement>();
-        persistenceAdapter.GetAttributes(Arg.Any<SkillRequest>(), Arg.Any<CancellationToken>())
-            .Returns(adapterData);
+        persistenceAdapter.Configure().GetAttributes(Match.Any<SkillRequest>(), Match.Any<CancellationToken>())
+            .Returns(Task.FromResult(adapterData));
 
         await manager.GetPersistentAsync(TestContext.Current.CancellationToken);
         await manager.SavePersistentAttributes(TestContext.Current.CancellationToken);
 
-        await persistenceAdapter.Received(1).SaveAttribute(Arg.Any<SkillRequest>(),
-            Arg.Any<IDictionary<string, JsonElement>>(), Arg.Any<CancellationToken>());
+        persistenceAdapter.Verify().SaveAttribute(Match.Any<SkillRequest>(),
+            Match.Any<IDictionary<string, JsonElement>>(), Match.Any<CancellationToken>()).Once();
     }
 
     [Theory]
-    [MediatRAutoData]
-    public async Task GetSession_ReturnsSkillRequestSession([Frozen] SkillRequest skillRequest,
+    [Compose<MediatRTestProfile>]
+    public async Task GetSession_ReturnsSkillRequestSession([Shared] SkillRequest skillRequest,
         SkillRequestFactory factory)
     {
         var manager = new AttributesManager(factory);
@@ -183,9 +186,9 @@ public class AttributesManagerTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task GetSession_WhenSessionIsNull_ReturnsNull(
-        [Frozen] SkillRequest skillRequest, SkillRequestFactory factory)
+        [Shared] SkillRequest skillRequest, SkillRequestFactory factory)
     {
         skillRequest.Session = null!;
         var manager = new AttributesManager(factory);

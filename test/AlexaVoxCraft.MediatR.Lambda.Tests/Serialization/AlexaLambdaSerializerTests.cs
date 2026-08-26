@@ -6,6 +6,8 @@ using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Serialization;
 using Microsoft.Extensions.Logging;
 using LayeredCraft.StructuredLogging.Testing;
+using AlexaVoxCraft.MediatR.Lambda.Tests.TestKit;
+using Compono.XunitV3;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests.Serialization;
 
@@ -48,8 +50,7 @@ public class AlexaLambdaSerializerTests : TestBase
         serializer.Should().NotBeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Deserialize_WithValidJson_ReturnsDeserializedObject(SkillRequest skillRequest)
     {
         var json = JsonSerializer.Serialize(skillRequest, AlexaJsonOptions.DefaultOptions);
@@ -82,8 +83,7 @@ public class AlexaLambdaSerializerTests : TestBase
         exception.Should().NotBeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Serialize_WithValidObject_WritesToStream(SkillResponse skillResponse)
     {
         using var stream = new MemoryStream();
@@ -104,8 +104,7 @@ public class AlexaLambdaSerializerTests : TestBase
         exception.Should().NotBeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Serialize_WithObject_ProducesValidJson(SkillResponse skillResponse)
     {
         using var stream = new MemoryStream();
@@ -121,8 +120,7 @@ public class AlexaLambdaSerializerTests : TestBase
         exception.Should().BeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Serialize_ThenDeserialize_RoundTripWorks(SkillRequest originalRequest)
     {
         using var stream = new MemoryStream();
@@ -155,8 +153,7 @@ public class AlexaLambdaSerializerTests : TestBase
         json.Should().Be("null");
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Deserialize_LogsOperationTiming(SkillRequest skillRequest)
     {
         var json = JsonSerializer.Serialize(skillRequest, AlexaJsonOptions.DefaultOptions);
@@ -168,8 +165,7 @@ public class AlexaLambdaSerializerTests : TestBase
         _testLogger.LogEntries.Should().NotBeEmpty();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Serialize_LogsOperationTiming(SkillResponse skillResponse)
     {
         using var stream = new MemoryStream();
@@ -180,8 +176,7 @@ public class AlexaLambdaSerializerTests : TestBase
         _testLogger.LogEntries.Should().NotBeEmpty();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Deserialize_WithDebugLogging_LogsRawInput(SkillRequest skillRequest)
     {
         _testLogger.MinimumLogLevel = LogLevel.Debug;
@@ -193,8 +188,7 @@ public class AlexaLambdaSerializerTests : TestBase
         _testLogger.HasLogEntry(LogLevel.Debug, "Raw JSON Input").Should().BeTrue();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Serialize_WithDebugLogging_LogsRawOutput(SkillResponse skillResponse)
     {
         _testLogger.MinimumLogLevel = LogLevel.Debug;
@@ -205,8 +199,7 @@ public class AlexaLambdaSerializerTests : TestBase
         _testLogger.HasLogEntry(LogLevel.Debug, "Serialized JSON Output").Should().BeTrue();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void Deserialize_WithLargePayload_HandlesCorrectly(SkillRequest skillRequest)
     {
         var largeRequest = CreateLargeSkillRequest(skillRequest);

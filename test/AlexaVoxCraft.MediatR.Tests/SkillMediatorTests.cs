@@ -1,3 +1,5 @@
+using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Tests.TestKit;
 using AlexaVoxCraft.MediatR.DI;
 using AlexaVoxCraft.Model.Request;
 using Microsoft.Extensions.Options;
@@ -7,7 +9,7 @@ namespace AlexaVoxCraft.MediatR.Tests;
 public class SkillMediatorTests : TestBase
 {
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithNullServiceProvider_ThrowsArgumentNullException(
         IOptions<SkillServiceConfiguration> validConfiguration)
     {
@@ -17,7 +19,7 @@ public class SkillMediatorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithNullConfiguration_ThrowsNullReferenceException(
         IServiceProvider serviceProvider)
     {
@@ -27,18 +29,20 @@ public class SkillMediatorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithNullConfigurationValue_ThrowsArgumentNullException(
-        IServiceProvider serviceProvider,
-        IOptions<SkillServiceConfiguration> nullConfigurationValue)
+        IServiceProvider serviceProvider)
     {
+        // Arrange - an IOptions<T> whose Value is itself null
+        var nullConfigurationValue = TestHelper.SkillOptionsWithNullValue();
+
         var exception = Record.Exception(() => new SkillMediator(serviceProvider, nullConfigurationValue));
 
         exception.Should().BeOfType<ArgumentNullException>().Subject.ParamName.Should().Be("serviceConfiguration");
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public void Constructor_WithValidParameters_CreatesInstance(
         IServiceProvider serviceProvider,
         IOptions<SkillServiceConfiguration> validConfiguration)
@@ -49,7 +53,7 @@ public class SkillMediatorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Send_WithNullSkillId_ThrowsArgumentException(
         SkillRequest skillRequest,
         IServiceProvider serviceProvider,
@@ -63,7 +67,7 @@ public class SkillMediatorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Send_WithEmptySkillId_ThrowsArgumentException(
         SkillRequest skillRequest,
         IServiceProvider serviceProvider,
@@ -77,7 +81,7 @@ public class SkillMediatorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Send_WithWhitespaceSkillId_ThrowsArgumentException(
         SkillRequest skillRequest,
         IServiceProvider serviceProvider,
@@ -91,7 +95,7 @@ public class SkillMediatorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Send_WithMismatchedSkillId_ThrowsArgumentException(
         SkillRequest skillRequest,
         IServiceProvider serviceProvider,
@@ -105,7 +109,7 @@ public class SkillMediatorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Send_WithMatchingSkillId_PassesSkillIdValidation(
         SkillRequest skillRequest,
         IServiceProvider serviceProvider,
@@ -124,7 +128,7 @@ public class SkillMediatorTests : TestBase
     }
 
     [Theory]
-    [MediatRAutoData]
+    [Compose<MediatRTestProfile>]
     public async Task Send_CreatesHandlerWrapper_ThrowsInvalidOperationExceptionForUnsupportedType(
         SkillRequest skillRequest,
         IServiceProvider serviceProvider,

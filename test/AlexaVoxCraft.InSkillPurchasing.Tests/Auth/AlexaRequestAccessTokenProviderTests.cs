@@ -15,15 +15,15 @@ public sealed class AlexaRequestAccessTokenProviderTests
         };
         var sut = new AlexaRequestAccessTokenProvider(() => skillRequest);
 
-        var result = await sut.GetAccessTokenAsync();
+        var result = await sut.GetAccessTokenAsync(TestContext.Current.CancellationToken);
 
         result.Should().Be(expectedToken);
     }
 
     [Theory]
-    [InlineAlexaVoxCraftAutoData(null)]
-    [InlineAlexaVoxCraftAutoData("")]
-    [InlineAlexaVoxCraftAutoData("   ")]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
     public async Task GetAccessTokenAsync_WhenTokenNullOrWhitespace_ThrowsInvalidOperationException(string? token)
     {
         var skillRequest = new SkillRequest

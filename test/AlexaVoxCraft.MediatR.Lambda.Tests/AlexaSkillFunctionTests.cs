@@ -9,6 +9,8 @@ using Amazon.Lambda.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AlexaVoxCraft.MediatR.Lambda.Tests.TestKit;
+using Compono.XunitV3;
 
 namespace AlexaVoxCraft.MediatR.Lambda.Tests;
 
@@ -69,8 +71,7 @@ public class AlexaSkillFunctionTests : TestBase
         function.InitCalled.Should().BeTrue();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public void CreateContext_WithValidRequest_CallsFactory(SkillRequest launchRequest)
     {
         var function = new TestAlexaSkillFunction();
@@ -81,11 +82,10 @@ public class AlexaSkillFunctionTests : TestBase
         exception.Should().BeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task FunctionHandlerAsync_WithMissingHandler_ThrowsException(
         SkillRequest skillRequest,
-        ILambdaContext lambdaContext)
+        FakeLambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunction();
 
@@ -96,9 +96,8 @@ public class AlexaSkillFunctionTests : TestBase
         exception.Should().BeOfType<InvalidOperationException>();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
-    public async Task FunctionHandlerAsync_WithNullRequest_ThrowsException(ILambdaContext lambdaContext)
+    [Theory, Compose<LambdaTestProfile>]
+    public async Task FunctionHandlerAsync_WithNullRequest_ThrowsException(FakeLambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunction();
 
@@ -108,8 +107,7 @@ public class AlexaSkillFunctionTests : TestBase
         exception.Should().NotBeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task FunctionHandlerAsync_WithNullLambdaContext_ThrowsException(SkillRequest skillRequest)
     {
         var function = new TestAlexaSkillFunction();
@@ -120,11 +118,10 @@ public class AlexaSkillFunctionTests : TestBase
         exception.Should().NotBeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task FunctionHandlerAsync_WithValidHandler_ReturnsResponse(
         SkillRequest skillRequest,
-        ILambdaContext lambdaContext)
+        FakeLambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithHandler();
 
@@ -134,11 +131,10 @@ public class AlexaSkillFunctionTests : TestBase
         result.Should().BeOfType<SkillResponse>();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task FunctionHandlerAsync_WithHandlerException_PropagatesException(
         SkillRequest skillRequest,
-        ILambdaContext lambdaContext)
+        FakeLambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithThrowingHandler();
 
@@ -161,55 +157,51 @@ public class AlexaSkillFunctionTests : TestBase
         services.GetService<ISkillContextAccessor>().Should().NotBeNull();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
-    public void CreateContext_WithLaunchRequest_CreatesLaunchRequest(SkillRequest launchRequest)
+    [Fact]
+    public void CreateContext_WithLaunchRequest_CreatesLaunchRequest()
     {
-        // Verify our specimen builder creates a launch request based on parameter name
+        var launchRequest = LambdaTestProfile.CreateSkillRequest(new LaunchRequest { Type = "LaunchRequest" });
+
         launchRequest.Request.Type.Should().Be("LaunchRequest");
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
-    public void CreateContext_WithIntentRequest_CreatesIntentRequest(SkillRequest intentRequest)
+    [Fact]
+    public void CreateContext_WithIntentRequest_CreatesIntentRequest()
     {
-        // Verify our specimen builder creates an intent request based on parameter name
+        var intentRequest = LambdaTestProfile.CreateSkillRequest(new IntentRequest { Type = "IntentRequest", Intent = new Intent() });
+
         intentRequest.Request.Type.Should().Be("IntentRequest");
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
-    public void CreateContext_WithHelpIntentRequest_CreatesHelpIntent(SkillRequest helpIntentRequest)
+    [Fact]
+    public void CreateContext_WithHelpIntentRequest_CreatesHelpIntent()
     {
-        // Verify our specimen builder creates a help intent based on parameter name
+        var helpIntentRequest = LambdaTestProfile.CreateSkillRequest(new IntentRequest { Type = "IntentRequest", Intent = new Intent { Name = "AMAZON.HelpIntent" } });
+
         helpIntentRequest.Request.Type.Should().Be("IntentRequest");
-        if (helpIntentRequest.Request is IntentRequest intentRequest)
-        {
-            intentRequest.Intent.Name.Should().Be("AMAZON.HelpIntent");
-        }
+        ((IntentRequest)helpIntentRequest.Request).Intent.Name.Should().Be("AMAZON.HelpIntent");
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
-    public void CreateContext_WithSessionEndRequest_CreatesSessionEndedRequest(SkillRequest sessionEndRequest)
+    [Fact]
+    public void CreateContext_WithSessionEndRequest_CreatesSessionEndedRequest()
     {
-        // Verify our specimen builder creates a session ended request based on parameter name
+        var sessionEndRequest = LambdaTestProfile.CreateSkillRequest(new SessionEndedRequest { Type = "SessionEndedRequest" });
+
         sessionEndRequest.Request.Type.Should().Be("SessionEndedRequest");
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
-    public void CreateContext_WithAudioPlayerRequest_CreatesAudioPlayerRequest(SkillRequest audioPlayerRequest)
+    [Fact]
+    public void CreateContext_WithAudioPlayerRequest_CreatesAudioPlayerRequest()
     {
-        // Verify our specimen builder creates an audio player request based on parameter name
+        var audioPlayerRequest = LambdaTestProfile.CreateSkillRequest(new AudioPlayerRequest { Type = "AudioPlayer.PlaybackStopped" });
+
         audioPlayerRequest.Request.Type.Should().Be("AudioPlayer.PlaybackStopped");
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task FunctionHandlerAsync_CreatesLambdaSpan(
         SkillRequest skillRequest,
-        ILambdaContext lambdaContext)
+        FakeLambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithHandler();
         var activities = new List<Activity>();
@@ -230,11 +222,10 @@ public class AlexaSkillFunctionTests : TestBase
     }
 
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task FunctionHandlerAsync_HandlesColdStart(
         SkillRequest skillRequest,
-        ILambdaContext lambdaContext)
+        FakeLambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithHandler();
         var activities = new List<Activity>();
@@ -264,11 +255,10 @@ public class AlexaSkillFunctionTests : TestBase
         lambdaSpan.Status.Should().Be(ActivityStatusCode.Ok);
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task FunctionHandlerAsync_HandlesSpanOnException(
         SkillRequest skillRequest,
-        ILambdaContext lambdaContext)
+        FakeLambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithThrowingHandler();
         var activities = new List<Activity>();
@@ -297,11 +287,10 @@ public class AlexaSkillFunctionTests : TestBase
         exceptionEvents.Should().NotBeEmpty();
     }
 
-    [Theory]
-    [MediatRLambdaAutoData]
+    [Theory, Compose<LambdaTestProfile>]
     public async Task FunctionHandlerAsync_TracksLambdaDuration(
         SkillRequest skillRequest,
-        ILambdaContext lambdaContext)
+        FakeLambdaContext lambdaContext)
     {
         var function = new TestAlexaSkillFunctionWithHandler();
 

@@ -1,7 +1,7 @@
 using System.Net;
-using AlexaVoxCraft.Http.TestKit.Extensions;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
+using Compono.Http;
 
 namespace AlexaVoxCraft.InSkillPurchasing.Tests.Handlers;
 
@@ -12,14 +12,8 @@ public sealed class LocaleHandlerTests
     {
         const string locale = "en-US";
         var skillRequest = new SkillRequest { Request = new LaunchRequest { Locale = locale } };
-        var innerHandler = Substitute.For<HttpMessageHandler>();
-
-        HttpRequestMessage? capturedRequest = null;
-        innerHandler.ReturnsResponse(HttpStatusCode.OK, predicate: req =>
-        {
-            capturedRequest = req;
-            return true;
-        });
+        using var innerHandler = new TestHttpHandler();
+        innerHandler.When(_ => true).Respond(HttpStatusCode.OK);
 
         var localeHandler = new LocaleHandler(() => skillRequest) { InnerHandler = innerHandler };
         using var httpClient = new HttpClient(localeHandler) { BaseAddress = new Uri("https://api.amazonalexa.com/") };
@@ -28,19 +22,22 @@ public sealed class LocaleHandlerTests
             new HttpRequestMessage(HttpMethod.Get, new Uri("/test", UriKind.Relative)),
             TestContext.Current.CancellationToken);
 
-        capturedRequest!.Headers.AcceptLanguage
-            .Should().ContainSingle(h => h.Value == locale);
+        // Replaces the old predicate-side-effect capture (a matcher closure smuggling the request
+        // out via a captured local variable) with a real, first-class read from the handler's own
+        // request log - ADR-0051 "Kept separate: global request-log inspection".
+        innerHandler.Requests.Should().ContainSingle()
+            .Which.Headers.AcceptLanguage.Should().ContainSingle(h => h.Value == locale);
     }
 
     [Theory]
-    [InlineAlexaVoxCraftAutoData(null)]
-    [InlineAlexaVoxCraftAutoData("")]
-    [InlineAlexaVoxCraftAutoData("   ")]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
     public async Task SendAsync_WhenLocaleNullOrWhitespace_ThrowsInvalidOperationException(string? locale)
     {
-        var skillRequest = new SkillRequest { Request = new LaunchRequest { Locale = locale } };
-        var innerHandler = Substitute.For<HttpMessageHandler>();
-        innerHandler.ReturnsResponse(HttpStatusCode.OK);
+        var skillRequest = new SkillRequest { Request = new LaunchRequest { Locale = locale! } };
+        using var innerHandler = new TestHttpHandler();
+        innerHandler.When(_ => true).Respond(HttpStatusCode.OK);
 
         var localeHandler = new LocaleHandler(() => skillRequest) { InnerHandler = innerHandler };
         using var httpClient = new HttpClient(localeHandler) { BaseAddress = new Uri("https://api.amazonalexa.com/") };

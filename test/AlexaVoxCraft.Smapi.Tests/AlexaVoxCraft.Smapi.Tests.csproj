@@ -20,10 +20,45 @@
         <PackageReference Include="Verify.XunitV3" />
     </ItemGroup>
 
+  <!-- PLAN-0051 (Compono ecosystem migration): replaces the old AlexaVoxCraft.Http.TestKit
+       ProjectReference (reflection-based HttpMessageHandler fake + AutoFixture wiring, removed) -
+       Compono.Http's TestHttpHandler + Compono.XunitV3's [Compose]/[Shared]. No Compono.NSubstitute
+       - nothing composed in this project needs a substitute (the HttpClient-typed clients are
+       hand-constructed, not composed, per AlexaInteractionModelClientTests.cs's own comment; the
+       one interface dependency, IHttpClientFactory, is satisfied by a plain project-local fake). -->
   <ItemGroup>
-    <ProjectReference Include="..\AlexaVoxCraft.Http.TestKit\AlexaVoxCraft.Http.TestKit.csproj" />
-    <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
+    <PackageReference Include="Compono" />
+    <PackageReference Include="Compono.XunitV3" />
+    <PackageReference Include="Compono.Http" />
   </ItemGroup>
 
+  <!-- Previously only transitive via AlexaVoxCraft.TestKit (now-removed reference chain). -->
+  <ItemGroup>
+    <PackageReference Include="AwesomeAssertions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
+    <!-- Kept directly (was previously only transitive, via the now-removed
+         AlexaVoxCraft.Http.TestKit -> AlexaVoxCraft.TestKit reference) - InteractionModelBuilderTests.cs
+         (an unrelated, non-HTTP test file, out of this migration pass's scope) needs
+         AlexaVoxCraft.Model.Request.Type directly. -->
+    <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+  </ItemGroup>
+
+  <!-- This project no longer references AutoFixture/AutoFixture.Xunit3/NSubstitute/
+       AlexaVoxCraft.TestKit (PLAN-0051 migration - every test here now composes via Compono, and
+       nothing needs a raw NSubstitute double - see the Compono ItemGroup's own comment) - cancel
+       the global usings test/Directory.Build.props adds for every test project by default,
+       matching the Remove-in-project-body pattern that file's own consumers already use
+       elsewhere. Xunit/AwesomeAssertions stay - AwesomeAssertions' .Should() is still used
+       directly in test bodies. -->
+  <ItemGroup>
+    <Using Remove="AutoFixture" />
+    <Using Remove="AutoFixture.Xunit3" />
+    <Using Remove="NSubstitute" />
+    <Using Remove="AlexaVoxCraft.TestKit" />
+    <Using Remove="AlexaVoxCraft.TestKit.Attributes" />
+  </ItemGroup>
 
 </Project>
