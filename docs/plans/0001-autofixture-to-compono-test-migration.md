@@ -90,17 +90,17 @@ test(lambda): remove TestKit dependency
 
 ### Commit 3: Finish MediatR tests migration
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Inventory remaining AutoFixture/NSubstitute/TestKit usage in `AlexaVoxCraft.MediatR.Tests`.
-- [ ] Confirm current `MediatRTestProfile` and fake delegates cover the old AutoFixture/NSubstitute behavior intentionally.
-- [ ] Replace any remaining NSubstitute-style assertions with Compono test doubles or purpose-built fakes.
-- [ ] Remove stale comments unless they document an intentional Compono capability gap.
-- [ ] Remove `AlexaVoxCraft.TestKit` project reference if no longer needed.
-- [ ] Validate `dotnet test test/AlexaVoxCraft.MediatR.Tests/AlexaVoxCraft.MediatR.Tests.csproj --no-build --no-restore`.
-- [ ] Validate solution build.
+- [x] Inventory remaining AutoFixture/NSubstitute/TestKit usage in `AlexaVoxCraft.MediatR.Tests`.
+- [x] Confirm current `MediatRTestProfile` and fake delegates cover the old AutoFixture/NSubstitute behavior intentionally.
+- [x] Replace any remaining NSubstitute-style assertions with Compono test doubles or purpose-built fakes.
+- [x] Remove stale comments unless they document an intentional Compono capability gap.
+- [x] Remove `AlexaVoxCraft.TestKit` project reference if no longer needed.
+- [x] Validate `dotnet test test/AlexaVoxCraft.MediatR.Tests/AlexaVoxCraft.MediatR.Tests.csproj --no-build --no-restore`.
+- [x] Validate solution build (`dotnet build AlexaVoxCraft.slnx --no-restore` passed; existing warnings remain outside this slice).
 
 Suggested commit message:
 
