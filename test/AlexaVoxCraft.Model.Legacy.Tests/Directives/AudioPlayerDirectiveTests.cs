@@ -130,7 +130,7 @@ public sealed class AudioPlayerDirectiveTests
         Assert.Equal("AudioPlayer.Stop", directive.Type);
     }
 
-    // AutoFixture-based tests
+    // Compono-generated model-shape tests
     [Theory, Compose<ModelLegacyProfile>]
     public void AudioPlayerPlayDirective_WithGeneratedData_HasValidProperties(AudioPlayerPlayDirective directive)
     {

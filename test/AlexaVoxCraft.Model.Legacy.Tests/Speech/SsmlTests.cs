@@ -284,7 +284,7 @@ public sealed class SsmlTests
         Assert.Equal(expected, xmlHost.ToXml());
     }
 
-    // AutoFixture-based tests
+    // Compono-generated model-shape tests
     [Theory, Compose<ModelLegacyProfile>]
     public void Speech_WithGeneratedData_GeneratesValidXml(SsmlSpeech speech)
     {

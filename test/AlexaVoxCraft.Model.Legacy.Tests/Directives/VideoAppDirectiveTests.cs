@@ -85,7 +85,7 @@ public sealed class VideoAppDirectiveTests
         public bool? ShouldEndSession => false;
     }
 
-    // AutoFixture-based tests
+    // Compono-generated model-shape tests
     [Theory, Compose<ModelLegacyProfile>]
     public void VideoAppDirective_WithGeneratedData_HasValidProperties(VideoAppDirective directive)
     {

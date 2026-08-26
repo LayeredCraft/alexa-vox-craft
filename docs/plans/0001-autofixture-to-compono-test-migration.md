@@ -51,17 +51,17 @@ test: checkpoint Compono migration baseline
 
 ### Commit 1: Finish Model Legacy migration
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Inventory remaining `ModelAutoData`, `AutoData`, `Frozen`, and `AlexaVoxCraft.TestKit` usage in `AlexaVoxCraft.Model.Legacy.Tests`.
-- [ ] Convert remaining AutoFixture-driven tests to `Compose<ModelLegacyProfile>` or explicit object construction.
-- [ ] Replace misleading comments that say "AutoFixture-based tests" where tests are now Compono/explicit-data based.
-- [ ] Remove the `AlexaVoxCraft.TestKit` project reference if no longer needed.
-- [ ] Keep or refine project-local JSON helpers as needed.
-- [ ] Validate `dotnet test test/AlexaVoxCraft.Model.Legacy.Tests/AlexaVoxCraft.Model.Legacy.Tests.csproj --no-build --no-restore`.
-- [ ] Validate solution build.
+- [x] Inventory remaining `ModelAutoData`, `AutoData`, `Frozen`, and `AlexaVoxCraft.TestKit` usage in `AlexaVoxCraft.Model.Legacy.Tests`.
+- [x] Convert remaining AutoFixture-driven tests to `Compose<ModelLegacyProfile>` or explicit object construction.
+- [x] Replace misleading comments that say "AutoFixture-based tests" where tests are now Compono/explicit-data based.
+- [x] Remove the `AlexaVoxCraft.TestKit` project reference if no longer needed.
+- [x] Keep or refine project-local JSON helpers as needed.
+- [x] Validate `dotnet test test/AlexaVoxCraft.Model.Legacy.Tests/AlexaVoxCraft.Model.Legacy.Tests.csproj --no-build --no-restore`.
+- [x] Validate solution build (`dotnet build AlexaVoxCraft.slnx --no-restore` passed; existing APL Legacy nullable warnings remain outside this slice).
 
 Suggested commit message:
 
