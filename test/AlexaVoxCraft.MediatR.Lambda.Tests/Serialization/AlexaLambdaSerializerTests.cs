@@ -112,7 +112,8 @@ public class AlexaLambdaSerializerTests : TestBase
         _serializer.Serialize(skillResponse, stream);
 
         stream.Position = 0;
-        var json = new StreamReader(stream).ReadToEnd();
+        using var reader = new StreamReader(stream);
+        var json = reader.ReadToEnd();
         json.Should().NotBeNullOrEmpty();
 
         // Verify it's valid JSON by trying to parse it back
@@ -149,7 +150,8 @@ public class AlexaLambdaSerializerTests : TestBase
 
         stream.Length.Should().BeGreaterThan(0);
         stream.Position = 0;
-        var json = new StreamReader(stream).ReadToEnd();
+        using var reader = new StreamReader(stream);
+        var json = reader.ReadToEnd();
         json.Should().Be("null");
     }
 

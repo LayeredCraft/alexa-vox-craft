@@ -10,7 +10,7 @@
 - **📊 Session Management**: Robust session attribute handling with typed attribute serialization
 - **🔧 Pipeline Behaviors**: Request/response interceptors for cross-cutting concerns like logging and validation
 - **💰 In-Skill Purchasing**: Full ISP support with buy/upsell/cancel directives and entitlement checks
-- **🧪 Testing Support**: Comprehensive testing utilities with AutoFixture integration and property-based testing
+- **🧪 Testing Support**: Comprehensive tests using explicit fixtures, focused fakes, and Compono-based composition
 
 ## 📦 Packages
 
@@ -162,7 +162,6 @@ AlexaVoxCraft/
 │   ├── 🧪 AlexaVoxCraft.MediatR.Lambda.Tests/ # Lambda hosting tests
 │   └── 🧪 AlexaVoxCraft.Smapi.Tests/          # SMAPI client tests
 │
-├── 📂 AlexaVoxCraft.TestKit/                  # Testing utilities & AutoFixture support
 └── 📂 docs/                                   # Documentation source
 ```
 
@@ -191,12 +190,12 @@ Skills use the MediatR pattern where:
 
 ## 🧪 Testing
 
-AlexaVoxCraft includes comprehensive testing support:
+AlexaVoxCraft includes comprehensive test coverage using:
 
 - **xUnit v3** with Microsoft.Testing.Platform
-- **AutoFixture** integration for property-based testing
+- **Compono** for source-generated test composition where shared setup improves clarity
+- **Explicit fixtures and focused fakes** for scenario-specific data and behavior-rich seams
 - **AwesomeAssertions** for fluent assertions
-- **TestKit** with specimen builders and test utilities
 
 ## ⚠️ Error Handling
 

@@ -56,9 +56,9 @@ public class SkillMediatorTests : TestBase
     [Compose<MediatRTestProfile>]
     public async Task Send_WithNullSkillId_ThrowsArgumentException(
         SkillRequest skillRequest,
-        IServiceProvider serviceProvider,
-        IOptions<SkillServiceConfiguration> nullConfiguration)
+        IServiceProvider serviceProvider)
     {
+        var nullConfiguration = TestHelper.SkillOptions(skillId: null);
         var mediator = new SkillMediator(serviceProvider, nullConfiguration);
 
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
@@ -70,9 +70,9 @@ public class SkillMediatorTests : TestBase
     [Compose<MediatRTestProfile>]
     public async Task Send_WithEmptySkillId_ThrowsArgumentException(
         SkillRequest skillRequest,
-        IServiceProvider serviceProvider,
-        IOptions<SkillServiceConfiguration> emptyConfiguration)
+        IServiceProvider serviceProvider)
     {
+        var emptyConfiguration = TestHelper.SkillOptions(skillId: string.Empty);
         var mediator = new SkillMediator(serviceProvider, emptyConfiguration);
 
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
@@ -84,9 +84,9 @@ public class SkillMediatorTests : TestBase
     [Compose<MediatRTestProfile>]
     public async Task Send_WithWhitespaceSkillId_ThrowsArgumentException(
         SkillRequest skillRequest,
-        IServiceProvider serviceProvider,
-        IOptions<SkillServiceConfiguration> whitespaceConfiguration)
+        IServiceProvider serviceProvider)
     {
+        var whitespaceConfiguration = TestHelper.SkillOptions(skillId: "   ");
         var mediator = new SkillMediator(serviceProvider, whitespaceConfiguration);
 
         var exception = await Record.ExceptionAsync(() => mediator.Send(skillRequest, CancellationToken));
@@ -115,7 +115,6 @@ public class SkillMediatorTests : TestBase
         IServiceProvider serviceProvider,
         IOptions<SkillServiceConfiguration> validConfiguration)
     {
-        // Ensure skill IDs match using the specimen builder's valid configuration
         skillRequest.Context.System.Application.ApplicationId = validConfiguration.Value.SkillId!;
 
         var mediator = new SkillMediator(serviceProvider, validConfiguration);
