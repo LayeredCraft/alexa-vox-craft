@@ -110,16 +110,16 @@ test(mediatr): complete Compono migration
 
 ### Commit 4: Migrate APL legacy / remaining model-adjacent AutoFixture usage
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Inventory `AlexaVoxCraft.Model.Apl.Legacy.Tests` AutoFixture usage.
-- [ ] Convert only tests that actually depend on AutoFixture/TestKit behavior; leave unrelated tests alone.
-- [ ] Add a local profile/helper only if repeated valid APL object construction needs it.
-- [ ] Remove `AlexaVoxCraft.TestKit` reference from the project if no longer needed.
-- [ ] Validate `dotnet test test/AlexaVoxCraft.Model.Apl.Legacy.Tests/AlexaVoxCraft.Model.Apl.Legacy.Tests.csproj --no-build --no-restore`.
-- [ ] Validate solution build.
+- [x] Inventory `AlexaVoxCraft.Model.Apl.Legacy.Tests` AutoFixture usage.
+- [x] Convert only tests that actually depend on AutoFixture/TestKit behavior; leave unrelated tests alone.
+- [x] Add a local profile/helper only if repeated valid APL object construction needs it.
+- [x] Remove `AlexaVoxCraft.TestKit` reference from the project if no longer needed.
+- [x] Validate `dotnet test test/AlexaVoxCraft.Model.Apl.Legacy.Tests/AlexaVoxCraft.Model.Apl.Legacy.Tests.csproj --no-build --no-restore`.
+- [x] Validate solution build (`dotnet build AlexaVoxCraft.slnx --no-restore` passed with 0 warnings / 0 errors).
 
 Suggested commit message:
 
