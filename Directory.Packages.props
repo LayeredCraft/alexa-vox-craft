@@ -5,7 +5,7 @@
   <ItemGroup Label="AWS Lambda">
     <PackageVersion Include="Amazon.Lambda.Core" Version="3.3.0" />
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.2.0" />
-    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="3.0.0" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="3.0.1" />
   </ItemGroup>
   <ItemGroup Label="LayeredCraft">
     <PackageVersion Include="LayeredCraft.Logging.CompactJsonFormatter" Version="1.1.4" />
@@ -70,8 +70,8 @@
     <PackageVersion Include="Microsoft.Extensions.Options" Version="[11.0.0-preview.6.26359.118, 12.0.0-a)" />
   </ItemGroup>
   <ItemGroup Label="Roslyn / Source Generators">
-    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.6.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.6.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.9.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
   </ItemGroup>
   <ItemGroup Label="Verify">
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
@@ -79,7 +79,7 @@
   </ItemGroup>
   <ItemGroup Label="Testing">
     <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
   </ItemGroup>
@@ -96,12 +96,12 @@
     <PackageVersion Include="Compono.Bogus" Version="0.8.0" />
   </ItemGroup>
   <ItemGroup Label="Reference Assemblies">
-    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.10" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.10" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.10" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.10" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.11" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.11" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.11" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.11" />
   </ItemGroup>
   <ItemGroup Label="Utilities">
-    <PackageVersion Include="MinimalLambda" Version="2.6.0" />
+    <PackageVersion Include="MinimalLambda" Version="2.7.0" />
   </ItemGroup>
 </Project>
