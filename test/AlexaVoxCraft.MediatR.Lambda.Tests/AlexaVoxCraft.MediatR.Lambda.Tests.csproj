@@ -28,12 +28,5 @@
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Using Remove="AutoFixture" />
-        <Using Remove="AutoFixture.Xunit3" />
-        <Using Remove="NSubstitute" />
-        <Using Remove="AlexaVoxCraft.TestKit" />
-        <Using Remove="AlexaVoxCraft.TestKit.Attributes" />
-    </ItemGroup>
 
 </Project>

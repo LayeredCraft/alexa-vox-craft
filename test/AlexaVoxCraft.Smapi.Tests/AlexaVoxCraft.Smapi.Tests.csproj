@@ -53,12 +53,5 @@
        matching the Remove-in-project-body pattern that file's own consumers already use
        elsewhere. Xunit/AwesomeAssertions stay - AwesomeAssertions' .Should() is still used
        directly in test bodies. -->
-  <ItemGroup>
-    <Using Remove="AutoFixture" />
-    <Using Remove="AutoFixture.Xunit3" />
-    <Using Remove="NSubstitute" />
-    <Using Remove="AlexaVoxCraft.TestKit" />
-    <Using Remove="AlexaVoxCraft.TestKit.Attributes" />
-  </ItemGroup>
 
 </Project>

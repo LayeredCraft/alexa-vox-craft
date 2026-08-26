@@ -17,11 +17,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj"/>
+        <PackageReference Include="AwesomeAssertions" />
+        <PackageReference Include="Verify.XunitV3" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Verify.XunitV3" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
     </ItemGroup>
     <ItemGroup>
         <!-- Embed all JSON fixtures under Examples/ -->

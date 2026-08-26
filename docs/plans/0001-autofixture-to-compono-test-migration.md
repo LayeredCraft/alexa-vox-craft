@@ -129,20 +129,20 @@ test(apl-legacy): migrate AutoFixture tests to Compono
 
 ### Commit 5: Remove shared AutoFixture/NSubstitute test infrastructure
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Confirm no test project depends on `AlexaVoxCraft.TestKit` for AutoFixture/NSubstitute behavior.
-- [ ] Delete remaining `*AutoDataAttribute` files.
-- [ ] Delete remaining AutoFixture specimen builders/customizations/specifications.
-- [ ] Remove AutoFixture package references.
-- [ ] Remove `AutoFixture`, `AutoFixture.Xunit3`, and `NSubstitute` global usings from `test/Directory.Build.props`.
-- [ ] Remove NSubstitute package references where no longer used.
-- [ ] Decide whether `AlexaVoxCraft.TestKit` should be deleted entirely or retained only for non-AutoFixture utilities.
-- [ ] Validate `rg "AutoFixture|AutoData|InlineAutoData|Frozen|NSubstitute|Substitute\\.For|Received\\(|Arg\\." test -g '!bin/**' -g '!obj/**'` returns only intentional historical comments or no matches.
-- [ ] Validate `dotnet build AlexaVoxCraft.slnx --no-restore`.
-- [ ] Validate `dotnet test AlexaVoxCraft.slnx --no-build --no-restore`.
+- [x] Confirm no test project depends on `AlexaVoxCraft.TestKit` for AutoFixture/NSubstitute behavior.
+- [x] Delete remaining `*AutoDataAttribute` files.
+- [x] Delete remaining AutoFixture specimen builders/customizations/specifications.
+- [x] Remove AutoFixture package references.
+- [x] Remove `AutoFixture`, `AutoFixture.Xunit3`, and `NSubstitute` global usings from `test/Directory.Build.props`.
+- [x] Remove NSubstitute package references where no longer used.
+- [x] Decide whether `AlexaVoxCraft.TestKit` should be deleted entirely or retained only for non-AutoFixture utilities.
+- [x] Validate `rg "AutoFixture|AutoData|InlineAutoData|Frozen|NSubstitute|Substitute\\.For|Received\\(|Arg\\." test -g '!bin/**' -g '!obj/**'` returns only intentional historical comments or no matches.
+- [x] Validate `dotnet build AlexaVoxCraft.slnx --no-restore`.
+- [x] Validate `dotnet test AlexaVoxCraft.slnx --no-build --no-restore`.
 
 Suggested commit message:
 

@@ -11,6 +11,7 @@
         <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="AwesomeAssertions" />
         <PackageReference Include="Verify.XunitV3" />
     </ItemGroup>
     <ItemGroup>
@@ -23,7 +24,7 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
       <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.InSkillPurchasing\AlexaVoxCraft.Model.InSkillPurchasing.csproj" />
-      <ProjectReference Include="..\AlexaVoxCraft.TestKit\AlexaVoxCraft.TestKit.csproj" />
     </ItemGroup>
 </Project>

@@ -53,12 +53,5 @@
          interface double is now Compono.TestDoubles-generated; TestBase.CreateSubstitute<T>()
          removed, it had gone unused since Stage 1). AwesomeAssertions stays for the same reason
          as ADR-0051's Smapi.Tests precedent. -->
-    <ItemGroup>
-        <Using Remove="AutoFixture" />
-        <Using Remove="AutoFixture.Xunit3" />
-        <Using Remove="NSubstitute" />
-        <Using Remove="AlexaVoxCraft.TestKit" />
-        <Using Remove="AlexaVoxCraft.TestKit.Attributes" />
-    </ItemGroup>
 
 </Project>

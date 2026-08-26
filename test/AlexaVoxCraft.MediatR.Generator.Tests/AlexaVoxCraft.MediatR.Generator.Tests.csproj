@@ -46,13 +46,6 @@
       <Folder Include="Snapshots\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Using Remove="AutoFixture" />
-      <Using Remove="AutoFixture.Xunit3" />
-      <Using Remove="NSubstitute" />
-      <Using Remove="AlexaVoxCraft.TestKit" />
-      <Using Remove="AlexaVoxCraft.TestKit.Attributes" />
-    </ItemGroup>
     
     <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
       <PackageReference Include="Basic.Reference.Assemblies.Net100" />
