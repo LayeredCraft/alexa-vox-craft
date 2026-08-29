@@ -26,6 +26,7 @@
         <PackageReference Include="Compono" />
         <PackageReference Include="Compono.XunitV3" />
         <PackageReference Include="Compono.TestDoubles" />
+        <PackageReference Include="Compono.Logging" />
     </ItemGroup>
 
     <ItemGroup>

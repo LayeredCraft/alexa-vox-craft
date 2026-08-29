@@ -1,10 +1,10 @@
 using Compono;
+using Compono.Logging;
 using Compono.XunitV3;
 using AlexaVoxCraft.MediatR.Tests.TestKit;
 using AlexaVoxCraft.MediatR.Pipeline;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
-using LayeredCraft.StructuredLogging.Testing;
 using Microsoft.Extensions.Logging;
 
 namespace AlexaVoxCraft.MediatR.Tests.Pipeline;
@@ -15,7 +15,7 @@ public class PerformanceLoggingBehaviorTests : TestBase
     [Theory]
     [Compose<MediatRTestProfile>]
     public async Task Handle_WithSuccessfulRequest_LogsDebugMessages(
-        [Shared] ILogger<PerformanceLoggingBehavior> logger,
+        ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
         [Shared] FakeRequestHandlerDelegate next,
@@ -32,17 +32,16 @@ public class PerformanceLoggingBehaviorTests : TestBase
         // Assert
         result.Should().Be(expectedResponse);
 
-        // Verify logging using structured logging testing extensions
-        var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
-        testLogger.AssertLogCount(LogLevel.Debug, 2);
-        testLogger.HasLogEntry(LogLevel.Debug, "Processing Alexa skill request").Should().BeTrue();
-        testLogger.HasLogEntry(LogLevel.Debug, "Successfully processed Alexa skill request").Should().BeTrue();
+        // Verify logging using Compono.Logging
+        logger.GetCapturedEntries().Count(e => e.LogLevel == LogLevel.Debug).Should().Be(2);
+        logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Processing Alexa skill request").Once();
+        logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Successfully processed Alexa skill request").Once();
     }
 
     [Theory]
     [Compose<MediatRTestProfile>]
     public async Task Handle_WithException_LogsErrorAndRethrows(
-        [Shared] ILogger<PerformanceLoggingBehavior> logger,
+        ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
         [Shared] FakeRequestHandlerDelegate next,
@@ -59,17 +58,19 @@ public class PerformanceLoggingBehaviorTests : TestBase
 
         exception.Should().Be(expectedException);
 
-        // Verify error logging using structured logging testing extensions
-        var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
-        testLogger.AssertLogCount(LogLevel.Error, 1);
-        testLogger.HasLogEntry(LogLevel.Error, "Failed to process Alexa skill request").Should().BeTrue();
-        testLogger.HasLogEntryWithException<InvalidOperationException>(LogLevel.Error).Should().BeTrue();
+        // Verify error logging using Compono.Logging
+        logger.GetCapturedEntries().Count(e => e.LogLevel == LogLevel.Error).Should().Be(1);
+        logger.Verify()
+            .AtLevel(LogLevel.Error)
+            .WithMessageContaining("Failed to process Alexa skill request")
+            .WithException<InvalidOperationException>()
+            .Once();
     }
 
     [Theory]
     [Compose<MediatRTestProfile>]
     public async Task Handle_WithIntentRequest_LogsIntentName(
-        [Shared] ILogger<PerformanceLoggingBehavior> logger,
+        ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         [Shared] IHandlerInput handlerInput,
         [Shared] FakeRequestHandlerDelegate next,
@@ -84,16 +85,14 @@ public class PerformanceLoggingBehaviorTests : TestBase
         await behavior.Handle(handlerInput, CancellationToken, next);
 
         // Assert
-        var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
-        testLogger.HasLogEntry(LogLevel.Debug, "Processing Alexa skill request").Should().BeTrue();
-        var debugEntries = testLogger.GetLogEntriesContaining("TestIntent");
-        debugEntries.Should().NotBeEmpty();
+        logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Processing Alexa skill request").Once();
+        logger.GetCapturedEntries().Where(e => e.Message.Contains("TestIntent")).Should().NotBeEmpty();
     }
 
     [Theory]
     [Compose<MediatRTestProfile>]
     public async Task Handle_WithNonIntentRequest_LogsWithoutIntentName(
-        [Shared] ILogger<PerformanceLoggingBehavior> logger,
+        ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         [Shared] IHandlerInput handlerInput,
         [Shared] FakeRequestHandlerDelegate next,
@@ -108,15 +107,14 @@ public class PerformanceLoggingBehaviorTests : TestBase
         await behavior.Handle(handlerInput, CancellationToken, next);
 
         // Assert
-        var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
-        testLogger.HasLogEntry(LogLevel.Debug, "Processing Alexa skill request").Should().BeTrue();
-        testLogger.AssertLogCount(LogLevel.Debug, 2);
+        logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Processing Alexa skill request").Once();
+        logger.GetCapturedEntries().Count(e => e.LogLevel == LogLevel.Debug).Should().Be(2);
     }
 
     [Theory]
     [Compose<MediatRTestProfile>]
     public async Task Handle_CallsNextDelegate_ExactlyOnce(
-        [Shared] TestLogger<PerformanceLoggingBehavior> logger,
+        ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
         [Shared] FakeRequestHandlerDelegate next,
@@ -137,7 +135,7 @@ public class PerformanceLoggingBehaviorTests : TestBase
     [Theory]
     [Compose<MediatRTestProfile>]
     public async Task Handle_CreatesProperScope_WithRequestContext(
-        [Shared] ILogger<PerformanceLoggingBehavior> logger,
+        ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
         [Shared] FakeRequestHandlerDelegate next,
@@ -152,10 +150,9 @@ public class PerformanceLoggingBehaviorTests : TestBase
         await behavior.Handle(handlerInput, CancellationToken, next);
 
         // Assert - scope creation and proper logging should occur
-        var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
-        testLogger.AssertLogCount(LogLevel.Debug, 2);
-        testLogger.HasLogEntry(LogLevel.Debug, "Processing Alexa skill request").Should().BeTrue();
-        testLogger.HasLogEntry(LogLevel.Debug, "Successfully processed Alexa skill request").Should().BeTrue();
+        logger.GetCapturedEntries().Count(e => e.LogLevel == LogLevel.Debug).Should().Be(2);
+        logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Processing Alexa skill request").Once();
+        logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Successfully processed Alexa skill request").Once();
     }
 
     [Theory]
@@ -171,7 +168,7 @@ public class PerformanceLoggingBehaviorTests : TestBase
     [Theory]
     [Compose<MediatRTestProfile>]
     public async Task Handle_LogsRequestTypeAndApplicationId(
-        [Shared] ILogger<PerformanceLoggingBehavior> logger,
+        ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         [Shared] IHandlerInput handlerInput,
         [Shared] FakeRequestHandlerDelegate next,
@@ -186,9 +183,7 @@ public class PerformanceLoggingBehaviorTests : TestBase
         await behavior.Handle(handlerInput, CancellationToken, next);
 
         // Assert
-        var testLogger = (TestLogger<PerformanceLoggingBehavior>)logger;
-        var debugEntries = testLogger.GetLogEntriesContaining("LaunchRequest");
-        debugEntries.Should().NotBeEmpty();
-        testLogger.AssertLogCount(LogLevel.Debug, 2);
+        logger.GetCapturedEntries().Where(e => e.Message.Contains("LaunchRequest")).Should().NotBeEmpty();
+        logger.GetCapturedEntries().Count(e => e.LogLevel == LogLevel.Debug).Should().Be(2);
     }
 }
