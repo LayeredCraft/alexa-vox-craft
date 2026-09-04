@@ -35,6 +35,27 @@ public sealed class IntentTests() : TestBase<IntentTests>
     }
 
     [Fact]
+    public void Signature_NamespaceAndAction_ParsesBoth()
+    {
+        var intent = new Intent { Name = "AMAZON.CancelIntent" };
+
+        intent.Signature.Namespace.Should().Be("AMAZON");
+        intent.Signature.Action.Should().Be("CancelIntent");
+    }
+
+    [Fact]
+    public void Signature_ComplexIntentWithEntityProperty_ParsesEntityAndProperty()
+    {
+        var intent = new Intent { Name = "AMAZON.SearchAction<object@WeatherForecast[weatherCondition]>" };
+
+        intent.Signature.Namespace.Should().Be("AMAZON");
+        intent.Signature.Action.Should().Be("SearchAction");
+        intent.Signature.Properties.Should().ContainSingle();
+        intent.Signature.Properties["object"].Entity.Should().Be("WeatherForecast");
+        intent.Signature.Properties["object"].Property.Should().Be("weatherCondition");
+    }
+
+    [Fact]
     public void Signature_BuiltInIntentWithProperties_ParsesNamespaceActionAndProperties()
     {
         var intent = new Intent { Name = "AMAZON.AddAction<object@Book,targetCollection@ReadingList>" };
