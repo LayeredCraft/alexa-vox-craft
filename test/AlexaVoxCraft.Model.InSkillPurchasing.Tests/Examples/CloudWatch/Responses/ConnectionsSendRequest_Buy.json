@@ -1,0 +1,94 @@
+{
+  "version": "1.0",
+  "sessionAttributes": {
+    "UserContext": {
+      "$type": "guest",
+      "AlexaUserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+      "IsLinked": false,
+      "entitledProducts": [
+        {
+          "productId": "amzn1.adg.product.5e8ec9a9-ff64-4569-ac34-3cb66c852e4c",
+          "name": "Disney Parks Pack",
+          "type": "ENTITLEMENT",
+          "summary": "Explore the magic of Disney Parks with trivia about attractions, resorts, lands, entertainment, and unforgettable park experiences from around the world.",
+          "purchasable": "NOT_PURCHASABLE",
+          "entitled": "ENTITLED",
+          "entitlementReason": "PURCHASED",
+          "referenceName": "ent-disney-parks",
+          "activeEntitlementCount": 1,
+          "purchaseMode": "TEST",
+          "startTime": "0001-01-01T00:00:00+00:00",
+          "endTime": "0001-01-01T00:00:00+00:00"
+        }
+      ],
+      "purchasableProducts": [
+        {
+          "productId": "amzn1.adg.product.09ec74a2-745a-407f-bd4c-960bf5a97d0e",
+          "name": "Pixar Pack",
+          "type": "ENTITLEMENT",
+          "summary": "Unlock Pixar trivia categories.",
+          "purchasable": "PURCHASABLE",
+          "entitled": "NOT_ENTITLED",
+          "entitlementReason": "NOT_PURCHASED",
+          "referenceName": "ent-pixar",
+          "activeEntitlementCount": 0,
+          "purchaseMode": "TEST",
+          "startTime": "0001-01-01T00:00:00+00:00",
+          "endTime": "0001-01-01T00:00:00+00:00"
+        }
+      ]
+    },
+    "repeatModel": {
+      "$type": "productList",
+      "Speech": "Question packs available for purchase right now are Pixar Pack. To learn more about a pack, say 'tell me more about' followed by the pack name. If you're ready to buy, say 'buy' followed by the pack name. What can I help you with?",
+      "Reprompt": "I didn't catch that. What can I help you with?",
+      "Products": [
+        {
+          "Name": "Pixar Pack",
+          "ReferenceName": "ent-pixar"
+        }
+      ],
+      "HintText": "buy \"product name\""
+    },
+    "PriorContextType": "WelcomeFlow",
+    "currentGame": {
+      "GameQuestions": {},
+      "CorrectAnswerIndex": 0,
+      "CurrentScore": 0,
+      "CurrentQuestionIndex": 0,
+      "CorrectAnswerText": "",
+      "QuestionText": "",
+      "Answers": [],
+      "CategoryId": "general"
+    },
+    "ConversationContext": {
+      "Type": 3,
+      "SubContext": "Browsing",
+      "Metadata": {
+        "CreatedAt": "2026-09-04T16:22:35.7312608+00:00",
+        "LastUpdated": "2026-09-04T16:22:35.7312651+00:00",
+        "LastHandler": null,
+        "TransitionCount": 1,
+        "UserIdentifier": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "IsAuthenticated": false,
+        "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000"
+      },
+      "Data": {}
+    }
+  },
+  "response": {
+    "shouldEndSession": true,
+    "directives": [
+      {
+        "token": "8e8fb7f858ca45729aa822d43fdb585e",
+        "payload": {
+          "InSkillProduct": {
+            "productId": "amzn1.adg.product.09ec74a2-745a-407f-bd4c-960bf5a97d0e"
+          }
+        },
+        "type": "Connections.SendRequest",
+        "name": "Buy"
+      }
+    ]
+  }
+}

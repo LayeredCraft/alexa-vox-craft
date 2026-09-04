@@ -80,10 +80,20 @@ Tasks:
       at `test/AlexaVoxCraft.Model.Tests/Examples/Requests/SessionEndedRequest.json` (pre-existing,
       non-legacy) — no gap, no action needed.
 - [x] Still missing from both log groups, deferred to Commit 2/3 as legacy-fallback candidates (this
-      skill doesn't exercise these interfaces): ISP/Connections directives (`Connections.SendRequest`
-      for print tasks — legacy has `PrintPDFConnection.json`/`PrintWebPageConnection.json`/
-      `PrintImageConnection.json`/`ConnectionsResponseRequest.json`), and the legacy-only
-      AudioPlayer/Dialog/Display/VideoApp directive fixtures.
+      skill doesn't exercise these interfaces): print-task Connections directives (legacy has
+      `PrintPDFConnection.json`/`PrintWebPageConnection.json`/`PrintImageConnection.json`), and the
+      legacy-only AudioPlayer/Dialog/Display/VideoApp directive fixtures.
+- [x] Re-pulled both log groups after a second manual test pass covering more scenarios (prod 42→66,
+      dev 182→216 events). New shapes found and landed: `AMAZON.StopIntent`, `DontKnowIntent`
+      (→ `Model.Tests/Examples/CloudWatch/Requests/`); ISP flow — `BuyIntent`, `WhatCanIBuyIntent`,
+      `ProductDetailIntent`, `Connections.Response`/`Buy` request, `Connections.SendRequest`/`Buy`
+      response directive (→ `Model.InSkillPurchasing.Tests/Examples/CloudWatch/`, which already has
+      its own non-legacy Verify-based suite — this fills the ISP gap noted above without needing the
+      legacy print-connection fixtures). `SessionEndedRequest` (reason `USER_INITIATED`) also
+      appeared live, confirming the pre-existing `Model.Tests/Examples/Requests/SessionEndedRequest.json`
+      fixture's shape is representative; left as-is. All 7 new fixtures scrubbed and manually
+      re-verified clean (per-turn `Connections` correlation tokens and `amzn1.adg.product.*` catalog
+      ids left unscrubbed — not user-identifying).
 - [x] Scrubbed all 15 fixtures: `amzn1.ask.account.*`, `amzn1.ask.device.*`,
       `amzn1.echo-api.session.*`, `amzn1.echo-api.request.*` replaced with zero-padded fakes; any
       JWT-shaped string (`eyJ...`) redacted regardless of source env. Manually re-grepped every
