@@ -1,0 +1,9 @@
+﻿{
+  "FromVersion": "1.0.0",
+  "ToVersion": "1.0.1",
+  "PackageId": "WeatherWidget",
+  "Type": "Alexa.DataStore.PackageManager.UpdateRequest",
+  "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "Locale": "en-US",
+  "Timestamp": "DateTime_1"
+}

@@ -522,20 +522,38 @@ test(model-apl): add APLDocument/Package/Layout/Gradient/VectorGraphic coverage
 
 ### Commit 12: Model.Apl.Tests — DataStore and remaining APL request types
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Port `DataStoreClientTests.cs` (4 tests) and `DataStoreCommandTests.cs` (5 tests:
-      `SendIndexListDataDirective`/`SendTokenListDataDirective`/`UpdateIndexListDataDirective`) as
-      response-side serialize.
-- [ ] Port `AudioTests.cs` (8 tests: APL `Audio` component/track config) as response-side serialize.
-- [ ] Close the remaining `RequestTests.cs` (Apl) gaps beyond `UserEventRequest` (already covered):
-      `LoadIndexListDataRequest`, `LoadTokenListDataRequest`, `RuntimeErrorRequest`,
-      `DataStoreErrorRequest`/`InstallationErrorRequest`, `UsagesInstalledRequest`,
-      `UsagesRemovedRequest`, `UpdateRequest`. All request-side, deserialize, added to
-      `APLSkillRequestTests`.
-- [ ] Validate all 4 TFMs, solution build.
+- [x] Ported `DataStoreCommandTests.cs` (5 types: `PutNamespace`, `RemoveNamespace`, `Clear`,
+      `PutObject`, `PutObjectArray`) into `DataStore/DataStoreCommandTests.cs` as response-side
+      serialize — these are commands the skill sends via `DataStoreClient.Commands()`.
+- [x] Ported `DataStoreClientTests.cs` into `DataStore/DataStoreClientTests.cs`, but not as
+      serialize-only: `AccessTokenClient`/`DataStoreClient` are genuinely bidirectional HTTP clients
+      (send a request body, parse a response body), the same category as `ProgressiveResponse` in
+      Commit 4 — rewritten against `Compono.Http.TestHttpHandler` instead of legacy's bespoke
+      `ActionHandler` mock, matching that precedent. Added a `Compono.Http` package reference to
+      `Model.Apl.Tests.csproj` (didn't have one yet). One correction found while porting:
+      `TestHttpHandler.OnGet(path)` matches on `PathAndQuery`, so a registration has to include the
+      query string when the real request will carry one — not a library bug, a fixture-writing
+      mistake, fixed in the test.
+- [x] Ported `AudioTests.cs` (fresh read — 8 legacy tests, 2 of which had no hand-built legacy
+      example: `APLADocument`/`APLARenderDocument`) into `Components/AudioTests.cs`: `APLADocument`,
+      `Audio` (with filters), `Mixer`, `Selector`, `Sequencer`, `Silence`, `Speech` — 7 tests,
+      response-side serialize, hand-constructed (skipped the separate `APLARenderDocument` directive
+      wrapper as redundant once `APLADocument` itself is covered).
+- [x] Closed the remaining `RequestTests.cs` (Apl) gaps beyond `UserEventRequest` (already covered) in
+      a new `Request/APLRequestTypeTests.cs`: `LoadIndexListDataRequest`, `LoadTokenListDataRequest`,
+      `RuntimeErrorRequest`, `UsagesInstalledRequest`, `UsagesRemovedRequest`, `UpdateRequest`,
+      `InstallationError`, and `DataStoreErrorRequest` (both the storage-error and device-error
+      variants, exercising the `DataStoreErrorConverter` discriminator). All request-side deserialize,
+      fixtures built fresh under `Examples/Requests/`. Skipped legacy's `CanReadSessionAttributes`
+      (generic session-attribute presence check, already covered elsewhere) alongside `UserEventRequest`.
+- [x] No suspected library bugs found.
+- [x] Validated all 4 TFMs: 171/171 passing (146 pre-existing + 25 new: 5 DataStore commands + 4
+      DataStore client + 7 Audio + 9 request types), no stray `.received.*` files. Validated solution
+      build: 0 errors.
 
 Suggested commit message:
 

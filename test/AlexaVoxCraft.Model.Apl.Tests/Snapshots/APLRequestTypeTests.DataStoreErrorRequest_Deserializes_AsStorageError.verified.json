@@ -1,0 +1,19 @@
+﻿{
+  "Error": {
+    "Content": {
+      "Message": "Storage limit exceeded for this device.",
+      "FailedCommand": {
+        "Content": {},
+        "Namespace": "namespace-from-the-command",
+        "Key": "key-from-the-command",
+        "Type": "PUT_OBJECT"
+      },
+      "DeviceId": "device-id"
+    },
+    "Type": "STORAGE_LIMIT_EXCEEDED"
+  },
+  "Type": "Alexa.DataStore.DataStoreError",
+  "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "Locale": "en-US",
+  "Timestamp": "DateTime_1"
+}

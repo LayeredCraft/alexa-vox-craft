@@ -1,0 +1,1 @@
+﻿{"type":"Audio","source":"https://example.com/audio/clip.mp3","filter":[{"type":"FadeIn","duration":1000},{"type":"Trim","start":0,"end":5000}]}
