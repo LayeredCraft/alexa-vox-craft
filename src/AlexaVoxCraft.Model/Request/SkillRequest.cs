@@ -14,7 +14,7 @@ public class SkillRequest
     /// This indicates the format version used by the Alexa service.
     /// </summary>
     [JsonPropertyName("version")]
-    public string Version { get; set; }
+    public string Version { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the session information for this request.
@@ -22,27 +22,27 @@ public class SkillRequest
     /// May be null for certain request types that don't use sessions.
     /// </summary>
     [JsonPropertyName("session")]
-    public Session Session { get; set; }
+    public Session Session { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the context information including device capabilities and state.
     /// Provides information about the device making the request and available interfaces.
     /// </summary>
     [JsonPropertyName("context")]
-    public Context Context { get; set; }
+    public Context Context { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the actual request data containing the specific request details.
     /// This could be an intent request, launch request, session ended request, or other request types.
     /// </summary>
     [JsonPropertyName("request")]
-    public Type.Request Request { get; set; }
+    public Type.Request Request { get; set; } = null!;
 
     /// <summary>
     /// Gets the runtime type of the request for use in request routing and handling.
     /// </summary>
     /// <returns>The runtime type of the request, or null if no request is set.</returns>
-    public System.Type GetRequestType()
+    public System.Type? GetRequestType()
     {
         return Request?.GetType();
     }

@@ -21,5 +21,5 @@ public class AskForPermissionPayload
     public string Version { get; set; } = "1";
 
     [JsonPropertyName("permissionScope")]
-    public string PermissionScope { get; set; }
+    public string PermissionScope { get; set; } = null!;
 }

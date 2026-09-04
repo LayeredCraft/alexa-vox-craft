@@ -15,7 +15,7 @@ public class AlexaName : ICommonSsml
         PersonId = personId;
     }
 
-    public string PersonId { get; set; }
+    public string PersonId { get; set; } = null!;
 
     public XNode ToXml()
     {

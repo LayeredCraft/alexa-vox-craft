@@ -19,7 +19,7 @@ public class ScheduleFoodEstablishmentReservation : IConnectionTask
 
     [JsonPropertyName("context")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public ConnectionTaskContext Context { get; set; }
+    public ConnectionTaskContext Context { get; set; } = null!;
 
     [JsonPropertyName("partySize")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -31,5 +31,5 @@ public class ScheduleFoodEstablishmentReservation : IConnectionTask
     public DateTime? StartTime { get; set; }
 
     [JsonPropertyName("restaurant")]
-    public Restaurant Restaurant { get; set; }
+    public Restaurant Restaurant { get; set; } = null!;
 }

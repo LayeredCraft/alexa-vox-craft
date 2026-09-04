@@ -5,5 +5,5 @@ namespace AlexaVoxCraft.Model.Request;
 public class ResolutionStatus
 {
     [JsonPropertyName("code")]
-    public string Code { get; set; }
+    public string Code { get; set; } = null!;
 }

@@ -14,5 +14,5 @@ public class AudioItemSource
     }
 
     [JsonPropertyName("url"), JsonRequired]
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 }

@@ -4,9 +4,9 @@ namespace AlexaVoxCraft.Model.Response.Ssml;
 
 public class Prosody : ICommonSsml
 {
-    public string Rate { get; set; }
-    public string Pitch { get; set; }
-    public string Volume { get; set; }
+    public string Rate { get; set; } = null!;
+    public string Pitch { get; set; } = null!;
+    public string Volume { get; set; } = null!;
 
     public Prosody() { }
 

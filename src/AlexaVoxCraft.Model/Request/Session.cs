@@ -9,14 +9,14 @@ public class Session
     public bool New { get; set; }
 
     [JsonPropertyName("sessionId")]
-    public string SessionId { get; set; }
+    public string SessionId { get; set; } = null!;
 
     [JsonPropertyName("attributes")]
     public Dictionary<string, JsonElement>? Attributes { get; set; }
 
     [JsonPropertyName("application")]
-    public Application Application { get; set; }
+    public Application Application { get; set; } = null!;
 
     [JsonPropertyName("user")]
-    public User User { get; set; }
+    public User User { get; set; } = null!;
 }

@@ -16,7 +16,7 @@ public class SkillResponse
     /// </summary>
     [JsonRequired]
     [JsonPropertyName("version")]
-    public string Version { get; set; }
+    public string Version { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the session attributes to persist for the next request in the same session.
@@ -33,5 +33,5 @@ public class SkillResponse
     /// </summary>
     [JsonRequired]
     [JsonPropertyName("response")]
-    public ResponseBody Response { get; set; }
+    public ResponseBody Response { get; set; } = null!;
 }

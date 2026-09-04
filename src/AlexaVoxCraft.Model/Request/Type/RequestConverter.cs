@@ -61,6 +61,10 @@ public class RequestConverter : JsonConverter<Request>
             IDataDrivenRequestTypeResolver dataDriven => dataDriven.Resolve(root),
             _ => typeResolver.Resolve(requestType)
         };
+        if (target is null)
+        {
+            throw new ArgumentOutOfRangeException(nameof(requestType), $"Unable to resolve a CLR type for request type: {requestType}.");
+        }
         var json = root.GetRawText();
         return (Request?)JsonSerializer.Deserialize(json, target, options);
     }

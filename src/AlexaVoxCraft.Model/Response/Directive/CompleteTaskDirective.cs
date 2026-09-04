@@ -16,5 +16,5 @@ public class CompleteTaskDirective : IDirective
     public string Type => DirectiveType;
 
     [JsonPropertyName("status")]
-    public ConnectionStatus Status { get; set; }
+    public ConnectionStatus Status { get; set; } = null!;
 }

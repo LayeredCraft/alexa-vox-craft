@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Request;
 
 public class Intent
 {
-    private string _name;
+    private string _name = null!;
 
     [JsonPropertyName("name")]
     public string Name
@@ -18,12 +18,12 @@ public class Intent
     }
 
     [JsonIgnore]
-    public IntentSignature Signature { get; private set; }
+    public IntentSignature Signature { get; private set; } = null!;
 
 
     [JsonPropertyName("confirmationStatus")]
-    public string ConfirmationStatus { get; set; }
+    public string ConfirmationStatus { get; set; } = null!;
 
     [JsonPropertyName("slots")]
-    public Dictionary<string, Slot> Slots { get; set; }
+    public Dictionary<string, Slot> Slots { get; set; } = null!;
 }

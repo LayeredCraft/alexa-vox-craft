@@ -4,8 +4,8 @@ namespace AlexaVoxCraft.Model.Response.Ssml;
 
 public class Break : ICommonSsml
 {
-    public string Time { get; set; }
-    public string Strength { get; set; }
+    public string Time { get; set; } = null!;
+    public string Strength { get; set; } = null!;
 
     public XNode ToXml()
     {

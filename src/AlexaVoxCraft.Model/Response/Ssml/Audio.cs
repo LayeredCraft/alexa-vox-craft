@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Response.Ssml;
 
 public class Audio : ISsml
 {
-    public string Source { get; set; }
+    public string Source { get; set; } = null!;
     public List<ISsml> Elements { get; set; } = [];
 
     public Audio() { }

@@ -5,7 +5,7 @@ namespace AlexaVoxCraft.Model.Request;
 public class Permissions
 {
     [JsonPropertyName("consentToken"), Obsolete("ConsentToken is deprecated, please use SkillRequest.Context.System.ApiAccessToken")]
-    public string ConsentToken { get; set; }
+    public string ConsentToken { get; set; } = null!;
 
     [JsonPropertyName("scopes")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

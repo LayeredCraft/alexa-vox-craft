@@ -5,5 +5,5 @@ namespace AlexaVoxCraft.Model.Request;
 public class Application
 {
     [JsonPropertyName("applicationId")]
-    public string ApplicationId { get; set; }
+    public string ApplicationId { get; set; } = null!;
 }

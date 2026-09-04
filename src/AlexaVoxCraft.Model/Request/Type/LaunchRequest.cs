@@ -6,5 +6,5 @@ public class LaunchRequest : Request
 {
     [JsonPropertyName("task")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public LaunchRequestTask Task { get; set; }
+    public LaunchRequestTask Task { get; set; } = null!;
 }

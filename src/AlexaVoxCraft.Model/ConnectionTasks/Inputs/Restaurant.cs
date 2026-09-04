@@ -11,8 +11,8 @@ public class Restaurant
     public string Version => 1.ToString();
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [JsonPropertyName("location")]
-    public PostalAddress Location { get; set; }
+    public PostalAddress Location { get; set; } = null!;
 }

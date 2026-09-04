@@ -12,13 +12,13 @@ public class StandardCard : ICard
 
     [JsonRequired]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = null!;
 
     [JsonRequired]
     [JsonPropertyName("text")]
-    public string Content { get; set; }
+    public string Content { get; set; } = null!;
 
     [JsonPropertyName("image")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public CardImage Image { get; set; }
+    public CardImage Image { get; set; } = null!;
 }

@@ -5,8 +5,8 @@ namespace AlexaVoxCraft.Model.Request.Type;
 public class SessionResumedRequest : Request
 {
     [JsonPropertyName("originIpAddress")]
-    public string OriginIpAddress { get; set; }
+    public string OriginIpAddress { get; set; } = null!;
 
     [JsonPropertyName("cause")]
-    public SessionResumedRequestCause Cause { get; set; }
+    public SessionResumedRequestCause Cause { get; set; } = null!;
 }

@@ -18,7 +18,7 @@ public class VideoAppDirective : IEndSessionDirective
     [JsonPropertyName("type")] public string Type => DirectiveType;
 
     [JsonPropertyName("videoItem"), JsonRequired]
-    public VideoItem VideoItem { get; set; }
+    public VideoItem VideoItem { get; set; } = null!;
 
     [JsonIgnore]
     public bool? ShouldEndSession => null;

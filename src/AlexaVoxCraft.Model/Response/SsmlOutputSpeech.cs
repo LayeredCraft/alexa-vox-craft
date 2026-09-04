@@ -23,7 +23,7 @@ public class SsmlOutputSpeech : IOutputSpeech
 
     [JsonRequired]
     [JsonPropertyName("ssml")]
-    public string Ssml { get; set; }
+    public string Ssml { get; set; } = null!;
 
     [JsonPropertyName("playBehavior")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

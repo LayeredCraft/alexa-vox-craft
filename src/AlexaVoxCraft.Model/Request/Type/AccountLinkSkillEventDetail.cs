@@ -5,5 +5,5 @@ namespace AlexaVoxCraft.Model.Request.Type;
 public class AccountLinkSkillEventDetail
 {
     [JsonPropertyName("accessToken")]
-    public string AccessToken { get; set; }
+    public string AccessToken { get; set; } = null!;
 }

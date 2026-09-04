@@ -23,5 +23,5 @@ public class VoicePlayerSpeakDirective : IProgressiveResponseDirective
     public string Type => DirectiveType;
 
     [JsonPropertyName("speech")]
-    public string Speech { get; }
+    public string Speech { get; } = null!;
 }

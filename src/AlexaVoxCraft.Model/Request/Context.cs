@@ -6,11 +6,11 @@ namespace AlexaVoxCraft.Model.Request;
 public class Context
 {
     [JsonPropertyName("System")]
-    public AlexaSystem System { get; set; }
+    public AlexaSystem System { get; set; } = null!;
 
     [JsonPropertyName("AudioPlayer")]
-    public PlaybackState AudioPlayer { get; set; }
+    public PlaybackState AudioPlayer { get; set; } = null!;
 
     [JsonPropertyName("Geolocation")]
-    public Geolocation Geolocation { get; set; }
+    public Geolocation Geolocation { get; set; } = null!;
 }

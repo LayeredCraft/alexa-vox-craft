@@ -15,5 +15,5 @@ public class VideoItem
 
     [JsonPropertyName("metadata")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public VideoItemMetadata Metadata { get; set; }
+    public VideoItemMetadata Metadata { get; set; } = null!;
 }

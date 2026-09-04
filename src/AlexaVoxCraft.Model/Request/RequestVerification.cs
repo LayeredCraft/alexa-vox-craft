@@ -18,7 +18,7 @@ public static class RequestVerification
         return Math.Abs(DateTimeOffset.Now.Subtract(timestamp).TotalSeconds) <= AllowedTimestampToleranceInSeconds;
     }
 
-    public static async Task<bool> Verify(string encodedSignature, Uri certificatePath, string body, Func<Uri, Task<X509Certificate2>> getCertificate = null)
+    public static async Task<bool> Verify(string encodedSignature, Uri certificatePath, string body, Func<Uri, Task<X509Certificate2>>? getCertificate = null)
     {
         if (!VerifyCertificateUrl(certificatePath))
         {
@@ -47,7 +47,7 @@ public static class RequestVerification
     public static bool AssertHashMatch(X509Certificate2 certificate, string encodedSignature, string body)
     {
         var signature = Convert.FromBase64String(encodedSignature);
-        var rsa = certificate.GetRSAPublicKey();
+        var rsa = certificate.GetRSAPublicKey() ?? throw new InvalidOperationException("Certificate does not contain an RSA public key.");
 
         return rsa.VerifyData(Encoding.UTF8.GetBytes(body), signature, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
     }

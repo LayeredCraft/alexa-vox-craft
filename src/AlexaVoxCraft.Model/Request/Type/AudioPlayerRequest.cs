@@ -5,19 +5,19 @@ namespace AlexaVoxCraft.Model.Request.Type;
 public class AudioPlayerRequest : Request
 {
     [JsonPropertyName("token")]
-    public string Token { get; set; }
+    public string Token { get; set; } = null!;
 
     [JsonPropertyName("offsetInMilliseconds")]
     public long OffsetInMilliseconds { get; set; }
 
     [JsonPropertyName("error")]
-    public Error Error { get; set; }
+    public Error Error { get; set; } = null!;
 
     [JsonPropertyName("currentPlaybackState")]
-    public PlaybackState CurrentPlaybackState { get; set; }
+    public PlaybackState CurrentPlaybackState { get; set; } = null!;
 
     [JsonPropertyName("enqueuedToken")]
-    public string EnqueuedToken { get; set; }
+    public string EnqueuedToken { get; set; } = null!;
 
     public bool HasEnqueuedItem
     {

@@ -6,9 +6,9 @@ public class AudioItem
 {
     [JsonRequired]
     [JsonPropertyName("stream")]
-    public AudioItemStream Stream { get; set; }
+    public AudioItemStream Stream { get; set; } = null!;
 
     [JsonPropertyName("metadata")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public AudioItemMetadata Metadata { get; set; }
+    public AudioItemMetadata Metadata { get; set; } = null!;
 }

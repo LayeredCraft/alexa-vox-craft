@@ -769,17 +769,52 @@ chore(generator): add analyzer release tracking files
 
 ### Commit 18: Nullable warning cleanup - AlexaVoxCraft.Model
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Fix CS8618 (uninitialized non-nullable member) via constructor-required init, `required`
+- [x] Fix CS8618 (uninitialized non-nullable member) via constructor-required init, `required`
       modifier, sensible default, or nullable annotation only where the field is genuinely optional
       per the Alexa schema — cross-check against Commit 1's real payload examples.
-- [ ] Fix CS8600/CS8601/CS8602/CS8603/CS8604/CS8619/CS8625/CS8765/CS8767 via proper null-checks/
+- [x] Fix CS8600/CS8601/CS8602/CS8603/CS8604/CS8619/CS8625/CS8765/CS8767 via proper null-checks/
       guard clauses or correct annotations; avoid `!` null-forgiving unless truly guaranteed.
-- [ ] Validate `dotnet test test/AlexaVoxCraft.Model.Tests/AlexaVoxCraft.Model.Tests.csproj --no-build --no-restore`.
-- [ ] Validate solution build warning count for `AlexaVoxCraft.Model` is zero.
+- [x] Validate `dotnet run --project test/AlexaVoxCraft.Model.Tests -- --filter-query "/*/*/*"` on all 4 TFMs.
+- [x] Validate solution build warning count for `AlexaVoxCraft.Model` is zero.
+
+Resulting guidance:
+
+- 254 unique CS8618 sites (across ~97 files) were almost entirely DTO auto-properties populated by
+  System.Text.Json deserialization, never by their own constructors — the correct, non-breaking fix for
+  that shape is `= null!;` (or `= default!;` for an unconstrained generic `T`), not `required` (would
+  change construction call sites) and not blanket `?` (would weaken every consumer's null-checking for
+  properties that in practice are always present on the wire). Applied mechanically via a one-off Python
+  script matching `public <type> <Prop> { get; set; }` (no existing initializer) against each warning's
+  reported property name, run with `newline=''` on both read and write to preserve this repo's mixed
+  CRLF/LF line endings file-by-file (confirmed via `git diff --stat` showing 1-line diffs, not whole-file
+  rewrites) — see the CRLF root-cause note from Commit 15. 167 of 254 sites were fixed this way; the
+  remaining ~90 needed manual judgment (multi-line declarations, backing fields, get-only properties,
+  generic `T`).
+- Properties/parameters that are genuinely optional per the Alexa wire protocol or by design were
+  annotated `?` instead of defaulted: `IntentSignature.Namespace`/`.Properties` (not present for
+  top-level intents), `AudioItemStream.ExpectedPreviousToken`, `StartConnectionDirective.Token`,
+  `DialogDelegate`/`DialogElicitSlot`/`DialogConfirmIntent`.`UpdatedIntent` (matching the existing
+  `DialogConfirmSlot.UpdatedIntent` precedent), and every `ResponseBuilder`/`ProgressiveResponse`
+  parameter that legitimately accepts `null` at a public call site (`Session`, `Reprompt`, `ICard`,
+  `IOutputSpeech`, `Intent`, request id/token/base-address triples).
+- Two real design signals surfaced and were preserved rather than papered over: `RequestVerification.
+  AssertHashMatch` now throws `InvalidOperationException` instead of silently NRE'ing when a certificate
+  has no RSA public key; `ProgressiveResponse.Send`/`SendSpeech` now return `Task<HttpResponseMessage?>`
+  (rewritten `Send` as `async`/`await` to satisfy the nullable generic return without a cast) since a
+  `null` result was always the documented "couldn't send" signal, just previously unannotated.
+  `RequestConverter.Read` gained an explicit null-check + `ArgumentOutOfRangeException` for an
+  unresolvable request type, replacing what would otherwise have been a null passed into
+  `JsonSerializer.Deserialize`'s `Type` parameter.
+- Model-only change (no code path outside `AlexaVoxCraft.Model` touched — confirmed via
+  `git status --porcelain`), so per the Phase 8 instruction no new tests were required; instead, all 112
+  existing `Model.Tests` were re-run on all 4 TFMs (net8.0/9.0/10.0/11.0, all green) plus every other
+  project that depends on `AlexaVoxCraft.Model` (`Model.Apl.Tests`, `Model.InSkillPurchasing.Tests`,
+  `InSkillPurchasing.Tests`, `MediatR.Tests`, `MediatR.Lambda.Tests`, `MediatR.Generator.Tests`,
+  `Smapi.Tests`) to catch any nullable-signature ripple — all passed with 0 failures.
 
 Suggested commit message:
 

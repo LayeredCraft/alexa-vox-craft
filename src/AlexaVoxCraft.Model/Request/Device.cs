@@ -5,10 +5,10 @@ namespace AlexaVoxCraft.Model.Request;
 public class Device
 {
     [JsonPropertyName("deviceId")]
-    public string DeviceID { get; set; }
+    public string DeviceID { get; set; } = null!;
 
     [JsonPropertyName("supportedInterfaces")]
-    public Dictionary<string, object> SupportedInterfaces { get; set; }
+    public Dictionary<string, object> SupportedInterfaces { get; set; } = null!;
 
     public bool IsInterfaceSupported(string interfaceName)
     {

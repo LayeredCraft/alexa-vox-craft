@@ -7,7 +7,7 @@ namespace AlexaVoxCraft.Model.Request.Type;
 public class AskForPermissionRequestPayload
 {
     [JsonPropertyName("permissionScope")]
-    public string PermissionScope { get; set; }
+    public string PermissionScope { get; set; } = null!;
 
     [JsonPropertyName("status"), JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PermissionStatus>))]
     public PermissionStatus Status { get; set; }

@@ -6,7 +6,7 @@ public class SayAs : ICommonSsml
 {
     public string Text { get; set; }
     public string InterpretAs { get; set; }
-    public string Format { get; set; }
+    public string Format { get; set; } = null!;
 
     public SayAs(string text, string interpretAs)
     {

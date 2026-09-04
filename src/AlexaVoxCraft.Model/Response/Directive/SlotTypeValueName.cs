@@ -5,9 +5,9 @@ namespace AlexaVoxCraft.Model.Response.Directive;
 public class SlotTypeValueName
 {
     [JsonPropertyName("value")]
-    public string Value { get; set; }
+    public string Value { get; set; } = null!;
 
     [JsonPropertyName("synonyms")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string[] Synonyms { get; set; }
+    public string[] Synonyms { get; set; } = null!;
 }

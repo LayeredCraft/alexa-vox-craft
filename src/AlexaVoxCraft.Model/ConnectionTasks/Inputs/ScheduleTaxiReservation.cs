@@ -19,16 +19,16 @@ public class ScheduleTaxiReservation : IConnectionTask
     [JsonPropertyName("context")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 
-    public ConnectionTaskContext Context { get; set; }
+    public ConnectionTaskContext Context { get; set; } = null!;
 
     [JsonPropertyName("partySize")] public int PartySize { get; set; }
     [JsonPropertyName("pickupLocation")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PostalAddress PickupLocation { get; set; }
+    public PostalAddress PickupLocation { get; set; } = null!;
 
     [JsonPropertyName("dropoffLocation")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PostalAddress DropoffLocation { get; set; }
+    public PostalAddress DropoffLocation { get; set; } = null!;
 
     [JsonPropertyName("pickupTime")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

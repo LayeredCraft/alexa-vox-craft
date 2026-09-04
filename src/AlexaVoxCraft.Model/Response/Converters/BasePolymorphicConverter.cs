@@ -72,7 +72,7 @@ public abstract class BasePolymorphicConverter<T> : JsonConverter<T>
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
-        JsonSerializer.Serialize(writer, value, value.GetType(), options);
+        JsonSerializer.Serialize(writer, value, value!.GetType(), options);
     }
 
     private bool IsEmptyObject(JsonElement element)

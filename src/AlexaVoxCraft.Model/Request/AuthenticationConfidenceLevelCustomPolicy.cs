@@ -12,5 +12,5 @@ public class AuthenticationConfidenceLevelCustomPolicy
     }
 
     [JsonPropertyName("policyName")]
-    public string PolicyName { get; set; }
+    public string PolicyName { get; set; } = null!;
 }
