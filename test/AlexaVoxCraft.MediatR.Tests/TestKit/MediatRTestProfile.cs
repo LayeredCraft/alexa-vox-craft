@@ -7,7 +7,7 @@ using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Request.Type;
 using Compono;
-using LayeredCraft.StructuredLogging.Testing;
+using Compono.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -27,15 +27,20 @@ public sealed class MediatRTestProfile : ICompositionProfile
 {
     public void Configure(CompositionBuilder builder) =>
         builder
+            // UseLogging() registered before UseGeneratedTestDoubles() (stage-6 first-registered-
+            // wins, ADR-0055) - PerformanceLoggingBehavior's ILogger<T> asserts observable log
+            // output, so it needs Compono.Logging's CapturingLogger<T>, not a generated double of
+            // the ILogger<T> interface shape. Every other ILogger<T> constructor dependency in
+            // this project is never itself asserted against, so this ordering doesn't change their
+            // behavior (they'd resolve to a CapturingLogger<T> too now, which is fine - unused).
+            .UseLogging(options => options.MinimumLevel = LogLevel.Debug)
+            // docs/adr/0056-composition-builder-share-graph-wide-sharing.md: every request for
+            // ILogger<PerformanceLoggingBehavior> anywhere in the graph now participates
+            // automatically - PerformanceLoggingBehaviorTests.cs's own `logger` theory parameters
+            // no longer need [Shared] to observe the exact instance PerformanceLoggingBehavior
+            // itself logs through.
+            .Share<ILogger<PerformanceLoggingBehavior>>()
             .UseGeneratedTestDoubles()
-            // The only ILogger<T> this project's tests actually assert observable behavior
-            // against (AssertLogCount/HasLogEntry, from LayeredCraft.StructuredLogging.Testing) -
-            // a real TestLogger<T>, not a UseGeneratedTestDoubles() fake of the ILogger<T>
-            // interface shape (confirmed: every other ILogger<T> constructor dependency in this
-            // project is never itself asserted against, so the generated double suffices for
-            // those - no open-generic Register<ILogger<T>> rule needed).
-            .Register<ILogger<PerformanceLoggingBehavior>>(() =>
-                new TestLogger<PerformanceLoggingBehavior> { MinimumLogLevel = LogLevel.Debug })
             // Every real theory in this project composes SkillResponse directly somewhere in the
             // project (a compile-time discovery root), so this nested context.Resolve<SkillResponse>()
             // is not RESEARCH-0010 Finding B's shape - included here only because an unconfigured
@@ -67,7 +72,7 @@ public sealed class MediatRTestProfile : ICompositionProfile
             // generated test-double closure ever reaches it, and the nested
             // context.Resolve<ILogger<SkillMediator>>() below genuinely threw CompositionException
             // ("no ... test-double provider ... could satisfy"). SkillMediator's own logger is never
-            // asserted against by any test here (unlike PerformanceLoggingBehavior's TestLogger<T>
+            // asserted against by any test here (unlike PerformanceLoggingBehavior's CapturingLogger<T>
             // above), so a plain NullLogger<T> is the right fallback, not a generated double.
             .Register<ILogger<SkillMediator>>(() => Microsoft.Extensions.Logging.Abstractions.NullLogger<SkillMediator>.Instance)
             .Register<IServiceProvider>(context =>
