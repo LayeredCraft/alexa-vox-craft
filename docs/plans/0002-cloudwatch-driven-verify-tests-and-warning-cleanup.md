@@ -231,20 +231,42 @@ or property-test these objects rather than deserializing a capture).
 
 ### Commit 4: Model.Tests — response construction surface (directives, speech, remaining cards, progressive response)
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Port `Responses/ResponseTests.cs` (26 tests: `HintDirective`, `Hint`, `Reprompt` string/Ssml
-      constructors, `PlainTextOutputSpeech`, `SsmlOutputSpeech`) as response-side serialize tests,
-      component-level, following the `BuyDirectiveTests`/`CardTests` pattern (construct in code,
-      Verify the serialized JSON) rather than the legacy `JsonElementDeepEquals` string-comparison
-      style.
-- [ ] Port the 3 remaining `Responses/CardTests.cs` card types not yet covered: `StandardCard`,
-      `AskForPermissionsConsentCard`, `LinkAccountCard` (legacy uses Compono-generated data for these
-      — keep that approach, add to `Response/CardTests.cs`).
-- [ ] Port `Responses/ProgressiveResponseTests.cs` (10 tests) as response-side serialize tests.
-- [ ] Validate all 4 TFMs, solution build.
+- [x] Ported `Responses/ResponseTests.cs`'s response-side content as serialize tests (construct in
+      code, `TestHelper.VerifySerializedObject`, Verify the JSON) rather than legacy's
+      `JsonElementDeepEquals` string-comparison style: `HintDirective`
+      (`Response/DirectiveTests.cs`), the 4 Dialog directives (`DialogConfirmIntent`,
+      `DialogConfirmSlot`, `DialogDelegate`, `DialogElicitSlot`, same file), `AskForPermissionDirective`
+      (same file), `PlainTextOutputSpeech`/`SsmlOutputSpeech` plain + `PlayBehavior` variants
+      (`Response/OutputSpeechTests.cs`), `Reprompt` string/Ssml constructors + the
+      `SsmlOutputSpeech(string)` constructor (`Response/RepromptTests.cs`), the full example response
+      (speech + card + session attributes) added to `Response/SkillResponseTests.cs`.
+      `JsonDirective`'s round-trip test and the `ResponseBuilder.Tell`/directive-override test landed
+      in a new `Response/JsonDirectiveTests.cs` — `JsonDirective` is a deliberate exception to the
+      response-side-serialize-only rule (documented in that file) since it's the generic
+      unknown-directive escape hatch, genuinely used both ways by design, not because
+      `System.Text.Json` merely happens to allow it.
+- [x] Extended `Response/CardTests.cs` with the 3 remaining card types (`StandardCard`,
+      `LinkAccountCard`, `AskForPermissionsConsentCard`) — hand-constructed with realistic literal
+      values rather than Compono-generated data, matching the style already established in this file
+      and `BuyDirectiveTests` (avoids adding composition machinery for 3 more simple POCOs).
+- [x] Ported `Responses/ProgressiveResponseTests.cs` as `Response/ProgressiveResponseTests.cs`: the
+      `VoicePlayerSpeakDirective`/`ProgressiveResponseRequest` serialize tests, the `Send()`
+      null-guard behavioral tests, `CanSend()`, and the 3 HTTP-behavior tests (base address, endpoint
+      path, Bearer auth header) — the latter rewritten from a bespoke `ActionMessageHandler` to
+      `Compono.Http.TestHttpHandler` directly (matches this repo's established HTTP test-double
+      convention from plan 0001; added a `Compono.Http` package reference to `Model.Tests.csproj`,
+      which didn't have one yet).
+- [x] Found and fixed a real bug along the way: `AskForPermissionDirective`'s constructors set
+      `Payload` but never `Name`, even though its own `AskForPermissionDirectiveHandler` discriminates
+      incoming `Connections.Response` traffic on `name == "AskFor"` — building this directive the
+      normal way produced `"name": null`. Fixed by setting `Name = "AskFor"` in both constructors
+      (small, additive, non-breaking).
+- [x] Validated all 4 TFMs: 49/49 passing, no stray `.received.*` files. Validated solution build:
+      0 errors.
 
 Suggested commit message:
 

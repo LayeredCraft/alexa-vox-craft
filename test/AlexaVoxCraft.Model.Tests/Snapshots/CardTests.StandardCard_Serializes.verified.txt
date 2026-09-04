@@ -1,0 +1,1 @@
+﻿{"type":"Standard","title":"Disney Trivia","text":"Question 1. When Disney World opened, who gave the opening speech?","image":{"smallImageUrl":"https://example.com/smallImage.png","largeImageUrl":"https://example.com/largeImage.png"}}

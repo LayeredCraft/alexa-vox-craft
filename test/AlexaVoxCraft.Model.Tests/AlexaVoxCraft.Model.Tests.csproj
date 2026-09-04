@@ -19,6 +19,7 @@
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions" />
         <PackageReference Include="Verify.XunitV3" />
+        <PackageReference Include="Compono.Http" />
     </ItemGroup>
 
     <ItemGroup>

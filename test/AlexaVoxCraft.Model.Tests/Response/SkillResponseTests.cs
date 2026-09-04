@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AlexaVoxCraft.Model.Response;
 
 namespace AlexaVoxCraft.Model.Tests.Response;
@@ -42,5 +43,33 @@ public sealed class SkillResponseTests() : TestBase<SkillResponseTests>
         };
 
         await TestHelper.VerifySerializedObject(response, AlexaJson, "SkillResponse_ShouldEndSessionTrue");
+    }
+
+    [Fact]
+    public async Task SkillResponse_Serializes_WithSpeechCardAndSessionAttributes()
+    {
+        var response = new SkillResponse
+        {
+            Version = "1.0",
+            SessionAttributes = new Dictionary<string, JsonElement>
+            {
+                ["supportedHoriscopePeriods"] = JsonSerializer.SerializeToElement(new { daily = true, weekly = false, monthly = false })
+            },
+            Response = new ResponseBody
+            {
+                OutputSpeech = new PlainTextOutputSpeech
+                {
+                    Text = "Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless. Can I help you with anything else?"
+                },
+                Card = new SimpleCard
+                {
+                    Title = "Horoscope",
+                    Content = "Today will provide you a new learning opportunity. Stick with it and the possibilities will be endless."
+                },
+                ShouldEndSession = false
+            }
+        };
+
+        await TestHelper.VerifySerializedObject(response, AlexaJson, "SkillResponse_WithSpeechCardAndSessionAttributes");
     }
 }

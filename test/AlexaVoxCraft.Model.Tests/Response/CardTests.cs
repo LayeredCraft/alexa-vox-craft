@@ -20,4 +20,40 @@ public sealed class CardTests() : TestBase<CardTests>
 
         await TestHelper.VerifySerializedObject(card, AlexaJson, "SimpleCard_RealisticContent");
     }
+
+    [Fact]
+    public async Task StandardCard_Serializes()
+    {
+        var card = new StandardCard
+        {
+            Title = "Disney Trivia",
+            Content = "Question 1. When Disney World opened, who gave the opening speech?",
+            Image = new CardImage
+            {
+                SmallImageUrl = "https://example.com/smallImage.png",
+                LargeImageUrl = "https://example.com/largeImage.png"
+            }
+        };
+
+        await TestHelper.VerifySerializedObject(card, AlexaJson, "StandardCard");
+    }
+
+    [Fact]
+    public async Task LinkAccountCard_Serializes()
+    {
+        var card = new LinkAccountCard();
+
+        await TestHelper.VerifySerializedObject(card, AlexaJson, "LinkAccountCard");
+    }
+
+    [Fact]
+    public async Task AskForPermissionsConsentCard_Serializes()
+    {
+        var card = new AskForPermissionsConsentCard
+        {
+            Permissions = ["alexa::household:lists:read", "alexa::household:lists:write"]
+        };
+
+        await TestHelper.VerifySerializedObject(card, AlexaJson, "AskForPermissionsConsentCard");
+    }
 }
