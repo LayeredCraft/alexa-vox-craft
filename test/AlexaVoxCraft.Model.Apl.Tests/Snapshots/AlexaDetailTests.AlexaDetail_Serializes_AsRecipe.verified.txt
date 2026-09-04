@@ -1,0 +1,1 @@
+﻿{"type":"AlexaDetail","imageSource":"https://example.com/carbonara.jpg","ingredientsHideDivider":false,"ingredientsText":"Ingredients","primaryText":"Spaghetti Carbonara","secondaryText":"Serves 4"}

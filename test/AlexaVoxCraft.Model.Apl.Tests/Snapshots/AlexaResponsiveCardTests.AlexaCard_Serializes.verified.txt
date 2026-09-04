@@ -1,0 +1,1 @@
+﻿{"type":"AlexaCard","cardRoundedCorner":true,"headerText":"Disney Trivia","imageSource":"https://example.com/card.png","primaryText":"Question 1","secondaryText":"Multiple choice"}

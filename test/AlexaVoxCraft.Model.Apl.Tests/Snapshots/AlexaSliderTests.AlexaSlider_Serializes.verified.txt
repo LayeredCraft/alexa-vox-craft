@@ -1,0 +1,1 @@
+﻿{"type":"AlexaSlider","sliderId":"volumeSlider","metadataPosition":"above_right","sliderSize":"medium","sliderType":"default","progressValue":50,"totalValue":100}

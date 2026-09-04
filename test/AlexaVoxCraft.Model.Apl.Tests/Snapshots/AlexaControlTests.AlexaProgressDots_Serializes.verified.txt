@@ -1,0 +1,1 @@
+﻿{"type":"AlexaProgressDots","componentId":"dots","dotSize":"8dp","theme":"dark"}

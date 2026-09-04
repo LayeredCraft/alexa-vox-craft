@@ -1,0 +1,1 @@
+﻿{"type":"EditText","hint":"Enter your name","keyboardType":"normal","maxLength":50,"secureInput":false,"selectOnFocus":true,"submitKeyType":"done"}

@@ -1,0 +1,1 @@
+﻿{"type":"Video","audioTrack":"foreground","autoplay":true,"muted":false,"scale":"best-fill","source":[{"url":"https://example.com/video.mp4"}]}

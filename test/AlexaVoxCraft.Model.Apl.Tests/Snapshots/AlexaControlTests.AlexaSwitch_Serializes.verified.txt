@@ -1,0 +1,1 @@
+﻿{"type":"AlexaSwitch","theme":"dark","activeColor":"@colorAccent","switchHeight":"24dp"}

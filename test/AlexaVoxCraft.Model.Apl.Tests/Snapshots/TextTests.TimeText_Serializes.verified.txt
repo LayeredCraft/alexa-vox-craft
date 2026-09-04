@@ -1,0 +1,1 @@
+﻿{"type":"TimeText","direction":"down","format":"%M:%S","start":1552070232}

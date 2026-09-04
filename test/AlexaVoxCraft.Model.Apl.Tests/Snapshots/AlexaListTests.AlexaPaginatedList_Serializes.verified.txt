@@ -1,0 +1,1 @@
+﻿{"type":"AlexaPaginatedList","headerAttributionOpacity":1.0,"listId":"myPaginatedList","speechItems":"${speechData.items}"}

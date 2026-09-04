@@ -447,17 +447,36 @@ test(model-apl): add remaining APL command coverage
 
 ### Commit 10: Model.Apl.Tests — remaining APL components
 
-Status: Not started.
+Status: Done (executed via a forked subagent given the volume — reviewed and independently re-verified
+before committing).
 
 Tasks:
 
-- [ ] Port the ~37 component types in `ComponentTests.cs` not already covered by the pre-existing
-      `Components/ContainerTests.cs`/`FrameTests.cs`/`SpacerTests.cs`: `Text`, `Image`, `Pager`,
-      `ScrollView`, `TouchWrapper`, the `VectorGraphic` component, etc. Response-side serialize,
-      component-level, added to `Components/` following the existing per-type file convention. This
-      is the single largest gap (40 legacy tests) — fine to split across more than one working
-      session/sub-commit if needed, but land it as this numbered commit (or 9a/9b if split).
-- [ ] Validate all 4 TFMs, solution build.
+- [x] Ported 31 test methods across 13 new files in `Components/`: `TextTests.cs` (`Text` construction,
+      dimension/binding-value inspection, `TimeText`, generic `Bindings`), `VideoTests.cs`,
+      `AlexaControlTests.cs` (`AlexaIconButton`, `AlexaRating`, `AlexaProgressDots`,
+      `AlexaProgressBar`, `AlexaRadioButton`, `AlexaCheckbox`, `AlexaSwitch`, `AlexaIcon`),
+      `AlexaListTests.cs` (`AlexaImageListItem`, `AlexaImageList`, `AlexaLists`, `AlexaPaginatedList`,
+      `AlexaGridList`), `AlexaSliderTests.cs`, `AlexaDetailTests.cs` (recipe + TV-detail variants),
+      `EditTextTests.cs`, `AlexaSwipeToActionTests.cs`, `GridSequenceTests.cs`, `PagerTests.cs`,
+      `AlexaResponsiveCardTests.cs` (`AlexaCard`, `AlexaImageCaption`, `AlexaPhoto`,
+      `AlexaTextWrapping`), `CustomComponentTests.cs`, `ContainerDataTests.cs` (`Container.Data`
+      accepting a literal dict list vs. a binding-expression string). All response-side serialize,
+      hand-constructed with plausible literal values (no fixture files) per the established pattern.
+- [x] Deliberately skipped, each documented in-file or here: `ComponentTypes`/`RandomClassTest`
+      (deserialize-only polymorphic-converter sanity checks, off-limits and low value);
+      `KeyboardEvent`/`TickHandler`/`ProgressBarRadial`/`SliderRadial` (legacy tested these via
+      `Utility.AssertComponent<Container>(...)` against a specific captured document fixture that
+      doesn't exist here — not worth fabricating from scratch); `AalmadaTest` (scratch/demo, no
+      assertions); the commented-out dead `DictionaryBindingTest` block (superseded by the live
+      duplicate right after it, which was ported as `ContainerDataTests`).
+- [x] `Container.Data`'s binding-expression form judged serialize-only (authoring-time convenience
+      evaluated by the Alexa renderer, not read back by the skill) — consistent with the
+      `RenderDocumentDirective` call from Commit 3, documented in the file.
+- [x] No suspected library bugs found in this batch.
+- [x] Validated all 4 TFMs independently after the fork's work (not just trusting its self-report):
+      115/115 passing (84 pre-existing + 31 new), no stray `.received.*` files. Validated solution
+      build: 0 errors.
 
 Suggested commit message:
 

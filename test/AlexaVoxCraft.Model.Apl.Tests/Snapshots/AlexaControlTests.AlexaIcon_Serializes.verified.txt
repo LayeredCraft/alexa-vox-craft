@@ -1,0 +1,1 @@
+﻿{"type":"AlexaIcon","iconName":"closedCaptioning","iconSize":"24dp","iconColor":"@colorText"}
