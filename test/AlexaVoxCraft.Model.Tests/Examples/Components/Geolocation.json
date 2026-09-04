@@ -1,0 +1,24 @@
+{
+  "locationServices": {
+    "access": "ENABLED",
+    "status": "RUNNING"
+  },
+  "timestamp": "2026-01-15T07:05:48Z",
+  "coordinate": {
+    "latitudeInDegrees": 47.6,
+    "longitudeInDegrees": -122.3,
+    "accuracyInMeters": 12.1
+  },
+  "altitude": {
+    "altitudeInMeters": 56.4,
+    "accuracyInMeters": 30.1
+  },
+  "heading": {
+    "directionInDegrees": 180.0,
+    "accuracyInDegrees": 5.0
+  },
+  "speed": {
+    "speedInMetersPerSecond": 10.0,
+    "accuracyInMetresPerSecond": 1.1
+  }
+}

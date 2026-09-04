@@ -1,0 +1,21 @@
+﻿{
+  "LocationServices": {},
+  "Timestamp": "DateTimeOffset_1",
+  "Coordinate": {
+    "Latitude": 47.6,
+    "Longitude": -122.3,
+    "Accuracy": 12.1
+  },
+  "Altitude": {
+    "Altitude": 56.4,
+    "Accuracy": 30.1
+  },
+  "Heading": {
+    "Direction": 180.0,
+    "Accuracy": 5.0
+  },
+  "Speed": {
+    "Speed": 10.0,
+    "Accuracy": 1.1
+  }
+}

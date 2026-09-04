@@ -1,0 +1,24 @@
+﻿{
+  "Version": "1.0",
+  "Context": {
+    "System": {
+      "ApiEndpoint": "https://api.amazonalexa.com",
+      "Application": {
+        "ApplicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
+      },
+      "User": {
+        "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "AccessToken": "token",
+        "Permissions": {}
+      }
+    }
+  },
+  "Request": {
+    "Body": {
+      "AccessToken": "linkedAccessToken"
+    },
+    "Type": "AlexaSkillEvent.SkillAccountLinked",
+    "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "Timestamp": "DateTime_1"
+  }
+}

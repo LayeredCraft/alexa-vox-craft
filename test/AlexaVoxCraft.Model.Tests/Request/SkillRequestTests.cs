@@ -1,4 +1,5 @@
 using System.Text.Json;
+using AlexaVoxCraft.Model;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 
@@ -49,6 +50,19 @@ public sealed class SkillRequestTests() : TestBase<SkillRequestTests>
 
         envelope.Request.Should().BeOfType<LaunchRequest>();
         envelope.Session.New.Should().BeTrue();
+
+        await TestHelper.VerifyRequestObject(envelope);
+    }
+
+    [Fact]
+    public async Task IntentRequest_WithDialogState_Deserializes()
+    {
+        var envelope = Deserialize("Requests/IntentRequest_WithDialogState.json");
+
+        var request = envelope.Request.Should().BeOfType<IntentRequest>().Subject;
+        request.DialogState.Should().Be(DialogState.InProgress);
+        request.Intent.ConfirmationStatus.Should().Be(ConfirmationStatus.Denied);
+        request.Intent.Slots["ZodiacSign"].ConfirmationStatus.Should().Be(ConfirmationStatus.Confirmed);
 
         await TestHelper.VerifyRequestObject(envelope);
     }

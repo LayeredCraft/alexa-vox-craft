@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "context": {
+    "System": {
+      "application": { "applicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000" },
+      "user": { "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000" },
+      "apiEndpoint": "https://api.amazonalexa.com"
+    }
+  },
+  "request": {
+    "type": "AlexaSkillEvent.ProactiveSubscriptionChanged",
+    "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "timestamp": "2026-01-15T12:34:56Z"
+  }
+}

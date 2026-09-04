@@ -375,37 +375,44 @@ test(model): add Connection Tasks coverage
 
 ### Commit 8: Model.Tests — remaining RequestTests.cs gaps (IntentSignature, SkillEvents, Geolocation, Person, AskForPermissionRequest, and more)
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] `IntentSignature` parsing: plain intent name/signature/action, and a built-in intent
-      (`AMAZON.AddAction`-shaped) with namespace + multiple properties (entity/property pairs).
-      Request-side, deserialize.
-- [ ] `DialogState` on `IntentRequest`, `ConfirmationStatus` on `Intent` and on `Slot` — likely
-      addable as assertions on existing `IntentRequest_*` fixtures already in
-      `Request/SkillRequestTests.cs`/`IntentTests.cs` rather than new fixtures, if any already carry
-      dialog state or a denied/confirmed slot; otherwise a small new fixture.
-- [ ] Custom/unknown request-type extensibility hook (`RequestConverter.RegisterRequestTypeResolver`)
-      — port the `NewIntentRequestTypeResolver`/`NewIntentRequest` pattern with a project-local
-      equivalent under `Infrastructure/`, matching the `ExampleConnectionTaskResolver` approach from
-      Commit 7.
-- [ ] Epoch-timestamp `LaunchRequest` parsing variant. Request-side, deserialize.
-- [ ] `RequestVerification.RequestTimestampWithinTolerance` behavior (in-tolerance and replay-attack
-      cases) — functional test, not serialize/deserialize.
-- [ ] `Geolocation` deserialization (location services status, coordinate, altitude, heading, speed).
-- [ ] `Context.System.Person` deserialization (person id, access token, authentication confidence).
-- [ ] `SkillEvent` requests: `AccountLinkSkillEventRequest`, `PermissionSkillEventRequest` (with
-      `EventCreationTime`/`EventPublishingTime`), and the non-specialized `SkillEventRequest` fallback.
-- [ ] `AskForPermissionRequest` deserialization — the request-side counterpart of
-      `AskForPermissionDirective` (fixed in Commit 4): a `Connections.Response` with `name == "AskFor"`
-      carrying a `PermissionStatus` and permission scope. Worth double-checking this round-trips
-      correctly now that the directive-side `Name` bug is fixed.
-- [ ] `MultiValueSlot` deserialization (a slot with multiple resolved values).
-- [ ] SmartProperties support: `Context.System.Unit` (`UnitID`, `PersistentUnitID`) and
-      `Context.System.Device.PersistentEndpointID`.
-- [ ] All fixtures built fresh (not copied from Legacy).
-- [ ] Validate all 4 TFMs, solution build.
+- [x] `IntentSignature` parsing added to `Request/IntentTests.cs`: plain intent name, and a built-in
+      intent (`AMAZON.AddAction<object@Book,targetCollection@ReadingList>`) with namespace + multiple
+      properties. Pure construction assertions, no fixture needed.
+- [x] `DialogState`/`ConfirmationStatus` added as a new fact on `Request/SkillRequestTests.cs`
+      (`IntentRequest_WithDialogState_Deserializes`) against a new fixture — the existing
+      `IntentRequest_*` fixtures didn't carry dialog state or a non-`NONE` confirmation status, so this
+      needed a dedicated one rather than piggybacking on an existing fact.
+- [x] Custom/unknown request-type extensibility hook: `Request/CustomRequestTypeTests.cs`, with a
+      project-local `CustomIntentRequest`/`CustomIntentRequestTypeResolver` (mirrors legacy's
+      `NewIntentRequestTypeResolver`/`NewIntentRequest`, and the `ExampleConnectionTaskResolver`
+      approach from Commit 7).
+- [x] Epoch-timestamp `LaunchRequest` variant — same file.
+- [x] `RequestVerification.RequestTimestampWithinTolerance` — `Request/RequestVerificationTests.cs`
+      (in-tolerance and outside-tolerance cases), functional, no fixture.
+- [x] `Geolocation`, `Context.System.Person`, and SmartProperties (`Context.System.Unit`,
+      `Context.System.Device.PersistentEndpointID`) — `Request/RequestContextTests.cs`, 3 facts.
+- [x] `SkillEvent` requests — `Request/SkillEventRequestTests.cs`: `AccountLinkSkillEventRequest`,
+      `PermissionSkillEventRequest` (with `EventCreationTime`/`EventPublishingTime`), and the
+      non-specialized fallback. **Found while writing this**: the type this session assumed would hit
+      the generic `SkillEventRequest` fallback (`AlexaSkillEvent.SkillEnabled`) actually resolves to a
+      dedicated `SkillEnablementSkillEventRequest` per `SkillEventRequestTypeResolver` — not a bug,
+      just a wrong assumption; fixed by using a genuinely unmapped event name
+      (`AlexaSkillEvent.ProactiveSubscriptionChanged`) to actually exercise the fallback path, and
+      renamed the fixture from `SkillEventEnabled.json` to `SkillEventNonSpecialized.json` to match.
+- [x] `AskForPermissionRequest` deserialization — `Request/AskForPermissionRequestTests.cs`, the
+      request-side counterpart of `AskForPermissionDirective` (fixed in Commit 4); confirmed it
+      round-trips correctly now that the directive-side `Name` bug is fixed.
+- [x] `MultiValueSlot` deserialization added to `Request/IntentTests.cs` (a slot with multiple
+      resolved values, each with its own resolution authority).
+- [x] All fixtures built fresh under `Examples/Requests/` and `Examples/Components/` (not copied from
+      Legacy).
+- [x] Validated all 4 TFMs: 108/108 passing (15 new test methods; 10 needed Verify acceptance, 5
+      passed directly as pure assertions), no stray `.received.*` files. Validated solution build:
+      0 errors.
 
 Suggested commit message:
 
