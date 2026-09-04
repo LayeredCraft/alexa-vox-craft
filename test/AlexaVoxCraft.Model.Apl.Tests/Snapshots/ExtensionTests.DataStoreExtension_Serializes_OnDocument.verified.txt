@@ -1,0 +1,1 @@
+﻿{"type":"APL","mainTemplate":{"items":{"type":"Text","text":"Question text"}},"settings":{"DataStore":{"dataBindings":[{"namespace":"LocationWeather","key":"weather","dataBindingName":"DS_Weather"}]}},"extensions":[{"name":"DataStore","uri":"alexaext:datastore:10"}],"version":"2023.1"}

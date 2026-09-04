@@ -1,0 +1,1 @@
+﻿{"type":"APL","mainTemplate":{"items":{"type":"Text","text":"Question text"}},"settings":{"Back":{"backstackId":"myDocument"}},"extensions":[{"name":"Back","uri":"aplext:backstack:10"}],"version":"1.4"}

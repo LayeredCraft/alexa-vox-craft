@@ -563,15 +563,28 @@ test(model-apl): add DataStore and remaining APL request-type coverage
 
 ### Commit 13: Model.Apl.Tests — Extensions
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Port `ExtensionTests.cs` (22 tests): `BackStack`, `EntitySensing`, `SmartMotion` extension
-      settings/directives (response-side serialize) and extension event requests (request-side
-      deserialize, where applicable) — check each test individually for which side it's actually
-      exercising rather than assuming uniformly.
-- [ ] Validate all 4 TFMs, solution build.
+- [x] Ported all 22 tests from `ExtensionTests.cs` into `Document/ExtensionTests.cs`. Every one turned
+      out to be response-side (extension registration + settings on a document, or a command the
+      extension sends) — no request-side extension event types exist in this surface, so the "check
+      each individually" caveat resolved to "all serialize": `BackstackExtension` (document
+      registration + `GoBack`/`Clear` commands), `SmartMotionExtension` (document registration +
+      `FollowPrimaryUser`/`GoToCenter`/`SetWakeWordResponse`/`StopMotion`/`TurnToPrimaryUser`/
+      `PlayNamedChoreo` commands + `OnDeviceStateChanged` handler registration),
+      `EntitySensingExtension` (document registration + `OnEntitySensingStateChanged`/
+      `OnPrimaryUserChanged` handler registration), `DataStoreExtension` (document registration +
+      `GetObject`/`WatchObject`/`UnwatchObject`/`UpdateArrayBindingRange` commands +
+      `OnObjectChanged`/`OnObjectReceived` handler registration). The 5 handler-registration tests
+      assert `doc.Handlers.Should().ContainKey(...)` directly (no Verify — behavioral, not shape).
+      All hand-constructed directly from legacy's own already-correct construction code (legacy had
+      no deserialize-only gaps here to fill in from scratch), just swapping `AssertJsonEqual`/
+      `CompareJson` for `TestHelper.VerifySerializedObject`.
+- [x] No suspected library bugs found.
+- [x] Validated all 4 TFMs: 193/193 passing (171 pre-existing + 22 new), no stray `.received.*`
+      files. Validated solution build: 0 errors.
 
 Suggested commit message:
 

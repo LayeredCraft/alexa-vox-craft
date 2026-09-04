@@ -1,0 +1,1 @@
+﻿{"type":"APL","mainTemplate":{"items":{"type":"Text","text":"Question text"}},"settings":{"SmartMotion":{"deviceStateName":"MyDeviceState","wakeWordResponse":"followOnWakeWord"}},"extensions":[{"name":"SmartMotion","uri":"alexaext:smartmotion:10"}],"version":"1.4"}
