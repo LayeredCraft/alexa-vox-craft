@@ -54,7 +54,7 @@ public class AlexaImageCaption : ResponsiveTemplate, IJsonSerializable<AlexaImag
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<bool?> TouchForward { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : AlexaImageCaption
+    public new static void RegisterTypeInfo<T>() where T : AlexaImageCaption
     {
         ResponsiveTemplate.RegisterTypeInfo<ResponsiveTemplate>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>

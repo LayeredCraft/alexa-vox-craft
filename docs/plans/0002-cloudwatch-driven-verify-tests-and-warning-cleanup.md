@@ -701,15 +701,37 @@ fix: resolve obsolete-API compiler warnings
 
 ### Commit 16: CS0108/CS0114 member-hiding fixes
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Review each CS0108 (hides inherited member, 120 warnings) and CS0114 (hides inherited member,
+- [x] Review each CS0108 (hides inherited member, 120 warnings) and CS0114 (hides inherited member,
       missing override, 2 warnings) site individually — do not blindly add `new` everywhere.
-- [ ] Add explicit `new` where shadowing is intentional, `override` where it was a missed override.
-- [ ] Validate solution build shows these categories at zero.
-- [ ] Validate full test suite, paying attention to any behavior change from switching hide to override.
+- [x] Add explicit `new` where shadowing is intentional, `override` where it was a missed override.
+- [x] Validate solution build shows these categories at zero.
+- [x] Validate full test suite, paying attention to any behavior change from switching hide to override.
+
+Resulting guidance:
+
+- 15 sites were the established `RegisterTypeInfo<T>()` static-method-chain pattern used throughout
+  `AlexaVoxCraft.Model.Apl` (each subclass redeclares its own generic static registration method that
+  calls its base's). Since `static` methods can't use polymorphic `override`, the codebase's own
+  intentional pattern is member-hiding — the fix was adding `new` to make the hide explicit rather than
+  accidental: `APLAMultiChildComponent`, `Audio`, `Mixer`, `Selector`, `Sequencer`, `AlexaImageCaption`,
+  `AlexaImageListItem`, `AlexaPaginatedListItem`, `AlexaSliderBase`, `FlexSequence`, `TouchComponent`,
+  `TouchWrapper`, `AVGGroup`, `AVGPath`, `AVGText`.
+- 1 site (`samples/Sample.Generated.Function/Handlers/LaunchHandler.cs`) was a genuine missed override —
+  `CanHandle` hid `BaseHandler<T>`'s `virtual CanHandle` instead of overriding it, so real polymorphic
+  dispatch through the base type would have skipped this handler's logic. Fixed with `override`.
+- Per the Phase 8 test-coverage instruction, audited existing coverage for all 15 `RegisterTypeInfo`
+  sites: 12 already had live coverage via prior commits' component/document tests (`Audio`/`Mixer`/
+  `Selector`/`Sequencer`/`APLAMultiChildComponent` via `Components/AudioTests.cs`; `AlexaImageCaption` via
+  `Components/AlexaResponsiveCardTests.cs`; `AlexaImageListItem`/`AlexaPaginatedListItem` via
+  `Components/AlexaListTests.cs`; `AlexaSliderBase` via `Components/AlexaSliderTests.cs`; `AVGGroup`/
+  `AVGPath`/`AVGText` via `Document/VectorGraphicTests.cs`). `FlexSequence`, `TouchComponent`, and
+  `TouchWrapper` had none — added `Components/FlexSequenceTests.cs` and `Components/TouchWrapperTests.cs`
+  (the latter exercises `TouchComponent` transitively as its only concrete subclass), each a single
+  Verify-based serialize test, snapshots accepted across all 4 TFMs.
 
 Suggested commit message:
 

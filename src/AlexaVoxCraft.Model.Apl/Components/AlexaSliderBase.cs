@@ -71,7 +71,7 @@ public abstract class AlexaSliderBase : TouchComponent, IJsonSerializable<AlexaS
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<bool>? MetadataDisplayed { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : AlexaSliderBase
+    public new static void RegisterTypeInfo<T>() where T : AlexaSliderBase
     {
         TouchComponent.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>

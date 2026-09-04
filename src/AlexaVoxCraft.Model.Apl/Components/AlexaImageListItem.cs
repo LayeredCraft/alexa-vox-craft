@@ -66,7 +66,7 @@ public class AlexaImageListItem : AlexaPaginatedListItem, IJsonSerializable<Alex
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? ImageAltText { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : AlexaImageListItem
+    public new static void RegisterTypeInfo<T>() where T : AlexaImageListItem
     {
         AlexaPaginatedListItem.RegisterTypeInfo<T>();
     }

@@ -112,7 +112,7 @@ public class FlexSequence : ActionableComponent, IJsonSerializable<FlexSequence>
     /// Registers the JSON metadata modifications required for <see cref="FlexSequence"/> components.
     /// </summary>
     /// <typeparam name="T">The component type deriving from <see cref="FlexSequence"/>.</typeparam>
-    public static void RegisterTypeInfo<T>() where T : FlexSequence
+    public new static void RegisterTypeInfo<T>() where T : FlexSequence
     {
         ActionableComponent.RegisterTypeInfo<T>();
         MultiChildComponentTrait.RegisterTypeInfo<T>();

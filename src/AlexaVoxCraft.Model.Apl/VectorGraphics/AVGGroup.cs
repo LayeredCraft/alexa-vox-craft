@@ -29,7 +29,7 @@ public class AVGGroup : AVGItem, IJsonSerializable<AVGGroup>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<IAVGItem> Items { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : AVGGroup
+    public new static void RegisterTypeInfo<T>() where T : AVGGroup
     {
         AVGItem.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>

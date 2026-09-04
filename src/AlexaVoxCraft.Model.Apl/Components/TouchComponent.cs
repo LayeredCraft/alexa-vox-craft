@@ -68,7 +68,7 @@ public abstract class TouchComponent : ActionableComponent, IJsonSerializable<To
     /// Registers the JSON metadata modifications required for touchable components.
     /// </summary>
     /// <typeparam name="T">The component type deriving from <see cref="TouchComponent"/>.</typeparam>
-    public static void RegisterTypeInfo<T>() where T : TouchComponent
+    public new static void RegisterTypeInfo<T>() where T : TouchComponent
     {
         ActionableComponent.RegisterTypeInfo<T>();
         TouchableComponentTrait.RegisterTypeInfo<T>();

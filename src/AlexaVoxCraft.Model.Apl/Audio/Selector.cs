@@ -11,7 +11,7 @@ public class Selector : APLAMultiChildComponent, IJsonSerializable<Selector>
     [JsonPropertyName("type")]
     public override string Type => nameof(Selector);
 
-    public static void RegisterTypeInfo<T>() where T : Selector
+    public new static void RegisterTypeInfo<T>() where T : Selector
     {
         APLAMultiChildComponent.RegisterTypeInfo<T>();
     }

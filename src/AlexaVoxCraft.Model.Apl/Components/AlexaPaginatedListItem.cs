@@ -12,7 +12,7 @@ public abstract class AlexaPaginatedListItem : AlexaListItem, IJsonSerializable<
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string> TertiaryText { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : AlexaPaginatedListItem
+    public new static void RegisterTypeInfo<T>() where T : AlexaPaginatedListItem
     {
         AlexaListItem.RegisterTypeInfo<T>();
     }
