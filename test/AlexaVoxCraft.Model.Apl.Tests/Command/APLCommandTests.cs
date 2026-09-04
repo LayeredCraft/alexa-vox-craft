@@ -11,6 +11,14 @@ namespace AlexaVoxCraft.Model.Apl.Tests.Command;
 public sealed class APLCommandTests() : TestBase<APLCommandTests>
 {
     [Fact]
+    public async Task Idle_Serializes()
+    {
+        var command = new Idle();
+
+        await TestHelper.VerifySerializedObject(command, AlexaJson, "Idle");
+    }
+
+    [Fact]
     public async Task AnimateItem_Serializes()
     {
         var command = new AnimateItem

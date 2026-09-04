@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AlexaVoxCraft.Model.Apl.DataSources;
 
 namespace AlexaVoxCraft.Model.Apl.Tests.Document;
@@ -44,5 +45,23 @@ public sealed class DataSourceTests() : TestBase<DataSourceTests>
         list.Items.Add(new { primaryText = "item 2" });
 
         await TestHelper.VerifySerializedObject(list, AlexaJson, "DynamicTokenList");
+    }
+
+    [Fact]
+    public async Task KeyValueDataSource_Serializes_WithoutTypeWrapper()
+    {
+        var source = new KeyValueDataSource
+        {
+            Properties = new Dictionary<string, JsonElement>
+            {
+                ["headerTitle"] = JsonSerializer.SerializeToElement("Leaderboard"),
+                ["listItemsToShow"] = JsonSerializer.SerializeToElement(new[]
+                {
+                    new { primaryText = "Player1", tertiaryText = "100" }
+                })
+            }
+        };
+
+        await TestHelper.VerifySerializedObject(source, AlexaJson, "KeyValueDataSource");
     }
 }

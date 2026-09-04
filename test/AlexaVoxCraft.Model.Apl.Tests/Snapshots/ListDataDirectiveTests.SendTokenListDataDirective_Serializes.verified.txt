@@ -1,0 +1,1 @@
+﻿{"type":"Alexa.Presentation.APL.SendTokenListData","pageToken":"current-page-token","nextPageToken":"next-page-token","token":"developer-provided-token","correlationToken":"alexa-provided-correlation-token","listId":"my-list-id","items":[{"primaryText":"item 1"},{"primaryText":"item 2"}]}

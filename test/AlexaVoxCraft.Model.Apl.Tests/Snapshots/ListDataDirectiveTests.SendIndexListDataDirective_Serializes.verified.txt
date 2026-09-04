@@ -1,0 +1,1 @@
+﻿{"type":"Alexa.Presentation.APL.SendIndexListData","listVersion":3,"startIndex":11,"minimumInclusiveIndex":11,"maximumExclusiveIndex":21,"token":"developer-provided-token","correlationToken":"alexa-provided-correlation-token","listId":"my-list-id","items":[{"primaryText":"item 11"},{"primaryText":"item 12"},{"primaryText":"item 13"}]}
