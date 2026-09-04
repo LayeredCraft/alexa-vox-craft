@@ -210,14 +210,219 @@ Suggested commit message:
 test(apl,isp): add envelope- and component-level tests from real payloads
 ```
 
-### Commit 4: Remove Legacy test projects
+### Parity audit (between Commit 3 and the coverage-buildout commits)
+
+Status: Done.
+
+Before assuming Commits 2-3 were "enough," did an honest method-count + subject audit of both Legacy
+projects against the new suites. Result: **not close to parity**. Legacy has ~117 test methods in
+`Model.Legacy.Tests` and ~136 in `Model.Apl.Legacy.Tests`; Commits 2-3 added ~102 across all three
+non-legacy projects, concentrated on the shapes this specific skill actually sends/receives. Large
+legacy subsystems have zero coverage in the new suites. Full gap inventory (method counts, which
+request/directive/component types are covered vs. not) is preserved in this session's history; the
+commits below are scoped directly from it. This blocks Commit 13 (Legacy removal) until closed out —
+per Constraints, Legacy only gets deleted once new coverage is equivalent-or-better.
+
+Most of this remaining work has **no real CloudWatch capture behind it** — the trivia skill never
+exercises AudioPlayer, legacy Display templates, VideoApp, DataStore, generic print/task Connections,
+or most APL extensions/commands/components. Per Constraints, these get Compono/AutoFixture-generated
+synthetic data instead, matching legacy's own construction style (many Legacy tests already hand-build
+or property-test these objects rather than deserializing a capture).
+
+### Commit 4: Model.Tests — response construction surface (directives, speech, remaining cards, progressive response)
 
 Status: Not started.
 
 Tasks:
 
-- [ ] Confirm new suites (Commits 2-3) are a superset of Legacy suite coverage by running both side
-      by side.
+- [ ] Port `Responses/ResponseTests.cs` (26 tests: `HintDirective`, `Hint`, `Reprompt` string/Ssml
+      constructors, `PlainTextOutputSpeech`, `SsmlOutputSpeech`) as response-side serialize tests,
+      component-level, following the `BuyDirectiveTests`/`CardTests` pattern (construct in code,
+      Verify the serialized JSON) rather than the legacy `JsonElementDeepEquals` string-comparison
+      style.
+- [ ] Port the 3 remaining `Responses/CardTests.cs` card types not yet covered: `StandardCard`,
+      `AskForPermissionsConsentCard`, `LinkAccountCard` (legacy uses Compono-generated data for these
+      — keep that approach, add to `Response/CardTests.cs`).
+- [ ] Port `Responses/ProgressiveResponseTests.cs` (10 tests) as response-side serialize tests.
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model): add response construction coverage (directives, speech, cards, progressive response)
+```
+
+### Commit 5: Model.Tests — SSML builder
+
+Status: Not started.
+
+Tasks:
+
+- [ ] Port `Speech/SsmlTests.cs` (22 tests: `Speech` fluent API, `PlainText`, `<break>`, `<emphasis>`,
+      `<prosody>`, `<say-as>`, special-character escaping) as response-side serialize tests,
+      component-level, in a new `Response/SsmlTests.cs` (or `Speech/SsmlTests.cs` matching legacy's
+      folder name — pick whichever reads better once the file exists).
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model): add SSML builder coverage
+```
+
+### Commit 6: Model.Tests — legacy-interface directives (AudioPlayer, Display, VideoApp)
+
+Status: Not started.
+
+Tasks:
+
+- [ ] Port `Directives/AudioPlayerDirectiveTests.cs` (7 tests: `AudioPlayerPlayDirective`,
+      `ClearQueueDirective`, `StopDirective`, `AudioItem`/`AudioItemStream`/`AudioItemMetadata`) as
+      response-side serialize, component-level, under `Directive/`.
+- [ ] Port `Directives/DisplayDirectiveTests.cs` (3 tests, legacy pre-APL display templates).
+- [ ] Port `Directives/VideoAppDirectiveTests.cs` (6 tests: `VideoAppDirective`).
+- [ ] These interfaces are unused by the trivia skill (no real captures exist) — synthetic
+      construction only, matching legacy's hand-written style.
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model): add AudioPlayer/Display/VideoApp directive coverage
+```
+
+### Commit 7: Model.Tests — Connection Tasks and remaining request-type gaps
+
+Status: Not started.
+
+Tasks:
+
+- [ ] Port `ConnectionTasks/SkillConnectionTests.cs` (14 tests): generic print/task `Connections`
+      directives (PDF/web page/image) as response-side serialize; `ConnectionsResponseRequest`
+      deserialization as request-side. Port the `ExampleTask`/`ExampleTaskResolver` custom-task
+      registration test too (extensibility hook).
+- [ ] Close the remaining `Requests/RequestTests.cs` gaps not covered by `SkillRequestTests`:
+      `SessionResumedRequest` deserialization, the custom/unknown-request-type extensibility hook
+      (`NewIntentRequestTypeResolver`/`NewIntentRequest` pattern), and the epoch-timestamp parsing
+      variant. All request-side, deserialize, added to `Request/SkillRequestTests.cs` or a new
+      focused file if the additions don't fit naturally.
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model): add Connection Tasks and remaining request-type coverage
+```
+
+### Commit 8: Model.Apl.Tests — remaining APL commands
+
+Status: Not started.
+
+Tasks:
+
+- [ ] Port the ~10 command types in `APLCommandTests.cs` not already covered by the
+      `ExecuteCommandsDirectiveTests` sequence (`Sequential`/`SpeakItem`/`SpeakList` are done):
+      `Parallel`, `SetValue`, `SetState`, `SendEvent`, `AnimateItem`, and the rest. Response-side
+      serialize, component-level, under `Command/` (new folder, mirrors `Directive/`).
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model-apl): add remaining APL command coverage
+```
+
+### Commit 9: Model.Apl.Tests — remaining APL components
+
+Status: Not started.
+
+Tasks:
+
+- [ ] Port the ~37 component types in `ComponentTests.cs` not already covered by the pre-existing
+      `Components/ContainerTests.cs`/`FrameTests.cs`/`SpacerTests.cs`: `Text`, `Image`, `Pager`,
+      `ScrollView`, `TouchWrapper`, the `VectorGraphic` component, etc. Response-side serialize,
+      component-level, added to `Components/` following the existing per-type file convention. This
+      is the single largest gap (40 legacy tests) — fine to split across more than one working
+      session/sub-commit if needed, but land it as this numbered commit (or 9a/9b if split).
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model-apl): add remaining APL component coverage
+```
+
+### Commit 10: Model.Apl.Tests — APLDocument, Package, Layout, Gradient, VectorGraphic document
+
+Status: Not started.
+
+Tasks:
+
+- [ ] Port `APLDocumentTests.cs` (15 tests): full document feature surface — imports, resources,
+      styles, settings, mainTemplate — beyond the trivial one-component document in
+      `RenderDocumentDirectiveTests`.
+- [ ] Port `APLPackageTests.cs` (1 test: `APLDocumentLink` external package reference).
+- [ ] Port `LayoutTests.cs` (8 tests: `Layout` parameters/bindings/items).
+- [ ] Port `GradientTest.cs` (1 test) and `VectorGraphicTests.cs` (1 test: AVG document construction).
+- [ ] All response-side serialize, component-level.
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model-apl): add APLDocument/Package/Layout/Gradient/VectorGraphic coverage
+```
+
+### Commit 11: Model.Apl.Tests — DataStore and remaining APL request types
+
+Status: Not started.
+
+Tasks:
+
+- [ ] Port `DataStoreClientTests.cs` (4 tests) and `DataStoreCommandTests.cs` (5 tests:
+      `SendIndexListDataDirective`/`SendTokenListDataDirective`/`UpdateIndexListDataDirective`) as
+      response-side serialize.
+- [ ] Port `AudioTests.cs` (8 tests: APL `Audio` component/track config) as response-side serialize.
+- [ ] Close the remaining `RequestTests.cs` (Apl) gaps beyond `UserEventRequest` (already covered):
+      `LoadIndexListDataRequest`, `LoadTokenListDataRequest`, `RuntimeErrorRequest`,
+      `DataStoreErrorRequest`/`InstallationErrorRequest`, `UsagesInstalledRequest`,
+      `UsagesRemovedRequest`, `UpdateRequest`. All request-side, deserialize, added to
+      `APLSkillRequestTests`.
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model-apl): add DataStore and remaining APL request-type coverage
+```
+
+### Commit 12: Model.Apl.Tests — Extensions
+
+Status: Not started.
+
+Tasks:
+
+- [ ] Port `ExtensionTests.cs` (22 tests): `BackStack`, `EntitySensing`, `SmartMotion` extension
+      settings/directives (response-side serialize) and extension event requests (request-side
+      deserialize, where applicable) — check each test individually for which side it's actually
+      exercising rather than assuming uniformly.
+- [ ] Validate all 4 TFMs, solution build.
+
+Suggested commit message:
+
+```text
+test(model-apl): add APL extension coverage
+```
+
+### Commit 13: Remove Legacy test projects
+
+Status: Not started. Blocked on Commits 4-12.
+
+Tasks:
+
+- [ ] Re-run the parity audit (method-count + subject comparison) to confirm Commits 4-12 actually
+      closed every gap identified above — don't just assume the commit list was exhaustive.
+- [ ] Confirm new suites are a superset of Legacy suite coverage by running both side by side.
 - [ ] Delete `test/AlexaVoxCraft.Model.Legacy.Tests` and `test/AlexaVoxCraft.Model.Apl.Legacy.Tests`,
       including their `Examples/*.json` fixtures.
 - [ ] Remove both projects from `AlexaVoxCraft.slnx`.
@@ -229,7 +434,7 @@ Suggested commit message:
 test: remove Legacy test projects superseded by Verify suites
 ```
 
-### Commit 5: Mechanical warning fixes (SYSLIB0057, CS0618)
+### Commit 14: Mechanical warning fixes (SYSLIB0057, CS0618)
 
 Status: Not started.
 
@@ -248,7 +453,7 @@ Suggested commit message:
 fix: resolve obsolete-API compiler warnings
 ```
 
-### Commit 6: CS0108/CS0114 member-hiding fixes
+### Commit 15: CS0108/CS0114 member-hiding fixes
 
 Status: Not started.
 
@@ -266,7 +471,7 @@ Suggested commit message:
 fix: resolve member-hiding compiler warnings
 ```
 
-### Commit 7: Analyzer release tracking (RS2008)
+### Commit 16: Analyzer release tracking (RS2008)
 
 Status: Not started.
 
@@ -282,7 +487,7 @@ Suggested commit message:
 chore(generator): add analyzer release tracking files
 ```
 
-### Commit 8: Nullable warning cleanup - AlexaVoxCraft.Model
+### Commit 17: Nullable warning cleanup - AlexaVoxCraft.Model
 
 Status: Not started.
 
@@ -302,7 +507,7 @@ Suggested commit message:
 fix(model): resolve nullable-reference compiler warnings
 ```
 
-### Commit 9: Nullable warning cleanup - AlexaVoxCraft.Model.Apl
+### Commit 18: Nullable warning cleanup - AlexaVoxCraft.Model.Apl
 
 Status: Not started.
 
@@ -318,7 +523,7 @@ Suggested commit message:
 fix(model-apl): resolve nullable-reference compiler warnings
 ```
 
-### Commit 10: Nullable warning cleanup - remaining projects
+### Commit 19: Nullable warning cleanup - remaining projects
 
 Status: Not started.
 
@@ -361,5 +566,5 @@ Each commit should include:
 - [ ] `dotnet build AlexaVoxCraft.slnx --no-restore` green.
 - [ ] No accidental real user/device/session IDs, `.received.*`, `bin/`, or `obj/` files staged.
 
-Full suite validation is required before Commit 4 (Legacy project removal) and before each nullable
-cleanup commit (8-10), since those are the commits most likely to silently change behavior.
+Full suite validation is required before Commit 13 (Legacy project removal) and before each nullable
+cleanup commit (17-19), since those are the commits most likely to silently change behavior.
