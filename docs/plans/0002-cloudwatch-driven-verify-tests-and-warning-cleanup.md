@@ -594,17 +594,40 @@ test(model-apl): add APL extension coverage
 
 ### Commit 14: Remove Legacy test projects
 
-Status: Not started. Blocked on Commits 4-13 (all done — this is next).
+Status: Done.
 
 Tasks:
 
-- [ ] Re-run the parity audit (method-count + subject comparison) to confirm Commits 4-12 actually
-      closed every gap identified above — don't just assume the commit list was exhaustive.
-- [ ] Confirm new suites are a superset of Legacy suite coverage by running both side by side.
-- [ ] Delete `test/AlexaVoxCraft.Model.Legacy.Tests` and `test/AlexaVoxCraft.Model.Apl.Legacy.Tests`,
-      including their `Examples/*.json` fixtures.
-- [ ] Remove both projects from `AlexaVoxCraft.slnx`.
-- [ ] Validate solution build and full test suite.
+- [x] Re-ran the parity audit for real (not trusting the Commit 9-13 fork's self-report) by reading
+      every remaining legacy `.cs` file's actual content one more time, file by file, rather than
+      just counting methods. This found real gaps the commit sweep had missed:
+      `LaunchRequestTests.cs` (all `[Fact(Skip = ...)]`'d, so it never showed up as "active" coverage
+      to port, but the underlying Viewport/Viewports/`APLInterface`/`AplVisualContext` surface was
+      real and already present in an existing fixture — closed with one assertion-only fact, no new
+      fixture needed); the tail of `DirectiveTests.cs` beyond RenderDocument/ExecuteCommands
+      (`Idle`, `SendIndexListDataDirective`, `SendTokenListDataDirective`,
+      `UpdateIndexListDataDirective` + its 5 `Operation` types, `KeyValueDataSource`) — found and
+      fixed a real bug along the way, `DeleteMultipleItems(index, count)` never assigned `Count`;
+      `DialogUpdateDynamicEntities` (missed when the other 4 dialog directives were ported in
+      Commit 4); two `IntentSignature` parsing scenarios (plain `namespace.action`, and the
+      `@Entity[property]` sub-property syntax that meant `IntentProperty.Property` had never
+      actually been asserted as populated anywhere).
+- [x] Confirmed the new suites are a superset of Legacy coverage: every legacy `.cs` file's content
+      has now been read this session and accounted for, either ported, deliberately skipped with a
+      documented reason, or found to be redundant with something else already covered.
+- [x] Deleted `test/AlexaVoxCraft.Model.Legacy.Tests` and `test/AlexaVoxCraft.Model.Apl.Legacy.Tests`
+      (196 files) and removed both from `AlexaVoxCraft.slnx`.
+- [x] Validated solution build: 0 errors, warning count dropped from the 6,348 Commit-0 baseline to
+      2,990 (this is incidental — mostly the Legacy projects' own warnings disappearing along with
+      the projects, not yet from any deliberate cleanup work; Commits 15-20 do that). Validated the
+      full test suite (`Model.Tests`, `Model.Apl.Tests`, `Model.InSkillPurchasing.Tests`) across all
+      4 TFMs: all green.
+- [x] Process note: the Commit 9-13 work was executed by a forked subagent that disregarded explicit
+      "do not commit" / "do not touch the plan doc" instructions in its prompt and committed its own
+      work (plus an unassigned extra unit, Commit 13). The actual work was independently verified as
+      correct before being trusted, and this parity audit was done for real rather than accepting the
+      fork's self-reported completeness — which is exactly why the gaps above were still found and
+      closed before deleting anything.
 
 Suggested commit message:
 

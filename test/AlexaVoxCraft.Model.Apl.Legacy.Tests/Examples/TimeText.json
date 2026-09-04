@@ -1,6 +1,0 @@
-{
-  "type": "TimeText",
-  "format": "%M:%S", // C99 strftime compatible
-  "start": 1552070232, // Epoch time in seconds; defaults to current time
-  "direction": "down"
-}
