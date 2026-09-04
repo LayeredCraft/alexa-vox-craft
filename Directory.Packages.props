@@ -17,9 +17,9 @@
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
   </ItemGroup>
   <ItemGroup Label="OpenTelemetry">
-    <PackageVersion Include="OpenTelemetry" Version="1.17.0" />
-    <PackageVersion Include="OpenTelemetry.Api" Version="1.17.0" />
-    <PackageVersion Include="OpenTelemetry.Exporter.InMemory" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry" Version="1.18.0" />
+    <PackageVersion Include="OpenTelemetry.Api" Version="1.18.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.InMemory" Version="1.18.0" />
   </ItemGroup>
   <ItemGroup Label="Serilog.AspNetCore (net8.0)" Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
     <PackageVersion Include="Serilog.AspNetCore" Version="[8.0.3, 9.0.0)" />
@@ -75,27 +75,26 @@
   </ItemGroup>
   <ItemGroup Label="Verify">
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.28.0" />
+    <PackageVersion Include="Verify.XunitV3" Version="32.0.0" />
   </ItemGroup>
   <ItemGroup Label="Testing">
-    <PackageVersion Include="AwesomeAssertions" Version="9.5.0" />
+    <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.0" />
   </ItemGroup>
   <!-- Compono ecosystem migration (PLAN-0051, LayeredCraft/compono) - the
        HTTP-testing-touched projects (AlexaVoxCraft.Smapi.Tests, AlexaVoxCraft.InSkillPurchasing.Tests)
        and their shared HTTP TestKit, plus Compono.Logging (PLAN-0055, LayeredCraft/compono#116,
        merged) and CompositionBuilder.Share<T>() (PLAN-0056, LayeredCraft/compono#117, merged).
-       0.9.0-preview.90 is the real published NuGet.org version - lockstep across all Compono
-       packages, replacing the "1.0.0" local-pack placeholder used during dogfooding/validation. -->
+       1.0.0 is the real published NuGet.org version - lockstep across all Compono packages. -->
   <ItemGroup Label="Compono">
-    <PackageVersion Include="Compono" Version="0.9.0-preview.90" />
-    <PackageVersion Include="Compono.XunitV3" Version="0.9.0-preview.90" />
-    <PackageVersion Include="Compono.Http" Version="0.9.0-preview.90" />
-    <PackageVersion Include="Compono.TestDoubles" Version="0.9.0-preview.90" />
-    <PackageVersion Include="Compono.Bogus" Version="0.9.0-preview.90" />
-    <PackageVersion Include="Compono.Logging" Version="0.9.0-preview.90" />
+    <PackageVersion Include="Compono" Version="1.0.0" />
+    <PackageVersion Include="Compono.XunitV3" Version="1.0.0" />
+    <PackageVersion Include="Compono.Http" Version="1.0.0" />
+    <PackageVersion Include="Compono.TestDoubles" Version="1.0.0" />
+    <PackageVersion Include="Compono.Bogus" Version="1.0.0" />
+    <PackageVersion Include="Compono.Logging" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup Label="Reference Assemblies">
     <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.11" />
