@@ -1,0 +1,107 @@
+{
+  "version": "1.0",
+  "sessionAttributes": {
+    "UserContext": {
+      "$type": "guest",
+      "AlexaUserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+      "IsLinked": false,
+      "entitledProducts": [
+        {
+          "productId": "amzn1.adg.product.09ec74a2-745a-407f-bd4c-960bf5a97d0e",
+          "name": "Pixar Pack",
+          "type": "ENTITLEMENT",
+          "summary": "Unlock Pixar trivia categories.",
+          "purchasable": "NOT_PURCHASABLE",
+          "entitled": "ENTITLED",
+          "entitlementReason": "PURCHASED",
+          "referenceName": "ent-pixar",
+          "activeEntitlementCount": 1,
+          "purchaseMode": "LIVE",
+          "startTime": "0001-01-01T00:00:00+00:00",
+          "endTime": "0001-01-01T00:00:00+00:00"
+        }
+      ],
+      "purchasableProducts": [
+        {
+          "productId": "amzn1.adg.product.5e8ec9a9-ff64-4569-ac34-3cb66c852e4c",
+          "name": "Disney Parks Pack",
+          "type": "ENTITLEMENT",
+          "summary": "Explore the magic of Disney Parks with trivia about attractions, resorts, lands, entertainment, and unforgettable park experiences from around the world.",
+          "purchasable": "PURCHASABLE",
+          "entitled": "NOT_ENTITLED",
+          "entitlementReason": "NOT_PURCHASED",
+          "referenceName": "ent-disney-parks",
+          "activeEntitlementCount": 0,
+          "purchaseMode": "LIVE",
+          "startTime": "0001-01-01T00:00:00+00:00",
+          "endTime": "0001-01-01T00:00:00+00:00"
+        }
+      ]
+    },
+    "repeatModel": {
+      "$type": "startGame",
+      "IntroSpeech": "",
+      "QuestionSpeech": "Question 1. When Disney World opened, who gave the opening speech? 1.  Roy Disney. 2.  Lillian Disney. 3.  The president. 4.  Walt Disney. ",
+      "QuestionText": "When Disney World opened, who gave the opening speech?",
+      "Answers": [
+        "Roy Disney",
+        "Lillian Disney",
+        "The president",
+        "Walt Disney"
+      ]
+    },
+    "currentGame": {
+      "GameQuestions": {
+        "1": "963923db-0b49-4fc0-9257-5187e40dbd07",
+        "6": "008a1a4f-4bd4-410d-8531-4c1c135cf98b",
+        "10": "74bf4247-ddac-4617-b6ed-78f88412e34d",
+        "3": "2ea31b72-5f9c-46d2-957b-ed0ae7f0dc10",
+        "9": "803d77cf-47a5-470d-8977-7f80b2904efd"
+      },
+      "CorrectAnswerIndex": 0,
+      "CurrentScore": 0,
+      "CurrentQuestionIndex": 0,
+      "CorrectAnswerText": "Roy Disney",
+      "QuestionText": "When Disney World opened, who gave the opening speech?",
+      "Answers": [
+        "Roy Disney",
+        "Lillian Disney",
+        "The president",
+        "Walt Disney"
+      ],
+      "CategoryId": "general"
+    },
+    "ConversationContext": {
+      "Type": 2,
+      "SubContext": null,
+      "Metadata": {
+        "CreatedAt": "2026-09-04T15:47:25.0958416+00:00",
+        "LastUpdated": "2026-09-04T15:47:34.4793591+00:00",
+        "LastHandler": null,
+        "TransitionCount": 2,
+        "UserIdentifier": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "IsAuthenticated": false,
+        "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000"
+      },
+      "Data": {}
+    }
+  },
+  "response": {
+    "outputSpeech": {
+      "type": "SSML",
+      "ssml": "<speak>Question 1. When Disney World opened, who gave the opening speech? 1.  Roy Disney. 2.  Lillian Disney. 3.  The president. 4.  Walt Disney.</speak>"
+    },
+    "card": {
+      "type": "Simple",
+      "title": "Disney Trivia",
+      "content": "Question 1. When Disney World opened, who gave the opening speech? 1.  Roy Disney. 2.  Lillian Disney. 3.  The president. 4.  Walt Disney. "
+    },
+    "reprompt": {
+      "outputSpeech": {
+        "type": "SSML",
+        "ssml": "<speak>Question 1. When Disney World opened, who gave the opening speech? 1.  Roy Disney. 2.  Lillian Disney. 3.  The president. 4.  Walt Disney.</speak>"
+      }
+    },
+    "shouldEndSession": false
+  }
+}
