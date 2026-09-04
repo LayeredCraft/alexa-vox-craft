@@ -1,0 +1,1 @@
+﻿{"type":"linear","colorRange":["white","transparent"],"inputRange":[0.0,0.5]}

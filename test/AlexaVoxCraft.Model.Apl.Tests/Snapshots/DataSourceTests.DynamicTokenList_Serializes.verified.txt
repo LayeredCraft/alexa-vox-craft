@@ -1,0 +1,1 @@
+﻿{"type":"dynamicTokenList","listId":"my-list-id","pageToken":"initial-token","forwardPageToken":"forward-token","items":[{"primaryText":"item 1"},{"primaryText":"item 2"}]}

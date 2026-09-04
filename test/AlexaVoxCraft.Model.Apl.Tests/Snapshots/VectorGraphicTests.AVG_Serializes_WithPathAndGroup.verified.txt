@@ -1,0 +1,1 @@
+﻿{"type":"AVG","version":"1.2","height":"24dp","width":"24dp","items":[{"type":"path","fill":"#FFFFFF","pathData":"M12,2L2,7L12,12L22,7L12,2Z"},{"type":"group","items":{"type":"path","pathData":"M2,17L12,22L22,17"}}],"viewportHeight":24,"viewportWidth":24}

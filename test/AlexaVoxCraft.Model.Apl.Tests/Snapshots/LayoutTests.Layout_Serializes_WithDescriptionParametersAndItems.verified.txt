@@ -1,0 +1,1 @@
+﻿{"description":"A basic header with a title and a logo","parameters":[{"name":"title","type":"string"},{"name":"logoUrl","type":"string"}],"items":[{"type":"AlexaHeader"},{"hintText":"Hint text","type":"AlexaFooter"}]}

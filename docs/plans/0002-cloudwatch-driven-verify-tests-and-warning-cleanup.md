@@ -486,18 +486,33 @@ test(model-apl): add remaining APL component coverage
 
 ### Commit 11: Model.Apl.Tests — APLDocument, Package, Layout, Gradient, VectorGraphic document
 
-Status: Not started.
+Status: Done (executed via a forked subagent, reviewed and independently re-verified before
+committing).
 
 Tasks:
 
-- [ ] Port `APLDocumentTests.cs` (15 tests): full document feature surface — imports, resources,
-      styles, settings, mainTemplate — beyond the trivial one-component document in
-      `RenderDocumentDirectiveTests`.
-- [ ] Port `APLPackageTests.cs` (1 test: `APLDocumentLink` external package reference).
-- [ ] Port `LayoutTests.cs` (8 tests: `Layout` parameters/bindings/items).
-- [ ] Port `GradientTest.cs` (1 test) and `VectorGraphicTests.cs` (1 test: AVG document construction).
-- [ ] All response-side serialize, component-level.
-- [ ] Validate all 4 TFMs, solution build.
+- [x] Ported 31 test methods across 6 new files in a new `Document/` folder (distinct from
+      `Components/`/`Command/`): `APLDocumentTests.cs` (the full `APLDocumentVersion` → version-string
+      mapping as one `[Theory]`, a document with resources/styles/imports, a document with lifecycle
+      hooks (`OnMount`/`OnConfigChange`) and `Settings.SupportsResizing`, `Import` construction,
+      `APLDocumentLink`, and the `Import.Into(document)` dedup-on-registration behavior — 2 tests, no
+      Verify, plain behavioral assertions), `LayoutTests.cs` (`Layout`, `AlexaImage`, `AlexaFooter`,
+      `AlexaHeader`), `GradientTests.cs` (`APLGradient`), `VectorGraphicTests.cs` (`AVG` with
+      `AVGPath`/`AVGGroup`), `APLPackageTests.cs` (`APLPackage`, which legacy only exercised via
+      round-trip against a fixture — built fresh from the actual class shape), `DataSourceTests.cs`
+      (`ListDataSource`, `DynamicIndexList`, `DynamicTokenList`).
+- [x] Skipped `HandleInvalidDocumentVersion`/`HandleValidDocumentVersion` (deserialize/round-trip,
+      off-limits — the version `[Theory]` covers the serialize half) and the fixture-only deserialize
+      tests (`DailyCheese`/`ChangeDocumentLayout`/`LongTextExample`/`KeeferExample`, plus legacy's
+      `Layout` `TopLevelProperties`/`ParameterProperties` which only deserialized) — reproducing an
+      equivalent intricate document tree from scratch wasn't worth it once resources/styles/imports/
+      lifecycle-hooks were covered standalone.
+- [x] No suspected library bugs found. One test-authoring pitfall worth recording: `Import` implements
+      `IEquatable<Import>` but not `object.Equals`, and `Import.AlexaLayouts` etc. return a *new*
+      instance per access, so `.Should().Be(Import.AlexaLayouts)` silently does reference comparison
+      and fails — use `.Should().BeEquivalentTo(...)` instead (already applied above).
+- [x] Validated independently (not just the fork's self-report): all 4 TFMs 146/146 passing (115
+      pre-existing + 31 new), no stray `.received.*` files. Validated solution build: 0 errors.
 
 Suggested commit message:
 
