@@ -6,5 +6,5 @@ public class BackStackSettings
 {
     [JsonPropertyName("backstackId")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string BackstackId { get; set; }
+    public string BackstackId { get; set; } = null!;
 }

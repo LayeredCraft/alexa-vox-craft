@@ -4,11 +4,11 @@ namespace AlexaVoxCraft.Model.Apl.DataStore.PackageManager;
 
 public class UsagesInstalledPayload
 {
-    [JsonPropertyName("packageId")] public string PackageId { get; set; }
+    [JsonPropertyName("packageId")] public string PackageId { get; set; } = null!;
 
     [JsonPropertyName("packageVersion")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? PackageVersion { get; set; }
 
-    [JsonPropertyName("usages")] public Usage[] Usages { get; set; }
+    [JsonPropertyName("usages")] public Usage[] Usages { get; set; } = null!;
 }

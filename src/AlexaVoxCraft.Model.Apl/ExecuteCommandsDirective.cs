@@ -39,9 +39,9 @@ public class ExecuteCommandsDirective : IDirective, IJsonSerializable<ExecuteCom
 
     [JsonPropertyName("type")] public string Type => DirectiveType;
 
-    [JsonPropertyName("token")] public string Token { get; set; }
+    [JsonPropertyName("token")] public string Token { get; set; } = null!;
 
-    [JsonPropertyName("commands")] public IList<APLCommand> Commands { get; set; }
+    [JsonPropertyName("commands")] public IList<APLCommand> Commands { get; set; } = null!;
 
     public static void RegisterTypeInfo<T>() where T : ExecuteCommandsDirective
     {

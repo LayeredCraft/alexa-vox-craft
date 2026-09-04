@@ -19,7 +19,7 @@ public class Parameter : IJsonSerializable<Parameter>
     [JsonIgnore] public bool WasStringInput { get; set; } = false;
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [JsonPropertyName("type")]
     [JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<ParameterType>))]
@@ -32,7 +32,7 @@ public class Parameter : IJsonSerializable<Parameter>
 
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public string Description { get; set; }
+    public string Description { get; set; } = null!;
 
     [JsonPropertyName("default")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

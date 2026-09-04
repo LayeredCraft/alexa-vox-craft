@@ -6,5 +6,5 @@ public class APLViewportConfigurationContainer
 {
     [JsonPropertyName("current")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLViewportConfiguration Current { get; set; }
+    public APLViewportConfiguration Current { get; set; } = null!;
 }

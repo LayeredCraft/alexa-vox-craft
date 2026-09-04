@@ -17,5 +17,5 @@ public class APLError
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Message { get; set; }
 
-    [JsonExtensionData] public Dictionary<string, object> ExtraData { get; set; }
+    [JsonExtensionData] public Dictionary<string, object> ExtraData { get; set; } = null!;
 }

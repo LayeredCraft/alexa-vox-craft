@@ -9,27 +9,27 @@ namespace AlexaVoxCraft.Model.Apl.Components;
 
 public class VideoSource : IJsonSerializable<VideoSource>
 {
-    [JsonPropertyName("url")] public APLValue<Uri> Uri { get; set; }
+    [JsonPropertyName("url")] public APLValue<Uri> Uri { get; set; } = null!;
 
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Description { get; set; }
+    public APLValue<string> Description { get; set; } = null!;
 
     [JsonPropertyName("duration")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<int?> DurationMilliseconds { get; set; }
+    public APLValue<int?> DurationMilliseconds { get; set; } = null!;
 
     [JsonPropertyName("repeatCount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<int?> RepeatCount { get; set; }
+    public APLValue<int?> RepeatCount { get; set; } = null!;
 
     [JsonPropertyName("offset")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<int?> Offset { get; set; }
+    public APLValue<int?> Offset { get; set; } = null!;
 
     [JsonPropertyName("textTrack")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<TextTrack> TextTrack { get; set; }
+    public APLValueCollection<TextTrack> TextTrack { get; set; } = null!;
 
     public static List<VideoSource> FromUrl(string url)
     {
@@ -47,7 +47,7 @@ public class VideoSource : IJsonSerializable<VideoSource>
 
     public VideoSource(string url)
     {
-        Uri = new Uri(url);
+        Uri = ((APLValue<Uri>?)new Uri(url))!;
     }
 
     public static void RegisterTypeInfo<T>() where T : VideoSource

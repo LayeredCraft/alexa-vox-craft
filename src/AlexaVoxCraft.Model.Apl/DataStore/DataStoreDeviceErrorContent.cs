@@ -7,5 +7,5 @@ public class DataStoreDeviceErrorContent : DataStoreErrorContent
 {
     [JsonPropertyName("commands")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public IList<DataStoreCommand> Commands { get; set; }
+    public IList<DataStoreCommand> Commands { get; set; } = null!;
 }

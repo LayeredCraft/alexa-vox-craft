@@ -12,10 +12,10 @@ public class DynamicTokenList : APLDataSource, IJsonSerializable<DynamicTokenLis
     public override string Type => DataSourceType;
 
     [JsonPropertyName("listId")]
-    public string ListId { get; set; }
+    public string ListId { get; set; } = null!;
 
     [JsonPropertyName("pageToken")]
-    public string PageToken { get; set; }
+    public string PageToken { get; set; } = null!;
 
     [JsonPropertyName("backwardPageToken")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

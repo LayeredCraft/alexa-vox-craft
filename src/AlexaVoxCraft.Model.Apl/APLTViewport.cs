@@ -9,7 +9,7 @@ public class APLTViewport : Viewport
     public override string Type => ViewportType;
 
     [JsonPropertyName("supportedProfiles")]
-    public APLTProfile[] SupportedProfiles { get; set; }
+    public APLTProfile[] SupportedProfiles { get; set; } = null!;
 
     [JsonPropertyName("lineLength")]
     public int LineLength { get; set; }
@@ -21,5 +21,5 @@ public class APLTViewport : Viewport
     public APLTFormat Format { get; set; }
 
     [JsonPropertyName("interSegments")]
-    public InterSegment[] InterSegments { get; set; }
+    public InterSegment[] InterSegments { get; set; } = null!;
 }

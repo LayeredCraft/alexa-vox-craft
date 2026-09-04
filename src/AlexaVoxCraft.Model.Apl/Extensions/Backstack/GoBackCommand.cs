@@ -4,14 +4,14 @@ namespace AlexaVoxCraft.Model.Apl.Extensions.Backstack;
 
 public class GoBackCommand : APLCommand
 {
-    private readonly string _extensionName;
+    private readonly string? _extensionName;
 
     public static GoBackCommand For(BackstackExtension extension)
     {
         return new GoBackCommand(extension.Name);
     }
 
-    public GoBackCommand(string extensionName)
+    public GoBackCommand(string? extensionName)
     {
         _extensionName = extensionName;
     }
@@ -25,5 +25,5 @@ public class GoBackCommand : APLCommand
 
     [JsonPropertyName("backValue")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public object BackValue { get; set; }
+    public object BackValue { get; set; } = null!;
 }

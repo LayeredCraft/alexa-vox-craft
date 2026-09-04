@@ -6,5 +6,5 @@ public class UsagesInstalledRequest : Request.Type.Request
 {
     public const string RequestType = "Alexa.DataStore.PackageManager.UsagesInstalled";
 
-    [JsonPropertyName("payload")] public UsagesInstalledPayload Payload { get; set; }
+    [JsonPropertyName("payload")] public UsagesInstalledPayload Payload { get; set; } = null!;
 }

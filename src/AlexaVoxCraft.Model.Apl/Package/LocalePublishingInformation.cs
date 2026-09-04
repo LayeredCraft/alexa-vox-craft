@@ -8,5 +8,5 @@ public class LocalePublishingInformation
     public TargetViewport TargetViewport { get; set; }
 
     [JsonPropertyName("metadata")]
-    public LocalePublishingInformationMetadata Metadata { get; set; }
+    public LocalePublishingInformationMetadata Metadata { get; set; } = null!;
 }

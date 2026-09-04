@@ -13,51 +13,51 @@ public class AlexaHeader : APLComponent, IJsonSerializable<AlexaHeader>
 
     [JsonPropertyName("headerTitle")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> HeaderTitle { get; set; }
+    public APLValue<string> HeaderTitle { get; set; } = null!;
 
     [JsonPropertyName("headerSubtitle")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> HeaderSubtitle { get; set; }
+    public APLValue<string> HeaderSubtitle { get; set; } = null!;
 
     [JsonPropertyName("headerAttributionText")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> HeaderAttributionText { get; set; }
+    public APLValue<string> HeaderAttributionText { get; set; } = null!;
 
     [JsonPropertyName("headerAttributionOpacity")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<double?> HeaderAttributionOpacity { get; set; }
+    public APLValue<double?> HeaderAttributionOpacity { get; set; } = null!;
 
     [JsonPropertyName("headerAttributionImage")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> HeaderAttributionImage { get; set; }
+    public APLValue<string> HeaderAttributionImage { get; set; } = null!;
 
     [JsonPropertyName("headerAttributionPrimacy")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> HeaderAttributionPrimacy { get; set; }
+    public APLValue<bool?> HeaderAttributionPrimacy { get; set; } = null!;
 
     [JsonPropertyName("headerBackButton")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> HeaderBackButton { get; set; }
+    public APLValue<bool?> HeaderBackButton { get; set; } = null!;
 
     [JsonPropertyName("headerBackButtonAccessibilityLabel")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> HeaderBackButtonAccessibilityLabel { get; set; }
+    public APLValue<string> HeaderBackButtonAccessibilityLabel { get; set; } = null!;
 
     [JsonPropertyName("headerBackButtonCommand")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand> HeaderBackButtonCommand { get; set; }
+    public APLValueCollection<APLCommand> HeaderBackButtonCommand { get; set; } = null!;
 
     [JsonPropertyName("headerBackgroundColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> HeaderBackgroundColor { get; set; }
+    public APLValue<string> HeaderBackgroundColor { get; set; } = null!;
 
     [JsonPropertyName("headerDivider")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> HeaderDivider { get; set; }
+    public APLValue<bool?> HeaderDivider { get; set; } = null!;
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Theme { get; set; }
+    public APLValue<string> Theme { get; set; } = null!;
 
     public new static void RegisterTypeInfo<T>() where T : AlexaHeader
     {

@@ -50,17 +50,17 @@ public class FlexSequence : ActionableComponent, IJsonSerializable<FlexSequence>
     /// <summary>Gets or sets the commands to execute when the component is scrolled.</summary>
     [JsonPropertyName("onScroll")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand> OnScroll { get; set; }
+    public APLValueCollection<APLCommand> OnScroll { get; set; } = null!;
 
     /// <summary>Gets or sets the direction in which the component scrolls.</summary>
     [JsonPropertyName("scrollDirection")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> ScrollDirection { get; set; }
+    public APLValue<string> ScrollDirection { get; set; } = null!;
 
     /// <summary>Gets or sets the snap behavior when scrolling stops.</summary>
     [JsonPropertyName("snap")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<Snap?> Snap { get; set; }
+    public APLValue<Snap?> Snap { get; set; } = null!;
 
     // IMultiChildComponent
     /// <summary>Gets or sets the data collection used to populate the component's children.</summary>

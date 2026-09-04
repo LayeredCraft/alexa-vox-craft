@@ -16,5 +16,5 @@ public class TickHandler
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<int>? MinimumDelay { get; set; }
 
-    [JsonPropertyName("commands")] public APLValueCollection<APLCommand> Commands { get; set; }
+    [JsonPropertyName("commands")] public APLValueCollection<APLCommand> Commands { get; set; } = null!;
 }

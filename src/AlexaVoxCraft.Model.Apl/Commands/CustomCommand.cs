@@ -14,8 +14,8 @@ public class CustomCommand : APLCommand
     }
 
     [JsonPropertyName("type")]
-    public override string Type { get; }
+    public override string Type { get; } = null!;
 
     [JsonExtensionData]
-    public Dictionary<string, object> ParameterValues { get; set; }
+    public Dictionary<string, object> ParameterValues { get; set; } = null!;
 }

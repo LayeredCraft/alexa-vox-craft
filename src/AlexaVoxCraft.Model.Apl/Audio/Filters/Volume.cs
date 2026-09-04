@@ -8,5 +8,5 @@ public class Volume : APLAFilter
     public override string Type => nameof(Volume);
 
     [JsonPropertyName("amount")]
-    public APLValue<double> Duration { get; set; }
+    public APLValue<double> Duration { get; set; } = null!;
 }

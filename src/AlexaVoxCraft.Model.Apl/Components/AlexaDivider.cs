@@ -8,7 +8,7 @@ public class AlexaDivider : APLComponent, IJsonSerializable<AlexaDivider>
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Theme { get; set; }
+    public APLValue<string> Theme { get; set; } = null!;
 
     public new static void RegisterTypeInfo<T>() where T : AlexaDivider
     {

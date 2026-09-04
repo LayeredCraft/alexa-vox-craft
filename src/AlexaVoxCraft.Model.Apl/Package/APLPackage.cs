@@ -14,5 +14,5 @@ public class APLPackage
     public PublishingInformation? PublishingInformation { get; set; }
 
     [JsonPropertyName("manifest")]
-    public Manifest Manifest { get; set; }
+    public Manifest Manifest { get; set; } = null!;
 }

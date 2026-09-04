@@ -13,7 +13,7 @@ public abstract class SingleOrListConverter<TValue> : JsonConverter<object>
     }
     protected virtual bool AlwaysOutputArray { get; }
 
-    protected virtual object OutputArrayItem(TValue value) => value;
+    protected virtual object OutputArrayItem(TValue value) => value!;
 
     protected virtual JsonTokenType SingleTokenType => JsonTokenType.StartObject;
 

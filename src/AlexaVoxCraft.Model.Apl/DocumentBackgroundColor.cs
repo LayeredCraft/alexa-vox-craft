@@ -16,8 +16,8 @@ public class DocumentBackgroundColor
         Gradient = gradient;
     }
 
-    public string Color { get; set; }
-    public APLGradient Gradient { get; set; }
+    public string Color { get; set; } = null!;
+    public APLGradient Gradient { get; set; } = null!;
 
     public static implicit operator DocumentBackgroundColor(string color)
     {

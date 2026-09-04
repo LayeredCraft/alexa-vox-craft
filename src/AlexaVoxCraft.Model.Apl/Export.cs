@@ -15,11 +15,11 @@ public class Export
         Name = name;
     }
 
-    [JsonPropertyName("name")] public string Name { get; set; }
+    [JsonPropertyName("name")] public string Name { get; set; } = null!;
 
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public static implicit operator Export(string exportName)
     {

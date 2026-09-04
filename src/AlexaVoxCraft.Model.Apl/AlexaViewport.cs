@@ -20,7 +20,7 @@ public class AlexaViewport
 
     [JsonPropertyName("pixelWidth")] public int PixelWidth { get; set; }
 
-    [JsonPropertyName("touch")] public string[] Touch { get; set; }
+    [JsonPropertyName("touch")] public string[] Touch { get; set; } = null!;
 
     [JsonPropertyName("keyboard")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

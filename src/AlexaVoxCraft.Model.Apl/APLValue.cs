@@ -8,7 +8,7 @@ public class APLValue
     public string? Expression { get; set; }
 
     public virtual bool IsSingle { get; set; } = false;
-    public virtual object GetValue()
+    public virtual object? GetValue()
     {
         return null;
     }
@@ -23,7 +23,7 @@ public class APLValue
         typeof(APLDimensionValue)
     };
 
-    public static APLValue<T> To<T>(string expression)
+    public static APLValue<T> To<T>(string? expression)
     {
         if (_invalidTypes.Contains(typeof(T)))
         {

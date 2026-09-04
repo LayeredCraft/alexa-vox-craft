@@ -18,5 +18,5 @@ public class LoadTokenListDataRequest : Request.Type.Request
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? ListId { get; set; }
 
-    [JsonPropertyName("pageToken")] public string PageToken { get; set; }
+    [JsonPropertyName("pageToken")] public string PageToken { get; set; } = null!;
 }

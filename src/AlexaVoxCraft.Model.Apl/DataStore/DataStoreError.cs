@@ -7,5 +7,5 @@ namespace AlexaVoxCraft.Model.Apl.DataStore;
 public abstract class DataStoreError
 {
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = null!;
 }

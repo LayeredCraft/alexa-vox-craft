@@ -21,7 +21,7 @@ public class DynamicIndexList : APLDataSource, IJsonSerializable<DynamicIndexLis
     [JsonPropertyName("type")]
     public override string Type => DataSourceType;
 
-    [JsonPropertyName("listId")] public string ListId { get; set; }
+    [JsonPropertyName("listId")] public string ListId { get; set; } = null!;
 
     [JsonPropertyName("startIndex")] public int StartIndex { get; set; }
 

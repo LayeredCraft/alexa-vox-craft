@@ -29,23 +29,23 @@ public class Sequence : ActionableComponent, IJsonSerializable<Sequence>, IMulti
 
     [JsonPropertyName("scrollDirection")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> ScrollDirection { get; set; }
+    public APLValue<string> ScrollDirection { get; set; } = null!;
 
     [JsonPropertyName("numbered")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> Numbered { get; set; }
+    public APLValue<bool?> Numbered { get; set; } = null!;
 
     [JsonPropertyName("onScroll")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand> OnScroll { get; set; }
+    public APLValueCollection<APLCommand> OnScroll { get; set; } = null!;
 
     [JsonPropertyName("scaling")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<int?> Scaling { get; set; }
+    public APLValue<int?> Scaling { get; set; } = null!;
 
     [JsonPropertyName("snap")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<Snap?> Snap { get; set; }
+    public APLValue<Snap?> Snap { get; set; } = null!;
 
     [JsonPropertyName("allowForward")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -10,7 +10,7 @@ public class JsonStringExportConverter : JsonConverter<Export>
     {
         return reader.TokenType switch
         {
-            JsonTokenType.String => new Export(reader.GetString()),
+            JsonTokenType.String => new Export(reader.GetString()!),
             JsonTokenType.StartObject => ReadExportObject(ref reader),
             _ => throw new JsonException($"Unexpected token {reader.TokenType} when deserializing Export.")
         };
@@ -22,7 +22,7 @@ public class JsonStringExportConverter : JsonConverter<Export>
         var root = document.RootElement;
 
         var name = root.TryGetProperty("name", out var nameProp)
-            ? nameProp.GetString()
+            ? nameProp.GetString()!
             : throw new JsonException("Missing 'name' property for Export object");
 
         var export = new Export(name);

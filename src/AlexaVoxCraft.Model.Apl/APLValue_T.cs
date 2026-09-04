@@ -32,16 +32,16 @@ public class APLValue<T> : APLValue
         Value = value;
     }
 
-    public T Value { get; set; }
+    public T Value { get; set; } = default!;
 
-    public override object GetValue()
+    public override object? GetValue()
     {
         return Value;
     }
 
     public static implicit operator T(APLValue<T> value)
     {
-        return value.Value;
+        return value.Value!;
     }
 
     public static implicit operator APLValue<T>?(T value)

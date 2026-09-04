@@ -6,7 +6,7 @@ public class Blur : IImageFilter
 {
     [JsonPropertyName("radius")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Radius { get; set; }
+    public APLDimensionValue Radius { get; set; } = null!;
 
     public Blur()
     {

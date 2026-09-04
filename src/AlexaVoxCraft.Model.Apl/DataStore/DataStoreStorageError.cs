@@ -4,5 +4,5 @@ namespace AlexaVoxCraft.Model.Apl.DataStore;
 
 public class DataStoreStorageError : DataStoreError
 {
-    [JsonPropertyName("content")] public DataStoreStorageErrorContent Content { get; set; }
+    [JsonPropertyName("content")] public DataStoreStorageErrorContent Content { get; set; } = null!;
 }

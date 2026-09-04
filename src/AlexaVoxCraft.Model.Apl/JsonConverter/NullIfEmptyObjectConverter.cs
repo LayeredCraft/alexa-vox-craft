@@ -19,9 +19,11 @@ public sealed class NullIfEmptyObjectConverter<T> : JsonConverter<T?> where T : 
 
         // Avoid recursion by cloning options without this converter
         var safeOptions = new JsonSerializerOptions(options);
-        safeOptions.Converters.Remove(
-            safeOptions.Converters.FirstOrDefault(c => c is NullIfEmptyObjectConverter<T>)
-        );
+        var selfConverter = safeOptions.Converters.FirstOrDefault(c => c is NullIfEmptyObjectConverter<T>);
+        if (selfConverter is not null)
+        {
+            safeOptions.Converters.Remove(selfConverter);
+        }
 
         return JsonSerializer.Deserialize<T>(root.GetRawText(), safeOptions);
     }

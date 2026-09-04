@@ -23,23 +23,23 @@ public class Image : APLComponent, IJsonSerializable<Image>
 
     [JsonPropertyName("align")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Align { get; set; }
+    public APLValue<string> Align { get; set; } = null!;
 
     [JsonPropertyName("borderRadius")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue BorderRadius { get; set; }
+    public APLDimensionValue BorderRadius { get; set; } = null!;
 
     [JsonPropertyName("overlayGradient")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<APLGradient> OverlayGradient { get; set; }
+    public APLValue<APLGradient> OverlayGradient { get; set; } = null!;
 
     [JsonPropertyName("overlayColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> OverlayColor { get; set; }
+    public APLValue<string> OverlayColor { get; set; } = null!;
 
     [JsonPropertyName("scale")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<Scale?> Scale { get; set; }
+    public APLValue<Scale?> Scale { get; set; } = null!;
 
     [JsonPropertyName("sources")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -47,7 +47,7 @@ public class Image : APLComponent, IJsonSerializable<Image>
 
     [JsonPropertyName("filters")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<IImageFilter> Filters { get; set; }
+    public APLValueCollection<IImageFilter> Filters { get; set; } = null!;
 
     public new static void RegisterTypeInfo<T>() where T : Image
     {

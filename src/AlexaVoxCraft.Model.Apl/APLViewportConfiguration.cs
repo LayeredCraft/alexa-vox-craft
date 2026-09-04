@@ -6,9 +6,9 @@ public class APLViewportConfiguration
 {
     [JsonPropertyName("video")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public VideoSupport Video { get; set; }
+    public VideoSupport Video { get; set; } = null!;
 
     [JsonPropertyName("size")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLViewportSize Size { get; set; }
+    public APLViewportSize Size { get; set; } = null!;
 }

@@ -12,11 +12,11 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 {
     [JsonPropertyName("inheritParentState")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> InheritParentState { get; set; }
+    public APLValue<bool?> InheritParentState { get; set; } = null!;
 
     [JsonPropertyName("style")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Style { get; set; }
+    public APLValue<string> Style { get; set; } = null!;
 
     [JsonPropertyName("padding")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -24,75 +24,75 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("paddingStart")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue PaddingStart { get; set; }
+    public APLDimensionValue PaddingStart { get; set; } = null!;
 
     [JsonPropertyName("paddingEnd")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue PaddingEnd { get; set; }
+    public APLDimensionValue PaddingEnd { get; set; } = null!;
 
     [JsonPropertyName("paddingLeft")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue PaddingLeft { get; set; }
+    public APLDimensionValue PaddingLeft { get; set; } = null!;
 
     [JsonPropertyName("paddingTop")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue PaddingTop { get; set; }
+    public APLDimensionValue PaddingTop { get; set; } = null!;
 
     [JsonPropertyName("paddingRight")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue PaddingRight { get; set; }
+    public APLDimensionValue PaddingRight { get; set; } = null!;
 
     [JsonPropertyName("paddingBottom")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue PaddingBottom { get; set; }
+    public APLDimensionValue PaddingBottom { get; set; } = null!;
 
     [JsonPropertyName("minWidth")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue MinWidth { get; set; }
+    public APLDimensionValue MinWidth { get; set; } = null!;
 
     [JsonPropertyName("minHeight")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue MinHeight { get; set; }
+    public APLDimensionValue MinHeight { get; set; } = null!;
 
     [JsonPropertyName("maxWidth")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue MaxWidth { get; set; }
+    public APLDimensionValue MaxWidth { get; set; } = null!;
 
     [JsonPropertyName("maxHeight")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue MaxHeight { get; set; }
+    public APLDimensionValue MaxHeight { get; set; } = null!;
 
     [JsonPropertyName("height")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Height { get; set; }
+    public APLDimensionValue Height { get; set; } = null!;
 
     [JsonPropertyName("width")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Width { get; set; }
+    public APLDimensionValue Width { get; set; } = null!;
 
     [JsonPropertyName("alignSelf")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> AlignSelf { get; set; }
+    public APLValue<string> AlignSelf { get; set; } = null!;
 
     [JsonPropertyName("bottom")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Bottom { get; set; }
+    public APLDimensionValue Bottom { get; set; } = null!;
 
     [JsonPropertyName("grow")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<double?> Grow { get; set; }
+    public APLValue<double?> Grow { get; set; } = null!;
 
     [JsonPropertyName("left")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Left { get; set; }
+    public APLDimensionValue Left { get; set; } = null!;
 
     [JsonPropertyName("start")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Start { get; set; }
+    public APLDimensionValue Start { get; set; } = null!;
 
     [JsonPropertyName("numbering")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Numbering { get; set; }
+    public APLValue<string> Numbering { get; set; } = null!;
 
     [JsonPropertyName("position")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -100,45 +100,45 @@ public abstract class APLComponent : APLComponentBase, IJsonSerializable<APLComp
 
     [JsonPropertyName("right")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Right { get; set; }
+    public APLDimensionValue Right { get; set; } = null!;
 
     [JsonPropertyName("end")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue End { get; set; }
+    public APLDimensionValue End { get; set; } = null!;
 
     [JsonPropertyName("shrink")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<int?> Shrink { get; set; }
+    public APLValue<int?> Shrink { get; set; } = null!;
 
     [JsonPropertyName("spacing")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Spacing { get; set; }
+    public APLDimensionValue Spacing { get; set; } = null!;
 
     [JsonPropertyName("top")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue Top { get; set; }
+    public APLDimensionValue Top { get; set; } = null!;
 
     [JsonPropertyName("speech")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Speech { get; set; }
+    public APLValue<string> Speech { get; set; } = null!;
 
-    [JsonExtensionData] public Dictionary<string, object> Properties { get; set; }
+    [JsonExtensionData] public Dictionary<string, object> Properties { get; set; } = null!;
 
     [JsonPropertyName("accessibilityLabel")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> AccessibilityLabel { get; set; }
+    public APLValue<string> AccessibilityLabel { get; set; } = null!;
 
     [JsonPropertyName("checked")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> Checked { get; set; }
+    public APLValue<bool?> Checked { get; set; } = null!;
 
     [JsonPropertyName("disabled")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> Disabled { get; set; }
+    public APLValue<bool?> Disabled { get; set; } = null!;
 
     [JsonPropertyName("display")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<APLDisplay> Display { get; set; }
+    public APLValue<APLDisplay> Display { get; set; } = null!;
 
     [JsonPropertyName("onMount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

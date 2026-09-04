@@ -4,17 +4,17 @@ namespace AlexaVoxCraft.Model.Apl;
 
 public class Dimension
 {
-    public virtual object GetValue()
+    public virtual object? GetValue()
     {
         return null;
     }
 
-    public static explicit operator Dimension(string value)
+    public static explicit operator Dimension?(string value)
     {
         return From(value);
     }
 
-    public static Dimension From(string value)
+    public static Dimension? From(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {

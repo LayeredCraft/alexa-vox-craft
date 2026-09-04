@@ -30,19 +30,19 @@ public class Pager : ActionableComponent, IJsonSerializable<Pager>, IMultiChildC
 
     [JsonPropertyName("initialPage")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<int?> InitialPage { get; set; }
+    public APLValue<int?> InitialPage { get; set; } = null!;
 
     [JsonPropertyName("navigation")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Navigation { get; set; }
+    public APLValue<string> Navigation { get; set; } = null!;
 
     [JsonPropertyName("onPageChanged")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand> OnPageChanged { get; set; }
+    public APLValueCollection<APLCommand> OnPageChanged { get; set; } = null!;
 
     [JsonPropertyName("handlePageMove")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLPageMoveHandler> HandlePageMove { get; set; }
+    public APLValueCollection<APLPageMoveHandler> HandlePageMove { get; set; } = null!;
 
     // IMultiChildComponent
     [JsonPropertyName("data")]

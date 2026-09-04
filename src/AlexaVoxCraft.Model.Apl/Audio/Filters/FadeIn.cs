@@ -8,5 +8,5 @@ public class FadeIn : APLAFilter
     public override string Type => nameof(FadeIn);
 
     [JsonPropertyName("duration")]
-    public APLValue<int> Duration { get; set; }
+    public APLValue<int> Duration { get; set; } = null!;
 }

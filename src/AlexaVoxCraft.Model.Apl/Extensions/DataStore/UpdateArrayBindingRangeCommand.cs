@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Apl.Extensions.DataStore;
 
 public class UpdateArrayBindingRangeCommand : APLCommand
 {
-    private readonly string _extensionName;
+    private readonly string? _extensionName;
 
     public static UpdateArrayBindingRangeCommand For(DataStoreExtension extension)
     {
@@ -17,12 +17,12 @@ public class UpdateArrayBindingRangeCommand : APLCommand
         return new UpdateArrayBindingRangeCommand(extension.Name, dataBindingName, startIndex, endIndex);
     }
 
-    public UpdateArrayBindingRangeCommand(string extensionName)
+    public UpdateArrayBindingRangeCommand(string? extensionName)
     {
         _extensionName = extensionName;
     }
 
-    public UpdateArrayBindingRangeCommand(string extensionName, APLValue<string> dataBindingName,
+    public UpdateArrayBindingRangeCommand(string? extensionName, APLValue<string> dataBindingName,
         APLValue<int?> startIndex, APLValue<int?> endIndex) : this(extensionName)
     {
         DataBindingName = dataBindingName;
@@ -32,15 +32,15 @@ public class UpdateArrayBindingRangeCommand : APLCommand
 
     [JsonPropertyName("dataBindingName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> DataBindingName { get; set; }
+    public APLValue<string> DataBindingName { get; set; } = null!;
 
     [JsonPropertyName("startIndex")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<int?> StartIndex { get; set; }
+    public APLValue<int?> StartIndex { get; set; } = null!;
 
     [JsonPropertyName("endIndex")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<int?> EndIndex { get; set; }
+    public APLValue<int?> EndIndex { get; set; } = null!;
 
     [JsonPropertyName("type")] public override string Type => $"{_extensionName}:UpdateArrayBindingRange";
 }

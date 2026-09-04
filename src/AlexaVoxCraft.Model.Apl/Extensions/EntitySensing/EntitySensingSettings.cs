@@ -6,9 +6,9 @@ public class EntitySensingSettings
 {
     [JsonPropertyName("entitySensingStateName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string EntitySensingStateName { get; set; }
+    public string EntitySensingStateName { get; set; } = null!;
 
     [JsonPropertyName("primaryUserName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string PrimaryUserName { get; set; }
+    public string PrimaryUserName { get; set; } = null!;
 }

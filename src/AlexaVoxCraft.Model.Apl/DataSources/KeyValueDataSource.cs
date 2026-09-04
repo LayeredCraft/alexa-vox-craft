@@ -8,7 +8,7 @@ public class KeyValueDataSource : APLDataSource
 {
     [JsonPropertyName("type")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public override string Type { get; }
+    public override string Type { get; } = null!;
 
-    [JsonExtensionData] public Dictionary<string, JsonElement> Properties { get; set; }
+    [JsonExtensionData] public Dictionary<string, JsonElement> Properties { get; set; } = null!;
 }

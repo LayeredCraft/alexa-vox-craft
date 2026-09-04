@@ -15,7 +15,7 @@ public class SendTokenListDataDirective : ListDataDirective, IJsonSerializable<S
     [JsonPropertyName("type")]
     public override string Type => DirectiveType;
 
-    [JsonPropertyName("pageToken")] public string PageToken { get; set; }
+    [JsonPropertyName("pageToken")] public string PageToken { get; set; } = null!;
 
     [JsonPropertyName("nextPageToken")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

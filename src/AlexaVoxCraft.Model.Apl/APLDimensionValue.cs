@@ -22,7 +22,7 @@ public class APLDimensionValue : APLDimensionValue<Dimension>
             Expression = value;
         }
 
-        Value = dimension;
+        Value = dimension!;
     }
 
     public static implicit operator APLDimensionValue(int value)

@@ -8,5 +8,5 @@ public class Repeat : APLAFilter
     public override string Type => nameof(Repeat);
 
     [JsonPropertyName("repeatCount")]
-    public APLValue<int> RepeatCount { get; set; }
+    public APLValue<int> RepeatCount { get; set; } = null!;
 }

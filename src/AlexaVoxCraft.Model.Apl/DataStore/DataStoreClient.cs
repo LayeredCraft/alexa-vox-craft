@@ -27,7 +27,7 @@ public class DataStoreClient
 
     }
 
-    public DataStoreClient(HttpClient client, string endpointUrl, string accessToken)
+    public DataStoreClient(HttpClient? client, string endpointUrl, string accessToken)
     {
         Client = client ?? new HttpClient();
         BaseAddress = new Uri(endpointUrl);
@@ -39,7 +39,7 @@ public class DataStoreClient
         return QueuedResultQuery(queuedResultId, maxResults, null);
     }
 
-    public async Task<QueuedResultResponse> QueuedResultQuery(string queuedResultId, int? maxResults = null, string nextToken = null)
+    public async Task<QueuedResultResponse> QueuedResultQuery(string queuedResultId, int? maxResults = null, string? nextToken = null)
     {
         var url = $"/v1/datastore/queue/{queuedResultId}";
         var query = "";

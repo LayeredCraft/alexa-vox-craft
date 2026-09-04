@@ -824,13 +824,48 @@ fix(model): resolve nullable-reference compiler warnings
 
 ### Commit 19: Nullable warning cleanup - AlexaVoxCraft.Model.Apl
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Same approach as Commit 8, scoped to `AlexaVoxCraft.Model.Apl`.
-- [ ] Validate `dotnet test test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj --no-build --no-restore`.
-- [ ] Validate solution build warning count for `AlexaVoxCraft.Model.Apl` is zero.
+- [x] Same approach as Commit 18, scoped to `AlexaVoxCraft.Model.Apl`.
+- [x] Validate `dotnet run --project test/AlexaVoxCraft.Model.Apl.Tests -- --filter-query "/*/*/*"` on all 4 TFMs.
+- [x] Validate solution build warning count for `AlexaVoxCraft.Model.Apl` is zero.
+
+Resulting guidance:
+
+- Same scale of problem as Commit 18 but roughly 2x the size: 690 raw CS8618 warnings (net10.0-only
+  count) plus ~118 other nullable warnings across ~150 files. Applied the same mechanical `= null!;`
+  script first (adapted for `Model.Apl`'s namespace), which cleared the bulk of it; the rest needed
+  per-site judgment.
+- Found and fixed the same recurring shapes as Commit 18: DTO auto-properties → `= null!;`; generic `T
+  Value { get; set; }` on the unconstrained `APLValue<T>` → `= default!;` (this bit twice — once
+  directly, once again in `APLDimensionValue<T>` which is `where T : Dimension`, a reference-type
+  constraint, so `Value == null` checks there are legitimate, not warnings to silence); optional
+  constructor parameters defaulting to `null` (`string x = null`) → `string? x = null`.
+- One recurring shape specific to this project: ~15 APL extension `*Command` classes
+  (`Extensions/Backstack`, `Extensions/DataStore`, `Extensions/SmartMotion`) all take a constructor
+  `string extensionName` sourced from `APLExtension.Name`, which is already (and correctly) `string?` —
+  the command classes' non-nullable parameter was the actual mismatch. Fixed by making
+  `extensionName`/`_extensionName` nullable throughout (safe: the field is only ever used in a string
+  interpolation for the `type` discriminator, which renders an empty segment for null rather than
+  throwing).
+- `Dimension.GetValue()`/`.From()` and `APLValue.GetValue()` are base virtuals that legitimately return
+  `null` (parse failure / no value) — annotated `object?`/`Dimension?` at the root and propagated the
+  `override` chain through `APLValue<T>`, `APLDimensionValue<T>`, `APLAbsoluteDimensionValue`,
+  `APLDimensionValue`, catching one CS8764 (override return-type mismatch) introduced mid-fix by that
+  chain not being updated consistently on the first pass.
+- Found and fixed one real bug while nullability-annotating `Style.Value`: the property setter referenced
+  the property's own getter (`Values = new List<StyleValue> { Value }`) instead of the incoming `value`
+  parameter — silent no-op/self-referential assignment, never actually stored the value being set. Fixed
+  to use `value` and annotated `Value` as `StyleValue?` (matches its `Values?.FirstOrDefault()` getter).
+- `Import.Equals(Import other)` and `AVGItem.Filters` had explicit interface-implementation nullability
+  mismatches (CS8767) against `IEquatable<Import>.Equals(Import? other)` and `IAVGItem.Filters`
+  respectively — both already-correct interfaces, fixed by matching the implementing member's annotation.
+- Model.Apl-only change (confirmed via `git status --porcelain`), so per the Phase 8 instruction no new
+  tests were required; all 201 existing `Model.Apl.Tests` re-run green on all 4 TFMs, plus every
+  dependent project's suite (`Model.Tests`, `MediatR.Tests`, `MediatR.Lambda.Tests`,
+  `Model.InSkillPurchasing.Tests`, `InSkillPurchasing.Tests`, `MediatR.Generator.Tests`, `Smapi.Tests`).
 
 Suggested commit message:
 

@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Apl.Extensions.DataStore;
 
 public class UnwatchObjectCommand : APLCommand
 {
-    private readonly string _extensionName;
+    private readonly string? _extensionName;
 
     public static UnwatchObjectCommand For(DataStoreExtension extension)
     {
@@ -16,19 +16,19 @@ public class UnwatchObjectCommand : APLCommand
         return new UnwatchObjectCommand(extension.Name, @namespace, key);
     }
 
-    public UnwatchObjectCommand(string extensionName)
+    public UnwatchObjectCommand(string? extensionName)
     {
         _extensionName = extensionName;
     }
 
-    public UnwatchObjectCommand(string extensionName, string @namespace, string key) : this(extensionName)
+    public UnwatchObjectCommand(string? extensionName, string @namespace, string key) : this(extensionName)
     {
         Namespace = @namespace;
         Key = key;
     }
 
-    [JsonPropertyName("namespace")] public string Namespace { get; set; }
+    [JsonPropertyName("namespace")] public string Namespace { get; set; } = null!;
 
-    [JsonPropertyName("key")] public string Key { get; set; }
+    [JsonPropertyName("key")] public string Key { get; set; } = null!;
     [JsonPropertyName("type")] public override string Type => $"{_extensionName}:UnwatchObject";
 }

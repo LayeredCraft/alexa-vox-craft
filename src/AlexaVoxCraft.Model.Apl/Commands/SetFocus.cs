@@ -8,5 +8,5 @@ public class SetFocus : APLCommand
 
     [JsonPropertyName("componentId")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> ComponentId { get; set; }
+    public APLValue<string> ComponentId { get; set; } = null!;
 }

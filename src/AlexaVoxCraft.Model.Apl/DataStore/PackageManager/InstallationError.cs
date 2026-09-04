@@ -6,9 +6,9 @@ public class InstallationError : Request.Type.Request
 {
     public const string RequestType = "Alexa.DataStore.PackageManager.InstallationError";
 
-    [JsonPropertyName("packageId")] public string PackageId { get; set; }
+    [JsonPropertyName("packageId")] public string PackageId { get; set; } = null!;
 
-    [JsonPropertyName("version")] public string Version { get; set; }
+    [JsonPropertyName("version")] public string Version { get; set; } = null!;
 
-    [JsonPropertyName("error")] public InstallationErrorDetail Error { get; set; }
+    [JsonPropertyName("error")] public InstallationErrorDetail Error { get; set; } = null!;
 }

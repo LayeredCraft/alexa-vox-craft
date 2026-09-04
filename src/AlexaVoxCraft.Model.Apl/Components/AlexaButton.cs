@@ -11,27 +11,27 @@ public class AlexaButton : APLComponent, IJsonSerializable<AlexaButton>
 
     [JsonPropertyName("buttonStyle")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> ButtonStyle { get; set; }
+    public APLValue<string> ButtonStyle { get; set; } = null!;
 
     [JsonPropertyName("buttonText")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> ButtonText { get; set; }
+    public APLValue<string> ButtonText { get; set; } = null!;
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand> PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand> PrimaryAction { get; set; } = null!;
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Theme { get; set; }
+    public APLValue<string> Theme { get; set; } = null!;
 
     [JsonPropertyName("touchForward")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> TouchForward { get; set; }
+    public APLValue<bool?> TouchForward { get; set; } = null!;
 
     [JsonPropertyName("lang")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Lang { get; set; }
+    public APLValue<string> Lang { get; set; } = null!;
 
     public new static void RegisterTypeInfo<T>() where T : AlexaButton
     {

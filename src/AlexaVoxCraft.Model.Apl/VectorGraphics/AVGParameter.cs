@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Apl.VectorGraphics;
 
 public class AVGParameter
 {
-    [JsonPropertyName("name")] public APLValue<string> Name { get; set; }
+    [JsonPropertyName("name")] public APLValue<string> Name { get; set; } = null!;
 
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

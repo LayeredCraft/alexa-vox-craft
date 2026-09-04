@@ -9,7 +9,7 @@ public class TextTrack
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? Type { get; } = "caption";
 
-    [JsonPropertyName("url")] public APLValue<Uri> Uri { get; set; }
+    [JsonPropertyName("url")] public APLValue<Uri> Uri { get; set; } = null!;
 
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

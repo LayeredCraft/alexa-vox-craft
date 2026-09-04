@@ -16,5 +16,5 @@ public class InsertMultipleItems : Operation
     [JsonPropertyName("type")]
     public override string Type => OperationType;
     [JsonPropertyName("items")]
-    public object[] Items { get; set; }
+    public object[] Items { get; set; } = null!;
 }

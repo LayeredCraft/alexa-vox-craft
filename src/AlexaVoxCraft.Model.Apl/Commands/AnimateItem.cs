@@ -27,7 +27,7 @@ public class AnimateItem : APLCommand, IJsonSerializable<AnimateItem>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<RepeatMode>? RepeatMode { get; set; }
 
-    [JsonPropertyName("value")] public APLValueCollection<AnimatedProperty> Value { get; set; }
+    [JsonPropertyName("value")] public APLValueCollection<AnimatedProperty> Value { get; set; } = null!;
 
     public static void RegisterTypeInfo<T>() where T : AnimateItem
     {

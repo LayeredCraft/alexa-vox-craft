@@ -27,7 +27,7 @@ public class AudioLayout
     public IList<Parameter>? Parameters { get; set; }
 
     [JsonPropertyName("items")]
-    public IList<APLAComponent> Items { get; set; }
+    public IList<APLAComponent> Items { get; set; } = null!;
 
     public AudioLayout AsMain(string dataSourceKey = "payload")
     {

@@ -5,7 +5,7 @@ namespace AlexaVoxCraft.Model.Apl;
 
 public class APLSkillRequest : SkillRequest
 {
-    private APLContext _context;
+    private APLContext _context = null!;
 
     [JsonPropertyName("context")]
     public new APLContext Context

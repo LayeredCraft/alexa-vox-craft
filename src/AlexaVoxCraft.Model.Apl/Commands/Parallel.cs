@@ -29,7 +29,7 @@ public class Parallel : APLCommand, IJsonSerializable<Parallel>
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<object> Data { get; set; }
+    public APLValueCollection<object> Data { get; set; } = null!;
 
     public static void RegisterTypeInfo<T>() where T : Parallel
     {

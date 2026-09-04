@@ -11,9 +11,9 @@ public class APLViewport : Viewport
 
     [JsonPropertyName("dpi")] public int DPI { get; set; }
 
-    [JsonPropertyName("presentationType")] public string PresentationType { get; set; }
+    [JsonPropertyName("presentationType")] public string PresentationType { get; set; } = null!;
 
     [JsonPropertyName("canRotate")] public bool CanRotate { get; set; }
 
-    [JsonPropertyName("configuration")] public APLViewportConfigurationContainer Configuration { get; set; }
+    [JsonPropertyName("configuration")] public APLViewportConfigurationContainer Configuration { get; set; } = null!;
 }
