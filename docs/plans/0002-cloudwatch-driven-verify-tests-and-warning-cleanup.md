@@ -110,6 +110,13 @@ Tasks:
       argument shapes are covered. Worth remembering for Commit 2/3: check `arguments`/`payload`
       sub-shapes within a request type, not just the top-level type, when deciding "do we have this
       shape yet."
+- [x] Follow-up 2: a third manual pass through ISP flows in dev surfaced two more
+      `Alexa.Presentation.APL.UserEvent` sub-shapes — `token="productDetailToken"` with
+      `arguments=["buyProduct", ...]` and `token="triviaPager"` with
+      `arguments=["productDetails", ...]` — landed as `Model.InSkillPurchasing.Tests/Examples/
+      CloudWatch/Requests/APLUserEvent_BuyProduct.json` and `APLUserEvent_ProductDetails.json`
+      (ISP-flow UserEvents belong with the ISP fixtures, not the general Model.Apl ones). Both
+      scrubbed and verified clean. No other new request/directive shapes appeared in this pass.
 
 Suggested commit message:
 
