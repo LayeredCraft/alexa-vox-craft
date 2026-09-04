@@ -1,0 +1,1 @@
+﻿{"type":"SetPage","componentId":"PagerId","position":"relative","value":1}

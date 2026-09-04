@@ -422,15 +422,22 @@ test(model): add remaining request coverage (signatures, skill events, geolocati
 
 ### Commit 9: Model.Apl.Tests — remaining APL commands
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Port the ~10 command types in `APLCommandTests.cs` not already covered by the
-      `ExecuteCommandsDirectiveTests` sequence (`Sequential`/`SpeakItem`/`SpeakList` are done):
-      `Parallel`, `SetValue`, `SetState`, `SendEvent`, `AnimateItem`, and the rest. Response-side
-      serialize, component-level, under `Command/` (new folder, mirrors `Directive/`).
-- [ ] Validate all 4 TFMs, solution build.
+- [x] Ported the 10 command types in `APLCommandTests.cs` not already covered by
+      `ExecuteCommandsDirectiveTests` (`Sequential`/`SpeakItem`/`SpeakList`): `AnimateItem` (with
+      `AnimatedOpacity`), `ControlMedia`, `SetValue`, `Finish`, `Reinflate`, `Select`, `InsertItem`,
+      `RemoveItem`, `ScrollToComponent`, `SetPage` — into `Command/APLCommandTests.cs` (new folder,
+      mirrors `Directive/`). All response-side serialize; dropped legacy's deserialize/round-trip
+      assertions for the same reason as every other APL directive/command so far.
+  - Plan's original guess at the remaining command names (`Parallel`/`SetState`/`SendEvent`) didn't
+    match what's actually in the legacy file — corrected here to the real list.
+  - Deferred `CommandDefinitionWorksProperly` (custom command *definitions* registered on a document,
+    not a command itself) to Commit 11 alongside the rest of the document/layout config surface.
+- [x] Validated all 4 TFMs: 83/83 passing, no stray `.received.*` files. Validated solution build:
+      0 errors.
 
 Suggested commit message:
 

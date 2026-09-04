@@ -1,0 +1,1 @@
+﻿{"align":"center","componentId":"myComponent","type":"ScrollToComponent","targetDuration":500}
