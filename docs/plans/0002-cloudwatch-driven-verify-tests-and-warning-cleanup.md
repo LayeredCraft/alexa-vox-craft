@@ -103,6 +103,13 @@ Tasks:
       (10 request + 2 response files) and
       `test/AlexaVoxCraft.Model.Apl.Tests/Examples/CloudWatch/{Requests,Responses}/`
       (1 request + 2 response files).
+- [x] Follow-up: initial `Alexa.Presentation.APL.UserEvent` pick only captured one of two distinct
+      `arguments` shapes the skill actually sends on that request type (`["selectCategory", ...]` vs
+      `["answer", N]"`) — the naive one-pick-per-request-type approach missed the sub-variant. Renamed
+      the original to `APLUserEvent_SelectCategory.json` and added `APLUserEvent_Answer.json` so both
+      argument shapes are covered. Worth remembering for Commit 2/3: check `arguments`/`payload`
+      sub-shapes within a request type, not just the top-level type, when deciding "do we have this
+      shape yet."
 
 Suggested commit message:
 
