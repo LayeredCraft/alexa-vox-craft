@@ -35,6 +35,11 @@ the Model projects — without breaking the public API.
 - Delete the Legacy test projects only after the new suites have equivalent-or-better coverage.
 - Warning cleanup work happens only after the new Verify safety net is in place, project by project,
   smallest/most-mechanical warning categories first.
+- Commits 15-20 touch code outside the Model/Model.Apl projects too (MediatR, MediatR.Lambda,
+  Generators, RoslynAnalyzers). Before considering any fix in those projects done, check whether a
+  live test already exercises the changed code path (a pre-existing test that runs green is
+  sufficient evidence) — if not, add one (Compono-based, matching each project's established test
+  conventions) rather than relying on "it compiles and the build is green" alone.
 - Test/fixture naming must never leak provenance ("CloudWatch") into class or file names — the source
   is an implementation detail of how the fixture was built, not part of what's under test. Fixture
   folders are named for what they contain (`Requests/`, `Responses/`, `Components/`), test classes for
@@ -670,6 +675,19 @@ Tasks:
       original: only the intended lines changed. (Separately checked `AskForPermissionDirective.cs`
       and `DeleteMultipleItems.cs` from earlier commits — both were LF from their original commit, so
       never actually had this issue.)
+- [x] Test coverage check (prompted mid-commit): both `AddException` fixes turned out to already be
+      exercised by live, pre-existing tests that ran clean in every full-suite check above —
+      `OtelPerformanceLoggingBehaviorTests` (4 tests triggering the catch block) and
+      `AlexaSkillFunctionTests.FunctionHandlerAsync_HandlesSpanOnException` (asserts an `"exception"`
+      `ActivityEvent` exists, which is exactly what `AddException` produces). `GetCertificate` had
+      zero coverage before or after the fix, so added
+      `RequestVerificationTests.GetCertificate_ParsesFetchedCertificateBytes`: mocks the HTTP fetch
+      via `Compono.Http.TestHttpHandler` (DER bytes carried losslessly through `Encoding.Latin1`,
+      since `Compono.Http` has no raw-bytes response helper), exercises the same
+      `NET9_0_OR_GREATER` branch the source uses, and confirmed on both net8.0 and net10.0
+      individually that the fetch-and-parse path succeeds without throwing (the self-signed test
+      cert then correctly fails chain validation, so `Verify()` itself returns `false` — that part
+      isn't what's under test here, only that the certificate parses).
 - [x] Validated: 0 `SYSLIB0057`/`CS0618` anywhere in the solution, confirmed per-project per-TFM (not
       just once). Validated full test suite across all 4 TFMs for `Model.Tests`, `Model.Apl.Tests`,
       `Model.InSkillPurchasing.Tests`, `MediatR.Tests`, `MediatR.Lambda.Tests`: all green. Validated
