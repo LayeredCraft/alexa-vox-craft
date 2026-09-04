@@ -1,0 +1,1 @@
+﻿{"type":"Connections.StartConnection","uri":"connection://AMAZON.PrintPDF/1","input":{"@type":"PrintPDFRequest","context":{"providerId":"your-provider-skill-id"},"@version":"1","title":"title","description":"description","url":"http://www.example.com/flywheel.pdf"},"token":"none"}

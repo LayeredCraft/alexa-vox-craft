@@ -1,0 +1,18 @@
+﻿{
+  "Task": {
+    "Name": "AMAZON.PrintPDF",
+    "Version": "1",
+    "Input": {
+      "ConnectionUri": "connection://AMAZON.PrintPDF/1",
+      "Type": "PrintPDFRequest",
+      "Version": "1",
+      "Title": "Example Document",
+      "Description": "Example Description",
+      "Url": "http://www.example.com/document.pdf"
+    }
+  },
+  "Type": "LaunchRequest",
+  "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "Locale": "en-US",
+  "Timestamp": "DateTime_1"
+}

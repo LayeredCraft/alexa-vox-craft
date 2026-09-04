@@ -220,7 +220,7 @@ projects against the new suites. Result: **not close to parity**. Legacy has ~11
 non-legacy projects, concentrated on the shapes this specific skill actually sends/receives. Large
 legacy subsystems have zero coverage in the new suites. Full gap inventory (method counts, which
 request/directive/component types are covered vs. not) is preserved in this session's history; the
-commits below are scoped directly from it. This blocks Commit 13 (Legacy removal) until closed out —
+commits below are scoped directly from it. This blocks Commit 14 (Legacy removal) until closed out —
 per Constraints, Legacy only gets deleted once new coverage is equivalent-or-better.
 
 Most of this remaining work has **no real CloudWatch capture behind it** — the trivia skill never
@@ -331,30 +331,89 @@ Suggested commit message:
 test(model): add AudioPlayer/Display/VideoApp directive coverage
 ```
 
-### Commit 7: Model.Tests — Connection Tasks and remaining request-type gaps
+### Commit 7: Model.Tests — Connection Tasks
+
+Status: Done.
+
+Tasks:
+
+- [x] Ported the response-side half of `ConnectionTasks/SkillConnectionTests.cs` into
+      `Response/ConnectionTaskDirectiveTests.cs`: `PrintPdfV1`, `PrintImageV1`, `PrintWebPageV1`,
+      `ScheduleTaxiReservation`, `ScheduleFoodEstablishmentReservation` (with `OnComplete`),
+      `PinConfirmation` — all via `.ToConnectionDirective()` — plus `CompleteTaskDirective`. Dropped
+      legacy's `StartConnectionDirective` deserialize assertions per the response-side-serialize rule.
+- [x] Ported the request-side half into `Request/ConnectionTaskRequestTests.cs`:
+      `SessionResumedRequest` deserialize, `LaunchRequest.Task` deserialize (built-in `PrintPdfV1`
+      task and a custom task type via the `ConnectionTaskConverter.AddToConnectionTaskResolvers`
+      extensibility hook — added a project-local `ExampleConnectionTask`/`ExampleConnectionTaskResolver`
+      under `Infrastructure/`, mirroring legacy's `ExampleTask`/`ExampleTaskResolver`), and
+      `PinConfirmationResolver.ResultFromSessionResumed` (deserializes a `SessionResumedRequest`
+      whose `Cause.Result` carries a PIN-confirmation payload, then resolves it — passed immediately,
+      confirming the object→dictionary conversion this depends on still works).
+- [x] All fixtures built fresh (not copied from Legacy) under `Examples/Requests/`:
+      `SessionResumedRequest.json`, `LaunchRequestWithTask.json`, `LaunchRequestWithCustomTask.json`,
+      `SessionResumedRequestWithPinConfirmationResult.json`. Generic print/task connections are
+      unused by the trivia skill, so these are synthetic placeholder values, not real captures.
+- [x] **Scope note**: while reading the rest of `Requests/RequestTests.cs` to close its remaining
+      gaps in this commit, found the actual uncovered surface is far larger than the earlier survey
+      suggested — not just `SessionResumedRequest`/custom-request-type/epoch-timestamp, but also
+      `IntentSignature` parsing (built-in intents with properties), `SkillEvent` requests (3 kinds),
+      `DialogState`, `ConfirmationStatus` on `Intent`/`Slot`, `RequestVerification` timestamp-tolerance
+      behavior, `Geolocation`, `Person` info, `AskForPermissionRequest` (the request-side counterpart
+      of the `AskForPermissionDirective` bug fixed in Commit 4), `MultiValueSlot`, and SmartProperties
+      (`Unit`/`PersistentUnitID`/`PersistentEndpointID`). Split this out to its own Commit 8 rather
+      than cram it in here — this file alone is close to the size of everything else in Commits 4-6
+      combined.
+- [x] Validated all 4 TFMs: 93/93 passing, no stray `.received.*` files. Validated solution build:
+      0 errors.
+
+Suggested commit message:
+
+```text
+test(model): add Connection Tasks coverage
+```
+
+### Commit 8: Model.Tests — remaining RequestTests.cs gaps (IntentSignature, SkillEvents, Geolocation, Person, AskForPermissionRequest, and more)
 
 Status: Not started.
 
 Tasks:
 
-- [ ] Port `ConnectionTasks/SkillConnectionTests.cs` (14 tests): generic print/task `Connections`
-      directives (PDF/web page/image) as response-side serialize; `ConnectionsResponseRequest`
-      deserialization as request-side. Port the `ExampleTask`/`ExampleTaskResolver` custom-task
-      registration test too (extensibility hook).
-- [ ] Close the remaining `Requests/RequestTests.cs` gaps not covered by `SkillRequestTests`:
-      `SessionResumedRequest` deserialization, the custom/unknown-request-type extensibility hook
-      (`NewIntentRequestTypeResolver`/`NewIntentRequest` pattern), and the epoch-timestamp parsing
-      variant. All request-side, deserialize, added to `Request/SkillRequestTests.cs` or a new
-      focused file if the additions don't fit naturally.
+- [ ] `IntentSignature` parsing: plain intent name/signature/action, and a built-in intent
+      (`AMAZON.AddAction`-shaped) with namespace + multiple properties (entity/property pairs).
+      Request-side, deserialize.
+- [ ] `DialogState` on `IntentRequest`, `ConfirmationStatus` on `Intent` and on `Slot` — likely
+      addable as assertions on existing `IntentRequest_*` fixtures already in
+      `Request/SkillRequestTests.cs`/`IntentTests.cs` rather than new fixtures, if any already carry
+      dialog state or a denied/confirmed slot; otherwise a small new fixture.
+- [ ] Custom/unknown request-type extensibility hook (`RequestConverter.RegisterRequestTypeResolver`)
+      — port the `NewIntentRequestTypeResolver`/`NewIntentRequest` pattern with a project-local
+      equivalent under `Infrastructure/`, matching the `ExampleConnectionTaskResolver` approach from
+      Commit 7.
+- [ ] Epoch-timestamp `LaunchRequest` parsing variant. Request-side, deserialize.
+- [ ] `RequestVerification.RequestTimestampWithinTolerance` behavior (in-tolerance and replay-attack
+      cases) — functional test, not serialize/deserialize.
+- [ ] `Geolocation` deserialization (location services status, coordinate, altitude, heading, speed).
+- [ ] `Context.System.Person` deserialization (person id, access token, authentication confidence).
+- [ ] `SkillEvent` requests: `AccountLinkSkillEventRequest`, `PermissionSkillEventRequest` (with
+      `EventCreationTime`/`EventPublishingTime`), and the non-specialized `SkillEventRequest` fallback.
+- [ ] `AskForPermissionRequest` deserialization — the request-side counterpart of
+      `AskForPermissionDirective` (fixed in Commit 4): a `Connections.Response` with `name == "AskFor"`
+      carrying a `PermissionStatus` and permission scope. Worth double-checking this round-trips
+      correctly now that the directive-side `Name` bug is fixed.
+- [ ] `MultiValueSlot` deserialization (a slot with multiple resolved values).
+- [ ] SmartProperties support: `Context.System.Unit` (`UnitID`, `PersistentUnitID`) and
+      `Context.System.Device.PersistentEndpointID`.
+- [ ] All fixtures built fresh (not copied from Legacy).
 - [ ] Validate all 4 TFMs, solution build.
 
 Suggested commit message:
 
 ```text
-test(model): add Connection Tasks and remaining request-type coverage
+test(model): add remaining request coverage (signatures, skill events, geolocation, person, permissions)
 ```
 
-### Commit 8: Model.Apl.Tests — remaining APL commands
+### Commit 9: Model.Apl.Tests — remaining APL commands
 
 Status: Not started.
 
@@ -372,7 +431,7 @@ Suggested commit message:
 test(model-apl): add remaining APL command coverage
 ```
 
-### Commit 9: Model.Apl.Tests — remaining APL components
+### Commit 10: Model.Apl.Tests — remaining APL components
 
 Status: Not started.
 
@@ -392,7 +451,7 @@ Suggested commit message:
 test(model-apl): add remaining APL component coverage
 ```
 
-### Commit 10: Model.Apl.Tests — APLDocument, Package, Layout, Gradient, VectorGraphic document
+### Commit 11: Model.Apl.Tests — APLDocument, Package, Layout, Gradient, VectorGraphic document
 
 Status: Not started.
 
@@ -413,7 +472,7 @@ Suggested commit message:
 test(model-apl): add APLDocument/Package/Layout/Gradient/VectorGraphic coverage
 ```
 
-### Commit 11: Model.Apl.Tests — DataStore and remaining APL request types
+### Commit 12: Model.Apl.Tests — DataStore and remaining APL request types
 
 Status: Not started.
 
@@ -436,7 +495,7 @@ Suggested commit message:
 test(model-apl): add DataStore and remaining APL request-type coverage
 ```
 
-### Commit 12: Model.Apl.Tests — Extensions
+### Commit 13: Model.Apl.Tests — Extensions
 
 Status: Not started.
 
@@ -454,7 +513,7 @@ Suggested commit message:
 test(model-apl): add APL extension coverage
 ```
 
-### Commit 13: Remove Legacy test projects
+### Commit 14: Remove Legacy test projects
 
 Status: Not started. Blocked on Commits 4-12.
 
@@ -474,7 +533,7 @@ Suggested commit message:
 test: remove Legacy test projects superseded by Verify suites
 ```
 
-### Commit 14: Mechanical warning fixes (SYSLIB0057, CS0618)
+### Commit 15: Mechanical warning fixes (SYSLIB0057, CS0618)
 
 Status: Not started.
 
@@ -493,7 +552,7 @@ Suggested commit message:
 fix: resolve obsolete-API compiler warnings
 ```
 
-### Commit 15: CS0108/CS0114 member-hiding fixes
+### Commit 16: CS0108/CS0114 member-hiding fixes
 
 Status: Not started.
 
@@ -511,7 +570,7 @@ Suggested commit message:
 fix: resolve member-hiding compiler warnings
 ```
 
-### Commit 16: Analyzer release tracking (RS2008)
+### Commit 17: Analyzer release tracking (RS2008)
 
 Status: Not started.
 
@@ -527,7 +586,7 @@ Suggested commit message:
 chore(generator): add analyzer release tracking files
 ```
 
-### Commit 17: Nullable warning cleanup - AlexaVoxCraft.Model
+### Commit 18: Nullable warning cleanup - AlexaVoxCraft.Model
 
 Status: Not started.
 
@@ -547,7 +606,7 @@ Suggested commit message:
 fix(model): resolve nullable-reference compiler warnings
 ```
 
-### Commit 18: Nullable warning cleanup - AlexaVoxCraft.Model.Apl
+### Commit 19: Nullable warning cleanup - AlexaVoxCraft.Model.Apl
 
 Status: Not started.
 
@@ -563,7 +622,7 @@ Suggested commit message:
 fix(model-apl): resolve nullable-reference compiler warnings
 ```
 
-### Commit 19: Nullable warning cleanup - remaining projects
+### Commit 20: Nullable warning cleanup - remaining projects
 
 Status: Not started.
 
@@ -606,5 +665,5 @@ Each commit should include:
 - [ ] `dotnet build AlexaVoxCraft.slnx --no-restore` green.
 - [ ] No accidental real user/device/session IDs, `.received.*`, `bin/`, or `obj/` files staged.
 
-Full suite validation is required before Commit 13 (Legacy project removal) and before each nullable
-cleanup commit (17-19), since those are the commits most likely to silently change behavior.
+Full suite validation is required before Commit 14 (Legacy project removal) and before each nullable
+cleanup commit (18-20), since those are the commits most likely to silently change behavior.
