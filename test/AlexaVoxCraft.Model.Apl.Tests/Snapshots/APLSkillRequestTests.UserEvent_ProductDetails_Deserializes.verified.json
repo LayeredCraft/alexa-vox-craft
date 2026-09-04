@@ -1,0 +1,186 @@
+﻿{
+  "Context": {
+    "Viewport": {
+      "Experiences": [
+        {
+          "CanResize": false,
+          "CanRotate": false,
+          "ArcMinuteWidth": 221,
+          "ArcMinuteHeight": 162
+        }
+      ],
+      "CurrentPixelWidth": 1280,
+      "CurrentPixelHeight": 800,
+      "DPI": 160,
+      "PixelHeight": 800,
+      "PixelWidth": 1280,
+      "Touch": [
+        "SINGLE"
+      ],
+      "Keyboard": [
+        "DIRECTION"
+      ],
+      "Shape": "RECTANGLE",
+      "Video": {
+        "Codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Viewports": [
+      {
+        "Type": "APL",
+        "Shape": "RECTANGLE",
+        "DPI": 160,
+        "PresentationType": "OVERLAY",
+        "CanRotate": false,
+        "Configuration": {
+          "Current": {
+            "Video": {
+              "Codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "Size": {
+              "Type": "DISCRETE",
+              "PixelHeight": 800,
+              "PixelWidth": 1280
+            }
+          }
+        },
+        "ID": "medHub"
+      }
+    ],
+    "Extensions": {
+      "Available": {}
+    },
+    "System": {
+      "ApiAccessToken": "***REDACTED***",
+      "ApiEndpoint": "https://api.amazonalexa.com",
+      "Application": {
+        "ApplicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+      },
+      "User": {
+        "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "Device": {
+        "DeviceID": "amzn1.ask.device.A0000000000000000000000000000000000000000000000000000000",
+        "SupportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Version": "1.0",
+  "Session": {
+    "New": false,
+    "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "Attributes": {
+      "ConversationContext": {
+        "Type": 3,
+        "SubContext": "Browsing",
+        "Metadata": {
+          "CreatedAt": "2026-09-04T16:29:23.476948+00:00",
+          "LastUpdated": "2026-09-04T16:29:23.4769611+00:00",
+          "LastHandler": null,
+          "TransitionCount": 1,
+          "UserIdentifier": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+          "IsAuthenticated": false,
+          "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000"
+        },
+        "Data": {}
+      },
+      "currentGame": {
+        "GameQuestions": {},
+        "CorrectAnswerIndex": 0,
+        "CurrentScore": 0,
+        "CurrentQuestionIndex": 0,
+        "CorrectAnswerText": "",
+        "QuestionText": "",
+        "Answers": [],
+        "CategoryId": "general"
+      },
+      "PriorContextType": "WelcomeFlow",
+      "repeatModel": {
+        "$type": "productList",
+        "Speech": "Question packs available for purchase right now are Pixar Pack, and Disney Parks Pack. To learn more about a pack, say 'tell me more about' followed by the pack name. If you're ready to buy, say 'buy' followed by the pack name. What can I help you with?",
+        "Reprompt": "I didn't catch that. What can I help you with?",
+        "Products": [
+          {
+            "Name": "Pixar Pack",
+            "ReferenceName": "ent-pixar"
+          },
+          {
+            "Name": "Disney Parks Pack",
+            "ReferenceName": "ent-disney-parks"
+          }
+        ],
+        "HintText": "tell me more about \"product name\""
+      },
+      "UserContext": {
+        "$type": "guest",
+        "AlexaUserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "IsLinked": false,
+        "entitledProducts": [],
+        "purchasableProducts": [
+          {
+            "productId": "amzn1.adg.product.8defca28-dafb-4a96-9520-f4aa86ee3b75",
+            "name": "Pixar Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Unlock Pixar trivia categories.",
+            "purchasable": "PURCHASABLE",
+            "entitled": "NOT_ENTITLED",
+            "entitlementReason": "NOT_PURCHASED",
+            "referenceName": "ent-pixar",
+            "activeEntitlementCount": 0,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          },
+          {
+            "productId": "amzn1.adg.product.45c5fb86-180b-4042-92c2-e53b3322b7a0",
+            "name": "Disney Parks Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Explore the magic of Disney Parks with trivia about attractions, resorts, lands, entertainment, and unforgettable park experiences from around the world.",
+            "purchasable": "PURCHASABLE",
+            "entitled": "NOT_ENTITLED",
+            "entitlementReason": "NOT_PURCHASED",
+            "referenceName": "ent-disney-parks",
+            "activeEntitlementCount": 0,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          }
+        ]
+      }
+    },
+    "Application": {
+      "ApplicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+    },
+    "User": {
+      "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "Request": {
+    "Token": "triviaPager",
+    "Arguments": [
+      "productDetails",
+      "ent-pixar"
+    ],
+    "Source": {
+      "Type": "TouchWrapper",
+      "Handler": "Press",
+      "ComponentId": ""
+    },
+    "Type": "Alexa.Presentation.APL.UserEvent",
+    "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "Locale": "en-US",
+    "Timestamp": "DateTime_1"
+  }
+}

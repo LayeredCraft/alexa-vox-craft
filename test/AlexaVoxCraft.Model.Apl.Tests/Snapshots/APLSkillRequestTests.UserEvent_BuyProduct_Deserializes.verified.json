@@ -1,0 +1,290 @@
+﻿{
+  "Context": {
+    "Viewport": {
+      "Experiences": [
+        {
+          "CanResize": false,
+          "CanRotate": false,
+          "ArcMinuteWidth": 221,
+          "ArcMinuteHeight": 162
+        }
+      ],
+      "CurrentPixelWidth": 1280,
+      "CurrentPixelHeight": 800,
+      "DPI": 160,
+      "PixelHeight": 800,
+      "PixelWidth": 1280,
+      "Touch": [
+        "SINGLE"
+      ],
+      "Keyboard": [
+        "DIRECTION"
+      ],
+      "Shape": "RECTANGLE",
+      "Video": {
+        "Codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Viewports": [
+      {
+        "Type": "APL",
+        "Shape": "RECTANGLE",
+        "DPI": 160,
+        "PresentationType": "OVERLAY",
+        "CanRotate": false,
+        "Configuration": {
+          "Current": {
+            "Video": {
+              "Codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "Size": {
+              "Type": "DISCRETE",
+              "PixelHeight": 800,
+              "PixelWidth": 1280
+            }
+          }
+        },
+        "ID": "medHub"
+      }
+    ],
+    "Extensions": {
+      "Available": {}
+    },
+    "AplVisualContext": {
+      "Token": "productDetailToken",
+      "Version": "APL_WEB_RENDERER_GANDALF",
+      "ComponentsVisibleOnScreen": [
+        {
+          "Uid": ":1000",
+          "Position": "960x600+0+0:0",
+          "Type": "mixed",
+          "Tags": {},
+          "Children": [
+            {
+              "Id": "page1",
+              "Uid": ":1002",
+              "Position": "960x600+0+0:0",
+              "Type": "mixed",
+              "Tags": {
+                "Spoken": true
+              },
+              "Children": [
+                {
+                  "Uid": ":1003",
+                  "Position": "960x600+0+0:0",
+                  "Type": "graphic",
+                  "Tags": {}
+                },
+                {
+                  "Uid": ":1006",
+                  "Position": "960x116+0+0:1",
+                  "Type": "mixed",
+                  "Tags": {}
+                },
+                {
+                  "Uid": ":1019",
+                  "Position": "960x103+0+116:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Spoken": true,
+                    "Ordinal": 1
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1020",
+                      "Position": "960x103+0+116:1",
+                      "Type": "mixed",
+                      "Tags": {
+                        "Focused": false,
+                        "Clickable": true
+                      },
+                      "Children": [
+                        {
+                          "Uid": ":1026",
+                          "Position": "51x51+63+140:1",
+                          "Type": "mixed",
+                          "Tags": {}
+                        },
+                        {
+                          "Uid": ":1089",
+                          "Position": "832x2+63+217:1",
+                          "Type": "empty",
+                          "Tags": {}
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1091",
+                  "Position": "960x102+0+219:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Spoken": true,
+                    "Ordinal": 2
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1094",
+                      "Position": "960x102+0+219:1",
+                      "Type": "mixed",
+                      "Tags": {
+                        "Focused": false,
+                        "Clickable": true
+                      },
+                      "Children": [
+                        {
+                          "Uid": ":1100",
+                          "Position": "51x51+63+243:1",
+                          "Type": "mixed",
+                          "Tags": {}
+                        },
+                        {
+                          "Uid": ":1163",
+                          "Position": "832x2+63+320:1",
+                          "Type": "empty",
+                          "Tags": {}
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1092",
+                  "Position": "960x102+0+497:2",
+                  "Type": "text",
+                  "Tags": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "System": {
+      "ApiAccessToken": "***REDACTED***",
+      "ApiEndpoint": "https://api.amazonalexa.com",
+      "Application": {
+        "ApplicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+      },
+      "User": {
+        "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "Device": {
+        "DeviceID": "amzn1.ask.device.A0000000000000000000000000000000000000000000000000000000",
+        "SupportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Version": "1.0",
+  "Session": {
+    "New": false,
+    "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "Attributes": {
+      "ConversationContext": {
+        "Type": 3,
+        "SubContext": "Detail",
+        "Metadata": {
+          "CreatedAt": "2026-09-04T16:29:23.476948+00:00",
+          "LastUpdated": "2026-09-04T16:29:34.6089074+00:00",
+          "LastHandler": null,
+          "TransitionCount": 2,
+          "UserIdentifier": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+          "IsAuthenticated": false,
+          "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000"
+        },
+        "Data": {}
+      },
+      "currentGame": {
+        "GameQuestions": {},
+        "CorrectAnswerIndex": 0,
+        "CurrentScore": 0,
+        "CurrentQuestionIndex": 0,
+        "CorrectAnswerText": "",
+        "QuestionText": "",
+        "Answers": [],
+        "CategoryId": "general"
+      },
+      "PriorContextType": "WelcomeFlow",
+      "repeatModel": {
+        "$type": "productDetail",
+        "Speech": "Unlock Pixar trivia categories. To buy it, say Buy Pixar Pack.",
+        "AplSpeech": "Unlock Pixar trivia categories. To buy it, say Buy Pixar Pack, or click the Buy Pixar Pack button to purchase.",
+        "Reprompt": "I didn't catch that. To buy Pixar Pack, say Buy Pixar Pack.",
+        "ProductName": "Pixar Pack",
+        "ProductSummary": "Unlock Pixar trivia categories.",
+        "ProductReferenceName": "ent-pixar"
+      },
+      "UserContext": {
+        "$type": "guest",
+        "AlexaUserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "IsLinked": false,
+        "entitledProducts": [],
+        "purchasableProducts": [
+          {
+            "productId": "amzn1.adg.product.8defca28-dafb-4a96-9520-f4aa86ee3b75",
+            "name": "Pixar Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Unlock Pixar trivia categories.",
+            "purchasable": "PURCHASABLE",
+            "entitled": "NOT_ENTITLED",
+            "entitlementReason": "NOT_PURCHASED",
+            "referenceName": "ent-pixar",
+            "activeEntitlementCount": 0,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          },
+          {
+            "productId": "amzn1.adg.product.45c5fb86-180b-4042-92c2-e53b3322b7a0",
+            "name": "Disney Parks Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Explore the magic of Disney Parks with trivia about attractions, resorts, lands, entertainment, and unforgettable park experiences from around the world.",
+            "purchasable": "PURCHASABLE",
+            "entitled": "NOT_ENTITLED",
+            "entitlementReason": "NOT_PURCHASED",
+            "referenceName": "ent-disney-parks",
+            "activeEntitlementCount": 0,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          }
+        ]
+      }
+    },
+    "Application": {
+      "ApplicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+    },
+    "User": {
+      "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "Request": {
+    "Token": "productDetailToken",
+    "Arguments": [
+      "buyProduct",
+      "ent-pixar"
+    ],
+    "Source": {
+      "Type": "TouchWrapper",
+      "Handler": "Press",
+      "ComponentId": "AlexaDetailContentBlock_Button1"
+    },
+    "Type": "Alexa.Presentation.APL.UserEvent",
+    "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "Locale": "en-US",
+    "Timestamp": "DateTime_1"
+  }
+}

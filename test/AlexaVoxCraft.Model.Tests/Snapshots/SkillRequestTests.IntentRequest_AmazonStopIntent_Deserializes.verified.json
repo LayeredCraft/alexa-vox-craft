@@ -1,0 +1,136 @@
+﻿{
+  "Version": "1.0",
+  "Session": {
+    "New": false,
+    "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "Attributes": {
+      "ConversationContext": {
+        "Type": 2,
+        "SubContext": null,
+        "Metadata": {
+          "CreatedAt": "2026-09-04T16:19:05.8749878+00:00",
+          "LastUpdated": "2026-09-04T16:19:10.8053463+00:00",
+          "LastHandler": null,
+          "TransitionCount": 2,
+          "UserIdentifier": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+          "IsAuthenticated": false,
+          "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000"
+        },
+        "Data": {}
+      },
+      "currentGame": {
+        "GameQuestions": {
+          "10": "dc28ce68-54b0-44f4-b40a-c4f0d3db508e",
+          "6": "8fdbaa2d-735f-48da-9f09-244fe5478298",
+          "5": "9f30409b-0249-40ac-a2df-ebc1658f7198",
+          "9": "4e608773-2e0d-4c1f-ac36-826a5ebe5cd4",
+          "4": "b116472f-c3fd-42e5-8dab-06db7a2792b7"
+        },
+        "CorrectAnswerIndex": 0,
+        "CurrentScore": 0,
+        "CurrentQuestionIndex": 0,
+        "CorrectAnswerText": "Wisconsin",
+        "QuestionText": "In the Disney+ series Big Shot, at which Big Ten Conference school did Marvyn Korn previously coach?",
+        "Answers": [
+          "Wisconsin",
+          "Michigan",
+          "Michigan State",
+          "Ohio State"
+        ],
+        "CategoryId": "general"
+      },
+      "repeatModel": {
+        "$type": "startGame",
+        "IntroSpeech": "",
+        "QuestionSpeech": "Question 1. In the Disney+ series Big Shot, at which Big Ten Conference school did Marvyn Korn previously coach? 1.  Wisconsin. 2.  Michigan. 3.  Michigan State. 4.  Ohio State. ",
+        "QuestionText": "In the Disney+ series Big Shot, at which Big Ten Conference school did Marvyn Korn previously coach?",
+        "Answers": [
+          "Wisconsin",
+          "Michigan",
+          "Michigan State",
+          "Ohio State"
+        ]
+      },
+      "UserContext": {
+        "$type": "guest",
+        "AlexaUserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "IsLinked": false,
+        "entitledProducts": [
+          {
+            "productId": "amzn1.adg.product.5e8ec9a9-ff64-4569-ac34-3cb66c852e4c",
+            "name": "Disney Parks Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Explore the magic of Disney Parks with trivia about attractions, resorts, lands, entertainment, and unforgettable park experiences from around the world.",
+            "purchasable": "NOT_PURCHASABLE",
+            "entitled": "ENTITLED",
+            "entitlementReason": "PURCHASED",
+            "referenceName": "ent-disney-parks",
+            "activeEntitlementCount": 1,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          }
+        ],
+        "purchasableProducts": [
+          {
+            "productId": "amzn1.adg.product.09ec74a2-745a-407f-bd4c-960bf5a97d0e",
+            "name": "Pixar Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Unlock Pixar trivia categories.",
+            "purchasable": "PURCHASABLE",
+            "entitled": "NOT_ENTITLED",
+            "entitlementReason": "NOT_PURCHASED",
+            "referenceName": "ent-pixar",
+            "activeEntitlementCount": 0,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          }
+        ]
+      }
+    },
+    "Application": {
+      "ApplicationId": "amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2"
+    },
+    "User": {
+      "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "Context": {
+    "System": {
+      "ApiAccessToken": "***REDACTED***",
+      "ApiEndpoint": "https://api.amazonalexa.com",
+      "Application": {
+        "ApplicationId": "amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2"
+      },
+      "User": {
+        "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "Device": {
+        "DeviceID": "amzn1.ask.device.A0000000000000000000000000000000000000000000000000000000",
+        "SupportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Request": {
+    "Intent": {
+      "Name": "AMAZON.StopIntent",
+      "Signature": {
+        "FullName": "AMAZON.StopIntent",
+        "Namespace": "AMAZON",
+        "Action": "StopIntent"
+      },
+      "ConfirmationStatus": "NONE"
+    },
+    "Type": "IntentRequest",
+    "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "Locale": "en-US",
+    "Timestamp": "DateTime_1"
+  }
+}

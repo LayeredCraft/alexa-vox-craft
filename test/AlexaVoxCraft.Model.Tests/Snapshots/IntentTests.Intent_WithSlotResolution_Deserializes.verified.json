@@ -1,0 +1,55 @@
+﻿{
+  "Name": "CategorySelectionIntent",
+  "Signature": {
+    "FullName": "CategorySelectionIntent",
+    "Action": "CategorySelectionIntent"
+  },
+  "ConfirmationStatus": "NONE",
+  "Slots": {
+    "productCategory": {
+      "Name": "productCategory",
+      "Value": "general trivia",
+      "ConfirmationStatus": "NONE",
+      "Source": "USER",
+      "Resolution": {
+        "Authorities": [
+          {
+            "Name": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2_Live.packType",
+            "Status": {
+              "Code": "ER_SUCCESS_MATCH"
+            },
+            "Values": [
+              {
+                "Value": {
+                  "Name": "general",
+                  "Id": "Guid_1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "SlotValue": {
+        "Value": "general trivia",
+        "Resolutions": {
+          "Authorities": [
+            {
+              "Name": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2_Live.packType",
+              "Status": {
+                "Code": "ER_SUCCESS_MATCH"
+              },
+              "Values": [
+                {
+                  "Value": {
+                    "Name": "general",
+                    "Id": "Guid_1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

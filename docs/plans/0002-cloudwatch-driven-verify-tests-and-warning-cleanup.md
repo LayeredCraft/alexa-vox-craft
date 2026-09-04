@@ -35,6 +35,27 @@ the Model projects — without breaking the public API.
 - Delete the Legacy test projects only after the new suites have equivalent-or-better coverage.
 - Warning cleanup work happens only after the new Verify safety net is in place, project by project,
   smallest/most-mechanical warning categories first.
+- Test/fixture naming must never leak provenance ("CloudWatch") into class or file names — the source
+  is an implementation detail of how the fixture was built, not part of what's under test. Fixture
+  folders are named for what they contain (`Requests/`, `Responses/`, `Components/`), test classes for
+  what they test (`SkillRequestTests`, `IntentTests`, `RenderDocumentDirectiveTests`, etc.).
+- Two test tiers, mirroring the legacy suite's style: **envelope-level** (does a full captured
+  request/response round-trip) and **component-level** (does one piece — an `Intent`, a `Card`, a
+  `Directive` — work in isolation, independent of the envelope). A break at either tier pinpoints
+  where the regression is.
+- Test direction follows envelope role, strictly, even when `System.Text.Json` happens to support the
+  other direction: request-side objects (everything reachable from `SkillRequest`) are deserialize-only
+  — the skill only ever receives them. Response-side objects (everything reachable from
+  `SkillResponse`, including directives) are serialize-only — the skill only ever builds and sends
+  them, never reads them back, so a serialize test is added even where the object *could* technically
+  deserialize (e.g. `RenderDocumentDirective` — no deserialize test for it, despite legacy testing it
+  that way). Only test both directions for a type genuinely used both ways in this SDK. This surfaced
+  a real finding: `PaymentDirective`'s constructor can't bind for deserialization at all (params don't
+  match property names) — moot under this rule since it's response-only, but worth knowing if anyone
+  is ever tempted to deserialize a directive.
+- For response-side serialize tests, values are inlined in test code (extracted from real captures for
+  realism, e.g. real product ids/tokens) rather than deserializing a captured fixture file — matches
+  the existing `BuyDirectiveTests` pattern. Request-side deserialize tests still read fixture files.
 
 ## Commit checkpoints
 
@@ -124,47 +145,69 @@ Suggested commit message:
 test: add sanitized CloudWatch-derived JSON fixtures
 ```
 
-### Commit 2: Build Verify-based tests in Model.Tests
+### Commit 2: Build envelope- and component-level tests in Model.Tests
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Inventory `AlexaVoxCraft.Model.Legacy.Tests` coverage (Requests/Intent/Response/Card/
-      ProgressiveResponse/Ssml/ConnectionTasks/Directives: Audio/Dialog/Display/VideoApp) as a
-      parity checklist.
-- [ ] Add Verify-based tests in `AlexaVoxCraft.Model.Tests` following the existing `TestModuleInit`/
-      `Snapshots/*.verified.*` pattern, using Commit 1 fixtures for round-trip coverage of real
-      shapes and Compono/AutoFixture-generated data for shapes not present in the logs.
-- [ ] Use `AwesomeAssertions` for object/constraint checks alongside Verify snapshots for full
-      serialized-shape regression.
-- [ ] Validate `dotnet test test/AlexaVoxCraft.Model.Tests/AlexaVoxCraft.Model.Tests.csproj --no-build --no-restore`.
-- [ ] Validate solution build.
+- [x] Reorganized Commit 1's fixtures out of a `CloudWatch/` subfolder into `Examples/Requests/`
+      (envelope-level, merged with pre-existing fixtures — one rename to avoid a `LaunchRequest.json`
+      collision: `LaunchRequest_FreshSession.json`) and `Examples/Components/` (extracted single-piece
+      fragments, new).
+- [x] Request side (deserialize-only): folded new `[Fact]`s into the existing `SkillRequestTests` for
+      every captured intent/launch shape; added `Request/IntentTests.cs` (component-level) covering
+      `Intent` with slot resolution in isolation.
+- [x] Response side (serialize-only, per the Constraints rule): added `Response/SkillResponseTests.cs`
+      (envelope-level, `SimpleCard` + `shouldEndSession=true`) and `Response/CardTests.cs`
+      (component-level `SimpleCard`), both constructing objects in code from real captured values
+      rather than deserializing a fixture. Added `VerifySerializedObject` to `Model.Tests/TestHelper.cs`
+      (it only had `VerifyRequestObject` before) to support this.
+- [x] Validated `dotnet test` (via `dotnet run --framework <tfm>`) across all 4 target frameworks
+      (net8.0/9.0/10.0/11.0): 19/19 passing, no stray `.received.*` files.
+- [x] Validated solution build: 0 errors.
 
 Suggested commit message:
 
 ```text
-test(model): add Verify-based tests from CloudWatch fixtures
+test(model): add envelope- and component-level tests from real payloads
 ```
 
-### Commit 3: Build Verify-based tests in Model.Apl.Tests
+### Commit 3: Build envelope- and component-level tests in Model.Apl.Tests and Model.InSkillPurchasing.Tests
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Inventory `AlexaVoxCraft.Model.Apl.Legacy.Tests` coverage (Command/Document/Package/Component/
-      DataStore/Extension/Gradient/Layout/VectorGraphic/Launch/Request/Audio tests) as a parity
-      checklist.
-- [ ] Add Verify-based tests in `AlexaVoxCraft.Model.Apl.Tests` following the existing pattern, using
-      Commit 1 fixtures plus synthetic data for gaps.
-- [ ] Validate `dotnet test test/AlexaVoxCraft.Model.Apl.Tests/AlexaVoxCraft.Model.Apl.Tests.csproj --no-build --no-restore`.
-- [ ] Validate solution build.
+- [x] `Model.Apl.Tests`: fixtures reorganized the same way (`Examples/Requests/`, no `Components/`
+      needed after the response-side rework below). Request side: folded the 4 `UserEvent` argument
+      shapes (`selectCategory`/`answer`/`buyProduct`/`productDetails`) into the existing
+      `APLSkillRequestTests`. Response side (serialize-only): added `APLSkillResponseTests.cs`
+      (envelope, `RenderDocumentDirective` + `ExecuteCommandsDirective` together — this skill always
+      emits both for a page-render turn) and `Directive/RenderDocumentDirectiveTests.cs` /
+      `Directive/ExecuteCommandsDirectiveTests.cs` (component-level), all constructing small
+      representative objects in code (a full hand-built APL document tree matching the huge captured
+      one isn't practical) rather than deserializing.
+- [x] `Model.InSkillPurchasing.Tests`: fixtures under `Examples/Requests/` (`BuyIntent`,
+      `WhatCanIBuyIntent`, `ProductDetailIntent`, `ConnectionsResponse_Buy`) and `Examples/Components/`
+      (`ConnectionResponsePayload_Declined.json`). Request side: new
+      `Requests/InSkillPurchasingRequestTests.cs` (envelope) plus a new fact on the existing
+      `Responses/ConnectionResponseRequestTests.cs` (component-level, matches its established
+      pattern). Response side: extended the existing `Directive/BuyDirectiveTests.cs` with a second
+      serialize fact using a real captured product id/token — this is where the `PaymentDirective`
+      deserialize-incompatibility finding surfaced and was resolved by dropping the deserialize
+      attempt (response-only, per the Constraints rule), not by changing the source.
+      `Examples/Response/` (singular, pre-existing) renamed to `Examples/Responses/` (plural) to match
+      the other two projects' convention; the one reference in `ConnectionResponseRequestTests.cs`
+      updated.
+- [x] Validated all 4 target frameworks for both projects: `Model.Apl.Tests` 73/73,
+      `Model.InSkillPurchasing.Tests` 10/10, no stray `.received.*` files.
+- [x] Validated solution build: 0 errors.
 
 Suggested commit message:
 
 ```text
-test(model-apl): add Verify-based tests from CloudWatch fixtures
+test(apl,isp): add envelope- and component-level tests from real payloads
 ```
 
 ### Commit 4: Remove Legacy test projects
@@ -295,12 +338,20 @@ fix: resolve remaining compiler warnings
 
 ## Resulting test composition guidance
 
-- Prefer real CloudWatch-captured payload shapes for round-trip coverage of what the skill actually
-  sends and receives in production; use Compono/AutoFixture-generated data only to fill gaps CloudWatch
-  doesn't naturally produce (error paths, rare directive types, ISP edge cases).
+- Prefer real captured payload shapes for round-trip coverage of what the skill actually sends and
+  receives in production; use Compono/AutoFixture-generated data only to fill gaps the logs don't
+  naturally produce (error paths, rare directive types, ISP edge cases).
 - Use Verify snapshots for full serialized-shape regression, `AwesomeAssertions` for targeted
   object/constraint checks, matching the pattern already established in `Model.Tests`/`Model.Apl.Tests`.
 - Never commit a captured fixture without a manual PII grep pass, even after automated scrubbing.
+- Two tiers per subject: envelope-level (`SkillRequestTests`, `SkillResponseTests`, ...) and
+  component-level (`IntentTests`, `CardTests`, `Directive/*Tests`, ...). Neither name nor folder
+  references where the data came from.
+- Test direction follows envelope role: request-side deserializes (fixture files under
+  `Examples/Requests/`), response-side serializes (values inlined in code, no fixture file — a
+  captured payload is still useful as the source of realistic values even when it can't be the literal
+  test input). Verify this holds before writing a test for a new type — don't assume a type supports
+  a direction just because the underlying serializer happens to allow it.
 
 ## Validation policy
 

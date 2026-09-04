@@ -45,37 +45,46 @@
         ]
       },
       "repeatModel": {
-        "Speech": "Which question pack would you like to play? Say 1 for General Disney Trivia, 2 for Pixar Pack.",
-        "Reprompt": "Please say the name of the category you'd like to play.",
-        "Options": [
-          {
-            "Id": "general",
-            "DisplayName": "General Disney Trivia"
-          },
-          {
-            "Id": "ent-pixar",
-            "DisplayName": "Pixar Pack"
-          }
+        "$type": "startGame",
+        "IntroSpeech": "",
+        "QuestionSpeech": "Question 1. When Disney World opened, who gave the opening speech? 1.  Roy Disney. 2.  Lillian Disney. 3.  The president. 4.  Walt Disney. ",
+        "QuestionText": "When Disney World opened, who gave the opening speech?",
+        "Answers": [
+          "Roy Disney",
+          "Lillian Disney",
+          "The president",
+          "Walt Disney"
         ]
       },
       "currentGame": {
-        "GameQuestions": {},
+        "GameQuestions": {
+          "1": "963923db-0b49-4fc0-9257-5187e40dbd07",
+          "6": "008a1a4f-4bd4-410d-8531-4c1c135cf98b",
+          "10": "74bf4247-ddac-4617-b6ed-78f88412e34d",
+          "3": "2ea31b72-5f9c-46d2-957b-ed0ae7f0dc10",
+          "9": "803d77cf-47a5-470d-8977-7f80b2904efd"
+        },
         "CorrectAnswerIndex": 0,
         "CurrentScore": 0,
         "CurrentQuestionIndex": 0,
-        "CorrectAnswerText": "",
-        "QuestionText": "",
-        "Answers": [],
+        "CorrectAnswerText": "Roy Disney",
+        "QuestionText": "When Disney World opened, who gave the opening speech?",
+        "Answers": [
+          "Roy Disney",
+          "Lillian Disney",
+          "The president",
+          "Walt Disney"
+        ],
         "CategoryId": "general"
       },
       "ConversationContext": {
-        "Type": 4,
+        "Type": 2,
         "SubContext": null,
         "Metadata": {
           "CreatedAt": "2026-09-04T15:47:25.0958416+00:00",
-          "LastUpdated": "2026-09-04T15:47:25.0958563+00:00",
+          "LastUpdated": "2026-09-04T15:47:34.4793591+00:00",
           "LastHandler": null,
-          "TransitionCount": 1,
+          "TransitionCount": 2,
           "UserIdentifier": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
           "IsAuthenticated": false,
           "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000"
@@ -110,7 +119,7 @@
       "apiEndpoint": "https://api.amazonalexa.com",
       "apiAccessToken": "***REDACTED***",
       "unit": {
-        "unitId": "amzn1.ask.unit.AGYU24FGKY3WOEVEIECHNWZR47GLDAYVIHHI4EL6QNMLXJ47KJKKUCDHOKRPOXLPRQU674OJHSHDUE5AREMMY7T6APAETIRB22QVER73TFRHUI66X7PE25WZURRFXRCKGM"
+        "unitId": "amzn1.ask.unit.A00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
       }
     }
   },
@@ -118,55 +127,19 @@
     "type": "IntentRequest",
     "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
     "locale": "en-US",
-    "timestamp": "2026-09-04T15:47:34Z",
+    "timestamp": "2026-09-04T15:47:49Z",
     "intent": {
-      "name": "CategorySelectionIntent",
+      "name": "AnswerIntent",
       "confirmationStatus": "NONE",
       "slots": {
-        "productCategory": {
-          "name": "productCategory",
-          "value": "general trivia",
-          "resolutions": {
-            "resolutionsPerAuthority": [
-              {
-                "authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2_Live.packType",
-                "status": {
-                  "code": "ER_SUCCESS_MATCH"
-                },
-                "values": [
-                  {
-                    "value": {
-                      "name": "general",
-                      "id": "958153f1b8b96ec4c4eb2147429105d9"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
+        "Answer": {
+          "name": "Answer",
+          "value": "4",
           "confirmationStatus": "NONE",
           "source": "USER",
           "slotValue": {
             "type": "Simple",
-            "value": "general trivia",
-            "resolutions": {
-              "resolutionsPerAuthority": [
-                {
-                  "authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2_Live.packType",
-                  "status": {
-                    "code": "ER_SUCCESS_MATCH"
-                  },
-                  "values": [
-                    {
-                      "value": {
-                        "name": "general",
-                        "id": "958153f1b8b96ec4c4eb2147429105d9"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
+            "value": "4"
           }
         }
       }

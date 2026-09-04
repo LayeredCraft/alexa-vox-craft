@@ -1,0 +1,52 @@
+{
+  "name": "CategorySelectionIntent",
+  "confirmationStatus": "NONE",
+  "slots": {
+    "productCategory": {
+      "name": "productCategory",
+      "value": "general trivia",
+      "resolutions": {
+        "resolutionsPerAuthority": [
+          {
+            "authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2_Live.packType",
+            "status": {
+              "code": "ER_SUCCESS_MATCH"
+            },
+            "values": [
+              {
+                "value": {
+                  "name": "general",
+                  "id": "958153f1b8b96ec4c4eb2147429105d9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "confirmationStatus": "NONE",
+      "source": "USER",
+      "slotValue": {
+        "type": "Simple",
+        "value": "general trivia",
+        "resolutions": {
+          "resolutionsPerAuthority": [
+            {
+              "authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2_Live.packType",
+              "status": {
+                "code": "ER_SUCCESS_MATCH"
+              },
+              "values": [
+                {
+                  "value": {
+                    "name": "general",
+                    "id": "958153f1b8b96ec4c4eb2147429105d9"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
