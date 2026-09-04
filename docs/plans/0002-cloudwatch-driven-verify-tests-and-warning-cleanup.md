@@ -276,15 +276,24 @@ test(model): add response construction coverage (directives, speech, cards, prog
 
 ### Commit 5: Model.Tests — SSML builder
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Port `Speech/SsmlTests.cs` (22 tests: `Speech` fluent API, `PlainText`, `<break>`, `<emphasis>`,
-      `<prosody>`, `<say-as>`, special-character escaping) as response-side serialize tests,
-      component-level, in a new `Response/SsmlTests.cs` (or `Speech/SsmlTests.cs` matching legacy's
-      folder name — pick whichever reads better once the file exists).
-- [ ] Validate all 4 TFMs, solution build.
+- [x] Ported the 21 explicit-value `[Fact]` tests from `Speech/SsmlTests.cs` into
+      `Response/SsmlTests.cs`: `Speech` (empty-throws, `<speak>` wrapping), `PlainText`, `Sentence`,
+      `Paragraph`, `Break` (plain/time/strength), `SayAs` (plain/format), `Word`, `Sub`, `Prosody`,
+      `Emphasis`, `Phoneme`, `Audio`, `AmazonEffect`, terse-vs-verbose construction parity,
+      `Voice`+`Lang`, `AlexaName`, `AmazonDomain`, `AmazonEmotion`.
+- [x] `ISsml.ToXml()` is a one-directional string/XML builder with no deserialize counterpart at all
+      (no `FromXml`), so the request/response envelope-role direction rule from Constraints doesn't
+      apply here — there's nothing to be "strict about," only one direction exists.
+- [x] Deliberately did not port the ~14 Compono `[Theory]`-generated-data "shape" tests from the same
+      legacy file (e.g. `Word_WithGeneratedData_HasValidRole` asserting `StartsWith("<w")` /
+      `Contains("role=")`) — they're weaker, redundant checks on the same types the explicit tests
+      already assert exact output for. Recorded here as a deliberate simplification, not a silent gap.
+- [x] Validated all 4 TFMs: 71/71 passing (22 new, all passed on first run — no Verify snapshots
+      needed, plain string-equality assertions). Validated solution build: 0 errors.
 
 Suggested commit message:
 
