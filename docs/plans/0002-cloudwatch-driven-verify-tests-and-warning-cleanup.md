@@ -303,18 +303,27 @@ test(model): add SSML builder coverage
 
 ### Commit 6: Model.Tests — legacy-interface directives (AudioPlayer, Display, VideoApp)
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Port `Directives/AudioPlayerDirectiveTests.cs` (7 tests: `AudioPlayerPlayDirective`,
-      `ClearQueueDirective`, `StopDirective`, `AudioItem`/`AudioItemStream`/`AudioItemMetadata`) as
-      response-side serialize, component-level, under `Directive/`.
-- [ ] Port `Directives/DisplayDirectiveTests.cs` (3 tests, legacy pre-APL display templates).
-- [ ] Port `Directives/VideoAppDirectiveTests.cs` (6 tests: `VideoAppDirective`).
-- [ ] These interfaces are unused by the trivia skill (no real captures exist) — synthetic
+- [x] Ported `Directives/AudioPlayerDirectiveTests.cs`'s serialize coverage into
+      `Response/AudioPlayerDirectiveTests.cs`: `AudioPlayerPlayDirective` (with/without metadata),
+      `ClearQueueDirective`, `StopDirective`. Dropped the legacy file's deserialize tests and Compono
+      property-based "shape" theories (same reasoning as Commits 4-5: response-side is serialize-only,
+      and the shape theories duplicate what the explicit serialize tests already assert).
+- [x] Ported `Directives/DisplayDirectiveTests.cs` (legacy pre-APL display templates) into
+      `Response/DisplayTemplateTests.cs`: `TemplateImage` basic + with size/dimensions. (Its
+      `HintDirective` test was already covered in Commit 4.)
+- [x] Ported `Directives/VideoAppDirectiveTests.cs` into `Response/VideoAppDirectiveTests.cs`:
+      `VideoAppDirective` serialize (object-initializer + `FromSource` constructor), plus the 3
+      `IEndSessionDirective` override-behavior tests (overrides to null, stays null when directives
+      agree, reverts to explicit when directives contradict) — general `ResponseBody.ShouldEndSession`
+      logic, not really AudioPlayer/Display/VideoApp-specific, but this is where legacy had it.
+- [x] All three interfaces are unused by the trivia skill (no real captures exist) — synthetic
       construction only, matching legacy's hand-written style.
-- [ ] Validate all 4 TFMs, solution build.
+- [x] Validated all 4 TFMs: 82/82 passing, no stray `.received.*` files. Validated solution build:
+      0 errors.
 
 Suggested commit message:
 
