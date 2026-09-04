@@ -637,16 +637,25 @@ test: remove Legacy test projects superseded by Verify suites
 
 ### Commit 15: Mechanical warning fixes (SYSLIB0057, CS0618)
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Replace obsolete `X509Certificate2` constructor usage with `X509CertificateLoader`
-      (SYSLIB0057, 6 warnings).
-- [ ] Replace or scope-suppress obsolete API usage (CS0618, 4 warnings) with a one-line reason
-      comment where suppression is the right call.
-- [ ] Validate solution build shows these categories at zero.
-- [ ] Validate full test suite.
+- [x] `src/AlexaVoxCraft.Model/Request/RequestVerification.cs`: `X509Certificate2(byte[])` only
+      warns on net9+ (`X509CertificateLoader` doesn't exist on net8), so wrapped in
+      `#if NET9_0_OR_GREATER` — `X509CertificateLoader.LoadCertificate(bytes)` on net9/10/11, the old
+      constructor unchanged on net8.
+- [x] `PerformanceLoggingBehavior.cs` and `AlexaSkillFunction.cs`: both already had a
+      `#if NET9_0_OR_GREATER ... AddException ... #else ... RecordException ... #endif` split, but
+      `RecordException` is obsolete-marked regardless of TFM (it ships in the
+      `System.Diagnostics.DiagnosticSource` NuGet package, referenced at version 10.0.0 uniformly
+      across net8/9/10/11 per `dotnet list package --include-transitive`, not gated by the in-box
+      BCL) — so the net8 branch was warning too. Confirmed `AddException` itself works fine on all 4
+      TFMs (built each framework individually, 0 errors/warnings) and removed the conditional
+      entirely, calling `AddException` unconditionally.
+- [x] Validated: 0 `SYSLIB0057`/`CS0618` anywhere in the solution. Validated full test suite across
+      all 4 TFMs for `Model.Tests`, `Model.Apl.Tests`, `Model.InSkillPurchasing.Tests`,
+      `MediatR.Tests`, `MediatR.Lambda.Tests`: all green. Validated solution build: 0 errors.
 
 Suggested commit message:
 

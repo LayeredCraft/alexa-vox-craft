@@ -116,11 +116,7 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
         }
         catch (Exception ex)
         {
-#if NET9_0_OR_GREATER
             span?.AddException(ex);
-#else
-            span?.RecordException(ex);
-#endif
             span?.SetStatus(ActivityStatusCode.Error, ex.Message);
 
             var errorType = ClassifyError(ex);

@@ -56,7 +56,11 @@ public static class RequestVerification
     {
         var response = await new HttpClient().GetAsync(certificatePath);
         var bytes = await response.Content.ReadAsByteArrayAsync();
+#if NET9_0_OR_GREATER
+        return X509CertificateLoader.LoadCertificate(bytes);
+#else
         return new X509Certificate2(bytes);
+#endif
     }
 
     public static bool VerifyChain(X509Certificate2 certificate)
