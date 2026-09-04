@@ -594,7 +594,7 @@ test(model-apl): add APL extension coverage
 
 ### Commit 14: Remove Legacy test projects
 
-Status: Not started. Blocked on Commits 4-12.
+Status: Not started. Blocked on Commits 4-13 (all done — this is next).
 
 Tasks:
 
