@@ -1,0 +1,1 @@
+﻿{"type":"Dialog.UpdateDynamicEntities","updateBehavior":"REPLACE","types":[{"name":"ZodiacSign","values":[{"id":"virgo","name":{"value":"Virgo","synonyms":["The Maiden"]}}]}]}

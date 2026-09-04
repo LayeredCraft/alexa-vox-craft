@@ -109,4 +109,30 @@ public sealed class DirectiveTests() : TestBase<DirectiveTests>
 
         await TestHelper.VerifySerializedObject(directive, AlexaJson, "AskForPermissionDirective");
     }
+
+    [Fact]
+    public async Task DialogUpdateDynamicEntities_Serializes()
+    {
+        var directive = new DialogUpdateDynamicEntities
+        {
+            UpdateBehavior = UpdateBehavior.Replace,
+            Types =
+            [
+                new SlotType
+                {
+                    Name = "ZodiacSign",
+                    Values =
+                    [
+                        new SlotTypeValue
+                        {
+                            Id = "virgo",
+                            Name = new SlotTypeValueName { Value = "Virgo", Synonyms = ["The Maiden"] }
+                        }
+                    ]
+                }
+            ]
+        };
+
+        await TestHelper.VerifySerializedObject(directive, AlexaJson, "DialogUpdateDynamicEntities");
+    }
 }
