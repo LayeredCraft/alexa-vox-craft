@@ -741,13 +741,25 @@ fix: resolve member-hiding compiler warnings
 
 ### Commit 17: Analyzer release tracking (RS2008)
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Add missing `AnalyzerReleases.Shipped.md` / `AnalyzerReleases.Unshipped.md` entries for the
+- [x] Add missing `AnalyzerReleases.Shipped.md` / `AnalyzerReleases.Unshipped.md` entries for the
       MediatR source generator project (RS2008, 6 warnings).
-- [ ] Validate solution build shows this category at zero.
+- [x] Validate solution build shows this category at zero.
+
+Resulting guidance:
+
+- Added `AnalyzerReleases.Shipped.md` (AVXC001-003 listed under the current `VersionPrefix`, 7.3.4 —
+  these 3 rules already ship in the published package) and `AnalyzerReleases.Unshipped.md` (empty table,
+  no new unreleased rules) to `src/AlexaVoxCraft.MediatR.Generators/`, wired as `<AdditionalFiles>` in
+  the csproj.
+- `AnalyzerReleases.Unshipped.md` must NOT carry a `## Release ...`/`## Unshipped` header line — the
+  analyzer (RS2007) rejects any header there and expects the file to start directly with the rules
+  table. `AnalyzerReleases.Shipped.md` does require a `## Release <version>` header per release section.
+- Docs/config-only change (no source behavior changed), so no new test was added for this commit —
+  consistent with the Phase 8 instruction, which targets code-path changes.
 
 Suggested commit message:
 
