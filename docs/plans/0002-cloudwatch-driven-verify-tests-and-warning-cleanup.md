@@ -658,12 +658,18 @@ Tasks:
       exception on an `Activity` before `.AddException` landed natively in .NET 9). Confirmed
       (built net8.0 with the import removed) that `AddException` resolves fine without it, and
       removed the now-dead conditional import from both files.
-- [x] Follow-up correction: the first pass of this commit's edits silently flipped
-      `RequestVerification.cs`, `PerformanceLoggingBehavior.cs`, and `AlexaSkillFunction.cs` from LF
-      to CRLF line endings (an Edit-tool side effect, not intentional), which bloated the diff to
-      ~140 changed lines for what should have been a handful. Caught by inspecting the diff size
-      before moving on, fixed by normalizing back to LF and re-diffing to confirm only the intended
-      lines actually changed.
+- [x] Follow-up investigation: the first pass of this commit's edits produced a much larger diff than
+      expected (~140 changed lines for what should have been a handful) for these 3 files. Root cause
+      turned out to be line-ending history, not an edit bug: these 3 files were originally committed
+      with CRLF line endings (confirmed via `git cat-file -p <original-commit>:<path>`), unlike most
+      of the repo. This session's git config (`core.autocrlf=input`) normalizes CRLF→LF on every
+      `git add` regardless of working-tree content (confirmed by staging and inspecting the index
+      directly) — so committing any change to these files from this session, by any means, always
+      produces an LF blob. Verified the actual functional diff is clean by comparing content with
+      line-ending differences ignored (`git diff --ignore-cr-at-eol`) against each file's pre-touch
+      original: only the intended lines changed. (Separately checked `AskForPermissionDirective.cs`
+      and `DeleteMultipleItems.cs` from earlier commits — both were LF from their original commit, so
+      never actually had this issue.)
 - [x] Validated: 0 `SYSLIB0057`/`CS0618` anywhere in the solution, confirmed per-project per-TFM (not
       just once). Validated full test suite across all 4 TFMs for `Model.Tests`, `Model.Apl.Tests`,
       `Model.InSkillPurchasing.Tests`, `MediatR.Tests`, `MediatR.Lambda.Tests`: all green. Validated
