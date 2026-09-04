@@ -653,9 +653,21 @@ Tasks:
       BCL) — so the net8 branch was warning too. Confirmed `AddException` itself works fine on all 4
       TFMs (built each framework individually, 0 errors/warnings) and removed the conditional
       entirely, calling `AddException` unconditionally.
-- [x] Validated: 0 `SYSLIB0057`/`CS0618` anywhere in the solution. Validated full test suite across
-      all 4 TFMs for `Model.Tests`, `Model.Apl.Tests`, `Model.InSkillPurchasing.Tests`,
-      `MediatR.Tests`, `MediatR.Lambda.Tests`: all green. Validated solution build: 0 errors.
+- [x] Both files also had a `#if !NET9_0_OR_GREATER using OpenTelemetry.Trace; #endif` that existed
+      solely to support the old `RecordException` fallback call (originally the only way to record an
+      exception on an `Activity` before `.AddException` landed natively in .NET 9). Confirmed
+      (built net8.0 with the import removed) that `AddException` resolves fine without it, and
+      removed the now-dead conditional import from both files.
+- [x] Follow-up correction: the first pass of this commit's edits silently flipped
+      `RequestVerification.cs`, `PerformanceLoggingBehavior.cs`, and `AlexaSkillFunction.cs` from LF
+      to CRLF line endings (an Edit-tool side effect, not intentional), which bloated the diff to
+      ~140 changed lines for what should have been a handful. Caught by inspecting the diff size
+      before moving on, fixed by normalizing back to LF and re-diffing to confirm only the intended
+      lines actually changed.
+- [x] Validated: 0 `SYSLIB0057`/`CS0618` anywhere in the solution, confirmed per-project per-TFM (not
+      just once). Validated full test suite across all 4 TFMs for `Model.Tests`, `Model.Apl.Tests`,
+      `Model.InSkillPurchasing.Tests`, `MediatR.Tests`, `MediatR.Lambda.Tests`: all green. Validated
+      solution build: 0 errors.
 
 Suggested commit message:
 

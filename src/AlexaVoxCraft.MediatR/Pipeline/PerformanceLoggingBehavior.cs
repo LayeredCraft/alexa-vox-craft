@@ -5,9 +5,6 @@ using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
 using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.Logging;
-#if !NET9_0_OR_GREATER
-using OpenTelemetry.Trace;
-#endif
 
 namespace AlexaVoxCraft.MediatR.Pipeline;
 

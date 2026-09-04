@@ -13,9 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-#if !NET9_0_OR_GREATER
-using OpenTelemetry.Trace;
-#endif
 
 namespace AlexaVoxCraft.MediatR.Lambda;
 
