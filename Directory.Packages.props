@@ -87,14 +87,15 @@
        HTTP-testing-touched projects (AlexaVoxCraft.Smapi.Tests, AlexaVoxCraft.InSkillPurchasing.Tests)
        and their shared HTTP TestKit, plus Compono.Logging (PLAN-0055, LayeredCraft/compono#116,
        merged) and CompositionBuilder.Share<T>() (PLAN-0056, LayeredCraft/compono#117, merged).
-       1.0.0 is the real published NuGet.org version - lockstep across all Compono packages. -->
+       1.1.0-preview.103 adds TestHttpHandler.RespondBytes for raw binary payloads (e.g. fetched
+       certificate bytes) - real published NuGet.org preview version - lockstep across all Compono packages. -->
   <ItemGroup Label="Compono">
-    <PackageVersion Include="Compono" Version="1.0.0" />
-    <PackageVersion Include="Compono.XunitV3" Version="1.0.0" />
-    <PackageVersion Include="Compono.Http" Version="1.0.0" />
-    <PackageVersion Include="Compono.TestDoubles" Version="1.0.0" />
-    <PackageVersion Include="Compono.Bogus" Version="1.0.0" />
-    <PackageVersion Include="Compono.Logging" Version="1.0.0" />
+    <PackageVersion Include="Compono" Version="1.1.0-preview.103" />
+    <PackageVersion Include="Compono.XunitV3" Version="1.1.0-preview.103" />
+    <PackageVersion Include="Compono.Http" Version="1.1.0-preview.103" />
+    <PackageVersion Include="Compono.TestDoubles" Version="1.1.0-preview.103" />
+    <PackageVersion Include="Compono.Bogus" Version="1.1.0-preview.103" />
+    <PackageVersion Include="Compono.Logging" Version="1.1.0-preview.103" />
   </ItemGroup>
   <ItemGroup Label="Reference Assemblies">
     <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.11" />

@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using Compono.Http;
@@ -39,10 +38,8 @@ public sealed class RequestVerificationTests
         var certificateBytes = expected.Export(X509ContentType.Cert);
 
         using var handler = new TestHttpHandler();
-        // Compono.Http has no raw-bytes response helper; DER bytes round-trip losslessly through
-        // Latin1 (a single-byte, bijective 0-255 char<->byte mapping), unlike UTF-8.
         handler.OnGet("/echo.api/cert.pem")
-            .RespondText(Encoding.Latin1.GetString(certificateBytes), "application/octet-stream", Encoding.Latin1);
+            .RespondBytes(certificateBytes, "application/octet-stream");
         using var client = handler.CreateClient(new Uri("https://s3.amazonaws.com"));
 
         // GetCertificate builds its own internal HttpClient, so exercise it through the public
