@@ -54,7 +54,7 @@ public class DefaultHandler : IDefaultRequestHandler
                             BorderWidth = 5,
                             Height = "100%",
                             Width = "100%",
-                            Shrink = 1,
+                            Shrink = 1!,
                             Item = new List<APLComponent>
                             {
                                 new Text
