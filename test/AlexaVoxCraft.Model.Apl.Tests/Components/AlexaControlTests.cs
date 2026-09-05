@@ -15,7 +15,7 @@ public class AlexaControlTests : TestBase<AlexaControlTests>
         {
             ButtonSize = new AbsoluteDimension(72, "dp"),
             VectorSource = "M21.343,8.661l-7.895-7.105c-0.823-0.741-2.073-0.741-2.896,0",
-            PrimaryAction = [new SetValue { ComponentId = "textToUpdate", Property = "text", Value = APLValue.To<string>("${exampleData.imageStyleText}") }]
+            PrimaryAction = [new SetValue { ComponentId = "textToUpdate", Property = "text"!, Value = APLValue.To<string>("${exampleData.imageStyleText}")! }]
         };
 
         await TestHelper.VerifySerializedObject(control, AlexaJson, "AlexaIconButton");
@@ -63,7 +63,7 @@ public class AlexaControlTests : TestBase<AlexaControlTests>
     [Fact]
     public async Task AlexaCheckbox_Serializes()
     {
-        var control = new AlexaCheckbox { Theme = "dark", SelectedColor = "@colorAccent", CheckboxHeight = new AbsoluteDimension(24, "dp") };
+        var control = new AlexaCheckbox { Theme = "dark"!, SelectedColor = "@colorAccent"!, CheckboxHeight = new AbsoluteDimension(24, "dp") };
 
         await TestHelper.VerifySerializedObject(control, AlexaJson, "AlexaCheckbox");
     }
@@ -71,7 +71,7 @@ public class AlexaControlTests : TestBase<AlexaControlTests>
     [Fact]
     public async Task AlexaSwitch_Serializes()
     {
-        var control = new AlexaSwitch { Theme = "dark", ActiveColor = "@colorAccent", SwitchHeight = new AbsoluteDimension(24, "dp") };
+        var control = new AlexaSwitch { Theme = "dark"!, ActiveColor = "@colorAccent"!, SwitchHeight = new AbsoluteDimension(24, "dp") };
 
         await TestHelper.VerifySerializedObject(control, AlexaJson, "AlexaSwitch");
     }
@@ -79,7 +79,7 @@ public class AlexaControlTests : TestBase<AlexaControlTests>
     [Fact]
     public async Task AlexaIcon_Serializes()
     {
-        var control = new AlexaIcon { IconName = "closedCaptioning", IconSize = new AbsoluteDimension(24, "dp"), IconColor = "@colorText" };
+        var control = new AlexaIcon { IconName = "closedCaptioning"!, IconSize = new AbsoluteDimension(24, "dp"), IconColor = "@colorText"! };
 
         await TestHelper.VerifySerializedObject(control, AlexaJson, "AlexaIcon");
     }

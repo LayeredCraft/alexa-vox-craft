@@ -6,9 +6,9 @@ public class CardImage
 {
     [JsonPropertyName("smallImageUrl")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string SmallImageUrl { get; set; } = null!;
+    public string? SmallImageUrl { get; set; }
 
     [JsonPropertyName("largeImageUrl")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string LargeImageUrl { get; set; } = null!;
+    public string? LargeImageUrl { get; set; }
 }

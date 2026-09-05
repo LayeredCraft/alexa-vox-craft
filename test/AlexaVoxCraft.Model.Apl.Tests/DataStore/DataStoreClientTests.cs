@@ -32,7 +32,7 @@ public sealed class DataStoreClientTests
 
         var request = handler.Requests.Should().ContainSingle().Subject;
         request.RequestUri.Should().Be(new Uri("https://api.amazon.com/auth/O2/token"));
-        var content = await request.Content!.ReadAsStringAsync();
+        var content = await request.Content!.ReadAsStringAsync(TestContext.Current.CancellationToken);
         content.Should().Be("client_id=x&client_secret=y&grant_type=client_credentials&scope=alexa%3A%3Adatastore");
     }
 

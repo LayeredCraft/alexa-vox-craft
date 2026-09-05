@@ -20,7 +20,7 @@ public sealed class ExtensionTests() : TestBase<ExtensionTests>
         var doc = new APLDocument(APLDocumentVersion.V1_4) { MainTemplate = new Layout(new Text { Content = "Question text" }) };
         doc.Extensions!.Add(backstack);
         doc.Settings = new APLDocumentSettings();
-        doc.Settings.Add(backstack.Name, new BackStackSettings { BackstackId = "myDocument" });
+        doc.Settings.Add(backstack.Name!, new BackStackSettings { BackstackId = "myDocument" });
 
         await TestHelper.VerifySerializedObject(doc, AlexaJson, "Document_WithBackStackExtension");
     }
@@ -58,7 +58,7 @@ public sealed class ExtensionTests() : TestBase<ExtensionTests>
         var doc = new APLDocument(APLDocumentVersion.V1_4) { MainTemplate = new Layout(new Text { Content = "Question text" }) };
         doc.Extensions!.Add(smartMotion);
         doc.Settings = new APLDocumentSettings();
-        doc.Settings.Add(smartMotion.Name, new SmartMotionSettings
+        doc.Settings.Add(smartMotion.Name!, new SmartMotionSettings
         {
             DeviceStateName = "MyDeviceState",
             WakeWordResponse = WakeWordResponse.FollowOnWakeWord
@@ -134,7 +134,7 @@ public sealed class ExtensionTests() : TestBase<ExtensionTests>
         var doc = new APLDocument(APLDocumentVersion.V1_4) { MainTemplate = new Layout(new Text { Content = "Question text" }) };
         doc.Extensions!.Add(entitySensing);
         doc.Settings = new APLDocumentSettings();
-        doc.Settings.Add(entitySensing.Name, new EntitySensingSettings
+        doc.Settings.Add(entitySensing.Name!, new EntitySensingSettings
         {
             EntitySensingStateName = "EntitySensingState",
             PrimaryUserName = "User"
@@ -172,7 +172,7 @@ public sealed class ExtensionTests() : TestBase<ExtensionTests>
         var doc = new APLDocument(APLDocumentVersion.V2023_1) { MainTemplate = new Layout(new Text { Content = "Question text" }) };
         doc.Extensions!.Add(dataStore);
         doc.Settings = new APLDocumentSettings();
-        doc.Settings.Add(dataStore.Name, new DataStoreSettings
+        doc.Settings.Add(dataStore.Name!, new DataStoreSettings
         {
             DataBindings =
             [
@@ -210,7 +210,7 @@ public sealed class ExtensionTests() : TestBase<ExtensionTests>
     [Fact]
     public async Task DataStoreUpdateArrayBindingRange_Serializes()
     {
-        var command = UpdateArrayBindingRangeCommand.For(new DataStoreExtension("DataStore"), "ToDoNotes", APLValue.To<int?>("${test}"), 5);
+        var command = UpdateArrayBindingRangeCommand.For(new DataStoreExtension("DataStore"), new APLValue<string>("ToDoNotes"), APLValue.To<int?>("${test}"), new APLValue<int?>(5));
 
         await TestHelper.VerifySerializedObject(command, AlexaJson, "DataStore_UpdateArrayBindingRange");
     }

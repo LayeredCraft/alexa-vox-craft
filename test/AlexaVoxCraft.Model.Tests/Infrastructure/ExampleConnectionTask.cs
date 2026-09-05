@@ -11,10 +11,10 @@ namespace AlexaVoxCraft.Model.Tests.Infrastructure;
 /// </summary>
 public class ExampleConnectionTask : IConnectionTask
 {
-    public string ConnectionUri { get; set; }
+    public string ConnectionUri { get; set; } = null!;
 
     [JsonPropertyName("randomParameter")]
-    public string RandomParameter { get; set; }
+    public string RandomParameter { get; set; } = null!;
 }
 
 public class ExampleConnectionTaskResolver : IConnectionTaskResolver

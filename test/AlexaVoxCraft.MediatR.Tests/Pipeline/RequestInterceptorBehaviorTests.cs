@@ -133,8 +133,7 @@ public class RequestInterceptorBehaviorTests : TestBase
         next.CallCount.Should().Be(0);
     }
 
-    [Theory]
-    [Compose<MediatRTestProfile>]
+    [Fact]
     public void Constructor_WithNullInterceptors_DoesNotThrow()
     {
         // Act & Assert

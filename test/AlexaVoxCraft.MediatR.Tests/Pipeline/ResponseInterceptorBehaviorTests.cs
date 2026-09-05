@@ -163,8 +163,7 @@ public class ResponseInterceptorBehaviorTests : TestBase
         thirdInterceptor.Verify().Process(Match.Any<IHandlerInput>(), Match.Any<SkillResponse>(), Match.Any<CancellationToken>()).Never();
     }
 
-    [Theory]
-    [Compose<MediatRTestProfile>]
+    [Fact]
     public void Constructor_WithNullInterceptors_DoesNotThrow()
     {
         // Act & Assert

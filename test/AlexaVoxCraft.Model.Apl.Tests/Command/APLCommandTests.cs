@@ -37,7 +37,7 @@ public sealed class APLCommandTests() : TestBase<APLCommandTests>
     {
         var command = new ControlMedia
         {
-            Command = ControlMediaCommand.Seek,
+            Command = ControlMediaCommand.Seek!,
             ComponentId = "myAudioPlayer",
             Value = 5000
         };
@@ -51,8 +51,8 @@ public sealed class APLCommandTests() : TestBase<APLCommandTests>
         var command = new SetValue
         {
             ComponentId = "jokePunchline",
-            Property = "opacity",
-            Value = "1"
+            Property = "opacity"!,
+            Value = "1"!
         };
 
         await TestHelper.VerifySerializedObject(command, AlexaJson, "SetValue");
@@ -113,7 +113,7 @@ public sealed class APLCommandTests() : TestBase<APLCommandTests>
     [Fact]
     public async Task SetPage_Serializes()
     {
-        var command = new SetPage { ComponentId = "PagerId", Position = SetPagePosition.Relative, Value = 1 };
+        var command = new SetPage { ComponentId = "PagerId", Position = SetPagePosition.Relative, Value = 1! };
 
         await TestHelper.VerifySerializedObject(command, AlexaJson, "SetPage");
     }

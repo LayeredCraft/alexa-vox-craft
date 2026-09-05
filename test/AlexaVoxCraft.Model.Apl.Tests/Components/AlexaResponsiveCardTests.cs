@@ -28,10 +28,10 @@ public class AlexaResponsiveCardTests : TestBase<AlexaResponsiveCardTests>
     {
         var caption = new AlexaImageCaption
         {
-            PrimaryText = "Caption title",
-            SecondaryText = "Caption subtitle",
-            ImageSource = "https://example.com/photo.png",
-            ImageScrim = true
+            PrimaryText = "Caption title"!,
+            SecondaryText = "Caption subtitle"!,
+            ImageSource = "https://example.com/photo.png"!,
+            ImageScrim = true!
         };
 
         await TestHelper.VerifySerializedObject(caption, AlexaJson, "AlexaImageCaption");
@@ -56,10 +56,10 @@ public class AlexaResponsiveCardTests : TestBase<AlexaResponsiveCardTests>
     {
         var text = new AlexaTextWrapping
         {
-            PrimaryText = "Primary",
-            SecondaryText = "Secondary",
-            TertiaryText = "Tertiary",
-            TouchForward = false
+            PrimaryText = "Primary"!,
+            SecondaryText = "Secondary"!,
+            TertiaryText = "Tertiary"!,
+            TouchForward = false!
         };
 
         await TestHelper.VerifySerializedObject(text, AlexaJson, "AlexaTextWrapping");

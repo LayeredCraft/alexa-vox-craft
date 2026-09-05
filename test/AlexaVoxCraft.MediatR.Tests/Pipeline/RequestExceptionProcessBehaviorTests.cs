@@ -171,8 +171,7 @@ public class RequestExceptionProcessBehaviorTests : TestBase
         exception.Should().Be(testException);
     }
 
-    [Theory]
-    [Compose<MediatRTestProfile>]
+    [Fact]
     public void Constructor_WithNullExceptionHandlers_DoesNotThrow()
     {
         // Act & Assert

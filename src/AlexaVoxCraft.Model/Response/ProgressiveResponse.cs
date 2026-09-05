@@ -82,7 +82,7 @@ public class ProgressiveResponse
         return Header != null && Client != null;
     }
 
-    public async Task<HttpResponseMessage?> Send(IProgressiveResponseDirective directive)
+    public async Task<HttpResponseMessage?> Send(IProgressiveResponseDirective? directive)
     {
         if (directive == null || !CanSend())
         {

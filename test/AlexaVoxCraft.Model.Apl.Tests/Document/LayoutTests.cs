@@ -51,15 +51,15 @@ public sealed class LayoutTests() : TestBase<LayoutTests>
     {
         var header = new AlexaHeader
         {
-            HeaderTitle = "Header title",
-            HeaderSubtitle = "Header subtitle",
-            HeaderAttributionImage = "https://d2o906d8ln7ui1.cloudfront.net/images/cheeseskillicon.png",
-            HeaderBackgroundColor = "red",
-            HeaderBackButton = true,
-            HeaderBackButtonAccessibilityLabel = "back",
-            HeaderAttributionText = "Attribution",
-            HeaderAttributionPrimacy = true,
-            HeaderDivider = true,
+            HeaderTitle = "Header title"!,
+            HeaderSubtitle = "Header subtitle"!,
+            HeaderAttributionImage = "https://d2o906d8ln7ui1.cloudfront.net/images/cheeseskillicon.png"!,
+            HeaderBackgroundColor = "red"!,
+            HeaderBackButton = true!,
+            HeaderBackButtonAccessibilityLabel = "back"!,
+            HeaderAttributionText = "Attribution"!,
+            HeaderAttributionPrimacy = true!,
+            HeaderDivider = true!,
             LayoutDirection = LayoutDirection.RTL
         };
 

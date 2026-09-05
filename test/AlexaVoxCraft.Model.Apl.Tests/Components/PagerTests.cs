@@ -9,8 +9,8 @@ public class PagerTests : TestBase<PagerTests>
     {
         var pager = new Pager(new Text { Content = "Page 1" }, new Text { Content = "Page 2" })
         {
-            InitialPage = 0,
-            Navigation = "wrap"
+            InitialPage = 0!,
+            Navigation = "wrap"!
         };
 
         await TestHelper.VerifySerializedObject(pager, AlexaJson, "Constructor");

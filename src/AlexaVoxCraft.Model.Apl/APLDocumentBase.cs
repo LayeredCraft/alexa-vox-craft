@@ -60,14 +60,14 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
 
     [JsonExtensionData] public Dictionary<string, object> Handlers { get; set; } = null!;
 
-    public void AddHandler(string name, APLValueCollection<APLCommand> commands)
+    public void AddHandler(string name, APLValueCollection<APLCommand>? commands)
     {
         if (Handlers == null)
         {
             Handlers = new Dictionary<string, object>();
         }
 
-        Handlers.Add(name, commands);
+        Handlers.Add(name, commands!);
     }
 
     public static void RegisterTypeInfo<T>() where T : APLDocumentBase

@@ -16,7 +16,7 @@ public sealed class ExecuteCommandsDirectiveTests() : TestBase<ExecuteCommandsDi
             "triviaPager",
             new Sequential(
                 new SpeakItem { ComponentId = "page1" },
-                new SpeakList { ComponentId = "list1", Start = 0, Count = 3 }));
+                new SpeakList { ComponentId = "list1"!, Start = 0!, Count = 3!}));
 
         await TestHelper.VerifySerializedObject(directive, AlexaJson, "ExecuteCommandsDirective_RealisticCommandSequence");
     }

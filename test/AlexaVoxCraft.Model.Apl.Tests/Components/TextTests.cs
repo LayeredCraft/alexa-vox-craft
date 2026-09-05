@@ -52,9 +52,9 @@ public class TextTests : TestBase<TextTests>
     {
         var timeText = new TimeText
         {
-            Direction = TimeTextDirection.Down,
-            Format = "%M:%S",
-            Start = 1552070232
+            Direction = TimeTextDirection.Down!,
+            Format = "%M:%S"!,
+            Start = 1552070232!
         };
 
         await TestHelper.VerifySerializedObject(timeText, AlexaJson, "TimeText");

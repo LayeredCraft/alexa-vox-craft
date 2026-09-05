@@ -28,7 +28,7 @@ public sealed class AudioTests() : TestBase<AudioTests>
         var audio = new AudioComponent
         {
             Source = "https://example.com/audio/clip.mp3",
-            Filters = [new FadeIn { Duration = 1000 }, new Trim { Start = 0, End = 5000 }]
+            Filters = [new FadeIn { Duration = 1000! }, new Trim { Start = 0, End = 5000 }]
         };
 
         await TestHelper.VerifySerializedObject(audio, AlexaJson, "Audio_WithFilters");

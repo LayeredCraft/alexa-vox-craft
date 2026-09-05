@@ -16,8 +16,8 @@ public class AlexaListTests : TestBase<AlexaListTests>
         {
             Theme = "dark",
             PrimaryText = "${exampleData.primaryText}",
-            SecondaryText = "${exampleData.secondaryText}",
-            TertiaryText = "${exampleData.tertiaryText}",
+            SecondaryText = "${exampleData.secondaryText}"!,
+            TertiaryText = "${exampleData.tertiaryText}"!,
             ProviderText = "${exampleData.providerText}",
             ImageProgressBarPercentage = 75,
             ImageRoundedCorner = true,

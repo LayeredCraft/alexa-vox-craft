@@ -875,15 +875,54 @@ fix(model-apl): resolve nullable-reference compiler warnings
 
 ### Commit 20: Nullable warning cleanup - remaining projects
 
-Status: Not started.
+Status: Done.
 
 Tasks:
 
-- [ ] Inventory remaining warnings across `AlexaVoxCraft.MediatR`, `AlexaVoxCraft.MediatR.Lambda`,
+- [x] Inventory remaining warnings across `AlexaVoxCraft.MediatR`, `AlexaVoxCraft.MediatR.Lambda`,
       and any other project still emitting warnings.
-- [ ] Fix per-project, smallest project first.
-- [ ] Validate each affected project's test suite after its fixes.
-- [ ] Validate full solution build shows 0 warnings / 0 errors.
+- [x] Fix per-project, smallest project first.
+- [x] Validate each affected project's test suite after its fixes.
+- [x] Validate full solution build shows 0 warnings / 0 errors.
+
+Resulting guidance:
+
+- Full inventory (net10.0-only, deduped) after Commits 18-19: `AlexaVoxCraft.MediatR` (5),
+  `AlexaVoxCraft.Model.InSkillPurchasing` (3), `AlexaVoxCraft.Model.Tests` (4), `AlexaVoxCraft.MediatR.Tests`
+  (7), `AlexaVoxCraft.Model.Apl.Tests` (52). `AlexaVoxCraft.MediatR.Lambda` was already at zero. Fixed
+  smallest-to-largest.
+- `AlexaVoxCraft.MediatR`/`Model.InSkillPurchasing`: same DTO/optional-parameter patterns as Commits
+  18-19. Also caught two more Model properties that should have been `?` back in Commit 18 but were
+  missed (`CardImage.SmallImageUrl`/`LargeImageUrl`, `VideoItemMetadata.Title`/`Subtitle` — all four carry
+  `JsonIgnoreCondition.WhenWritingNull` and are guarded by `IsNullOrWhiteSpace` checks at their only
+  call site in `DefaultResponseBuilder`), and `ProgressiveResponse.Send`'s `directive` parameter (a test
+  explicitly calls `Send(null)` to verify the no-op path, so `null` is a supported input, not an oversight).
+- The single largest recurring shape across the whole solution, hit again and again in `Model.Apl.Tests`:
+  `APLValue<T>`'s convenience implicit conversion from `T` is deliberately `APLValue<T>?` (must return
+  `null` for a `null` input), so assigning a plain literal (`"text"`, `true`, `5`) to any *non-nullable*
+  `APLValue<T>` property in an object initializer triggers CS8601, even though the literal itself can
+  never be null. There's no way to fix this at the operator declaration without breaking the null-in/
+  null-out contract other code relies on, so each site needs a literal `!` — tedious but mechanical.
+  **Trap to watch for**: which specific property in a multi-property object-initializer is flagged is
+  *never* obvious from the test code alone — properties that look identical (`PrimaryText`, `Theme`,
+  `ComponentId`) are `string?` on some component types and `string` (`= null!;`) on others depending on
+  each component's own schema, and column offsets from `dotnet build -v:n` are the only reliable way to
+  identify the exact flagged expression. Several attempts in this commit initially null-forgave the wrong
+  property in a block purely from visual pattern-matching and had to be corrected against the actual
+  warning column.
+- Fixed one design gap surfaced by 3 near-identical APL extension methods used only in tests with `null`
+  commands (`SmartMotionExtension.OnDeviceStateChanged`, `EntitySensingExtension.OnEntitySensingStateChanged`/
+  `.OnPrimaryUserChanged`, `DataStoreExtension.OnObjectChanged`/`.OnObjectReceived`): registering a handler
+  with no commands is a legitimate use case, so `APLValueCollection<APLCommand> commands` → `?` on all
+  five methods, propagated to `APLDocumentBase.AddHandler`.
+- 4 `MediatR.Tests` parameterless `[Theory][Compose<MediatRTestProfile>]` constructor-guard-clause tests
+  converted to `[Fact]` (xUnit1006 — Compono's `[Compose<T>]` doesn't register as theory data from the
+  analyzer's point of view when the method itself takes no parameters); one test's unused injected
+  `logger` parameter removed (xUnit1026); one `DataStoreClientTests.cs` call updated to pass
+  `TestContext.Current.CancellationToken` (xUnit1051).
+- Full solution build confirmed at 0 warnings / 0 errors across all 4 TFMs (net8.0/9.0/10.0/11.0). Full
+  test suite (all 9 test projects) re-run green on all 4 TFMs — this closes out the entire warning-cleanup
+  effort (Commits 15-20).
 
 Suggested commit message:
 

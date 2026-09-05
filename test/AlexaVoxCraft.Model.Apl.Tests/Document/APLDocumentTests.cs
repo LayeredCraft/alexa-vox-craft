@@ -79,7 +79,7 @@ public sealed class APLDocumentTests() : TestBase<APLDocumentTests>
         {
             MainTemplate = new Layout(new Text { Content = "Question text" }),
             Settings = new APLDocumentSettings { SupportsResizing = true },
-            OnMount = [new SetValue { ComponentId = "root", Property = "opacity", Value = "1" }],
+            OnMount = [new SetValue { ComponentId = "root", Property = "opacity"!, Value = "1"! }],
             OnConfigChange = [new Reinflate()]
         };
 
