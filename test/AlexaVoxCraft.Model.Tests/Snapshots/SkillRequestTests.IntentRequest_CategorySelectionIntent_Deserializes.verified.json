@@ -81,7 +81,7 @@
       }
     },
     "Application": {
-      "ApplicationId": "amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2"
+      "ApplicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
     },
     "User": {
       "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
@@ -92,7 +92,7 @@
       "ApiAccessToken": "***REDACTED***",
       "ApiEndpoint": "https://api.amazonalexa.com",
       "Application": {
-        "ApplicationId": "amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2"
+        "ApplicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
       },
       "User": {
         "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
@@ -122,7 +122,7 @@
           "Resolution": {
             "Authorities": [
               {
-                "Name": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2_Live.packType",
+                "Name": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.00000000-0000-0000-0000-000000000000_Live.packType",
                 "Status": {
                   "Code": "ER_SUCCESS_MATCH"
                 },
@@ -142,7 +142,7 @@
             "Resolutions": {
               "Authorities": [
                 {
-                  "Name": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2_Live.packType",
+                  "Name": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.00000000-0000-0000-0000-000000000000_Live.packType",
                   "Status": {
                     "Code": "ER_SUCCESS_MATCH"
                   },

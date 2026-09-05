@@ -54,7 +54,8 @@ public static class RequestVerification
 
     public static async Task<X509Certificate2> GetCertificate(Uri certificatePath)
     {
-        var response = await new HttpClient().GetAsync(certificatePath);
+        using var httpClient = new HttpClient();
+        var response = await httpClient.GetAsync(certificatePath);
         var bytes = await response.Content.ReadAsByteArrayAsync();
 #if NET9_0_OR_GREATER
         return X509CertificateLoader.LoadCertificate(bytes);
@@ -67,7 +68,7 @@ public static class RequestVerification
     {
         //https://stackoverflow.com/questions/24618798/automated-downloading-of-x509-certificatePath-chain-from-remote-host
 
-        X509Chain certificateChain = new X509Chain();
+        using var certificateChain = new X509Chain();
         //If you do not provide revokation information, use the following line.
         certificateChain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
         return certificateChain.Build(certificate);

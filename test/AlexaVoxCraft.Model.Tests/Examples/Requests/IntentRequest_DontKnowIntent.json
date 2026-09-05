@@ -4,7 +4,7 @@
     "new": true,
     "sessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
     "application": {
-      "applicationId": "amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2"
+      "applicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
     },
     "attributes": {},
     "user": {
@@ -96,7 +96,7 @@
     },
     "System": {
       "application": {
-        "applicationId": "amzn1.ask.skill.71cceec3-a7e9-47da-8815-7ee6bc2340b2"
+        "applicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
       },
       "user": {
         "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
