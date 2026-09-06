@@ -4,14 +4,14 @@ namespace AlexaVoxCraft.Model.Apl.Extensions.SmartMotion;
 
 public class SetWakeWordResponseCommand : APLCommand
 {
-    private string _extensionName;
+    private string? _extensionName;
 
     public static SetWakeWordResponseCommand For(SmartMotionExtension extension)
     {
         return new SetWakeWordResponseCommand(extension.Name);
     }
 
-    public SetWakeWordResponseCommand(string extensionName)
+    public SetWakeWordResponseCommand(string? extensionName)
     {
         _extensionName = extensionName;
     }

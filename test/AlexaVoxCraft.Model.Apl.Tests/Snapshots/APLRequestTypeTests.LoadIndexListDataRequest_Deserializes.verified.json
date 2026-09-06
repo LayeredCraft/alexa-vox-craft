@@ -1,0 +1,11 @@
+﻿{
+  "Token": "triviaList",
+  "CorrelationToken": "correlation-token-example",
+  "ListId": "my-list-id",
+  "StartIndex": 10,
+  "Count": 5,
+  "Type": "Alexa.Presentation.APL.LoadIndexListData",
+  "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "Locale": "en-US",
+  "Timestamp": "DateTime_1"
+}

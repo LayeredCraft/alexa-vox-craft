@@ -8,9 +8,9 @@ public class PaginationContext
 
     [JsonPropertyName("nextToken")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string NextToken { get; set; }
+    public string NextToken { get; set; } = null!;
 
     [JsonPropertyName("previousToken")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string PreviousToken { get; set; }
+    public string PreviousToken { get; set; } = null!;
 }

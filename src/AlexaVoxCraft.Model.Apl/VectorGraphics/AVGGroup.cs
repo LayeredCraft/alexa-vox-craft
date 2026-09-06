@@ -11,25 +11,25 @@ public class AVGGroup : AVGItem, IJsonSerializable<AVGGroup>
 
     [JsonPropertyName("opacity")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<double?> Opacity { get; set; }
+    public APLValue<double?> Opacity { get; set; } = null!;
 
     [JsonPropertyName("style")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Style { get; set; }
+    public APLValue<string> Style { get; set; } = null!;
 
     [JsonPropertyName("clipPath")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> ClipPath { get; set; }
+    public APLValue<string> ClipPath { get; set; } = null!;
 
     [JsonPropertyName("transform")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Transform { get; set; }
+    public APLValue<string> Transform { get; set; } = null!;
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<IAVGItem> Items { get; set; }
+    public APLValueCollection<IAVGItem> Items { get; set; } = null!;
 
-    public static void RegisterTypeInfo<T>() where T : AVGGroup
+    public new static void RegisterTypeInfo<T>() where T : AVGGroup
     {
         AVGItem.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>

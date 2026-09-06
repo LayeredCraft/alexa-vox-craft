@@ -12,7 +12,7 @@ public class ListDataSource : APLDataSource
     public ListPage ListPage { get; }
 
     [JsonPropertyName("listId")]
-    public string ListId { get; set; }
+    public string ListId { get; set; } = null!;
 
     [JsonPropertyName("totalNumberOfItems")]
     public int TotalNumberOfItems { get; set; }

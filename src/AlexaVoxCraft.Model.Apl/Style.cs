@@ -9,17 +9,17 @@ namespace AlexaVoxCraft.Model.Apl;
 public class Style : IJsonSerializable<Style>
 {
     [JsonPropertyName("extend")]
-    public IList<string> Extends { get; set; }
+    public IList<string> Extends { get; set; } = null!;
 
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public string? Description { get; set; }
 
     [JsonIgnore]
-    public StyleValue Value
+    public StyleValue? Value
     {
         get => Values?.FirstOrDefault();
-        set { Values = new List<StyleValue> { Value }; }
+        set { Values = new List<StyleValue> { value! }; }
     }
 
     [JsonPropertyName("values")]

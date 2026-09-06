@@ -14,7 +14,7 @@ public class Sequential : APLCommand, IJsonSerializable<Sequential>
 
     public Sequential(IEnumerable<APLCommand> commands)
     {
-        Commands = commands.ToList();
+        Commands = commands.ToList()!;
     }
 
     public Sequential(params APLCommand[] commands) : this((IEnumerable<APLCommand>)commands)
@@ -33,7 +33,7 @@ public class Sequential : APLCommand, IJsonSerializable<Sequential>
     public APLValueCollection<APLCommand>? Catch { get; set; }
 
     [JsonPropertyName("commands")]
-    public APLValueCollection<APLCommand> Commands { get; set; }
+    public APLValueCollection<APLCommand> Commands { get; set; } = null!;
 
     [JsonPropertyName("repeatCount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

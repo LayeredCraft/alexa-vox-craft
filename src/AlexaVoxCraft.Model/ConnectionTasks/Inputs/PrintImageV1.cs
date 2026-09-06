@@ -19,19 +19,19 @@ public class PrintImageV1 : IConnectionTask
 
     [JsonPropertyName("context")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public ConnectionTaskContext Context { get; set; }
+    public ConnectionTaskContext Context { get; set; } = null!;
 
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = null!;
 
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = null!;
 
     [JsonPropertyName("imageType"), JsonConverter(typeof(JsonStringEnumConverterWithEnumMemberAttrSupport<PrintImageV1Type>))]
     public PrintImageV1Type ImageV1Type { get; set; }
 
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 }
 
 public enum PrintImageV1Type

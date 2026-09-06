@@ -5,5 +5,5 @@ namespace AlexaVoxCraft.Model.Request.Type;
 public class Permission
 {
     [JsonPropertyName("scope")]
-    public string Scope { get; set; }
+    public string Scope { get; set; } = null!;
 }

@@ -18,7 +18,7 @@ public static class RequestVerification
         return Math.Abs(DateTimeOffset.Now.Subtract(timestamp).TotalSeconds) <= AllowedTimestampToleranceInSeconds;
     }
 
-    public static async Task<bool> Verify(string encodedSignature, Uri certificatePath, string body, Func<Uri, Task<X509Certificate2>> getCertificate = null)
+    public static async Task<bool> Verify(string encodedSignature, Uri certificatePath, string body, Func<Uri, Task<X509Certificate2>>? getCertificate = null)
     {
         if (!VerifyCertificateUrl(certificatePath))
         {
@@ -47,23 +47,28 @@ public static class RequestVerification
     public static bool AssertHashMatch(X509Certificate2 certificate, string encodedSignature, string body)
     {
         var signature = Convert.FromBase64String(encodedSignature);
-        var rsa = certificate.GetRSAPublicKey();
+        var rsa = certificate.GetRSAPublicKey() ?? throw new InvalidOperationException("Certificate does not contain an RSA public key.");
 
         return rsa.VerifyData(Encoding.UTF8.GetBytes(body), signature, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
     }
 
     public static async Task<X509Certificate2> GetCertificate(Uri certificatePath)
     {
-        var response = await new HttpClient().GetAsync(certificatePath);
+        using var httpClient = new HttpClient();
+        var response = await httpClient.GetAsync(certificatePath);
         var bytes = await response.Content.ReadAsByteArrayAsync();
+#if NET9_0_OR_GREATER
+        return X509CertificateLoader.LoadCertificate(bytes);
+#else
         return new X509Certificate2(bytes);
+#endif
     }
 
     public static bool VerifyChain(X509Certificate2 certificate)
     {
         //https://stackoverflow.com/questions/24618798/automated-downloading-of-x509-certificatePath-chain-from-remote-host
 
-        X509Chain certificateChain = new X509Chain();
+        using var certificateChain = new X509Chain();
         //If you do not provide revokation information, use the following line.
         certificateChain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
         return certificateChain.Build(certificate);

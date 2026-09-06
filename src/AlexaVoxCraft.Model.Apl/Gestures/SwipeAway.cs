@@ -25,7 +25,7 @@ public class SwipeAway : APLGesture, IJsonSerializable<SwipeAway>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<SwipeAction?>? Action { get; set; }
 
-    [JsonPropertyName("direction")] public APLValue<SwipeDirection> Direction { get; set; }
+    [JsonPropertyName("direction")] public APLValue<SwipeDirection> Direction { get; set; } = null!;
     public static void RegisterTypeInfo<T>() where T : SwipeAway
     {
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>

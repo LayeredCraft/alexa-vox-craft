@@ -1,0 +1,1 @@
+﻿{"token":"8e8fb7f858ca45729aa822d43fdb585e","payload":{"InSkillProduct":{"productId":"amzn1.adg.product.09ec74a2-745a-407f-bd4c-960bf5a97d0e"}},"type":"Connections.SendRequest","name":"Buy"}

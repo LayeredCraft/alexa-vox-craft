@@ -10,5 +10,5 @@ public class RuntimeErrorRequest : Request.Type.Request
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Token { get; set; }
 
-    [JsonPropertyName("errors")] public APLError[] Errors { get; set; }
+    [JsonPropertyName("errors")] public APLError[] Errors { get; set; } = null!;
 }

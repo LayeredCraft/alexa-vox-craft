@@ -6,7 +6,7 @@ public class ControlMedia : APLCommand
 {
     [JsonPropertyName("type")] public override string Type => nameof(ControlMedia);
 
-    [JsonPropertyName("command")] public APLValue<ControlMediaCommand> Command { get; set; }
+    [JsonPropertyName("command")] public APLValue<ControlMediaCommand> Command { get; set; } = null!;
 
     [JsonPropertyName("componentId")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

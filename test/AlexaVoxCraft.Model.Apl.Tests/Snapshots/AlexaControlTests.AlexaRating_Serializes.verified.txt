@@ -1,0 +1,1 @@
+﻿{"type":"AlexaRating","ratingNumber":3.5,"ratingSlotMode":"multiple","ratingSlotPadding":"0dp","ratingText":"509 ratings","spacing":"@spacingMedium"}

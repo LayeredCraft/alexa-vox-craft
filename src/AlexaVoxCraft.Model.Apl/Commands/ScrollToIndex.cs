@@ -14,7 +14,7 @@ public class ScrollToIndex : APLCommand
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? ComponentId { get; set; }
 
-    [JsonPropertyName("index")] public APLValue<int> Index { get; set; }
+    [JsonPropertyName("index")] public APLValue<int> Index { get; set; } = null!;
 
     [JsonPropertyName("targetDuration")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

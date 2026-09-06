@@ -8,11 +8,11 @@ public class AlexaOrdinal : APLComponent, IJsonSerializable<AlexaOrdinal>
 
     [JsonPropertyName("ordinalText")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> OrdinalText { get; set; }
+    public APLValue<string> OrdinalText { get; set; } = null!;
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Theme { get; set; }
+    public APLValue<string> Theme { get; set; } = null!;
 
     public new static void RegisterTypeInfo<T>() where T : AlexaOrdinal
     {

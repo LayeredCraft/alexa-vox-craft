@@ -1,0 +1,224 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
+    },
+    "attributes": {
+      "UserContext": {
+        "$type": "guest",
+        "AlexaUserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "IsLinked": false,
+        "entitledProducts": [
+          {
+            "productId": "amzn1.adg.product.5e8ec9a9-ff64-4569-ac34-3cb66c852e4c",
+            "name": "Disney Parks Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Explore the magic of Disney Parks with trivia about attractions, resorts, lands, entertainment, and unforgettable park experiences from around the world.",
+            "purchasable": "NOT_PURCHASABLE",
+            "entitled": "ENTITLED",
+            "entitlementReason": "PURCHASED",
+            "referenceName": "ent-disney-parks",
+            "activeEntitlementCount": 1,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          }
+        ],
+        "purchasableProducts": [
+          {
+            "productId": "amzn1.adg.product.09ec74a2-745a-407f-bd4c-960bf5a97d0e",
+            "name": "Pixar Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Unlock Pixar trivia categories.",
+            "purchasable": "PURCHASABLE",
+            "entitled": "NOT_ENTITLED",
+            "entitlementReason": "NOT_PURCHASED",
+            "referenceName": "ent-pixar",
+            "activeEntitlementCount": 0,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          }
+        ]
+      },
+      "currentGame": {
+        "GameQuestions": {},
+        "CorrectAnswerIndex": 0,
+        "CurrentScore": 0,
+        "CurrentQuestionIndex": 0,
+        "CorrectAnswerText": "",
+        "QuestionText": "",
+        "Answers": [],
+        "CategoryId": "general"
+      }
+    },
+    "user": {
+      "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "affiliatedResources": []
+  },
+  "context": {
+    "Viewports": [
+      {
+        "type": "APL",
+        "id": "medHub",
+        "shape": "RECTANGLE",
+        "dpi": 160,
+        "presentationType": "OVERLAY",
+        "canRotate": false,
+        "configuration": {
+          "current": {
+            "mode": "HUB",
+            "video": {
+              "codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "size": {
+              "type": "DISCRETE",
+              "pixelWidth": 1280,
+              "pixelHeight": 800
+            }
+          }
+        }
+      }
+    ],
+    "AlexaDisplayWindowComponent": {
+      "defaultWindowId": "medHub",
+      "focusedInstanceId": null,
+      "visibleInstanceIds": null,
+      "instances": [
+        {
+          "id": "medHub",
+          "templateId": "medHub",
+          "token": null,
+          "configuration": {
+            "interactionMode": "hub",
+            "sizeConfigurationId": "medHubSize"
+          },
+          "timeSinceLastInteractionInMilliseconds": -1
+        }
+      ]
+    },
+    "Viewport": {
+      "experiences": [
+        {
+          "arcMinuteWidth": 221,
+          "arcMinuteHeight": 162,
+          "canRotate": false,
+          "canResize": false
+        }
+      ],
+      "mode": "HUB",
+      "shape": "RECTANGLE",
+      "pixelWidth": 1280,
+      "pixelHeight": 800,
+      "dpi": 160,
+      "currentPixelWidth": 1280,
+      "currentPixelHeight": 800,
+      "touch": [
+        "SINGLE"
+      ],
+      "keyboard": [
+        "DIRECTION"
+      ],
+      "video": {
+        "codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Extensions": {
+      "available": {
+        "aplext:backstack:10": {}
+      }
+    },
+    "Advertising": {
+      "advertisingId": "00000000-0000-0000-0000-000000000000",
+      "limitAdTracking": true
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.A0000000000000000000000000000000000000000000000000000000",
+        "supportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      },
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "apiAccessToken": "***REDACTED***"
+    },
+    "Alexa.Presentation.APL": {
+      "token": "triviaPager",
+      "version": "APL_WEB_RENDERER_GANDALF",
+      "componentsVisibleOnScreen": [
+        {
+          "uid": ":1000",
+          "position": "960x600+0+0:0",
+          "type": "mixed",
+          "tags": {
+            "viewport": {}
+          },
+          "children": [
+            {
+              "uid": ":1003",
+              "position": "960x600+0+0:0",
+              "type": "graphic",
+              "tags": {},
+              "entities": []
+            },
+            {
+              "uid": ":1006",
+              "position": "960x87+0+0:1",
+              "type": "mixed",
+              "tags": {},
+              "entities": []
+            },
+            {
+              "id": "page1",
+              "uid": ":1017",
+              "position": "832x127+63+110:1",
+              "type": "text",
+              "tags": {
+                "spoken": true
+              },
+              "entities": []
+            },
+            {
+              "uid": ":1018",
+              "position": "960x102+0+497:2",
+              "type": "text",
+              "tags": {},
+              "entities": []
+            }
+          ],
+          "entities": []
+        }
+      ]
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "locale": "en-US",
+    "timestamp": "2026-09-04T16:22:35Z",
+    "intent": {
+      "name": "WhatCanIBuyIntent",
+      "confirmationStatus": "NONE"
+    }
+  }
+}

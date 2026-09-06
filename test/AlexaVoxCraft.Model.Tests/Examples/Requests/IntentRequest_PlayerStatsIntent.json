@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000-user-03"
+    },
+    "attributes": {}
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000-user-03"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.A0000000000000000000000000000000000000000000000000000000",
+        "supportedInterfaces": {}
+      }
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "locale": "en-US",
+    "timestamp": "2026-09-04T15:17:50.7760696Z",
+    "intent": {
+      "name": "PlayerStatsIntent",
+      "confirmationStatus": "NONE",
+      "slots": {}
+    }
+  }
+}

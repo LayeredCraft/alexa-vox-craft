@@ -6,11 +6,11 @@ namespace AlexaVoxCraft.Model.Response.Directive.Templates;
 public class ImageSource
 {
     [JsonPropertyName("url"), JsonRequired]
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 
     [JsonPropertyName("size")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Size { get; set; }
+    public string Size { get; set; } = null!;
 
     [JsonPropertyName("widthPixels")]
     public int Width { get; set; }

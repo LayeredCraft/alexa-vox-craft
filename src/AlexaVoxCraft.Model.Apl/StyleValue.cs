@@ -15,8 +15,8 @@ public class StyleValue
 
     [JsonPropertyName("when")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string When { get; set; }
+    public string When { get; set; } = null!;
 
     [JsonExtensionData]
-    public Dictionary<string, object> Properties { get; set; }
+    public Dictionary<string, object> Properties { get; set; } = null!;
 }

@@ -44,7 +44,7 @@ public class Container : APLComponent, IJsonSerializable<Container>, IMultiChild
 
     [JsonPropertyName("wrap")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<ContainerWrap?> Wrap { get; set; }
+    public APLValue<ContainerWrap?> Wrap { get; set; } = null!;
 
     // IMultiChildComponent
     [JsonPropertyName("data")]

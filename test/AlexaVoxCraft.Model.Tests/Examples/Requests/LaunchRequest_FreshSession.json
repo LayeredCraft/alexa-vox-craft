@@ -1,0 +1,53 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": true,
+    "sessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
+    },
+    "attributes": {},
+    "user": {
+      "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "context": {
+    "Extensions": {
+      "available": {}
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.A0000000000000000000000000000000000000000000000000000000",
+        "supportedInterfaces": {}
+      },
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "apiAccessToken": "***REDACTED***",
+      "unit": {
+        "unitId": "amzn1.ask.unit.A00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      }
+    }
+  },
+  "request": {
+    "type": "LaunchRequest",
+    "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "locale": "en-US",
+    "timestamp": "2026-09-04T15:47:19Z",
+    "target": {
+      "address": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
+    },
+    "metadata": {
+      "referrer": "amzn1.alexa-speechlet-client.DOMAIN:A2S"
+    },
+    "body": {},
+    "payload": {},
+    "targetURI": "alexa://amzn1.ask.skill.00000000-0000-0000-0000-000000000000/",
+    "launchRequestType": "FOLLOW_LINK_WITHOUT_RESULT",
+    "shouldLinkResultBeReturned": false
+  }
+}

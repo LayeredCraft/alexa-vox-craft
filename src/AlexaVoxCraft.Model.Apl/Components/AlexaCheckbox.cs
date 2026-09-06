@@ -11,27 +11,27 @@ public class AlexaCheckbox : APLComponent, IJsonSerializable<AlexaCheckbox>
 
     [JsonPropertyName("primaryAction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand> PrimaryAction { get; set; }
+    public APLValueCollection<APLCommand> PrimaryAction { get; set; } = null!;
 
     [JsonPropertyName("theme")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Theme { get; set; }
+    public APLValue<string> Theme { get; set; } = null!;
 
     [JsonPropertyName("selectedColor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> SelectedColor { get; set; }
+    public APLValue<string> SelectedColor { get; set; } = null!;
 
     [JsonPropertyName("checkboxHeight")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue CheckboxHeight { get; set; }
+    public APLDimensionValue CheckboxHeight { get; set; } = null!;
 
     [JsonPropertyName("checkboxWidth")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLDimensionValue CheckboxWidth { get; set; }
+    public APLDimensionValue CheckboxWidth { get; set; } = null!;
 
     [JsonPropertyName("isIndeterminate")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<bool?> IsIndeterminate { get; set; }
+    public APLValue<bool?> IsIndeterminate { get; set; } = null!;
 
     public new static void RegisterTypeInfo<T>() where T : AlexaCheckbox
     {

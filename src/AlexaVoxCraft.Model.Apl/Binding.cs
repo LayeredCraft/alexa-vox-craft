@@ -7,9 +7,9 @@ namespace AlexaVoxCraft.Model.Apl;
 
 public class Binding : IJsonSerializable<Binding>
 {
-    [JsonPropertyName("name")] public string Name { get; set; }
+    [JsonPropertyName("name")] public string Name { get; set; } = null!;
 
-    [JsonPropertyName("value")] public object Value { get; set; }
+    [JsonPropertyName("value")] public object Value { get; set; } = null!;
 
     [JsonPropertyName("type")] public ParameterType Type { get; set; } = ParameterType.any;
 

@@ -1,0 +1,1 @@
+﻿{"type":"list","listPage":{"listItems":[{"listItemIdentifier":"gouda","token":"gouda","ordinalNumber":1},{"listItemIdentifier":"cheddar","token":"cheddar","ordinalNumber":2},{"listItemIdentifier":"brie","token":"brie","ordinalNumber":3}]},"listId":"lt1Sample","totalNumberOfItems":3}

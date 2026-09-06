@@ -5,7 +5,7 @@ namespace AlexaVoxCraft.Model.Apl.DataStore.PackageManager;
 
 public class InstallationErrorDetail
 {
-    [JsonPropertyName("type")] public string Type { get; set; }
+    [JsonPropertyName("type")] public string Type { get; set; } = null!;
 
     [JsonPropertyName("content")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

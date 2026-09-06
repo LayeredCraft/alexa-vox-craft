@@ -6,7 +6,7 @@ public class SmartMotionSettings
 {
     [JsonPropertyName("deviceStateName")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string DeviceStateName { get; set; }
+    public string DeviceStateName { get; set; } = null!;
 
     [JsonPropertyName("wakeWordResponse")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

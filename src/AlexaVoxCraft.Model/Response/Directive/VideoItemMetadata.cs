@@ -6,9 +6,9 @@ public class VideoItemMetadata
 {
     [JsonPropertyName("title")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     [JsonPropertyName("subtitle")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Subtitle { get; set; }
+    public string? Subtitle { get; set; }
 }

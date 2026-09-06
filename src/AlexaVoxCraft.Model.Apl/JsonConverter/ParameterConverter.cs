@@ -11,7 +11,7 @@ public class ParameterConverter : JsonConverter<Parameter>
     {
         if (reader.TokenType == JsonTokenType.String)
         {
-            var value = reader.GetString();
+            var value = reader.GetString()!;
             return value; // uses implicit operator
         }
 

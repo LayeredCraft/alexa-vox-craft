@@ -34,7 +34,7 @@ public class APLAbsoluteDimensionValue : APLDimensionValue<AbsoluteDimension>
             throw new InvalidOperationException($"{value} is used for {dimension.GetType().Name}, not AbsoluteDimension");
         }
 
-        Value = dimension as AbsoluteDimension;
+        Value = (dimension as AbsoluteDimension)!;
     }
 
     public static implicit operator APLAbsoluteDimensionValue(string value)

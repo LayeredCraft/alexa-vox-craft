@@ -1,0 +1,1 @@
+﻿{"type":"Text","text":"Hello","bind":[{"name":"foo","value":"27"},{"name":"bar","value":"${foo \u002B 23}"}]}

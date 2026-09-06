@@ -16,7 +16,7 @@ public class SetPage : APLCommand
     public APLValue<SetPagePosition>? Position { get; set; }
 
     [JsonPropertyName("value")]
-    public APLValue<int> Value { get; set; }
+    public APLValue<int> Value { get; set; } = null!;
 
     [JsonPropertyName("transitionDuration")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

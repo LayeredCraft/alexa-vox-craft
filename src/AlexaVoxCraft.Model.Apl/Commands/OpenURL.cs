@@ -9,7 +9,7 @@ public class OpenURL : APLCommand, IJsonSerializable<OpenURL>
 {
     [JsonPropertyName("type")] public override string Type => nameof(OpenURL);
 
-    [JsonPropertyName("source")] public APLValue<string> Source { get; set; }
+    [JsonPropertyName("source")] public APLValue<string> Source { get; set; } = null!;
 
     [JsonPropertyName("onFail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -11,5 +11,5 @@ public class InterSegment
     public int Y { get; set; }
 
     [JsonPropertyName("characters")]
-    public string Characters { get; set; }
+    public string Characters { get; set; } = null!;
 }

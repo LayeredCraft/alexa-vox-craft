@@ -32,11 +32,11 @@ public class ScrollView : ActionableComponent, IJsonSerializable<ScrollView>
 
     [JsonPropertyName("item")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLComponent> Item { get; set; }
+    public APLValueCollection<APLComponent> Item { get; set; } = null!;
 
     [JsonPropertyName("onScroll")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand> OnScroll { get; set; }
+    public APLValueCollection<APLCommand> OnScroll { get; set; } = null!;
 
     [JsonPropertyName("allowForward")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

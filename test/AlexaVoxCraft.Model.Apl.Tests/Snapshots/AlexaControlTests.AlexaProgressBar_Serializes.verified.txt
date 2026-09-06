@@ -1,0 +1,1 @@
+﻿{"type":"AlexaProgressBar","progressValue":50,"theme":"dark","totalValue":100}

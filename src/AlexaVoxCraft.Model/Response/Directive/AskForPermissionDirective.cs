@@ -2,13 +2,16 @@
 
 public class AskForPermissionDirective : ConnectionSendRequest<AskForPermissionPayload>
 {
+    private const string RequestName = "AskFor";
+
     public AskForPermissionDirective()
     {
-
+        Name = RequestName;
     }
 
     public AskForPermissionDirective(string permissionScope)
     {
-        this.Payload = new AskForPermissionPayload(permissionScope);
+        Name = RequestName;
+        Payload = new AskForPermissionPayload(permissionScope);
     }
 }

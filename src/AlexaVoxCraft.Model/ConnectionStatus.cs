@@ -28,5 +28,5 @@ public class ConnectionStatus
 
     /// <summary>Gets or sets the human-readable description of the connection status.</summary>
     [JsonPropertyName("message")]
-    public string Message { get; set; }
+    public string Message { get; set; } = null!;
 }

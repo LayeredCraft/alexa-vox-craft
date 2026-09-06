@@ -1,0 +1,20 @@
+{
+  "type": "Alexa.DataStore.DataStoreError",
+  "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "timestamp": "2026-01-15T12:34:56Z",
+  "locale": "en-US",
+  "error": {
+    "type": "DEVICE_UNAVAILABLE",
+    "content": {
+      "deviceId": "device-id",
+      "commands": [
+        {
+          "type": "PUT_OBJECT",
+          "namespace": "namespace-for-the-command",
+          "key": "key-from-the-command",
+          "content": {}
+        }
+      ]
+    }
+  }
+}

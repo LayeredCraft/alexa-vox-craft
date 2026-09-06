@@ -1,6 +1,0 @@
-{
-  "type": "SetState",
-  "componentId": "myButton",
-  "state": "checked",
-  "value": true
-}

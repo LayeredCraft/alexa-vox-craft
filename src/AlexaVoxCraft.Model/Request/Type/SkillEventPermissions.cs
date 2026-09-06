@@ -5,5 +5,5 @@ namespace AlexaVoxCraft.Model.Request.Type;
 public class SkillEventPermissions
 {
     [JsonPropertyName("acceptedPermissions")]
-    public Permission[] AcceptedPermissions { get; set; }
+    public Permission[] AcceptedPermissions { get; set; } = null!;
 }

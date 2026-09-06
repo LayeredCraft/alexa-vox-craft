@@ -27,7 +27,7 @@ public class APLADocument : APLDocumentReference
         set => VersionString = EnumParser.ToEnumString(typeof(APLADocumentVersion), value);
     }
 
-    [JsonPropertyName("mainTemplate")] public AudioLayout MainTemplate { get; set; }
+    [JsonPropertyName("mainTemplate")] public AudioLayout MainTemplate { get; set; } = null!;
 
     [JsonPropertyName("resources")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

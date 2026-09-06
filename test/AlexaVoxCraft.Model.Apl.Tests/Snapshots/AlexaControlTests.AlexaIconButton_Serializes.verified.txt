@@ -1,0 +1,1 @@
+﻿{"type":"AlexaIconButton","buttonSize":"72dp","primaryAction":{"type":"SetValue","componentId":"textToUpdate","property":"text","value":"${exampleData.imageStyleText}"},"vectorSource":"M21.343,8.661l-7.895-7.105c-0.823-0.741-2.073-0.741-2.896,0"}

@@ -21,10 +21,10 @@ public class ObjectDataSource : APLDataSource
     public string? Title { get; set; }
 
     [JsonPropertyName("properties")]
-    public virtual Dictionary<string, object> Properties { get; set; }
+    public virtual Dictionary<string, object> Properties { get; set; } = null!;
 
     [JsonExtensionData]
-    public virtual Dictionary<string, object> TopLevelData { get; set; }
+    public virtual Dictionary<string, object> TopLevelData { get; set; } = null!;
 
     [JsonPropertyName("transformers")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

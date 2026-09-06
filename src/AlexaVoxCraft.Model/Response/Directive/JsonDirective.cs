@@ -14,7 +14,7 @@ public class JsonDirective : IDirective
     }
 
     [JsonPropertyName("type")]
-    public string Type { get; }
+    public string Type { get; } = null!;
 
     [JsonExtensionData]
     public Dictionary<string, JsonElement> Properties { get; set; } = new();

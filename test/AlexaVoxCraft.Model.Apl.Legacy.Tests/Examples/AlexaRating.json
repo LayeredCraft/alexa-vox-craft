@@ -1,8 +1,0 @@
-{
-  "type": "AlexaRating",
-  "ratingSlotPadding": "0dp",
-  "ratingSlotMode": "multiple",
-  "ratingNumber": 3.5,
-  "ratingText": "509 ratings",
-  "spacing": "@spacingMedium"
-}

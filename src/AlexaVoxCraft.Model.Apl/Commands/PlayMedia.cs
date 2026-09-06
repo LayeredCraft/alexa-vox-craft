@@ -20,7 +20,7 @@ public class PlayMedia : APLCommand, IJsonSerializable<PlayMedia>
     public APLValue<string>? ComponentId { get; set; }
 
     [JsonPropertyName("source")]
-    public APLValueCollection<VideoSource> Value { get; set; }
+    public APLValueCollection<VideoSource> Value { get; set; } = null!;
 
     public static void RegisterTypeInfo<T>() where T : PlayMedia
     {

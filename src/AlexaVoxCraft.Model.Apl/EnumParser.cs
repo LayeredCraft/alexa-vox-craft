@@ -9,12 +9,12 @@ internal static class EnumParser
 {
     internal static string ToEnumString(System.Type enumType, object type)
     {
-        var name = Enum.GetName(enumType, type);
-        var enumMemberAttribute = ((EnumMemberAttribute[])enumType.GetTypeInfo().GetField(name).GetCustomAttributes(typeof(EnumMemberAttribute), true)).FirstOrDefault();
-        return enumMemberAttribute?.Value ?? type.ToString();
+        var name = Enum.GetName(enumType, type)!;
+        var enumMemberAttribute = ((EnumMemberAttribute[])enumType.GetTypeInfo().GetField(name)!.GetCustomAttributes(typeof(EnumMemberAttribute), true)).FirstOrDefault();
+        return enumMemberAttribute?.Value ?? type.ToString() ?? string.Empty;
     }
 
-    internal static T ToEnum<T>(string str, T defaultValue)
+    internal static T ToEnum<T>(string? str, T defaultValue)
     {
         var enumType = typeof(T);
         if (string.IsNullOrWhiteSpace(str))
@@ -25,7 +25,7 @@ internal static class EnumParser
         foreach (var name in Enum.GetNames(enumType))
 
         {
-            var enumMemberAttribute = ((EnumMemberAttribute[])enumType.GetTypeInfo().GetField(name).GetCustomAttributes(typeof(EnumMemberAttribute), true)).FirstOrDefault();
+            var enumMemberAttribute = ((EnumMemberAttribute[])enumType.GetTypeInfo().GetField(name)!.GetCustomAttributes(typeof(EnumMemberAttribute), true)).FirstOrDefault();
             if (enumMemberAttribute != null && enumMemberAttribute.Value == str) return (T)Enum.Parse(enumType, name);
         }
         return defaultValue;

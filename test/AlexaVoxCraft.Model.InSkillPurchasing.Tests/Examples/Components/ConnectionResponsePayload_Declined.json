@@ -1,0 +1,16 @@
+{
+  "type": "Connections.Response",
+  "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "timestamp": "2026-09-04T16:23:07Z",
+  "locale": "en-US",
+  "status": {
+    "code": "200",
+    "message": "OK"
+  },
+  "name": "Buy",
+  "payload": {
+    "purchaseResult": "DECLINED",
+    "productId": "amzn1.adg.product.09ec74a2-745a-407f-bd4c-960bf5a97d0e"
+  },
+  "token": "8e8fb7f858ca45729aa822d43fdb585e"
+}

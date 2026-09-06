@@ -1,0 +1,16 @@
+﻿{
+  "Payload": {
+    "PurchaseResult": "DECLINED",
+    "ProductId": "amzn1.adg.product.09ec74a2-745a-407f-bd4c-960bf5a97d0e"
+  },
+  "Name": "Buy",
+  "Status": {
+    "Code": 200,
+    "Message": "OK"
+  },
+  "Token": "Guid_1",
+  "Type": "Connections.Response",
+  "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "Locale": "en-US",
+  "Timestamp": "DateTime_1"
+}

@@ -1,0 +1,1 @@
+﻿{"type":"Pager","initialPage":0,"navigation":"wrap","items":[{"type":"Text","text":"Page 1"},{"type":"Text","text":"Page 2"}]}

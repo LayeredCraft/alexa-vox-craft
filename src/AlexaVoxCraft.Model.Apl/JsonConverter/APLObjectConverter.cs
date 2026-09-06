@@ -12,7 +12,7 @@ public class APLObjectConverter : JsonConverter<APLValue<object>>
     {
         var returnValue = new APLValue<object>();
 
-        returnValue.Value = _innerConverter.Read(ref reader, typeToConvert, options);
+        returnValue.Value = _innerConverter.Read(ref reader, typeToConvert, options)!;
 
         return returnValue;
     }

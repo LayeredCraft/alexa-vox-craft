@@ -11,10 +11,10 @@ public class CommandsTarget : IJsonSerializable<CommandsTarget>
     public TargetType Type { get; set; }
 
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
 
     [JsonPropertyName("items")]
-    public List<string> Items { get; set; }
+    public List<string> Items { get; set; } = null!;
 
     public static void RegisterTypeInfo<T>() where T : CommandsTarget
     {

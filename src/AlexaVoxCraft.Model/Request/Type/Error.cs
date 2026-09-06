@@ -10,5 +10,5 @@ public class Error
     public ErrorType Type { get; set; }
 
     [JsonPropertyName("message")]
-    public string Message { get; set; }
+    public string Message { get; set; } = null!;
 }

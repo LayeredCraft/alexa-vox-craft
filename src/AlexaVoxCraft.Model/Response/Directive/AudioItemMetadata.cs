@@ -5,10 +5,10 @@ namespace AlexaVoxCraft.Model.Response.Directive;
 public class AudioItemMetadata
 {
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = null!;
 
     [JsonPropertyName("subtitle")]
-    public string Subtitle { get; set; }
+    public string Subtitle { get; set; } = null!;
 
     [JsonPropertyName("art")]
     public AudioItemSources Art { get; set; } = new AudioItemSources();

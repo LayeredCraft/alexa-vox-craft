@@ -1,0 +1,1 @@
+﻿{"type":"AlexaDetail","bodyText":"A computer hacker learns about the true nature of reality.","button1Text":"Play","button1Theme":"dark","button2Text":"More Info","ratingNumber":8.7,"ratingSlotMode":"single","primaryText":"The Matrix","secondaryText":"1999 \u00B7 Sci-Fi"}

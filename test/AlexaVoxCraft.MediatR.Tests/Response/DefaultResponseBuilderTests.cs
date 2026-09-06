@@ -374,7 +374,7 @@ public class DefaultResponseBuilderTests : TestBase
         var response = await builder.GetResponse(TestContext.Current.CancellationToken);
 
         // Assert
-        var ssmlSpeech = response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        var ssmlSpeech = response.Response.Reprompt!.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
         ssmlSpeech.Ssml.Should().Contain($"<voice name=\"{AlexaSupportedVoices.EnglishUS.Matthew}\">");
         ssmlSpeech.Ssml.Should().Contain("Please respond");
     }
@@ -406,7 +406,7 @@ public class DefaultResponseBuilderTests : TestBase
         var response = await builder.GetResponse(TestContext.Current.CancellationToken);
 
         // Assert
-        var ssmlSpeech = response.Response.Reprompt.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
+        var ssmlSpeech = response.Response.Reprompt!.OutputSpeech.Should().BeOfType<SsmlOutputSpeech>().Subject;
         ssmlSpeech.Ssml.Should().NotContain("<voice");
         ssmlSpeech.Ssml.Should().Contain(repromptText.Trim());
     }

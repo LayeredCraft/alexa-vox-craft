@@ -9,5 +9,5 @@ public class RemoveNamespace : DataStoreCommand
     public RemoveNamespace() : base(CommandType) { }
 
     [JsonPropertyName("namespace")]
-    public string Namespace { get; set; }
+    public string Namespace { get; set; } = null!;
 }

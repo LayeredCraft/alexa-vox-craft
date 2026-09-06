@@ -10,5 +10,5 @@ public abstract class Viewport
     public abstract string Type { get; }
 
     [JsonPropertyName("id")]
-    public string ID { get; set; }
+    public string ID { get; set; } = null!;
 }

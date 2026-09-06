@@ -29,7 +29,7 @@ public class ObjectConverter : JsonConverter<object>
     {
         reader.Read();
 
-        var list = new List<object>();
+        var list = new List<object?>();
 
         while (reader.TokenType != JsonTokenType.EndArray)
         {
@@ -45,7 +45,7 @@ public class ObjectConverter : JsonConverter<object>
     {
         reader.Read();
 
-        var dictionary = new Dictionary<string, object>();
+        var dictionary = new Dictionary<string, object?>();
 
         while (reader.TokenType != JsonTokenType.EndObject)
         {
@@ -54,7 +54,7 @@ public class ObjectConverter : JsonConverter<object>
                 throw new JsonException("Expected property name token.");
             }
 
-            var propertyName = reader.GetString();
+            var propertyName = reader.GetString()!;
             reader.Read();
             var propertyValue = Deserialize(ref reader, options);
             dictionary[propertyName] = propertyValue;

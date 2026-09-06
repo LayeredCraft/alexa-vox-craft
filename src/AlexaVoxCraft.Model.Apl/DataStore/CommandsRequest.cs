@@ -11,5 +11,5 @@ public class CommandsRequest
 
     [JsonPropertyName("attemptDeliveryUntil")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string AttemptDeliveryUntil { get; set; }
+    public string AttemptDeliveryUntil { get; set; } = null!;
 }

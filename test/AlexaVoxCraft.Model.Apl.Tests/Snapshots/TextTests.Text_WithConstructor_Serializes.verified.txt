@@ -1,0 +1,1 @@
+﻿{"type":"Text","text":"APL in C#","fontSize":"24dp","textAlign":"Center"}

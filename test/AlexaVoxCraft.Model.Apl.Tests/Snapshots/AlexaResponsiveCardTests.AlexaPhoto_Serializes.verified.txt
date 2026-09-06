@@ -1,0 +1,1 @@
+﻿{"type":"AlexaPhoto","imageSource":"https://example.com/photo.png","primaryText":"Photo title","secondaryText":"Photo subtitle","touchForward":true}

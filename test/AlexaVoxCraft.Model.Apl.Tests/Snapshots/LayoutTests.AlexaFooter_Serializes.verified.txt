@@ -1,0 +1,1 @@
+﻿{"hintText":"Hint Text","type":"AlexaFooter"}

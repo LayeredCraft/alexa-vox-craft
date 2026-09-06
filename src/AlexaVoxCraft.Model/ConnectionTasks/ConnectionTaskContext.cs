@@ -5,5 +5,5 @@ namespace AlexaVoxCraft.Model.ConnectionTasks;
 public class ConnectionTaskContext
 {
     [JsonPropertyName("providerId")]
-    public string ProviderId { get; set; }
+    public string ProviderId { get; set; } = null!;
 }

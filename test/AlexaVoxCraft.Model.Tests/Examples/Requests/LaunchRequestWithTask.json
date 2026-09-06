@@ -1,0 +1,17 @@
+{
+  "type": "LaunchRequest",
+  "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "timestamp": "2026-01-15T00:00:00Z",
+  "locale": "en-US",
+  "task": {
+    "name": "AMAZON.PrintPDF",
+    "version": "1",
+    "input": {
+      "@type": "PrintPDFRequest",
+      "@version": "1",
+      "title": "Example Document",
+      "description": "Example Description",
+      "url": "http://www.example.com/document.pdf"
+    }
+  }
+}

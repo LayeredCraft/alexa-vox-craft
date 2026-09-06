@@ -1,0 +1,1 @@
+﻿{"type":"APLA","mainTemplate":{"items":[{"type":"Speech","content":"Welcome to the skill.","contentType":"PlainText"}]},"version":"0.8"}

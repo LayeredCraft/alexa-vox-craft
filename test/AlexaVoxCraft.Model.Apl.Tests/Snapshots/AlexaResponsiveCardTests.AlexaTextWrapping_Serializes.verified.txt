@@ -1,0 +1,1 @@
+﻿{"type":"AlexaTextWrapping","primaryText":"Primary","secondaryText":"Secondary","tertiaryText":"Tertiary","touchForward":false}

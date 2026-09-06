@@ -11,11 +11,11 @@ public class DialogElicitSlot : IDirective
     public string Type => DirectiveType;
 
     [JsonPropertyName("slotToElicit"), JsonRequired]
-    public string SlotName { get; set; }
+    public string SlotName { get; set; } = null!;
 
     [JsonPropertyName("updatedIntent")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Intent UpdatedIntent { get; set; }
+    public Intent? UpdatedIntent { get; set; }
 
     public DialogElicitSlot(string slotName)
     {

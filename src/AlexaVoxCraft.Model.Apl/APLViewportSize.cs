@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Apl;
 
 public class APLViewportSize
 {
-    [JsonPropertyName("type")] public string Type { get; set; }
+    [JsonPropertyName("type")] public string Type { get; set; } = null!;
 
     [JsonPropertyName("pixelHeight")] public int PixelHeight { get; set; }
 

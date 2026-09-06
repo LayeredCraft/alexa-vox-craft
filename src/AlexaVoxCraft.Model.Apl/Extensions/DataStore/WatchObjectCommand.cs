@@ -4,7 +4,7 @@ namespace AlexaVoxCraft.Model.Apl.Extensions.DataStore;
 
 public class WatchObjectCommand : APLCommand
 {
-    private readonly string _extensionName;
+    private readonly string? _extensionName;
 
     public static WatchObjectCommand For(DataStoreExtension extension)
     {
@@ -16,20 +16,20 @@ public class WatchObjectCommand : APLCommand
         return new WatchObjectCommand(extension.Name, @namespace, key);
     }
 
-    public WatchObjectCommand(string extensionName)
+    public WatchObjectCommand(string? extensionName)
     {
         _extensionName = extensionName;
     }
 
-    public WatchObjectCommand(string extensionName, string @namespace, string key) : this(extensionName)
+    public WatchObjectCommand(string? extensionName, string @namespace, string key) : this(extensionName)
     {
         Namespace = @namespace;
         Key = key;
     }
 
-    [JsonPropertyName("namespace")] public string Namespace { get; set; }
+    [JsonPropertyName("namespace")] public string Namespace { get; set; } = null!;
 
-    [JsonPropertyName("key")] public string Key { get; set; }
+    [JsonPropertyName("key")] public string Key { get; set; } = null!;
 
     [JsonPropertyName("type")]
     public override string Type => $"{_extensionName}:WatchObject";

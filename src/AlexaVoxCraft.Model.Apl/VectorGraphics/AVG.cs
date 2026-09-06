@@ -28,9 +28,9 @@ public class AVG : IJsonSerializable<AVG>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<object>? Data { get; set; }
 
-    [JsonPropertyName("height")] public APLAbsoluteDimensionValue Height { get; set; }
+    [JsonPropertyName("height")] public APLAbsoluteDimensionValue Height { get; set; } = null!;
 
-    [JsonPropertyName("width")] public APLAbsoluteDimensionValue Width { get; set; }
+    [JsonPropertyName("width")] public APLAbsoluteDimensionValue Width { get; set; } = null!;
 
     [JsonPropertyName("items")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

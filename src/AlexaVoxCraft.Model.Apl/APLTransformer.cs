@@ -28,7 +28,7 @@ public class APLTransformer
     public string? OutputName { get; set; }
 
     [JsonPropertyName("transformer")]
-    public string Transformer { get; set; }
+    public string Transformer { get; set; } = null!;
 
     [JsonPropertyName("template")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

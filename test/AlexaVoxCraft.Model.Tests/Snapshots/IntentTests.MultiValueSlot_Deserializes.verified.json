@@ -1,0 +1,60 @@
+﻿{
+  "toppings": {
+    "Name": "toppings",
+    "ConfirmationStatus": "NONE",
+    "Source": "USER",
+    "SlotValue": {
+      "SlotType": "List",
+      "Values": [
+        {
+          "Value": "olives",
+          "Resolutions": {
+            "Authorities": [
+              {
+                "Name": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.example.PizzaToppings",
+                "Status": {
+                  "Code": "ER_SUCCESS_MATCH"
+                },
+                "Values": [
+                  {
+                    "Value": {
+                      "Name": "black olives",
+                      "Id": "OLIVES_BLACK"
+                    }
+                  },
+                  {
+                    "Value": {
+                      "Name": "green olives",
+                      "Id": "OLIVES_GREEN"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "Value": "sausage",
+          "Resolutions": {
+            "Authorities": [
+              {
+                "Name": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.example.PizzaToppings",
+                "Status": {
+                  "Code": "ER_SUCCESS_MATCH"
+                },
+                "Values": [
+                  {
+                    "Value": {
+                      "Name": "sausage",
+                      "Id": "SAUSAGE"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

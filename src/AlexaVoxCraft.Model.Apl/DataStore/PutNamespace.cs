@@ -9,5 +9,5 @@ public class PutNamespace : DataStoreCommand
     public PutNamespace() : base(CommandType) { }
 
     [JsonPropertyName("namespace")]
-    public string Namespace { get; set; }
+    public string Namespace { get; set; } = null!;
 }

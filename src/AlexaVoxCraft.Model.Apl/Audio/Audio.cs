@@ -17,7 +17,7 @@ public class Audio : APLAComponent, IJsonSerializable<Audio>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLAFilter>? Filters { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : Audio
+    public new static void RegisterTypeInfo<T>() where T : Audio
     {
         AlexaJsonOptions.RegisterTypeModifier<Audio>(typeInfo =>
         {

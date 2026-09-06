@@ -1,0 +1,1 @@
+﻿{"type":"Link","src":"https://example.com/documents/my-document.json"}

@@ -12,9 +12,9 @@ public class SetValue : APLCommand
     public APLValue<string>? ComponentId { get; set; }
 
     [JsonPropertyName("property")]
-    public APLValue<string> Property { get; set; }
+    public APLValue<string> Property { get; set; } = null!;
 
 
     [JsonPropertyName("value")]
-    public APLValue<object> Value { get; set; }
+    public APLValue<object> Value { get; set; } = null!;
 }

@@ -8,5 +8,5 @@ public class DataStoreStorageErrorContent : DataStoreErrorContent
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Message { get; set; }
 
-    [JsonPropertyName("failedCommand")] public DataStoreCommand FailedCommand { get; set; }
+    [JsonPropertyName("failedCommand")] public DataStoreCommand FailedCommand { get; set; } = null!;
 }

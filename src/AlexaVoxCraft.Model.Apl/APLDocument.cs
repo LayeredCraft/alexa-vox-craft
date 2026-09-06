@@ -62,7 +62,7 @@ public class APLDocument : APLDocumentBase, IJsonSerializable<APLDocument>
 
     [JsonPropertyName("onDisplayStateChange")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValueCollection<APLCommand> OnDisplayStateChange { get; set; }
+    public APLValueCollection<APLCommand> OnDisplayStateChange { get; set; } = null!;
     public new static void RegisterTypeInfo<T>() where T : APLDocument
     {
         APLDocumentBase.RegisterTypeInfo<T>();

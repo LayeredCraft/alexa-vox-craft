@@ -44,7 +44,7 @@ public class RenderDocumentDirective : IDirective
     public APLTProfile? TargetProfile { get; set; }
 
     [JsonPropertyName("document")]
-    public APLDocumentReference Document { get; set; }
+    public APLDocumentReference Document { get; set; } = null!;
 
     [JsonPropertyName("datasources")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

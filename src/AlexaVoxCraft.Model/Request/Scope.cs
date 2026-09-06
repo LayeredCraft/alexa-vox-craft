@@ -5,5 +5,5 @@ namespace AlexaVoxCraft.Model.Request;
 public class Scope
 {
     [JsonPropertyName("status")]
-    public string Status { get; set; }
+    public string Status { get; set; } = null!;
 }

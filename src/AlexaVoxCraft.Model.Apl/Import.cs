@@ -19,7 +19,7 @@ public class Import : IEquatable<Import>, IJsonSerializable<Import>
         Version = version;
     }
 
-    [JsonPropertyName("name")] public string Name { get; set; }
+    [JsonPropertyName("name")] public string Name { get; set; } = null!;
 
     [JsonPropertyName("version")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -61,7 +61,7 @@ public class Import : IEquatable<Import>, IJsonSerializable<Import>
         document.Imports.Add(this);
     }
 
-    public bool Equals(Import other)
+    public bool Equals(Import? other)
     {
         if (other == null)
         {

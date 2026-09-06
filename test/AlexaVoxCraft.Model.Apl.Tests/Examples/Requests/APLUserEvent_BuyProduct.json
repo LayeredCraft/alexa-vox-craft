@@ -1,0 +1,334 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+    },
+    "attributes": {
+      "UserContext": {
+        "$type": "guest",
+        "AlexaUserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "IsLinked": false,
+        "entitledProducts": [],
+        "purchasableProducts": [
+          {
+            "productId": "amzn1.adg.product.8defca28-dafb-4a96-9520-f4aa86ee3b75",
+            "name": "Pixar Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Unlock Pixar trivia categories.",
+            "purchasable": "PURCHASABLE",
+            "entitled": "NOT_ENTITLED",
+            "entitlementReason": "NOT_PURCHASED",
+            "referenceName": "ent-pixar",
+            "activeEntitlementCount": 0,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          },
+          {
+            "productId": "amzn1.adg.product.45c5fb86-180b-4042-92c2-e53b3322b7a0",
+            "name": "Disney Parks Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Explore the magic of Disney Parks with trivia about attractions, resorts, lands, entertainment, and unforgettable park experiences from around the world.",
+            "purchasable": "PURCHASABLE",
+            "entitled": "NOT_ENTITLED",
+            "entitlementReason": "NOT_PURCHASED",
+            "referenceName": "ent-disney-parks",
+            "activeEntitlementCount": 0,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          }
+        ]
+      },
+      "repeatModel": {
+        "$type": "productDetail",
+        "Speech": "Unlock Pixar trivia categories. To buy it, say Buy Pixar Pack.",
+        "AplSpeech": "Unlock Pixar trivia categories. To buy it, say Buy Pixar Pack, or click the Buy Pixar Pack button to purchase.",
+        "Reprompt": "I didn't catch that. To buy Pixar Pack, say Buy Pixar Pack.",
+        "ProductName": "Pixar Pack",
+        "ProductSummary": "Unlock Pixar trivia categories.",
+        "ProductReferenceName": "ent-pixar"
+      },
+      "PriorContextType": "WelcomeFlow",
+      "currentGame": {
+        "GameQuestions": {},
+        "CorrectAnswerIndex": 0,
+        "CurrentScore": 0,
+        "CurrentQuestionIndex": 0,
+        "CorrectAnswerText": "",
+        "QuestionText": "",
+        "Answers": [],
+        "CategoryId": "general"
+      },
+      "ConversationContext": {
+        "Type": 3,
+        "SubContext": "Detail",
+        "Metadata": {
+          "CreatedAt": "2026-09-04T16:29:23.476948+00:00",
+          "LastUpdated": "2026-09-04T16:29:34.6089074+00:00",
+          "LastHandler": null,
+          "TransitionCount": 2,
+          "UserIdentifier": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+          "IsAuthenticated": false,
+          "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000"
+        },
+        "Data": {}
+      }
+    },
+    "user": {
+      "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "context": {
+    "Viewports": [
+      {
+        "type": "APL",
+        "id": "medHub",
+        "shape": "RECTANGLE",
+        "dpi": 160,
+        "presentationType": "OVERLAY",
+        "canRotate": false,
+        "configuration": {
+          "current": {
+            "mode": "HUB",
+            "video": {
+              "codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "size": {
+              "type": "DISCRETE",
+              "pixelWidth": 1280,
+              "pixelHeight": 800
+            }
+          }
+        }
+      }
+    ],
+    "AlexaDisplayWindowComponent": {
+      "defaultWindowId": "medHub",
+      "focusedInstanceId": null,
+      "visibleInstanceIds": null,
+      "instances": [
+        {
+          "id": "medHub",
+          "templateId": "medHub",
+          "token": null,
+          "configuration": {
+            "interactionMode": "hub",
+            "sizeConfigurationId": "medHubSize"
+          },
+          "timeSinceLastInteractionInMilliseconds": -1
+        }
+      ]
+    },
+    "Viewport": {
+      "experiences": [
+        {
+          "arcMinuteWidth": 221,
+          "arcMinuteHeight": 162,
+          "canRotate": false,
+          "canResize": false
+        }
+      ],
+      "mode": "HUB",
+      "shape": "RECTANGLE",
+      "pixelWidth": 1280,
+      "pixelHeight": 800,
+      "dpi": 160,
+      "currentPixelWidth": 1280,
+      "currentPixelHeight": 800,
+      "touch": [
+        "SINGLE"
+      ],
+      "keyboard": [
+        "DIRECTION"
+      ],
+      "video": {
+        "codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Extensions": {
+      "available": {
+        "aplext:backstack:10": {}
+      }
+    },
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.A0000000000000000000000000000000000000000000000000000000",
+        "supportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      },
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "apiAccessToken": "***REDACTED***"
+    },
+    "Alexa.Presentation.APL": {
+      "token": "productDetailToken",
+      "version": "APL_WEB_RENDERER_GANDALF",
+      "componentsVisibleOnScreen": [
+        {
+          "uid": ":1000",
+          "position": "960x600+0+0:0",
+          "type": "mixed",
+          "tags": {
+            "viewport": {}
+          },
+          "children": [
+            {
+              "id": "page1",
+              "uid": ":1002",
+              "position": "960x600+0+0:0",
+              "type": "mixed",
+              "tags": {
+                "spoken": true
+              },
+              "children": [
+                {
+                  "uid": ":1003",
+                  "position": "960x600+0+0:0",
+                  "type": "graphic",
+                  "tags": {},
+                  "entities": []
+                },
+                {
+                  "uid": ":1006",
+                  "position": "960x116+0+0:1",
+                  "type": "mixed",
+                  "tags": {},
+                  "entities": []
+                },
+                {
+                  "uid": ":1019",
+                  "position": "960x103+0+116:1",
+                  "type": "mixed",
+                  "tags": {
+                    "listItem": {
+                      "index": 0
+                    },
+                    "spoken": true,
+                    "ordinal": 1
+                  },
+                  "children": [
+                    {
+                      "uid": ":1020",
+                      "position": "960x103+0+116:1",
+                      "type": "mixed",
+                      "tags": {
+                        "focused": false,
+                        "clickable": true
+                      },
+                      "children": [
+                        {
+                          "uid": ":1026",
+                          "position": "51x51+63+140:1",
+                          "type": "mixed",
+                          "tags": {},
+                          "entities": []
+                        },
+                        {
+                          "uid": ":1089",
+                          "position": "832x2+63+217:1",
+                          "type": "empty",
+                          "tags": {},
+                          "entities": []
+                        }
+                      ],
+                      "entities": []
+                    }
+                  ],
+                  "entities": []
+                },
+                {
+                  "uid": ":1091",
+                  "position": "960x102+0+219:1",
+                  "type": "mixed",
+                  "tags": {
+                    "listItem": {
+                      "index": 1
+                    },
+                    "spoken": true,
+                    "ordinal": 2
+                  },
+                  "children": [
+                    {
+                      "uid": ":1094",
+                      "position": "960x102+0+219:1",
+                      "type": "mixed",
+                      "tags": {
+                        "focused": false,
+                        "clickable": true
+                      },
+                      "children": [
+                        {
+                          "uid": ":1100",
+                          "position": "51x51+63+243:1",
+                          "type": "mixed",
+                          "tags": {},
+                          "entities": []
+                        },
+                        {
+                          "uid": ":1163",
+                          "position": "832x2+63+320:1",
+                          "type": "empty",
+                          "tags": {},
+                          "visibility": 0.6700000166893005,
+                          "entities": []
+                        }
+                      ],
+                      "entities": []
+                    }
+                  ],
+                  "entities": []
+                },
+                {
+                  "uid": ":1092",
+                  "position": "960x102+0+497:2",
+                  "type": "text",
+                  "tags": {},
+                  "entities": []
+                }
+              ],
+              "entities": []
+            }
+          ],
+          "entities": []
+        }
+      ]
+    }
+  },
+  "request": {
+    "type": "Alexa.Presentation.APL.UserEvent",
+    "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "timestamp": "2026-09-04T16:29:39Z",
+    "locale": "en-US",
+    "arguments": [
+      "buyProduct",
+      "ent-pixar"
+    ],
+    "components": {},
+    "source": {
+      "type": "TouchWrapper",
+      "handler": "Press",
+      "id": "AlexaDetailContentBlock_Button1"
+    },
+    "token": "productDetailToken"
+  }
+}

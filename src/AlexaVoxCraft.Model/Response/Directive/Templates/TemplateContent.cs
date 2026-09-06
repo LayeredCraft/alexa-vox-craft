@@ -6,7 +6,7 @@ public class TemplateContent
 {
     [JsonPropertyName("primaryText")]
     [JsonRequired]
-    public TemplateText Primary { get; set; }
+    public TemplateText Primary { get; set; } = null!;
 
     [JsonPropertyName("secondaryText")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

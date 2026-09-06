@@ -5,11 +5,11 @@ namespace AlexaVoxCraft.Model.Request;
 public class User
 {
     [JsonPropertyName("userId")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = null!;
 
     [JsonPropertyName("accessToken")]
-    public string AccessToken { get; set; }
+    public string AccessToken { get; set; } = null!;
 
     [JsonPropertyName("permissions")]
-    public Permissions Permissions { get; set; }
+    public Permissions Permissions { get; set; } = null!;
 }

@@ -5,9 +5,9 @@ namespace AlexaVoxCraft.Model.Request;
 public sealed class IntentSignature
 {
     public string FullName { get; private set; }
-    public string Namespace { get; private set; }
-    public string Action { get; private set; }
-    public System.Collections.ObjectModel.ReadOnlyDictionary<string, IntentProperty> Properties { get; private set; }
+    public string? Namespace { get; private set; }
+    public string Action { get; private set; } = null!;
+    public System.Collections.ObjectModel.ReadOnlyDictionary<string, IntentProperty>? Properties { get; private set; }
 
     private static Regex PropertyFinder = new Regex(@"(\w+?)@(\w+?)\b(\[(\w+)\])*", RegexOptions.Compiled);
 
@@ -26,7 +26,7 @@ public sealed class IntentSignature
         return FullName.GetHashCode();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
         {

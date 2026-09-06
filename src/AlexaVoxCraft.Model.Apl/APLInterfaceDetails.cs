@@ -6,5 +6,5 @@ public class APLInterfaceDetails
 {
     [JsonPropertyName("runtime")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLInterfaceRuntime Runtime { get; set; }
+    public APLInterfaceRuntime Runtime { get; set; } = null!;
 }

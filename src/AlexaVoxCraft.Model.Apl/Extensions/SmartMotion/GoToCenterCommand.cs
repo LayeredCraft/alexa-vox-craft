@@ -4,14 +4,14 @@ namespace AlexaVoxCraft.Model.Apl.Extensions.SmartMotion;
 
 public class GoToCenterCommand : APLCommand
 {
-    private string _extensionName;
+    private string? _extensionName;
 
     public static GoToCenterCommand For(SmartMotionExtension extension)
     {
         return new GoToCenterCommand(extension.Name);
     }
 
-    public GoToCenterCommand(string extensionName)
+    public GoToCenterCommand(string? extensionName)
     {
         _extensionName = extensionName;
     }

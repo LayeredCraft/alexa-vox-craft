@@ -9,8 +9,8 @@ namespace AlexaVoxCraft.Model.Response;
 
 public class ProgressiveResponse
 {
-    public HttpClient Client { get; set; }
-    public ProgressiveResponseHeader Header { get; set; }
+    public HttpClient Client { get; set; } = null!;
+    public ProgressiveResponseHeader Header { get; set; } = null!;
 
     public static bool IsSupported(SkillRequest request)
     {
@@ -32,12 +32,12 @@ public class ProgressiveResponse
     {
     }
 
-    public ProgressiveResponse(string requestId, string authToken, string baseAddress) : this(requestId, authToken, baseAddress, new HttpClient())
+    public ProgressiveResponse(string? requestId, string? authToken, string? baseAddress) : this(requestId, authToken, baseAddress, new HttpClient())
     {
 
     }
 
-    public ProgressiveResponse(string requestId, string authToken, string baseAddress, HttpClient client)
+    public ProgressiveResponse(string? requestId, string? authToken, string? baseAddress, HttpClient client)
     {
         Client = client;
         if (!string.IsNullOrWhiteSpace(baseAddress))
@@ -67,12 +67,12 @@ public class ProgressiveResponse
 
     }
 
-    public Task<HttpResponseMessage> SendSpeech(Ssml.Speech ssml)
+    public Task<HttpResponseMessage?> SendSpeech(Ssml.Speech ssml)
     {
         return Send(new VoicePlayerSpeakDirective(ssml));
     }
 
-    public Task<HttpResponseMessage> SendSpeech(string ssml)
+    public Task<HttpResponseMessage?> SendSpeech(string ssml)
     {
         return Send(new VoicePlayerSpeakDirective(ssml));
     }
@@ -82,11 +82,11 @@ public class ProgressiveResponse
         return Header != null && Client != null;
     }
 
-    public Task<HttpResponseMessage> Send(IProgressiveResponseDirective directive)
+    public async Task<HttpResponseMessage?> Send(IProgressiveResponseDirective? directive)
     {
         if (directive == null || !CanSend())
         {
-            return Task.FromResult((HttpResponseMessage)null);
+            return null;
         }
 
         var request = new ProgressiveResponseRequest
@@ -96,6 +96,6 @@ public class ProgressiveResponse
         };
         var json = JsonSerializer.Serialize(request, AlexaJsonOptions.DefaultOptions);
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-        return Client.PostAsync(new Uri("/v1/directives", UriKind.Relative), httpContent);
+        return await Client.PostAsync(new Uri("/v1/directives", UriKind.Relative), httpContent);
     }
 }

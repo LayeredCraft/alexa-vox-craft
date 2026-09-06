@@ -6,11 +6,11 @@ namespace AlexaVoxCraft.Model.Request.Type;
 public class LaunchRequestTask
 {
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [JsonPropertyName("version")]
-    public string Version { get; set; }
+    public string Version { get; set; } = null!;
 
     [JsonPropertyName("input")]
-    public IConnectionTask Input { get; set; }
+    public IConnectionTask Input { get; set; } = null!;
 }

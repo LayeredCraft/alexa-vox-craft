@@ -1,0 +1,1 @@
+﻿{"type":"APL","mainTemplate":{"items":{"type":"Text","text":"Question text"}},"onMount":[{"type":"SetValue","componentId":"root","property":"opacity","value":"1"}],"onConfigChange":[{"type":"Reinflate"}],"settings":{"supportsResizing":true},"version":"1.6"}

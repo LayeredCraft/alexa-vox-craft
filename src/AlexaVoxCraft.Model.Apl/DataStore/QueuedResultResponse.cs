@@ -4,9 +4,9 @@ namespace AlexaVoxCraft.Model.Apl.DataStore;
 
 public class QueuedResultResponse
 {
-    [JsonPropertyName("items")] public CommandResult[] Items { get; set; }
+    [JsonPropertyName("items")] public CommandResult[] Items { get; set; } = null!;
 
     [JsonPropertyName("paginationContext")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PaginationContext PaginationContext { get; set; }
+    public PaginationContext PaginationContext { get; set; } = null!;
 }

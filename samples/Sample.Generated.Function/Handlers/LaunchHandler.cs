@@ -15,7 +15,7 @@ public sealed class LaunchHandler : BaseHandler<LaunchRequest>
         _logger = logger;
     }
 
-    public Task<bool> CanHandle(IHandlerInput input, CancellationToken cancellationToken = default)
+    public override Task<bool> CanHandle(IHandlerInput input, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(input.RequestEnvelope.Request is LaunchRequest);
     }

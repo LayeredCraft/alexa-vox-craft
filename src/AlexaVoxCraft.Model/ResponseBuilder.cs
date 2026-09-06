@@ -253,7 +253,7 @@ public class ResponseBuilder
         return AskWithCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, title, content, reprompt);
     }
 
-    public static SkillResponse AskWithCard(IOutputSpeech speechResponse, string title, string content, Reprompt reprompt, Session sessionAttributes)
+    public static SkillResponse AskWithCard(IOutputSpeech speechResponse, string title, string content, Reprompt reprompt, Session? sessionAttributes)
     {
         SimpleCard card = new SimpleCard
         {
@@ -287,7 +287,7 @@ public class ResponseBuilder
         return AudioPlayerPlay(playBehavior, url, token, null, offsetInMilliseconds);
     }
 
-    public static SkillResponse AudioPlayerPlay(PlayBehavior playBehavior, string url, string token, string expectedPreviousToken, int offsetInMilliseconds)
+    public static SkillResponse AudioPlayerPlay(PlayBehavior playBehavior, string url, string token, string? expectedPreviousToken, int offsetInMilliseconds)
     {
         var response = BuildResponse(null, true, null, null, null);
         response.Response.Directives.Add(new AudioPlayerPlayDirective()
@@ -328,24 +328,24 @@ public class ResponseBuilder
 
     #region Dialog Response
 
-    public static SkillResponse DialogDelegate(Intent updatedIntent = null)
+    public static SkillResponse DialogDelegate(Intent? updatedIntent = null)
     {
         return DialogDelegate(null, updatedIntent);
     }
 
-    public static SkillResponse DialogDelegate(Session attributes, Intent updatedIntent = null)
+    public static SkillResponse DialogDelegate(Session? attributes, Intent? updatedIntent = null)
     {
         var response = BuildResponse(null, false, attributes, null, null);
         response.Response.Directives.Add(new DialogDelegate { UpdatedIntent = updatedIntent });
         return response;
     }
 
-    public static SkillResponse DialogElicitSlot(IOutputSpeech outputSpeech, string slotName, Intent updatedIntent = null)
+    public static SkillResponse DialogElicitSlot(IOutputSpeech outputSpeech, string slotName, Intent? updatedIntent = null)
     {
         return DialogElicitSlot(outputSpeech, slotName, null, updatedIntent);
     }
 
-    public static SkillResponse DialogElicitSlot(IOutputSpeech outputSpeech, string slotName, Session attributes, Intent updatedIntent = null)
+    public static SkillResponse DialogElicitSlot(IOutputSpeech outputSpeech, string slotName, Session? attributes, Intent? updatedIntent = null)
     {
         var response = BuildResponse(outputSpeech, false, attributes, null, null);
         response.Response.Directives.Add(new DialogElicitSlot(slotName) { UpdatedIntent = updatedIntent });
@@ -353,24 +353,24 @@ public class ResponseBuilder
     }
 
     public static SkillResponse DialogConfirmSlot(IOutputSpeech outputSpeech, string slotName,
-        Intent updatedIntent = null)
+        Intent? updatedIntent = null)
     {
         return DialogConfirmSlot(outputSpeech, slotName, null, updatedIntent);
     }
 
-    public static SkillResponse DialogConfirmSlot(IOutputSpeech outputSpeech, string slotName, Session attributes, Intent updatedIntent = null)
+    public static SkillResponse DialogConfirmSlot(IOutputSpeech outputSpeech, string slotName, Session? attributes, Intent? updatedIntent = null)
     {
         var response = BuildResponse(outputSpeech, false, attributes, null, null);
         response.Response.Directives.Add(new DialogConfirmSlot(slotName) { UpdatedIntent = updatedIntent });
         return response;
     }
 
-    public static SkillResponse DialogConfirmIntent(IOutputSpeech outputSpeech, Intent updatedIntent = null)
+    public static SkillResponse DialogConfirmIntent(IOutputSpeech outputSpeech, Intent? updatedIntent = null)
     {
         return DialogConfirmIntent(outputSpeech, null, updatedIntent);
     }
 
-    public static SkillResponse DialogConfirmIntent(IOutputSpeech outputSpeech, Session attributes, Intent updatedIntent = null)
+    public static SkillResponse DialogConfirmIntent(IOutputSpeech outputSpeech, Session? attributes, Intent? updatedIntent = null)
     {
         var response = BuildResponse(outputSpeech, false, attributes, null, null);
         response.Response.Directives.Add(new DialogConfirmIntent { UpdatedIntent = updatedIntent });
@@ -385,7 +385,7 @@ public class ResponseBuilder
     }
 
     #region Main Response Builder
-    private static SkillResponse BuildResponse(IOutputSpeech outputSpeech, bool shouldEndSession, Session sessionAttributes, Reprompt reprompt, ICard card)
+    private static SkillResponse BuildResponse(IOutputSpeech? outputSpeech, bool shouldEndSession, Session? sessionAttributes, Reprompt? reprompt, ICard? card)
     {
         SkillResponse response = new SkillResponse { Version = "1.0" };
         if (sessionAttributes is not null) response.SessionAttributes = sessionAttributes.Attributes;

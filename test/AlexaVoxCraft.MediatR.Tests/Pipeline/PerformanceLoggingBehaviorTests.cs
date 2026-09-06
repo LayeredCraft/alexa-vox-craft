@@ -114,7 +114,6 @@ public class PerformanceLoggingBehaviorTests : TestBase
     [Theory]
     [Compose<MediatRTestProfile>]
     public async Task Handle_CallsNextDelegate_ExactlyOnce(
-        ILogger<PerformanceLoggingBehavior> logger,
         PerformanceLoggingBehavior behavior,
         IHandlerInput handlerInput,
         [Shared] FakeRequestHandlerDelegate next,
@@ -155,8 +154,7 @@ public class PerformanceLoggingBehaviorTests : TestBase
         logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Successfully processed Alexa skill request").Once();
     }
 
-    [Theory]
-    [Compose<MediatRTestProfile>]
+    [Fact]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {
         // Act & Assert

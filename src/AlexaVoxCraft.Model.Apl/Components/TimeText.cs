@@ -9,15 +9,15 @@ public class TimeText : TextBase, IJsonSerializable<TimeText>
 
     [JsonPropertyName("direction")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<TimeTextDirection?> Direction { get; set; }
+    public APLValue<TimeTextDirection?> Direction { get; set; } = null!;
 
     [JsonPropertyName("format")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<string> Format { get; set; }
+    public APLValue<string> Format { get; set; } = null!;
 
     [JsonPropertyName("start")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public new APLValue<int?> Start { get; set; }
+    public new APLValue<int?> Start { get; set; } = null!;
 
     public new static void RegisterTypeInfo<T>() where T : TimeText
     {

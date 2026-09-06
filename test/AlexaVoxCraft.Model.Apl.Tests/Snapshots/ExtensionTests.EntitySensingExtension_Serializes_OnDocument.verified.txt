@@ -1,0 +1,1 @@
+﻿{"type":"APL","mainTemplate":{"items":{"type":"Text","text":"Question text"}},"settings":{"EntitySensing":{"entitySensingStateName":"EntitySensingState","primaryUserName":"User"}},"extensions":[{"name":"EntitySensing","uri":"alexaext:entitysensing:10"}],"version":"1.4"}

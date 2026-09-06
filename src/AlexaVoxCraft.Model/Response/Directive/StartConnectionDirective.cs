@@ -12,14 +12,14 @@ public class StartConnectionDirective : IDirective
     public string Type => DirectiveType;
 
     [JsonPropertyName("uri")]
-    public string Uri { get; set; }
+    public string Uri { get; set; } = null!;
 
     [JsonPropertyName("input")]
-    public IConnectionTask Input { get; set; }
+    public IConnectionTask Input { get; set; } = null!;
 
     [JsonPropertyName("token")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Token { get; set; }
+    public string? Token { get; set; }
 
     [JsonPropertyName("onComplete")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -28,7 +28,7 @@ public class StartConnectionDirective : IDirective
 
     public StartConnectionDirective() { }
 
-    public StartConnectionDirective(IConnectionTask input, string token)
+    public StartConnectionDirective(IConnectionTask input, string? token)
     {
         Uri = input.ConnectionUri;
         Input = input;

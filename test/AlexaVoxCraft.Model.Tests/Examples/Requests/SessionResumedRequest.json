@@ -1,0 +1,16 @@
+{
+  "type": "SessionResumedRequest",
+  "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "timestamp": "2026-01-15T00:00:00Z",
+  "locale": "en-US",
+  "originIpAddress": "203.0.113.42",
+  "cause": {
+    "type": "ConnectionCompleted",
+    "token": "correlation-token-example",
+    "status": {
+      "code": 200,
+      "message": "OK"
+    },
+    "result": null
+  }
+}

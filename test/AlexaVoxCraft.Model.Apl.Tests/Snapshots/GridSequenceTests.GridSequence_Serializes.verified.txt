@@ -1,0 +1,1 @@
+﻿{"type":"GridSequence","childWidths":"100dp","scrollDirection":"horizontal","snap":"center","allowForward":true,"allowBackwards":false,"items":[{"type":"Text","text":"Item 1"},{"type":"Text","text":"Item 2"}]}

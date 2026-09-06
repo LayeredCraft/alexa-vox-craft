@@ -4,11 +4,11 @@ namespace AlexaVoxCraft.Model.Apl.Extensions.DataStore;
 
 public class DataBinding
 {
-    [JsonPropertyName("namespace")] public string Namespace { get; set; }
+    [JsonPropertyName("namespace")] public string Namespace { get; set; } = null!;
 
-    [JsonPropertyName("key")] public string Key { get; set; }
+    [JsonPropertyName("key")] public string Key { get; set; } = null!;
 
-    [JsonPropertyName("dataBindingName")] public string DataBindingName { get; set; }
+    [JsonPropertyName("dataBindingName")] public string DataBindingName { get; set; } = null!;
 
     [JsonPropertyName("dataType")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

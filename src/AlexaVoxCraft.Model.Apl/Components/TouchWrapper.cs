@@ -33,7 +33,7 @@ public class TouchWrapper : TouchComponent, IJsonSerializable<TouchWrapper>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLComponent>? Item { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : TouchWrapper
+    public new static void RegisterTypeInfo<T>() where T : TouchWrapper
     {
         TouchComponent.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>

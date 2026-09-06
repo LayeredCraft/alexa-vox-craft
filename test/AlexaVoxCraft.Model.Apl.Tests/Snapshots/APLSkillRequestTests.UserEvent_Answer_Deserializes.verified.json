@@ -1,0 +1,337 @@
+﻿{
+  "Context": {
+    "Viewport": {
+      "Experiences": [
+        {
+          "CanResize": false,
+          "CanRotate": false,
+          "ArcMinuteWidth": 221,
+          "ArcMinuteHeight": 162
+        }
+      ],
+      "CurrentPixelWidth": 1280,
+      "CurrentPixelHeight": 800,
+      "DPI": 160,
+      "PixelHeight": 800,
+      "PixelWidth": 1280,
+      "Touch": [
+        "SINGLE"
+      ],
+      "Keyboard": [
+        "DIRECTION"
+      ],
+      "Shape": "RECTANGLE",
+      "Video": {
+        "Codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Viewports": [
+      {
+        "Type": "APL",
+        "Shape": "RECTANGLE",
+        "DPI": 160,
+        "PresentationType": "OVERLAY",
+        "CanRotate": false,
+        "Configuration": {
+          "Current": {
+            "Video": {
+              "Codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "Size": {
+              "Type": "DISCRETE",
+              "PixelHeight": 800,
+              "PixelWidth": 1280
+            }
+          }
+        },
+        "ID": "medHub"
+      }
+    ],
+    "Extensions": {
+      "Available": {}
+    },
+    "AplVisualContext": {
+      "Token": "triviaPager",
+      "Version": "APL_WEB_RENDERER_GANDALF",
+      "ComponentsVisibleOnScreen": [
+        {
+          "Uid": ":1000",
+          "Position": "960x600+0+0:0",
+          "Type": "mixed",
+          "Tags": {},
+          "Children": [
+            {
+              "Id": "page1",
+              "Uid": ":1002",
+              "Position": "960x600+0+0:0",
+              "Type": "mixed",
+              "Tags": {
+                "Spoken": true
+              },
+              "Children": [
+                {
+                  "Uid": ":1003",
+                  "Position": "960x600+0+0:0",
+                  "Type": "graphic",
+                  "Tags": {}
+                },
+                {
+                  "Uid": ":1006",
+                  "Position": "960x87+0+0:1",
+                  "Type": "mixed",
+                  "Tags": {}
+                },
+                {
+                  "Uid": ":1018",
+                  "Position": "960x103+0+87:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Spoken": true,
+                    "Ordinal": 1
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1019",
+                      "Position": "960x103+0+87:1",
+                      "Type": "mixed",
+                      "Tags": {
+                        "Focused": false,
+                        "Clickable": true
+                      },
+                      "Children": [
+                        {
+                          "Uid": ":1025",
+                          "Position": "51x51+63+111:1",
+                          "Type": "mixed",
+                          "Tags": {}
+                        },
+                        {
+                          "Uid": ":1088",
+                          "Position": "832x2+63+188:1",
+                          "Type": "empty",
+                          "Tags": {}
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1090",
+                  "Position": "960x102+0+190:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Spoken": true,
+                    "Ordinal": 2
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1094",
+                      "Position": "960x102+0+190:1",
+                      "Type": "mixed",
+                      "Tags": {
+                        "Focused": false,
+                        "Clickable": true
+                      },
+                      "Children": [
+                        {
+                          "Uid": ":1100",
+                          "Position": "51x51+63+214:1",
+                          "Type": "mixed",
+                          "Tags": {}
+                        },
+                        {
+                          "Uid": ":1163",
+                          "Position": "832x2+63+291:1",
+                          "Type": "empty",
+                          "Tags": {}
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1091",
+                  "Position": "960x102+0+293:1",
+                  "Type": "mixed",
+                  "Tags": {
+                    "Spoken": true,
+                    "Ordinal": 3
+                  },
+                  "Children": [
+                    {
+                      "Uid": ":1165",
+                      "Position": "960x102+0+293:1",
+                      "Type": "mixed",
+                      "Tags": {
+                        "Focused": false,
+                        "Clickable": true
+                      },
+                      "Children": [
+                        {
+                          "Uid": ":1171",
+                          "Position": "51x51+63+317:1",
+                          "Type": "mixed",
+                          "Tags": {}
+                        },
+                        {
+                          "Uid": ":1234",
+                          "Position": "832x1+63+395:1",
+                          "Type": "empty",
+                          "Tags": {}
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Uid": ":1092",
+                  "Position": "960x102+0+497:2",
+                  "Type": "text",
+                  "Tags": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "System": {
+      "ApiAccessToken": "***REDACTED***",
+      "ApiEndpoint": "https://api.amazonalexa.com",
+      "Application": {
+        "ApplicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+      },
+      "User": {
+        "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "Device": {
+        "DeviceID": "amzn1.ask.device.A0000000000000000000000000000000000000000000000000000000",
+        "SupportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "2024.3"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Version": "1.0",
+  "Session": {
+    "New": false,
+    "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "Attributes": {
+      "ConversationContext": {
+        "Type": 2,
+        "SubContext": null,
+        "Metadata": {
+          "CreatedAt": "2026-09-04T14:27:34.7243064+00:00",
+          "LastUpdated": "2026-09-04T14:28:14.4733246+00:00",
+          "LastHandler": null,
+          "TransitionCount": 2,
+          "UserIdentifier": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+          "IsAuthenticated": false,
+          "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000"
+        },
+        "Data": {}
+      },
+      "currentGame": {
+        "GameQuestions": {
+          "9": "b8e5995b-b055-4532-abe9-2ea17b807ce7",
+          "6": "1f53b122-0b64-4a1e-b09e-9ae1548db2c6",
+          "5": "6a599dbe-1253-446f-8104-40b214e89026",
+          "1": "e4e33657-4b25-4269-b270-8bfc0dc52c86",
+          "3": "6d8b7030-2371-41b5-81ce-e4365f407b28"
+        },
+        "CorrectAnswerIndex": 0,
+        "CurrentScore": 0,
+        "CurrentQuestionIndex": 0,
+        "CorrectAnswerText": "16 years old",
+        "QuestionText": "What age does Princess Aurora prick her finger on the spinning wheel?",
+        "Answers": [
+          "16 years old",
+          "10 years old ",
+          "18 years old ",
+          "15 years old"
+        ],
+        "CategoryId": "general"
+      },
+      "repeatModel": {
+        "$type": "startGame",
+        "IntroSpeech": "",
+        "QuestionSpeech": "Question 1. What age does Princess Aurora prick her finger on the spinning wheel? 1.  16 years old. 2.  10 years old . 3.  18 years old . 4.  15 years old. ",
+        "QuestionText": "What age does Princess Aurora prick her finger on the spinning wheel?",
+        "Answers": [
+          "16 years old",
+          "10 years old ",
+          "18 years old ",
+          "15 years old"
+        ]
+      },
+      "UserContext": {
+        "$type": "guest",
+        "AlexaUserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000",
+        "IsLinked": false,
+        "entitledProducts": [
+          {
+            "productId": "amzn1.adg.product.8defca28-dafb-4a96-9520-f4aa86ee3b75",
+            "name": "Pixar Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Unlock Pixar trivia categories.",
+            "purchasable": "NOT_PURCHASABLE",
+            "entitled": "ENTITLED",
+            "entitlementReason": "PURCHASED",
+            "referenceName": "ent-pixar",
+            "activeEntitlementCount": 1,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          },
+          {
+            "productId": "amzn1.adg.product.45c5fb86-180b-4042-92c2-e53b3322b7a0",
+            "name": "Disney Parks Pack",
+            "type": "ENTITLEMENT",
+            "summary": "Explore the magic of Disney Parks with trivia about attractions, resorts, lands, entertainment, and unforgettable park experiences from around the world.",
+            "purchasable": "NOT_PURCHASABLE",
+            "entitled": "ENTITLED",
+            "entitlementReason": "PURCHASED",
+            "referenceName": "ent-disney-parks",
+            "activeEntitlementCount": 1,
+            "purchaseMode": "TEST",
+            "startTime": "0001-01-01T00:00:00+00:00",
+            "endTime": "0001-01-01T00:00:00+00:00"
+          }
+        ],
+        "purchasableProducts": []
+      }
+    },
+    "Application": {
+      "ApplicationId": "amzn1.ask.skill.4b4395b9-678c-479b-ba25-862058baac46"
+    },
+    "User": {
+      "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "Request": {
+    "Token": "triviaPager",
+    "Arguments": [
+      "answer",
+      1
+    ],
+    "Source": {
+      "Type": "TouchWrapper",
+      "Handler": "Press",
+      "ComponentId": ""
+    },
+    "Type": "Alexa.Presentation.APL.UserEvent",
+    "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "Locale": "en-US",
+    "Timestamp": "DateTime_1"
+  }
+}

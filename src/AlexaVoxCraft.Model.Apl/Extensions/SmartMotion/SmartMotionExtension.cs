@@ -15,7 +15,7 @@ public class SmartMotionExtension : APLExtension
         Name = name;
     }
 
-    public void OnDeviceStateChanged(APLDocumentBase document, APLValueCollection<APLCommand> commands)
+    public void OnDeviceStateChanged(APLDocumentBase document, APLValueCollection<APLCommand>? commands)
     {
         document.AddHandler($"{Name}:{DeviceStateChangedEventName}", commands);
     }

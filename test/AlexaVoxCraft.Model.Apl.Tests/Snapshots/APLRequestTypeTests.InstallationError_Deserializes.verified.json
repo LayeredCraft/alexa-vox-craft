@@ -1,0 +1,11 @@
+﻿{
+  "PackageId": "WeatherWidget",
+  "Version": "1.0.0",
+  "Error": {
+    "Type": "PACKAGEMANAGER_INTERNAL_ERROR"
+  },
+  "Type": "Alexa.DataStore.PackageManager.InstallationError",
+  "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "Locale": "en-US",
+  "Timestamp": "DateTime_1"
+}

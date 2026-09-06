@@ -9,5 +9,5 @@ public class AuthenticationConfidenceLevel
 
     [JsonPropertyName("customPolicy")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public AuthenticationConfidenceLevelCustomPolicy Custom { get; set; }
+    public AuthenticationConfidenceLevelCustomPolicy Custom { get; set; } = null!;
 }

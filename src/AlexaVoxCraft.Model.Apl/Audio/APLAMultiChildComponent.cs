@@ -15,7 +15,7 @@ public abstract class APLAMultiChildComponent : APLAComponent, IJsonSerializable
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValueCollection<APLAComponent>? Items { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : APLAMultiChildComponent
+    public new static void RegisterTypeInfo<T>() where T : APLAMultiChildComponent
     {
         AlexaJsonOptions.RegisterTypeModifier<APLAMultiChildComponent>(typeInfo =>
         {

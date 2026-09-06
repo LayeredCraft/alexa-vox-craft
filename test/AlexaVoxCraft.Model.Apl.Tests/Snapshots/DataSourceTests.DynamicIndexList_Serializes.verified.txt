@@ -1,0 +1,1 @@
+﻿{"type":"dynamicIndexList","listId":"my-list-id","startIndex":0,"minimumInclusiveIndex":0,"maximumExclusiveIndex":200,"items":[{"primaryText":"item 1"},{"primaryText":"item 2"},{"primaryText":"item 3"}]}

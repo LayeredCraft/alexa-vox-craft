@@ -18,5 +18,5 @@ public class InsertItem : Operation
     public override string Type => OperationType;
 
     [JsonPropertyName("item")]
-    public object Item { get; set; }
+    public object Item { get; set; } = null!;
 }

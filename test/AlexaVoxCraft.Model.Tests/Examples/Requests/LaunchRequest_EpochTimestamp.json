@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": true,
+    "sessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "application": { "applicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000" },
+    "attributes": {},
+    "user": { "userId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000" }
+  },
+  "request": {
+    "type": "LaunchRequest",
+    "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "timestamp": 1768476896000
+  }
+}

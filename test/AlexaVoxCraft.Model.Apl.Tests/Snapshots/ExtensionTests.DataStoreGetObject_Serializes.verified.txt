@@ -1,0 +1,1 @@
+﻿{"namespace":"LocationWeather","key":"weather","token":"thisIsADummyToken","type":"DataStore:GetObject"}

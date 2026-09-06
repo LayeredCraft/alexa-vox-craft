@@ -1,0 +1,35 @@
+﻿{
+  "Version": "1.0",
+  "Session": {
+    "New": false,
+    "SessionId": "amzn1.echo-api.session.00000000-0000-0000-0000-000000000000",
+    "Application": {
+      "ApplicationId": "amzn1.ask.skill.00000000-0000-0000-0000-000000000000"
+    },
+    "User": {
+      "UserId": "amzn1.ask.account.A000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "Request": {
+    "DialogState": "IN_PROGRESS",
+    "Intent": {
+      "Name": "GetZodiacHoroscopeIntent",
+      "Signature": {
+        "FullName": "GetZodiacHoroscopeIntent",
+        "Action": "GetZodiacHoroscopeIntent"
+      },
+      "ConfirmationStatus": "DENIED",
+      "Slots": {
+        "ZodiacSign": {
+          "Name": "ZodiacSign",
+          "Value": "virgo",
+          "ConfirmationStatus": "CONFIRMED"
+        }
+      }
+    },
+    "Type": "IntentRequest",
+    "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+    "Locale": "en-US",
+    "Timestamp": "DateTime_1"
+  }
+}

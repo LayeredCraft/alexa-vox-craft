@@ -1,0 +1,1 @@
+﻿{"type":"AlexaImage","imageAlignment":"center","imageAspectRatio":"square","imageBlurredBackground":true,"imageWidth":"75vh","imageRoundedCorner":true,"imageScale":"best-fit","imageSource":"https://d2o906d8ln7ui1.cloudfront.net/images/MollyforBT7.png"}

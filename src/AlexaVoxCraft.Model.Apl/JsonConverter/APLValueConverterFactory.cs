@@ -57,11 +57,11 @@ public class APLValueConverter<T> : JsonConverter<APLValue<T>>
 
         if (genericType == typeof(object))
         {
-            returnValue.Value = (T)new ObjectConverter().Read(ref reader, typeToConvert, options);
+            returnValue.Value = (T)new ObjectConverter().Read(ref reader, typeToConvert, options)!;
         }
         else
         {
-            returnValue.Value = (T)document.Deserialize(genericType, options);
+            returnValue.Value = (T)document.Deserialize(genericType, options)!;
         }
 
         return returnValue;
@@ -108,7 +108,7 @@ public class APLEnumerableValueConverter<TValue, TList> : JsonConverter<APLValue
         switch (root.ValueKind)
         {
             case JsonValueKind.Object:
-                returnValue.Value = (TList)new List<TValue> { root.Deserialize<TValue>(options) }.AsEnumerable();
+                returnValue.Value = (TList)new List<TValue> { root.Deserialize<TValue>(options)! }.AsEnumerable();
                 returnValue.IsSingle = true;
                 break;
             case JsonValueKind.Array:
@@ -154,7 +154,7 @@ public class APLDimensionValueConverter : JsonConverter<APLDimensionValue>
     {
         return reader.TokenType == JsonTokenType.Number
             ? new APLDimensionValue(reader.GetInt32().ToString())
-            : new APLDimensionValue(reader.GetString());
+            : new APLDimensionValue(reader.GetString()!);
     }
 
     public override void Write(Utf8JsonWriter writer, APLDimensionValue value, JsonSerializerOptions options)
@@ -171,7 +171,7 @@ public class APLAbsoluteDimensionValueConverter : JsonConverter<APLAbsoluteDimen
     {
         return reader.TokenType == JsonTokenType.Number
             ? new APLAbsoluteDimensionValue(reader.GetInt32().ToString())
-            : new APLAbsoluteDimensionValue(reader.GetString());
+            : new APLAbsoluteDimensionValue(reader.GetString()!);
     }
 
     public override void Write(Utf8JsonWriter writer, APLAbsoluteDimensionValue value, JsonSerializerOptions options)

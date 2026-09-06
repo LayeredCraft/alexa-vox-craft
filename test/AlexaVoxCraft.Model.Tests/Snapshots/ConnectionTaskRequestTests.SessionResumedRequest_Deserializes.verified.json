@@ -1,0 +1,15 @@
+﻿{
+  "OriginIpAddress": "203.0.113.42",
+  "Cause": {
+    "Type": "ConnectionCompleted",
+    "Token": "correlation-token-example",
+    "Status": {
+      "Code": 200,
+      "Message": "OK"
+    }
+  },
+  "Type": "SessionResumedRequest",
+  "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "Locale": "en-US",
+  "Timestamp": "DateTime_1"
+}

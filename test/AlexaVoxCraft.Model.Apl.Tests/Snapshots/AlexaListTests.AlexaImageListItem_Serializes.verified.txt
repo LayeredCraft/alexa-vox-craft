@@ -1,0 +1,1 @@
+﻿{"type":"AlexaImageListItem","imageAspectRatio":"square","imageProgressBarPercentage":75,"imageRoundedCorner":true,"providerText":"${exampleData.providerText}","imageSource":"${exampleData.imageSource}","secondaryText":"${exampleData.secondaryText}","tertiaryText":"${exampleData.tertiaryText}","primaryText":"${exampleData.primaryText}","theme":"dark"}

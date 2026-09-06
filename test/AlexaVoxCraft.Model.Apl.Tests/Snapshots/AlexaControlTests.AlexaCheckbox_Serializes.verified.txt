@@ -1,0 +1,1 @@
+﻿{"type":"AlexaCheckbox","theme":"dark","selectedColor":"@colorAccent","checkboxHeight":"24dp"}

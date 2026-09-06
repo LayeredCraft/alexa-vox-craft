@@ -11,9 +11,9 @@ public class SimpleCard : ICard
 
     [JsonPropertyName("title")]
     [JsonRequired]
-    public string Title { get; set; }
+    public string Title { get; set; } = null!;
 
     [JsonRequired]
     [JsonPropertyName("content")]
-    public string Content { get; set; }
+    public string Content { get; set; } = null!;
 }

@@ -76,5 +76,5 @@ public class AttributesManager : IAttributesManager
 
     /// <inheritdoc/>
     public Task<Session?> GetSession(CancellationToken cancellationToken = default) =>
-        Task.FromResult(_eventRequest.Session);
+        Task.FromResult<Session?>(_eventRequest.Session);
 }

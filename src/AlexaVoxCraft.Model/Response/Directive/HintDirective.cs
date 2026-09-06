@@ -20,5 +20,5 @@ public class HintDirective : IDirective
     public string Type => DirectiveType;
 
     [JsonPropertyName("hint")]
-    public Hint Hint { get; set; }
+    public Hint Hint { get; set; } = null!;
 }

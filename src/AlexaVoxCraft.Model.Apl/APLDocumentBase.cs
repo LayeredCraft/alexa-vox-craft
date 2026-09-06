@@ -36,7 +36,7 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IList<Resource>? Resources { get; set; }
 
-    [JsonPropertyName("mainTemplate")] public Layout MainTemplate { get; set; }
+    [JsonPropertyName("mainTemplate")] public Layout MainTemplate { get; set; } = null!;
 
     [JsonPropertyName("onMount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -58,16 +58,16 @@ public abstract class APLDocumentBase : APLDocumentReference, IJsonSerializable<
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLDocumentEnvironment? Environment { get; set; }
 
-    [JsonExtensionData] public Dictionary<string, object> Handlers { get; set; }
+    [JsonExtensionData] public Dictionary<string, object> Handlers { get; set; } = null!;
 
-    public void AddHandler(string name, APLValueCollection<APLCommand> commands)
+    public void AddHandler(string name, APLValueCollection<APLCommand>? commands)
     {
         if (Handlers == null)
         {
             Handlers = new Dictionary<string, object>();
         }
 
-        Handlers.Add(name, commands);
+        Handlers.Add(name, commands!);
     }
 
     public static void RegisterTypeInfo<T>() where T : APLDocumentBase

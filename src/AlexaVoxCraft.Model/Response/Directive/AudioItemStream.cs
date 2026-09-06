@@ -6,14 +6,14 @@ public class AudioItemStream
 {
     [JsonRequired]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 
     [JsonRequired]
     [JsonPropertyName("token")]
-    public string Token { get; set; }
+    public string Token { get; set; } = null!;
 
     [JsonPropertyName("expectedPreviousToken")]
-    public string ExpectedPreviousToken { get; set; }
+    public string? ExpectedPreviousToken { get; set; }
 
     [JsonRequired]
     [JsonPropertyName("offsetInMilliseconds")]

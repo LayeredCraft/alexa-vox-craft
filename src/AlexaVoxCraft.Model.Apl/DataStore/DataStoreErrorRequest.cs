@@ -6,5 +6,5 @@ public class DataStoreErrorRequest : Request.Type.Request
 {
     public const string RequestType = "Alexa.DataStore.DataStoreError";
 
-    [JsonPropertyName("error")] public DataStoreError Error { get; set; }
+    [JsonPropertyName("error")] public DataStoreError Error { get; set; } = null!;
 }

@@ -14,7 +14,7 @@ public class AudioPlayerPlayDirective : IDirective
 
     [JsonPropertyName("audioItem")]
     [JsonRequired]
-    public AudioItem AudioItem { get; set; }
+    public AudioItem AudioItem { get; set; } = null!;
 
     [JsonPropertyName("type")]
     public string Type => DirectiveType;

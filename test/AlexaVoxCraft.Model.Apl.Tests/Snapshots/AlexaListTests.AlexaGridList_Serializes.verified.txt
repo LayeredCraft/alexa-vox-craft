@@ -1,0 +1,1 @@
+﻿{"type":"AlexaGridList","customLayoutName":"MyGridLayout","defaultImnageSource":"https://d2o906d8ln7ui1.cloudfront.net/images/BT7_Background.png","imageAspectRatio":"square","listItemHorizontalCount":3,"hideOrdinal":true}

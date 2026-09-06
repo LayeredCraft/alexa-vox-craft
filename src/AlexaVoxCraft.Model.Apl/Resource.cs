@@ -10,7 +10,7 @@ public class Resource : ResourceBase
 
     }
 
-    public Resource(string when = null)
+    public Resource(string? when = null)
     {
         When = when;
     }

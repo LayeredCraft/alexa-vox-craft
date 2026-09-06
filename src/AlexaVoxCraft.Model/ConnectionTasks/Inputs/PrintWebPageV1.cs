@@ -17,17 +17,17 @@ public class PrintWebPageV1 : IConnectionTask
 
     [JsonPropertyName("context")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public ConnectionTaskContext Context { get; set; }
+    public ConnectionTaskContext Context { get; set; } = null!;
 
     [JsonPropertyName("@version")] public string Version => VersionNumber;
 
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = null!;
 
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = null!;
 
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 
 }

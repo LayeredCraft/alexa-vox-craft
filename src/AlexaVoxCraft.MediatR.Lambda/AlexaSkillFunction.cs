@@ -13,9 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-#if !NET9_0_OR_GREATER
-using OpenTelemetry.Trace;
-#endif
 
 namespace AlexaVoxCraft.MediatR.Lambda;
 
@@ -175,11 +172,7 @@ public abstract class AlexaSkillFunction<TRequest, TResponse>
         }
         catch (Exception ex)
         {
-#if NET9_0_OR_GREATER
             span?.AddException(ex);
-#else
-            span?.RecordException(ex);
-#endif
             span?.SetStatus(ActivityStatusCode.Error, ex.Message);
 
             logger.Error(ex, "Lambda execution failed for skill {ApplicationId}", applicationId);

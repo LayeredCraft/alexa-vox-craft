@@ -1,0 +1,1 @@
+﻿{"type":"AlexaSwipeToAction","button1Text":"Archive","button2Text":"Delete","direction":"right","primaryText":"Swipe me","secondaryText":"Details","theme":"dark"}

@@ -1,0 +1,10 @@
+﻿{
+  "Token": "triviaList",
+  "CorrelationToken": "correlation-token-example",
+  "ListId": "my-list-id",
+  "PageToken": "next-page-token",
+  "Type": "Alexa.Presentation.APL.LoadTokenListData",
+  "RequestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "Locale": "en-US",
+  "Timestamp": "DateTime_1"
+}

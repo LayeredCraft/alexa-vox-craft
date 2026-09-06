@@ -71,7 +71,7 @@ public class AVGPath : AVGItem, IJsonSerializable<AVGPath>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public APLValue<string>? Style { get; set; }
 
-    public static void RegisterTypeInfo<T>() where T : AVGPath
+    public new static void RegisterTypeInfo<T>() where T : AVGPath
     {
         AVGItem.RegisterTypeInfo<T>();
         AlexaJsonOptions.RegisterTypeModifier<T>(info =>

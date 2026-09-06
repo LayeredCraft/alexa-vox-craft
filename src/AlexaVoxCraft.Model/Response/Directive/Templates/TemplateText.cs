@@ -6,9 +6,9 @@ public class TemplateText
 {
     [JsonPropertyName("text")]
     [JsonRequired]
-    public string Text { get; set; }
+    public string Text { get; set; } = null!;
 
     [JsonPropertyName("type")]
     [JsonRequired]
-    public string Type { get; set; }
+    public string Type { get; set; } = null!;
 }

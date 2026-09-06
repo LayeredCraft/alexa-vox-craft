@@ -7,5 +7,5 @@ public class AlexaExtensions
 {
     [JsonPropertyName("available")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Dictionary<string, object> Available { get; set; }
+    public Dictionary<string, object> Available { get; set; } = null!;
 }

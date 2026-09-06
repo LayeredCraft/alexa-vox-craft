@@ -1,0 +1,1 @@
+﻿{"type":"AlexaImageList","defaultImageSource":"https://d2o906d8ln7ui1.cloudfront.net/images/BT7_Background.png","listItems":"${imageListData.listItemsToShow}","imageBlurredBackground":true,"primaryAction":{"type":"SendEvent","arguments":["ListItemSelected","${ordinal}"]}}

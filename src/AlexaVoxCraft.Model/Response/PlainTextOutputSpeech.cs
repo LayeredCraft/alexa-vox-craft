@@ -23,7 +23,7 @@ public class PlainTextOutputSpeech : IOutputSpeech
 
     [JsonRequired]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string Text { get; set; } = null!;
 
     [JsonPropertyName("playBehavior")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

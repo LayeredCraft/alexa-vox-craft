@@ -1,0 +1,1 @@
+﻿{"type":"AlexaImageCaption","imageScrim":true,"imageSource":"https://example.com/photo.png","primaryText":"Caption title","secondaryText":"Caption subtitle"}

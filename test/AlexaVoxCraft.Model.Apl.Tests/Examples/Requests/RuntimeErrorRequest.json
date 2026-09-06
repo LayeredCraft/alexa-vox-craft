@@ -1,0 +1,14 @@
+{
+  "type": "Alexa.Presentation.APL.RuntimeError",
+  "requestId": "amzn1.echo-api.request.00000000-0000-0000-0000-000000000000",
+  "timestamp": "2026-01-15T12:34:56Z",
+  "locale": "en-US",
+  "token": "triviaPager",
+  "errors": [
+    {
+      "type": "INVALID_OPERATION",
+      "reason": "INVALID_INDEX",
+      "message": "Index out of bounds"
+    }
+  ]
+}

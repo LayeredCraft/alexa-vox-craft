@@ -31,7 +31,7 @@ public class Layout
     public IList<Parameter>? Parameters { get; set; }
 
     [JsonPropertyName("items")]
-    public IList<APLComponent> Items { get; set; }
+    public IList<APLComponent> Items { get; set; } = null!;
 
     public Layout AsMain(string dataSourceKey = "payload")
     {

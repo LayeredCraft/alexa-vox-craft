@@ -6,5 +6,5 @@ public class PackageManagerContext
 {
     [JsonPropertyName("installedPackages")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public InstalledPackage[] InstalledPackages { get; set; }
+    public InstalledPackage[] InstalledPackages { get; set; } = null!;
 }

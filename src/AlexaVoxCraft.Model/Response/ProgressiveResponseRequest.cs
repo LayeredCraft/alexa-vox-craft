@@ -15,8 +15,8 @@ public class ProgressiveResponseRequest
     }
 
     [JsonPropertyName("header")]
-    public ProgressiveResponseHeader Header { get; set; }
+    public ProgressiveResponseHeader Header { get; set; } = null!;
 
     [JsonPropertyName("directive")]
-    public IProgressiveResponseDirective Directive { get; set; }
+    public IProgressiveResponseDirective Directive { get; set; } = null!;
 }

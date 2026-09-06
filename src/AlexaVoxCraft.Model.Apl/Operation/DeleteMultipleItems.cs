@@ -9,6 +9,7 @@ public class DeleteMultipleItems : Operation
     public DeleteMultipleItems(int index, int count)
     {
         Index = index;
+        Count = count;
     }
 
     public const string OperationType = "DeleteMultipleItems";
