@@ -90,16 +90,19 @@
   <!-- Compono ecosystem migration (PLAN-0051, LayeredCraft/compono) - the
        HTTP-testing-touched projects (AlexaVoxCraft.Smapi.Tests, AlexaVoxCraft.InSkillPurchasing.Tests)
        and their shared HTTP TestKit, plus Compono.Logging (PLAN-0055, LayeredCraft/compono#116,
-       merged) and CompositionBuilder.Share<T>() (PLAN-0056, LayeredCraft/compono#117, merged).
-       1.1.0-preview.103 adds TestHttpHandler.RespondBytes for raw binary payloads (e.g. fetched
-       certificate bytes) - real published NuGet.org preview version - lockstep across all Compono packages. -->
+       merged), CompositionBuilder.Share<T>() (PLAN-0056, LayeredCraft/compono#117, merged), and
+       Compono.Options (PLAN-0064, LayeredCraft/compono#135, merged) - TestOptionsSource<T>/
+       UseOptions<T>() for coherent IOptions<T>/IOptionsSnapshot<T>/IOptionsMonitor<T> composition,
+       adopted in MediatRTestProfile.cs. 1.2.0 is the real published stable NuGet.org release -
+       lockstep across all Compono packages. -->
   <ItemGroup Label="Compono">
-    <PackageVersion Include="Compono" Version="1.1.0-preview.103" />
-    <PackageVersion Include="Compono.XunitV3" Version="1.1.0-preview.103" />
-    <PackageVersion Include="Compono.Http" Version="1.1.0-preview.103" />
-    <PackageVersion Include="Compono.TestDoubles" Version="1.1.0-preview.103" />
-    <PackageVersion Include="Compono.Bogus" Version="1.1.0-preview.103" />
-    <PackageVersion Include="Compono.Logging" Version="1.1.0-preview.103" />
+    <PackageVersion Include="Compono" Version="1.2.0" />
+    <PackageVersion Include="Compono.XunitV3" Version="1.2.0" />
+    <PackageVersion Include="Compono.Http" Version="1.2.0" />
+    <PackageVersion Include="Compono.TestDoubles" Version="1.2.0" />
+    <PackageVersion Include="Compono.Bogus" Version="1.2.0" />
+    <PackageVersion Include="Compono.Logging" Version="1.2.0" />
+    <PackageVersion Include="Compono.Options" Version="1.2.0" />
   </ItemGroup>
   <ItemGroup Label="Reference Assemblies">
     <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.11" />
