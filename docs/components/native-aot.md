@@ -31,6 +31,19 @@ internal partial class MySkillJsonContext : JsonSerializerContext
 AlexaJsonOptions.RegisterTypeInfoResolver(MySkillJsonContext.Default);
 ```
 
+Make the context `internal` when the type it covers and the `RegisterTypeInfoResolver` call live in the same assembly - the common case for a single-project skill. In a modular application where the context lives in one assembly (e.g. a shared contracts project) and another assembly performs the registration, declare it `public` instead so `MySkillJsonContext.Default` is visible across that boundary:
+
+```csharp
+// Contracts assembly
+[JsonSerializable(typeof(GameState))]
+public partial class GameStateJsonContext : JsonSerializerContext
+{
+}
+
+// Different assembly, at startup:
+AlexaJsonOptions.RegisterTypeInfoResolver(GameStateJsonContext.Default);
+```
+
 After this call, `GameState` (and every other type declared with `[JsonSerializable]` on `MySkillJsonContext`) works everywhere AlexaVoxCraft uses `AlexaJsonOptions.DefaultOptions` - `JsonAttributeBag.Set<T>`/`Get<T>` for session/persistent attributes, `AlexaSkillInvocationClient.InvokeAsync<TRequest, TResponse>` for your own request/response bodies, and any `AlexaVoxCraft.Http`-based client's default serialization path.
 
 Registration order doesn't matter relative to when clients or the mediator were constructed - a registration made after a client already exists is still picked up before that client's next actual serialize/deserialize call.
