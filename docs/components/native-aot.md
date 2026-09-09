@@ -65,6 +65,19 @@ Registering only `GameState` is enough for `JsonAttributeBag`/`AlexaVoxCraft.Htt
 
 Registration order doesn't matter relative to when clients or the mediator were constructed - a registration made after a client already exists is still picked up before that client's next actual serialize/deserialize call.
 
+### Custom request types handled only by a default handler
+
+If your skill defines its own `AlexaVoxCraft.Model.Request.Type.Request` subclass (via a custom
+`IRequestTypeResolver`) and that request type is dispatched only to an `IDefaultRequestHandler` -
+never to a specific `IRequestHandler<T>` - it must still appear as a `[JsonSerializable]` root in a
+`JsonSerializerContext` registered with `AlexaJsonOptions.RegisterTypeInfoResolver`. The generated DI
+registration discovers which request types a default handler might receive by scanning
+`[JsonSerializable]` roots on every `JsonSerializerContext` in `AlexaVoxCraft.Model`/`AlexaVoxCraft.Model.*`
+assemblies plus your own skill's assembly; a custom request type with no such root is invisible to that
+scan. Under Native AOT this means `SkillMediator.Send` falls back silently to the unsupported
+`MakeGenericType` path for that request type instead of using the generated keyed-DI dispatch -
+register the type as a root even if nothing else in your code serializes it directly.
+
 ## JIT fallback vs. Native AOT requirement
 
 When reflection is available (any normal `dotnet run`/`dotnet publish` without `PublishAot`), AlexaVoxCraft falls back to reflection-based serialization for a type it doesn't otherwise have metadata for - registering your own context is optional there, purely a performance/startup-time optimization.

@@ -5,7 +5,8 @@ on:
     branches:
       - main
 
-permissions: write-all
+permissions:
+  contents: read
 
 jobs:
   native-aot-validation:
