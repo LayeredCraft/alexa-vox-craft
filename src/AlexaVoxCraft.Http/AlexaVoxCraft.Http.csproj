@@ -16,4 +16,14 @@
         <PackageReference Include="Microsoft.Extensions.Logging"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="AlexaVoxCraft.Smapi" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Http.TestKit" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.InSkillPurchasing" />
+    </ItemGroup>
+
 </Project>

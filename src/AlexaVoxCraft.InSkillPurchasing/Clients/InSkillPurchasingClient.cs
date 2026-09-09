@@ -1,5 +1,11 @@
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using AlexaVoxCraft.Http.Clients;
+using AlexaVoxCraft.Http.Serialization;
 using AlexaVoxCraft.InSkillPurchasing.Models;
+using AlexaVoxCraft.InSkillPurchasing.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace AlexaVoxCraft.InSkillPurchasing.Clients;
@@ -15,7 +21,14 @@ public sealed class InSkillPurchasingClient : BaseClient, IInSkillPurchasingClie
     /// <param name="httpClient">The HTTP client configured with the ISP base address.</param>
     /// <param name="logger">The logger instance.</param>
     public InSkillPurchasingClient(HttpClient httpClient, ILogger<InSkillPurchasingClient> logger) : base(httpClient,
-        logger)
+        logger, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            TypeInfoResolver = JsonTypeInfoResolver.Combine(InSkillPurchasingClientModelContext.Default, DelegatingModelTypeInfoResolver.Instance),
+        })
     {
     }
 

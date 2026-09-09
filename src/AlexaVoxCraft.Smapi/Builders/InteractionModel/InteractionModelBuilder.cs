@@ -2,7 +2,10 @@ using System.Collections.Immutable;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+using AlexaVoxCraft.Http.Serialization;
 using AlexaVoxCraft.Smapi.Models.InteractionModel;
+using AlexaVoxCraft.Smapi.Serialization;
 
 namespace AlexaVoxCraft.Smapi.Builders.InteractionModel;
 
@@ -185,7 +188,8 @@ public sealed class InteractionModelBuilder
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            TypeInfoResolver = JsonTypeInfoResolver.Combine(SmapiModelContext.Default, DelegatingModelTypeInfoResolver.Instance),
         };
 
         return JsonSerializer.Serialize(model, options);

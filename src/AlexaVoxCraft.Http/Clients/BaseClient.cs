@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Http.Serialization;
 using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.Logging;
 
@@ -39,6 +40,7 @@ public abstract class BaseClient
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         WriteIndented = true,
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        TypeInfoResolver = DelegatingModelTypeInfoResolver.Instance,
     })
     {
     }
