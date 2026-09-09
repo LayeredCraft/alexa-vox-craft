@@ -48,9 +48,13 @@ file static class AlexaVoxCraftInterceptors
 
         // Request Handlers
         services.AddSingleton<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.SessionEndedRequest>, global::Sample.Generated.Function.SessionEndedHandler>();
+        services.AddKeyedSingleton<AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapper>(typeof(AlexaVoxCraft.Model.Request.Type.SessionEndedRequest), (sp, key) => new AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapperImpl<AlexaVoxCraft.Model.Request.Type.SessionEndedRequest>());
         services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.LaunchRequest>, global::Sample.Generated.Function.LaunchTriviaHandler>();
+        services.AddKeyedSingleton<AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapper>(typeof(AlexaVoxCraft.Model.Request.Type.LaunchRequest), (sp, key) => new AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapperImpl<AlexaVoxCraft.Model.Request.Type.LaunchRequest>());
         services.AddScoped<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.IntentRequest>, global::Sample.Generated.Function.AnswerHandler>();
+        services.AddKeyedSingleton<AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapper>(typeof(AlexaVoxCraft.Model.Request.Type.IntentRequest), (sp, key) => new AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapperImpl<AlexaVoxCraft.Model.Request.Type.IntentRequest>());
         services.AddScoped<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Apl.UserEventRequest>, global::Sample.Generated.Function.AnswerHandler>();
+        services.AddKeyedSingleton<AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapper>(typeof(AlexaVoxCraft.Model.Apl.UserEventRequest), (sp, key) => new AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapperImpl<AlexaVoxCraft.Model.Apl.UserEventRequest>());
         services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.IntentRequest>, global::Sample.Generated.Function.HelpIntentHandler>();
         services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.IntentRequest>, global::Sample.Generated.Function.RepeatIntentHandler>();
         services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.IntentRequest>, global::Sample.Generated.Function.StopOrCancelHandler>();

@@ -55,9 +55,10 @@ public class SkillMediator : ISkillMediator
 
         var requestTypeInternal = request.Request.GetType();
 
-        var handler = RequestHandlers.GetOrAdd(requestTypeInternal,
-            static t => (RequestHandlerWrapper)(Activator.CreateInstance(typeof(RequestHandlerWrapperImpl<>)
-                .MakeGenericType(t)) ?? throw new InvalidOperationException($"Could not create wrapper type for {t}")));
+        var handler = _serviceProvider.GetKeyedService<RequestHandlerWrapper>(requestTypeInternal)
+            ?? RequestHandlers.GetOrAdd(requestTypeInternal,
+                static t => (RequestHandlerWrapper)(Activator.CreateInstance(typeof(RequestHandlerWrapperImpl<>)
+                    .MakeGenericType(t)) ?? throw new InvalidOperationException($"Could not create wrapper type for {t}")));
 
         logger.Debug("Successfully resolved handler for {RequestType}", requestType);
 

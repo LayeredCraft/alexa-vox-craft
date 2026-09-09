@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
 using AlexaVoxCraft.MediatR.Generators.Models;
@@ -94,6 +95,14 @@ internal static class InterceptorEmitter
 
         sb.AppendLine("        // Request Handlers");
 
+        // Keyed-DI bridge (ADR-0001, plan 0003 Task Group 5): one AddKeyedSingleton<RequestHandlerWrapper>
+        // per distinct request type, keyed by the request's runtime System.Type. SkillMediator.Send tries
+        // GetKeyedService<RequestHandlerWrapper>(requestType) first, falling back to its existing
+        // MakeGenericType path only when no keyed registration exists (interceptor-disabled carve-out).
+        // Emitted once per distinct RequestType even when multiple IRequestHandler<T> implementations
+        // share that T - RequestHandlerWrapperImpl<T> already iterates all registered handlers internally.
+        var emittedWrapperKeys = new HashSet<string>();
+
         foreach (var handler in model.Handlers)
         {
             var method = ToLifetimeMethod(handler.Lifetime);
@@ -103,6 +112,11 @@ internal static class InterceptorEmitter
             {
                 var requestTypeName = handler.RequestType.Value.FullyQualifiedName;
                 sb.AppendLine($"        services.{method}<AlexaVoxCraft.MediatR.IRequestHandler<{requestTypeName}>, {typeName}>();");
+
+                if (emittedWrapperKeys.Add(requestTypeName))
+                {
+                    sb.AppendLine($"        services.AddKeyedSingleton<AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapper>(typeof({requestTypeName}), (sp, key) => new AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapperImpl<{requestTypeName}>());");
+                }
             }
             else
             {
