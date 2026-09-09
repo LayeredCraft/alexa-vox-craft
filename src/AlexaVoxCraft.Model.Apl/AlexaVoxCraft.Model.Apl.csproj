@@ -16,4 +16,9 @@
     <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="AlexaVoxCraft.Model.Apl.Tests" />
+    <InternalsVisibleTo Include="AlexaVoxCraft.Model.Apl.Legacy.Tests" />
+  </ItemGroup>
+
 </Project>
