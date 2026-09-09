@@ -65,7 +65,11 @@ public class APLComponentConverter : BasePolymorphicConverter<APLComponent>
     protected override IDictionary<string, Type> DerivedTypes => AplComponentLookup;
     protected override JsonElement TransformJson(JsonElement original)
     {
-        var obj = original.Deserialize<JsonObject>() ?? new JsonObject();
+        // JsonNode.Parse/JsonDocument.Parse operate purely on the JSON DOM and never resolve a
+        // JsonTypeInfo, unlike JsonElement.Deserialize<T>()/JsonSerializer.Deserialize<T>(string)
+        // (used previously here) - those go through the normal serializer metadata pipeline and throw
+        // under Native AOT when reflection is disabled and no options/resolver is supplied.
+        var obj = JsonNode.Parse(original.GetRawText()) as JsonObject ?? new JsonObject();
 
         string? type = obj["type"]?.GetValue<string>();
         if (string.IsNullOrEmpty(type))
@@ -101,7 +105,7 @@ public class APLComponentConverter : BasePolymorphicConverter<APLComponent>
                 break;
         }
 
-        return JsonSerializer.Deserialize<JsonElement>(obj.ToJsonString());
+        return JsonDocument.Parse(obj.ToJsonString()).RootElement;
     }
 
     private static void Move(JsonObject json, string from, string to)

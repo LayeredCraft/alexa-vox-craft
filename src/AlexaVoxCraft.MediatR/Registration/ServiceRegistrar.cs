@@ -206,20 +206,32 @@ public static class ServiceRegistrar
         services.TryAddTransient<IHandlerInput, DefaultHandlerInput>();
         services.TryAddScoped<IAttributesManager, AttributesManager>();
         services.TryAddScoped<IResponseBuilder, DefaultResponseBuilder>();
-        services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(PerformanceLoggingBehavior));
-        services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestInterceptorBehavior));
-        services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(ResponseInterceptorBehavior));
-        services.TryAddTransientExact(typeof(IPipelineBehavior), typeof(RequestExceptionProcessBehavior));
+        services.TryAddTransientExact<IPipelineBehavior, PerformanceLoggingBehavior>();
+        services.TryAddTransientExact<IPipelineBehavior, RequestInterceptorBehavior>();
+        services.TryAddTransientExact<IPipelineBehavior, ResponseInterceptorBehavior>();
+        services.TryAddTransientExact<IPipelineBehavior, RequestExceptionProcessBehavior>();
 
         return services;
     }
 
-    private static void TryAddTransientExact(this IServiceCollection services, Type serviceType,
-        Type implementationType)
+    // Compile-time-closed generic registration (not the Type,Type overload) - this is the supported
+    // Native AOT path (called unconditionally by both the generator-interceptor and reflection-fallback
+    // AddSkillMediator paths, per plan 0003 Task Group 6): AddTransient(Type,Type)'s
+    // DynamicallyAccessedMembers-annotated Type parameters preserve constructor *metadata* for
+    // trimming, but do not by themselves guarantee the AOT compiler emits native code for that
+    // constructor's reflective invocation the way the generic AddTransient<TService,TImplementation>()
+    // overload does - confirmed empirically via the rooted Native AOT validation app
+    // (test/AlexaVoxCraft.NativeAot.ValidationApp), which failed constructing PerformanceLoggingBehavior
+    // at runtime under a published native binary until this method switched to the generic overload.
+    private static void TryAddTransientExact<TService,
+        [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicConstructors)] TImplementation>(
+        this IServiceCollection services)
+        where TService : class
+        where TImplementation : class, TService
     {
-        if (services.Any(reg => reg.ServiceType == serviceType && reg.ImplementationType == implementationType))
+        if (services.Any(reg => reg.ServiceType == typeof(TService) && reg.ImplementationType == typeof(TImplementation)))
             return;
 
-        services.AddTransient(serviceType, implementationType);
+        services.AddTransient<TService, TImplementation>();
     }
 }
