@@ -35,6 +35,7 @@ var count = container.Count;
 - **:speaker: Voice-Touch Sync**: Coordinated audio and visual experiences
 - **:wrench: Custom Layouts**: Reusable layout components and transformers
 - **:iphone: Device Adaptive**: Responsive design for different screen sizes
+- **:rocket: Native AOT Ready**: `AplSupport.Add()` also wires the serialization metadata required by Native AOT - see [Native AOT support](native-aot.md)
 
 ## Basic Usage
 

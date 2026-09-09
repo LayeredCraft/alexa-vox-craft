@@ -54,6 +54,8 @@ await app.RunAsync();
 - `BuyConnectionRequestHandler`, `UpsellConnectionRequestHandler`, and `CancelConnectionRequestHandler` with the `ConnectionSendRequestFactory`
 - `ConnectionResponseHandler` with the `ConnectionResponseTypeResolver`
 
+`InSkillPurchasingSupport.Add()` also supplies ISP's serialization metadata automatically, so ISP works under Native AOT with no extra registration - see [Native AOT support](native-aot.md).
+
 ### HTTP Client
 
 `AddInSkillPurchasing()` registers `IInSkillPurchasingClient` as an `HttpClient`-backed service. It automatically attaches the Alexa `apiAccessToken` as a bearer token and forwards the skill locale on every request:
