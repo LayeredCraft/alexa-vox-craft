@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
 using AlexaVoxCraft.Model.Serialization;
@@ -176,7 +175,7 @@ public class AlexaSwipeToAction : APLComponent, IJsonSerializable<AlexaSwipeToAc
 
     [JsonPropertyName("componentSlot")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<Component>? ComponentSlot { get; set; }
+    public APLValue<APLComponent>? ComponentSlot { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : AlexaSwipeToAction
     {

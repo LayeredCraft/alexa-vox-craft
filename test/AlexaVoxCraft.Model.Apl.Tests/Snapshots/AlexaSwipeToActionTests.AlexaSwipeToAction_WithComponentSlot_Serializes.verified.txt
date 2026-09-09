@@ -1,0 +1,1 @@
+﻿{"type":"AlexaSwipeToAction","primaryText":"Swipe me","componentSlot":{"type":"Container"}}
