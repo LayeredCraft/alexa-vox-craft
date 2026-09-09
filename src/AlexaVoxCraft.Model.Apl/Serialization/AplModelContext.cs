@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl;
 using AlexaVoxCraft.Model.Apl.Audio;
 using AlexaVoxCraft.Model.Apl.Audio.Filters;
 using AlexaVoxCraft.Model.Apl.Commands;
@@ -209,6 +210,12 @@ namespace AlexaVoxCraft.Model.Apl.Serialization;
 [JsonSerializable(typeof(DataStoreErrorRequest))]
 [JsonSerializable(typeof(AudioLayout))]
 [JsonSerializable(typeof(APLDocumentEnvironment))]
+// Root types directly passed to JsonSerializer by DataStoreClient/APLInterface/APLTInterface
+[JsonSerializable(typeof(CommandsRequest))]
+[JsonSerializable(typeof(CommandsResponse))]
+[JsonSerializable(typeof(QueuedResultResponse))]
+[JsonSerializable(typeof(APLInterfaceDetails))]
+[JsonSerializable(typeof(AccessToken))]
 internal partial class AplModelContext : JsonSerializerContext
 {
 }

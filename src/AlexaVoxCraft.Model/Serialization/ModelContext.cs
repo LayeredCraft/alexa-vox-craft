@@ -13,6 +13,11 @@ namespace AlexaVoxCraft.Model.Serialization;
 // type a polymorphic converter can resolve to via System.Type) need an explicit entry here.
 [JsonSerializable(typeof(SkillRequest))]
 [JsonSerializable(typeof(SkillResponse))]
+// ProgressiveResponse.Send serializes this directly
+[JsonSerializable(typeof(ProgressiveResponseRequest))]
+// PinConfirmationResolver resolves/deserializes these directly
+[JsonSerializable(typeof(PinConfirmation))]
+[JsonSerializable(typeof(PinConfirmationResult))]
 // Request-side polymorphic targets (RequestConverter / IRequestTypeResolver implementations)
 [JsonSerializable(typeof(IntentRequest))]
 [JsonSerializable(typeof(LaunchRequest))]

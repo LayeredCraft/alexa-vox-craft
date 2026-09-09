@@ -39,7 +39,11 @@ public class AplModelContextCompletenessTests
             {
                 instance = Activator.CreateInstance(converterType);
             }
-            catch
+            catch (MissingMethodException)
+            {
+                continue;
+            }
+            catch (TargetInvocationException)
             {
                 continue;
             }

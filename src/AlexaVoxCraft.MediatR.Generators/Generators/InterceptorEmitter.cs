@@ -7,6 +7,29 @@ namespace AlexaVoxCraft.MediatR.Generators.Generators;
 
 internal static class InterceptorEmitter
 {
+    // Closed set of concrete AlexaVoxCraft.Model.Request.Type.Request-derived types - the same set
+    // AlexaVoxCraft.Model/Serialization/ModelContext.cs roots for source-gen JSON metadata. When a
+    // consumer registers an IDefaultRequestHandler, SkillMediator.Send may dispatch any of these
+    // request types to it without a matching IRequestHandler<T>, so each needs its own keyed
+    // RequestHandlerWrapper too - otherwise dispatch falls through to the MakeGenericType path, which
+    // is unsupported under Native AOT (ADR-0001).
+    private static readonly string[] KnownRequestTypeNames =
+    [
+        "global::AlexaVoxCraft.Model.Request.Type.IntentRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.LaunchRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.SessionEndedRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.SystemExceptionRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.AudioPlayerRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.PlaybackControllerRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.DisplayElementSelectedRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.AccountLinkSkillEventRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.PermissionSkillEventRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.SkillEnablementSkillEventRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.SkillEventRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.SessionResumedRequest",
+        "global::AlexaVoxCraft.Model.Request.Type.AskForPermissionRequest",
+    ];
+
     public static string EmitInterceptors(ImmutableArray<InterceptorLocation> locations, RegistrationModel model)
     {
         var sb = new StringBuilder();
@@ -128,6 +151,16 @@ internal static class InterceptorEmitter
         {
             var typeName = model.DefaultHandler.Value.Type.FullyQualifiedName;
             sb.AppendLine($"        services.TryAddTransient<AlexaVoxCraft.MediatR.IDefaultRequestHandler, {typeName}>();");
+
+            // A default handler can receive any known request type that has no specific
+            // IRequestHandler<T> registered - give each of those its own keyed wrapper too.
+            foreach (var requestTypeName in KnownRequestTypeNames)
+            {
+                if (emittedWrapperKeys.Add(requestTypeName))
+                {
+                    sb.AppendLine($"        services.AddKeyedSingleton<AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapper>(typeof({requestTypeName}), (sp, key) => new AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapperImpl<{requestTypeName}>());");
+                }
+            }
         }
 
         sb.AppendLine();

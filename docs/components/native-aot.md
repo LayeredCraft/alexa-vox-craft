@@ -46,6 +46,23 @@ AlexaJsonOptions.RegisterTypeInfoResolver(GameStateJsonContext.Default);
 
 After this call, `GameState` (and every other type declared with `[JsonSerializable]` on `MySkillJsonContext`) works everywhere AlexaVoxCraft uses `AlexaJsonOptions.DefaultOptions` - `JsonAttributeBag.Set<T>`/`Get<T>` for session/persistent attributes, `AlexaSkillInvocationClient.InvokeAsync<TRequest, TResponse>` for your own request/response bodies, and any `AlexaVoxCraft.Http`-based client's default serialization path.
 
+For `AlexaSkillInvocationClient.InvokeAsync<TRequest, TResponse>` specifically, register the closed envelope types too - `SmapiModelContext` intentionally does not include them, since it cannot know your `TRequest`/`TResponse` ahead of time:
+
+```csharp
+[JsonSerializable(typeof(GameState))]
+[JsonSerializable(typeof(SkillInvocationRequest<GameState>))]
+[JsonSerializable(typeof(SkillInvocationResponse<GameState>))]
+[JsonSerializable(typeof(SkillInvocationBody<GameState>))]
+[JsonSerializable(typeof(SkillInvocationResult<GameState>))]
+[JsonSerializable(typeof(SkillExecutionInfo<GameState>))]
+[JsonSerializable(typeof(InvocationResponseInfo<GameState>))]
+internal partial class MySkillJsonContext : JsonSerializerContext
+{
+}
+```
+
+Registering only `GameState` is enough for `JsonAttributeBag`/`AlexaVoxCraft.Http` paths, but `InvokeAsync<GameState, GameState>` will fail with the missing-metadata error below until the envelope types above are also registered.
+
 Registration order doesn't matter relative to when clients or the mediator were constructed - a registration made after a client already exists is still picked up before that client's next actual serialize/deserialize call.
 
 ## JIT fallback vs. Native AOT requirement
