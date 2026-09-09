@@ -60,10 +60,14 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
             .Combine(explicitAssemblyNamesProvider)
             .Select(static (data, _) => DiscoverReferencedAssemblyTypes(data.Left, data.Right));
 
+        var knownRequestTypesProvider = context.CompilationProvider
+            .Select(static (compilation, _) => DiscoverKnownRequestTypes(compilation));
+
         var modelWithDiagnostics = allTypes
             .Collect()
             .Combine(referencedAssemblyTypes)
-            .Select(static (data, _) => BuildRegistrationModel(data.Left, data.Right));
+            .Combine(knownRequestTypesProvider)
+            .Select(static (data, _) => BuildRegistrationModel(data.Left.Left, data.Left.Right, data.Right));
 
         var combined = callSiteProvider
             .Collect()
@@ -233,7 +237,8 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
 
     private static ModelWithDiagnostics BuildRegistrationModel(
         ImmutableArray<DiscoveredTypeInfo> sourceTypes,
-        EquatableArray<DiscoveredTypeInfo> referencedAssemblyTypes)
+        EquatableArray<DiscoveredTypeInfo> referencedAssemblyTypes,
+        EquatableArray<string> knownRequestTypes)
     {
         var merged = new List<DiscoveredTypeInfo>(sourceTypes.Length + referencedAssemblyTypes.Count);
         var seen = new HashSet<string>(StringComparer.Ordinal);
@@ -254,7 +259,107 @@ public class AlexaVoxCraftDiGenerator : IIncrementalGenerator
             }
         }
 
-        return SymbolDiscovery.BuildModel(merged.ToImmutableArray());
+        return SymbolDiscovery.BuildModel(merged.ToImmutableArray(), knownRequestTypes);
+    }
+
+    // Discovers the closed set of concrete AlexaVoxCraft.Model.Request.Type.Request-derived types a
+    // Native AOT default handler might have to dispatch to (ADR-0001). Rather than hand-maintaining a
+    // list (which already proved incomplete once - see PR #188 review history), this reads the roots
+    // AlexaVoxCraft packages already curate by hand: every [JsonSerializable(typeof(X))] on any
+    // JsonSerializerContext in a referenced AlexaVoxCraft.* assembly, filtered to X deriving from
+    // Request. This also picks up closed generic request types (e.g. In-Skill Purchasing's
+    // ConnectionResponseRequest<ConnectionResponsePayload>) that a plain declared-type symbol walk
+    // could never find, since they exist only as typeof(...) use sites, not type declarations.
+    private static EquatableArray<string> DiscoverKnownRequestTypes(Compilation compilation)
+    {
+        var requestBaseType = compilation.GetTypeByMetadataName("AlexaVoxCraft.Model.Request.Type.Request");
+        var jsonSerializableAttribute = compilation.GetTypeByMetadataName("System.Text.Json.Serialization.JsonSerializableAttribute");
+
+        if (requestBaseType is null || jsonSerializableAttribute is null)
+        {
+            return new EquatableArray<string>(Array.Empty<string>());
+        }
+
+        var results = new HashSet<string>(StringComparer.Ordinal);
+
+        CollectKnownRequestTypesFromNamespace(compilation.Assembly.GlobalNamespace, requestBaseType, jsonSerializableAttribute, results);
+
+        foreach (var assembly in compilation.SourceModule.ReferencedAssemblySymbols)
+        {
+            var name = assembly.Identity.Name;
+            if (!string.Equals(name, "AlexaVoxCraft.Model", StringComparison.Ordinal) &&
+                !name.StartsWith("AlexaVoxCraft.Model.", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            CollectKnownRequestTypesFromNamespace(assembly.GlobalNamespace, requestBaseType, jsonSerializableAttribute, results);
+        }
+
+        var sorted = results.ToArray();
+        Array.Sort(sorted, StringComparer.Ordinal);
+        return new EquatableArray<string>(sorted);
+    }
+
+    private static void CollectKnownRequestTypesFromNamespace(
+        INamespaceSymbol namespaceSymbol,
+        INamedTypeSymbol requestBaseType,
+        INamedTypeSymbol jsonSerializableAttribute,
+        HashSet<string> results)
+    {
+        foreach (var typeSymbol in namespaceSymbol.GetTypeMembers())
+        {
+            CollectKnownRequestTypesFromType(typeSymbol, requestBaseType, jsonSerializableAttribute, results);
+        }
+
+        foreach (var childNamespace in namespaceSymbol.GetNamespaceMembers())
+        {
+            CollectKnownRequestTypesFromNamespace(childNamespace, requestBaseType, jsonSerializableAttribute, results);
+        }
+    }
+
+    private static void CollectKnownRequestTypesFromType(
+        INamedTypeSymbol typeSymbol,
+        INamedTypeSymbol requestBaseType,
+        INamedTypeSymbol jsonSerializableAttribute,
+        HashSet<string> results)
+    {
+        foreach (var attribute in typeSymbol.GetAttributes())
+        {
+            if (!SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, jsonSerializableAttribute))
+            {
+                continue;
+            }
+
+            if (attribute.ConstructorArguments.Length == 0 ||
+                attribute.ConstructorArguments[0].Value is not INamedTypeSymbol rootType)
+            {
+                continue;
+            }
+
+            if (InheritsFrom(rootType, requestBaseType))
+            {
+                results.Add(rootType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+            }
+        }
+
+        foreach (var nestedType in typeSymbol.GetTypeMembers())
+        {
+            CollectKnownRequestTypesFromType(nestedType, requestBaseType, jsonSerializableAttribute, results);
+        }
+    }
+
+    private static bool InheritsFrom(INamedTypeSymbol type, INamedTypeSymbol baseType)
+    {
+        for (var current = type.BaseType; current is not null; current = current.BaseType)
+        {
+            if (SymbolEqualityComparer.Default.Equals(current, baseType))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static EquatableArray<DiscoveredTypeInfo> DiscoverReferencedAssemblyTypes(
