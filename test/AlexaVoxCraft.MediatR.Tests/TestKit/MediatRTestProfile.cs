@@ -8,9 +8,9 @@ using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Request.Type;
 using Compono;
 using Compono.Logging;
+using Compono.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace AlexaVoxCraft.MediatR.Tests.TestKit;
 
@@ -25,7 +25,14 @@ namespace AlexaVoxCraft.MediatR.Tests.TestKit;
 /// </summary>
 public sealed class MediatRTestProfile : ICompositionProfile
 {
-    public void Configure(CompositionBuilder builder) =>
+    public void Configure(CompositionBuilder builder)
+    {
+        var defaultSkillServiceConfiguration = new SkillServiceConfiguration
+        {
+            SkillId = "amzn1.ask.skill.default-test-id",
+            CustomUserAgent = "TestAgent/1.0",
+        };
+
         builder
             // UseLogging() registered before UseGeneratedTestDoubles() (stage-6 first-registered-
             // wins, ADR-0055) - PerformanceLoggingBehavior's ILogger<T> asserts observable log
@@ -129,13 +136,20 @@ public sealed class MediatRTestProfile : ICompositionProfile
             // default construction until given its own explicit default here. Matches the old
             // SkillServiceConfigurationSpecimenBuilder's own generic fallback
             // (CreateDefaultConfiguration) - a non-null, matchable SkillId, not a magic/random one.
-            .Register<SkillServiceConfiguration>(_ => new SkillServiceConfiguration
-            {
-                SkillId = "amzn1.ask.skill.default-test-id",
-                CustomUserAgent = "TestAgent/1.0",
-            })
-            .Register<IOptions<SkillServiceConfiguration>>(context =>
-                Options.Create(context.Resolve<SkillServiceConfiguration>()))
+            // Compono.Options (docs/adr/0061-compono-options-testing-support.md): one
+            // TestOptionsSource<SkillServiceConfiguration> is the single source of truth for both
+            // the plain SkillServiceConfiguration dependency (ServiceRegistrarTests' own theory
+            // parameters) and IOptions<SkillServiceConfiguration> (SkillMediatorTests/
+            // DefaultResponseBuilderTests' generic-case parameters) - previously two
+            // separately-maintained registrations wired by hand
+            // (Register<SkillServiceConfiguration> plus
+            // Register<IOptions<SkillServiceConfiguration>>(context => Options.Create(context.Resolve<SkillServiceConfiguration>()))).
+            // UseOptions<T> replaces the second registration; the plain type is still registered
+            // separately from the same instance since ServiceRegistrarTests needs
+            // SkillServiceConfiguration itself, not IOptions<T> - UseOptions<T> only wires
+            // IOptions<T>/IOptionsSnapshot<T>/IOptionsMonitor<T>, by design.
+            .Register<SkillServiceConfiguration>(() => defaultSkillServiceConfiguration)
+            .UseOptions(new TestOptionsSource<SkillServiceConfiguration>(defaultSkillServiceConfiguration))
             // SkillRequest.Request is `abstract class Request` - a provider-resolved leaf with no
             // registration, so plain auto-composition always leaves it null. The old
             // SkillRequestSpecimenBuilder was itself parameter-name-keyed (launch/intent/help/
@@ -167,4 +181,5 @@ public sealed class MediatRTestProfile : ICompositionProfile
                 Version = "1.0",
                 Response = new ResponseBody(),
             });
+    }
 }
