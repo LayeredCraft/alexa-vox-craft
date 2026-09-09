@@ -11,4 +11,12 @@
         <PackageTags>alexa;model;request;response;directive;voxcraft;skills</PackageTags>
     </PropertyGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.Apl" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.InSkillPurchasing" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Smapi" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.Tests" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.Legacy.Tests" />
+    </ItemGroup>
+
 </Project>
