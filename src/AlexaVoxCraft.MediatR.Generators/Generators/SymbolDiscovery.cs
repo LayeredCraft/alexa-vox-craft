@@ -16,7 +16,7 @@ internal static class SymbolDiscovery
     private const string IResponseInterceptorName = "AlexaVoxCraft.MediatR.Pipeline.IResponseInterceptor";
     private const string IPersistenceAdapterName = "AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter";
 
-    public static ModelWithDiagnostics BuildModel(ImmutableArray<DiscoveredTypeInfo> types)
+    public static ModelWithDiagnostics BuildModel(ImmutableArray<DiscoveredTypeInfo> types, EquatableArray<string> knownRequestTypes)
     {
         var handlers = new List<HandlerRegistration>();
         HandlerRegistration? defaultHandler = null;
@@ -125,7 +125,8 @@ internal static class SymbolDiscovery
             new EquatableArray<TypeRegistration>(exceptionHandlers),
             new EquatableArray<TypeRegistration>(requestInterceptors),
             new EquatableArray<TypeRegistration>(responseInterceptors),
-            persistenceAdapter
+            persistenceAdapter,
+            knownRequestTypes
         );
 
         return new ModelWithDiagnostics(model, new EquatableArray<DiagnosticInfo>(diagnostics));

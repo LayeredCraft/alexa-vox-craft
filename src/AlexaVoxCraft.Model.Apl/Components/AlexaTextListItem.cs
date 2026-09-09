@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.Components;
 
@@ -25,7 +24,7 @@ public class AlexaTextListItem : AlexaPaginatedListItem, IJsonSerializable<Alexa
 
     [JsonPropertyName("componentSlot")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public APLValue<Component>? ComponentSlot { get; set; }
+    public APLValue<APLComponent>? ComponentSlot { get; set; }
 
     public new static void RegisterTypeInfo<T>() where T : AlexaTextListItem
     {

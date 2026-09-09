@@ -5,6 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AlexaVoxCraft.Model.Apl.Audio;
+using AlexaVoxCraft.Model.Apl.Commands;
+using AlexaVoxCraft.Model.Apl.Components;
+using AlexaVoxCraft.Model.Apl.Filters;
+using AlexaVoxCraft.Model.Apl.Gestures;
+using AlexaVoxCraft.Model.Apl.VectorGraphics;
 using AlexaVoxCraft.Model.Helpers;
 using AlexaVoxCraft.Model.Serialization;
 
@@ -95,58 +101,6 @@ internal static partial class TypeExtensions
     internal static bool IsNumberType(this Type type) => NumberTypes.Contains(type);
 }
 
-public class APLEnumerableValueConverter<TValue, TList> : JsonConverter<APLValue<TList>>
-    where TList : IEnumerable<TValue>
-{
-    public override APLValue<TList>? Read(ref Utf8JsonReader reader, Type typeToConvert,
-        JsonSerializerOptions options)
-    {
-        var returnValue = new APLValue<TList>();
-
-        using var document = JsonDocument.ParseValue(ref reader);
-        var root = document.RootElement;
-        switch (root.ValueKind)
-        {
-            case JsonValueKind.Object:
-                returnValue.Value = (TList)new List<TValue> { root.Deserialize<TValue>(options)! }.AsEnumerable();
-                returnValue.IsSingle = true;
-                break;
-            case JsonValueKind.Array:
-                returnValue.Value = (TList)root.EnumerateArray()
-                    .Select(element => JsonSerializer.Deserialize<TValue>(element.GetRawText(), options))
-                    // The ToList() is required here to iterate the array as the JsonDcoument above will be disposed
-                    .ToList()
-                    .AsEnumerable();
-                break;
-            case JsonValueKind.String:
-                returnValue.Expression = root.GetString();
-                break;
-            default:
-                throw new JsonException("Invalid JSON for Enumeration");
-        }
-
-        return returnValue;
-    }
-
-    public override void Write(Utf8JsonWriter writer, APLValue<TList> value, JsonSerializerOptions options)
-    {
-        object? obj;
-        if (!string.IsNullOrEmpty(value.Expression))
-        {
-            obj = value.Expression;
-        }
-        else if (value.IsSingle)
-        {
-            obj = value.Value!.First();
-        }
-        else
-        {
-            obj = value.Value;
-        }
-        JsonSerializer.Serialize(writer, obj, options);
-    }
-}
-
 public class APLDimensionValueConverter : JsonConverter<APLDimensionValue>
 {
     public override APLDimensionValue? Read(ref Utf8JsonReader reader, Type typeToConvert,
@@ -188,6 +142,98 @@ public class APLValueConverterFactory : JsonConverterFactory
     private static Type _aplObjectType = typeof(APLValue<object>);
     private static List<Type> _dimensionTypes = [_aplDimensionType, _aplAbsoluteDimensionType, _aplObjectType];
     private static readonly ConcurrentDictionary<Type, System.Text.Json.Serialization.JsonConverter?> _converterCache = new();
+
+    // Closed dispatch for every APLValue<T> instantiation this library ships, keyed by T (not
+    // APLValue<T>) - compile-time-closed, no MakeGenericType/Activator.CreateInstance. Assembled from
+    // every APLValue<...> declaration under src/, test/, samples/ during Task Group 4 planning; re-verify
+    // this list stays complete whenever a new APLValue<T>-typed property is added.
+    private static readonly Dictionary<Type, Func<System.Text.Json.Serialization.JsonConverter>> _valueConverters = new()
+    {
+        { typeof(APLComponent), static () => new APLValueConverter<APLComponent>() },
+        { typeof(APLDisplay), static () => new APLValueConverter<APLDisplay>() },
+        { typeof(APLDisplay?), static () => new APLValueConverter<APLDisplay?>() },
+        { typeof(APLGradient), static () => new APLValueConverter<APLGradient>() },
+        { typeof(AVGParameterType), static () => new APLValueConverter<AVGParameterType>() },
+        { typeof(AVGParameterType?), static () => new APLValueConverter<AVGParameterType?>() },
+        { typeof(AVGScaleType), static () => new APLValueConverter<AVGScaleType>() },
+        { typeof(AVGScaleType?), static () => new APLValueConverter<AVGScaleType?>() },
+        { typeof(AlexaImageAlignment), static () => new APLValueConverter<AlexaImageAlignment>() },
+        { typeof(AlexaImageAlignment?), static () => new APLValueConverter<AlexaImageAlignment?>() },
+        { typeof(AlexaImageAspectRatio), static () => new APLValueConverter<AlexaImageAspectRatio>() },
+        { typeof(AlexaImageAspectRatio?), static () => new APLValueConverter<AlexaImageAspectRatio?>() },
+        { typeof(BlendMode), static () => new APLValueConverter<BlendMode>() },
+        { typeof(BlendMode?), static () => new APLValueConverter<BlendMode?>() },
+        { typeof(ContainerWrap), static () => new APLValueConverter<ContainerWrap>() },
+        { typeof(ContainerWrap?), static () => new APLValueConverter<ContainerWrap?>() },
+        { typeof(ContentDirection), static () => new APLValueConverter<ContentDirection>() },
+        { typeof(ContentDirection?), static () => new APLValueConverter<ContentDirection?>() },
+        { typeof(ControlMediaCommand), static () => new APLValueConverter<ControlMediaCommand>() },
+        { typeof(ControlMediaCommand?), static () => new APLValueConverter<ControlMediaCommand?>() },
+        { typeof(DocumentBackgroundColor), static () => new APLValueConverter<DocumentBackgroundColor>() },
+        { typeof(DrawOrder), static () => new APLValueConverter<DrawOrder>() },
+        { typeof(DrawOrder?), static () => new APLValueConverter<DrawOrder?>() },
+        { typeof(HighlightMode), static () => new APLValueConverter<HighlightMode>() },
+        { typeof(HighlightMode?), static () => new APLValueConverter<HighlightMode?>() },
+        { typeof(ItemAlignment), static () => new APLValueConverter<ItemAlignment>() },
+        { typeof(ItemAlignment?), static () => new APLValueConverter<ItemAlignment?>() },
+        { typeof(KeyboardType), static () => new APLValueConverter<KeyboardType>() },
+        { typeof(KeyboardType?), static () => new APLValueConverter<KeyboardType?>() },
+        { typeof(LayoutDirection), static () => new APLValueConverter<LayoutDirection>() },
+        { typeof(LayoutDirection?), static () => new APLValueConverter<LayoutDirection?>() },
+        { typeof(MetadataPosition), static () => new APLValueConverter<MetadataPosition>() },
+        { typeof(MetadataPosition?), static () => new APLValueConverter<MetadataPosition?>() },
+        { typeof(NoiseKind), static () => new APLValueConverter<NoiseKind>() },
+        { typeof(NoiseKind?), static () => new APLValueConverter<NoiseKind?>() },
+        { typeof(ProgressBarType), static () => new APLValueConverter<ProgressBarType>() },
+        { typeof(ProgressBarType?), static () => new APLValueConverter<ProgressBarType?>() },
+        { typeof(RatingGraphicType), static () => new APLValueConverter<RatingGraphicType>() },
+        { typeof(RatingGraphicType?), static () => new APLValueConverter<RatingGraphicType?>() },
+        { typeof(RatingSlotMode), static () => new APLValueConverter<RatingSlotMode>() },
+        { typeof(RatingSlotMode?), static () => new APLValueConverter<RatingSlotMode?>() },
+        { typeof(RepeatMode), static () => new APLValueConverter<RepeatMode>() },
+        { typeof(RepeatMode?), static () => new APLValueConverter<RepeatMode?>() },
+        { typeof(Scale), static () => new APLValueConverter<Scale>() },
+        { typeof(Scale?), static () => new APLValueConverter<Scale?>() },
+        { typeof(ScrollDirection), static () => new APLValueConverter<ScrollDirection>() },
+        { typeof(ScrollDirection?), static () => new APLValueConverter<ScrollDirection?>() },
+        { typeof(SelectorStrategy), static () => new APLValueConverter<SelectorStrategy>() },
+        { typeof(SelectorStrategy?), static () => new APLValueConverter<SelectorStrategy?>() },
+        { typeof(SetPagePosition), static () => new APLValueConverter<SetPagePosition>() },
+        { typeof(SetPagePosition?), static () => new APLValueConverter<SetPagePosition?>() },
+        { typeof(SliderSize), static () => new APLValueConverter<SliderSize>() },
+        { typeof(SliderSize?), static () => new APLValueConverter<SliderSize?>() },
+        { typeof(SliderType), static () => new APLValueConverter<SliderType>() },
+        { typeof(SliderType?), static () => new APLValueConverter<SliderType?>() },
+        { typeof(Snap), static () => new APLValueConverter<Snap>() },
+        { typeof(Snap?), static () => new APLValueConverter<Snap?>() },
+        { typeof(SpeechContentType), static () => new APLValueConverter<SpeechContentType>() },
+        { typeof(SpeechContentType?), static () => new APLValueConverter<SpeechContentType?>() },
+        { typeof(StrokeLineCap), static () => new APLValueConverter<StrokeLineCap>() },
+        { typeof(StrokeLineCap?), static () => new APLValueConverter<StrokeLineCap?>() },
+        { typeof(StrokeLineJoin), static () => new APLValueConverter<StrokeLineJoin>() },
+        { typeof(StrokeLineJoin?), static () => new APLValueConverter<StrokeLineJoin?>() },
+        { typeof(SubmitKeyType), static () => new APLValueConverter<SubmitKeyType>() },
+        { typeof(SubmitKeyType?), static () => new APLValueConverter<SubmitKeyType?>() },
+        { typeof(SwipeAction), static () => new APLValueConverter<SwipeAction>() },
+        { typeof(SwipeAction?), static () => new APLValueConverter<SwipeAction?>() },
+        { typeof(SwipeDirection), static () => new APLValueConverter<SwipeDirection>() },
+        { typeof(SwipeDirection?), static () => new APLValueConverter<SwipeDirection?>() },
+        { typeof(TextOverflow), static () => new APLValueConverter<TextOverflow>() },
+        { typeof(TextOverflow?), static () => new APLValueConverter<TextOverflow?>() },
+        { typeof(TimeTextDirection), static () => new APLValueConverter<TimeTextDirection>() },
+        { typeof(TimeTextDirection?), static () => new APLValueConverter<TimeTextDirection?>() },
+        { typeof(Uri), static () => new APLValueConverter<Uri>() },
+        { typeof(VideoSource), static () => new APLValueConverter<VideoSource>() },
+        { typeof(bool), static () => new APLValueConverter<bool>() },
+        { typeof(bool?), static () => new APLValueConverter<bool?>() },
+        { typeof(double), static () => new APLValueConverter<double>() },
+        { typeof(double?), static () => new APLValueConverter<double?>() },
+        { typeof(int), static () => new APLValueConverter<int>() },
+        { typeof(int?), static () => new APLValueConverter<int?>() },
+        { typeof(object), static () => new APLValueConverter<object>() },
+        { typeof(string), static () => new APLValueConverter<string>() },
+    };
+
     public override bool CanConvert(Type typeToConvert)
     {
         if (_dimensionTypes.Contains(typeToConvert))
@@ -223,31 +269,13 @@ public class APLValueConverterFactory : JsonConverterFactory
         var typeArguments = typeToConvert.GetGenericArguments();
         var valueType = typeArguments[0];
 
-        if (valueType.IsGenericType && valueType.IsEnumerableOfType())
+        if (_valueConverters.TryGetValue(valueType, out var factory))
         {
-            var innerValueType = valueType.GetGenericArguments().First();
-            return (System.Text.Json.Serialization.JsonConverter)Activator.CreateInstance(
-                typeof(APLEnumerableValueConverter<,>).MakeGenericType(innerValueType, valueType),
-                BindingFlags.Instance | BindingFlags.Public,
-                binder: null,
-                args: null,
-                culture: null)!;
+            return factory();
         }
 
-        var converter = (System.Text.Json.Serialization.JsonConverter)Activator.CreateInstance(
-            typeof(APLValueConverter<>).MakeGenericType(valueType), BindingFlags.Instance | BindingFlags.Public,
-            binder: null,
-            args: null,
-            culture: null)!;
-
-        return converter;
+        throw new NotSupportedException(
+            $"APLValue<{valueType}> has no registered converter. Every APLValue<T> instantiation this " +
+            "library ships must be registered in APLValueConverterFactory's closed dispatch table.");
     }
-}
-
-internal static partial class TypeExtensions
-{
-    internal static bool IsEnumerableOfType(this Type type) =>
-        type.GetGenericTypeDefinition() == typeof(IEnumerable<>) || type.GetInterfaces().Any(i =>
-            i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>) &&
-            i.GetGenericArguments().First() == type.GetGenericArguments().First());
 }

@@ -1,5 +1,7 @@
 using AlexaVoxCraft.Model.InSkillPurchasing.Directives;
 using AlexaVoxCraft.Model.InSkillPurchasing.Responses;
+using AlexaVoxCraft.Model.InSkillPurchasing.Serialization;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.InSkillPurchasing;
 
@@ -14,6 +16,7 @@ public class InSkillPurchasingSupport
     /// </summary>
     public static void Add()
     {
+        AlexaJsonOptions.RegisterPackageTypeInfoResolver(InSkillPurchasingModelContext.Default);
         PaymentDirective.AddSupport();
         ConnectionResponseHandler.AddSupport();
     }

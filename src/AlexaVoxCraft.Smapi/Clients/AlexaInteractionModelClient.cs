@@ -1,5 +1,6 @@
 using AlexaVoxCraft.Http.Clients;
 using AlexaVoxCraft.Smapi.Models.InteractionModel;
+using AlexaVoxCraft.Smapi.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace AlexaVoxCraft.Smapi.Clients;
@@ -14,7 +15,7 @@ public sealed class AlexaInteractionModelClient : BaseClient, IAlexaInteractionM
     /// </summary>
     /// <param name="client">The configured HTTP client with base address and authentication.</param>
     /// <param name="logger">The logger instance.</param>
-    public AlexaInteractionModelClient(HttpClient client, ILogger<AlexaInteractionModelClient> logger) : base(client, logger)
+    public AlexaInteractionModelClient(HttpClient client, ILogger<AlexaInteractionModelClient> logger) : base(client, logger, SmapiModelContext.Default)
     {
     }
 

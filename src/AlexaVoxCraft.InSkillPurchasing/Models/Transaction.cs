@@ -12,7 +12,7 @@ public sealed record TransactionResponse([property: JsonPropertyName("results")]
 /// Represents a single in-skill purchase transaction.
 /// </summary>
 public sealed record Transaction(
-    [property: JsonPropertyName("status"), JsonConverter(typeof(JsonStringEnumConverter))]
+    [property: JsonPropertyName("status"), JsonConverter(typeof(JsonStringEnumConverter<TransactionStatus>))]
     TransactionStatus Status,
     [property: JsonPropertyName("productId")]
     string ProductId,

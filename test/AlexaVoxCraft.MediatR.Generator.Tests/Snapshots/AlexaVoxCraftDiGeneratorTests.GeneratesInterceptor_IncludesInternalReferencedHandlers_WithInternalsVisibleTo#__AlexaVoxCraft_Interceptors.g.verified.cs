@@ -48,6 +48,7 @@ file static class AlexaVoxCraftInterceptors
 
         // Request Handlers
         services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.LaunchRequest>, global::Referenced.WithIvt.InternalReferencedLaunchHandler>();
+        services.AddKeyedSingleton<AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapper>(typeof(AlexaVoxCraft.Model.Request.Type.LaunchRequest), (sp, key) => new AlexaVoxCraft.MediatR.Wrappers.RequestHandlerWrapperImpl<AlexaVoxCraft.Model.Request.Type.LaunchRequest>());
         services.AddTransient<AlexaVoxCraft.MediatR.IRequestHandler<AlexaVoxCraft.Model.Request.Type.LaunchRequest>, global::Referenced.WithIvt.PublicReferencedLaunchHandler>();
 
         return services;

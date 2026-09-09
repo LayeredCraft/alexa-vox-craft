@@ -534,19 +534,17 @@ Runtime: provided.al2023
 
 ### Bundle Size Optimization
 
+`AlexaVoxCraft.Model` and `AlexaVoxCraft.Model.Apl` (along with every other in-scope package - see [Native AOT support](native-aot.md)) are trim-safe and `IsAotCompatible`; they no longer need a `TrimmerRootAssembly` exemption to survive trimming.
+
 ```xml
 <!-- Enable trimming for smaller packages -->
 <PropertyGroup>
   <PublishTrimmed>true</PublishTrimmed>
   <TrimMode>copyused</TrimMode>
 </PropertyGroup>
-
-<!-- Preserve necessary assemblies -->
-<ItemGroup>
-  <TrimmerRootAssembly Include="AlexaVoxCraft.Model" />
-  <TrimmerRootAssembly Include="AlexaVoxCraft.Model.Apl" />
-</ItemGroup>
 ```
+
+For the smallest, fastest-starting deployment package, publish with `PublishAot=true` instead of `PublishTrimmed` alone - see [Native AOT support](native-aot.md) for what that requires of your own types.
 
 ## Monitoring and Logging
 

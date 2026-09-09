@@ -54,6 +54,10 @@ bag.Clear();
 Dictionary<string, JsonElement> raw = bag.Values;
 ```
 
+### Native AOT
+
+`Set`/`Get`/`TryGet`/`GetRequired` work for any type AlexaVoxCraft already owns without further setup. For your own types (e.g. a custom `GameState`), register a source-generated `JsonSerializerContext` via `AlexaJsonOptions.RegisterTypeInfoResolver(...)` once at startup - see [Native AOT support](native-aot.md). Under a Native AOT build, reading or writing an unregistered type fails immediately with a clear exception rather than silently falling back to reflection.
+
 ## Session Attributes
 
 `IAttributesManager.Session` is a `JsonAttributeBag` initialized from the incoming request's `Session.Attributes`. It is synchronous and always available (empty bag if the session has no attributes).

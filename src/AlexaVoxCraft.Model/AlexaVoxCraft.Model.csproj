@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <IsAotCompatible>true</IsAotCompatible>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
@@ -10,5 +11,13 @@
         <Description>Base model definitions for Alexa skill requests, responses, session state, and directives.</Description>
         <PackageTags>alexa;model;request;response;directive;voxcraft;skills</PackageTags>
     </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.Apl" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.InSkillPurchasing" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Smapi" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.Tests" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.Legacy.Tests" />
+    </ItemGroup>
 
 </Project>

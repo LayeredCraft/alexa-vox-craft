@@ -52,6 +52,43 @@ public class Function : AlexaSkillFunction<SkillRequest, SkillResponse>
 }
 ```
 
+### Native AOT Compatibility
+
+All in-scope runtime packages (`AlexaVoxCraft.Model`, `.Model.Apl`, `.Model.InSkillPurchasing`, `.MediatR`,
+`.MediatR.Lambda`, `.Lambda`, `.Http`, `.InSkillPurchasing`, `.Smapi`) are `IsAotCompatible=true` and
+validated end to end by a rooted, continuously-CI-run Native AOT application
+(`test/AlexaVoxCraft.NativeAot.ValidationApp`, gated by `.github/workflows/native-aot-validation.yaml`).
+See ADR-0001 (`docs/adr/0001-native-aot-compatibility.md`) and plan 0003
+(`docs/plans/0003-native-aot-compatibility-implementation.md`) for the full architecture and
+implementation history; consumer-facing guidance is in `docs/components/native-aot.md`.
+
+Key internal mechanics (not part of any public contract, useful when touching this area):
+- `AlexaJsonOptions`'s resolver chain: `ModelContext` (Model) → package-owned contexts
+  (`AplModelContext`, `InSkillPurchasingModelContext`, `SmapiModelContext`,
+  `InSkillPurchasingClientModelContext`) registered via the internal
+  `RegisterPackageTypeInfoResolver` → consumer resolvers via the public `RegisterTypeInfoResolver` →
+  JIT reflection fallback (present only when `JsonSerializer.IsReflectionEnabledByDefault`).
+- `AlexaVoxCraft.Http`'s `DelegatingModelTypeInfoResolver` forwards to
+  `AlexaJsonOptions.DefaultOptions.TypeInfoResolver` on every call rather than capturing it once, so a
+  `BaseClient`-derived instance constructed before a consumer's `RegisterTypeInfoResolver` call still
+  picks up that registration on its next actual use (the "resolver freshness invariant").
+  `AlexaVoxCraft.Smapi`/`AlexaVoxCraft.InSkillPurchasing` compose their own package context with the
+  same delegating resolver at each client's construction site.
+  `AlexaJsonOptions.RegisterPackageTypeInfoResolver`/`AlexaVoxCraft.Http`'s `DelegatingModelTypeInfoResolver` are `internal` -
+  `InternalsVisibleTo` grants access to the specific sibling assemblies that need them.
+- `SkillMediator.Send` resolves the handler wrapper via `GetKeyedService<RequestHandlerWrapper>(requestType)`
+  first (populated by `InterceptorEmitter.EmitHandlerRegistrations`'s generated `AddKeyedSingleton` calls),
+  falling back to the pre-existing `MakeGenericType`-based path only when the interceptor never ran
+  (`ServiceRegistrar`'s reflection-based assembly-scanning carve-out - not Native-AOT-supported, by design).
+- APL's `APLValueConverterFactory`/`APLValueCollectionConverterFactory` dispatch via a closed
+  `Dictionary<Type, Func<JsonConverter>>` keyed by the closed `APLValue<T>`/`APLValueCollection<T>`
+  instantiation - no `MakeGenericType`/`Activator.CreateInstance`. New `APLValue<T>`/`APLValueCollection<T>`
+  properties must add an entry to both the dictionary and `AplModelContext`.
+- A source-tree `ProjectReference` to `AlexaVoxCraft.MediatR` does **not** pull in its interceptor
+  generator as an analyzer (only a packaged NuGet reference does, via the `analyzers/dotnet/cs` pack
+  path) - any new source-tree consumer project (samples, the validation app) needs its own direct
+  `ProjectReference` to `AlexaVoxCraft.MediatR.Generators` with `OutputItemType="Analyzer"`.
+
 ## Development Commands
 
 ### Build and Test

@@ -9,7 +9,8 @@ internal readonly record struct RegistrationModel(
     EquatableArray<TypeRegistration> ExceptionHandlers,
     EquatableArray<TypeRegistration> RequestInterceptors,
     EquatableArray<TypeRegistration> ResponseInterceptors,
-    TypeRegistration? PersistenceAdapter
+    TypeRegistration? PersistenceAdapter,
+    EquatableArray<string> KnownRequestTypes
 );
 
 internal readonly record struct TypeInfo(string FullyQualifiedName);

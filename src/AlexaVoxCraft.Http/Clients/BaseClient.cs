@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+using AlexaVoxCraft.Http.Serialization;
 using LayeredCraft.StructuredLogging;
 using Microsoft.Extensions.Logging;
 
@@ -33,12 +35,29 @@ public abstract class BaseClient
     /// </summary>
     /// <param name="client">The HTTP client instance.</param>
     /// <param name="logger">The logger instance.</param>
-    protected BaseClient(HttpClient client, ILogger logger) : this(client, logger, new JsonSerializerOptions
+    protected BaseClient(HttpClient client, ILogger logger) : this(client, logger, DelegatingModelTypeInfoResolver.Instance)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseClient"/> class using AlexaVoxCraft's default
+    /// JSON options, with <paramref name="packageResolver"/> composed ahead of the delegating resolver
+    /// so a derived client's package-owned metadata (e.g. <c>SmapiModelContext.Default</c>) takes
+    /// precedence while still observing consumer registrations made via
+    /// <see cref="AlexaVoxCraft.Model.Serialization.AlexaJsonOptions.RegisterTypeInfoResolver"/>.
+    /// </summary>
+    /// <param name="client">The HTTP client instance.</param>
+    /// <param name="logger">The logger instance.</param>
+    /// <param name="packageResolver">The package-owned resolver to compose ahead of the delegating resolver.</param>
+    protected BaseClient(HttpClient client, ILogger logger, IJsonTypeInfoResolver packageResolver) : this(client, logger, new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         WriteIndented = true,
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        TypeInfoResolver = ReferenceEquals(packageResolver, DelegatingModelTypeInfoResolver.Instance)
+            ? packageResolver
+            : JsonTypeInfoResolver.Combine(packageResolver, DelegatingModelTypeInfoResolver.Instance),
     })
     {
     }

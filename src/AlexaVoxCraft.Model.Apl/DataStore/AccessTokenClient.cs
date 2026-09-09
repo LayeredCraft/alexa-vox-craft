@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl.DataStore;
 
@@ -15,11 +16,6 @@ public class AccessTokenClient
 
     public HttpClient Client { get; set; }
     private string BaseAddress { get; }
-
-    private static readonly JsonSerializerOptions Options = new(JsonSerializerDefaults.Web)
-    {
-        PropertyNameCaseInsensitive = true
-    };
 
     public AccessTokenClient() : this(new HttpClient(), null) { }
 
@@ -52,7 +48,7 @@ public class AccessTokenClient
         response.EnsureSuccessStatusCode();
 
         await using var stream = await response.Content.ReadAsStreamAsync();
-        return await JsonSerializer.DeserializeAsync<AccessToken>(stream, Options)
+        return await JsonSerializer.DeserializeAsync<AccessToken>(stream, AlexaJsonOptions.DefaultOptions)
                ?? throw new InvalidOperationException("Failed to deserialize access token.");
     }
 }

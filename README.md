@@ -7,6 +7,7 @@
 - **🎯 MediatR Integration**: CQRS-style request handling with compile-time source-generated DI registration
 - **🎨 APL Support**: Complete Alexa Presentation Language implementation for rich visual interfaces
 - **⚡ Lambda Hosting**: Optimized AWS Lambda runtime with custom serialization and ReadyToRun publishing
+- **🚀 Native AOT Ready**: Source-generated JSON serialization and compile-time-closed dispatch throughout, validated end to end by a rooted, continuously-run Native AOT application - see [Native AOT support](docs/components/native-aot.md)
 - **📊 Session Management**: Robust session attribute handling with typed attribute serialization
 - **🔧 Pipeline Behaviors**: Request/response interceptors for cross-cutting concerns like logging and validation
 - **💰 In-Skill Purchasing**: Full ISP support with buy/upsell/cancel directives and entitlement checks

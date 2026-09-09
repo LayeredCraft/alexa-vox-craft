@@ -1,5 +1,6 @@
 using AlexaVoxCraft.Http.Clients;
 using AlexaVoxCraft.InSkillPurchasing.Models;
+using AlexaVoxCraft.InSkillPurchasing.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace AlexaVoxCraft.InSkillPurchasing.Clients;
@@ -15,7 +16,7 @@ public sealed class InSkillPurchasingClient : BaseClient, IInSkillPurchasingClie
     /// <param name="httpClient">The HTTP client configured with the ISP base address.</param>
     /// <param name="logger">The logger instance.</param>
     public InSkillPurchasingClient(HttpClient httpClient, ILogger<InSkillPurchasingClient> logger) : base(httpClient,
-        logger)
+        logger, InSkillPurchasingClientModelContext.Default)
     {
     }
 

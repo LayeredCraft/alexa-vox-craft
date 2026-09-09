@@ -1,8 +1,11 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using AlexaVoxCraft.Http.Clients;
+using AlexaVoxCraft.Http.Serialization;
 using AlexaVoxCraft.Smapi.Models.Invocation;
+using AlexaVoxCraft.Smapi.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace AlexaVoxCraft.Smapi.Clients;
@@ -23,7 +26,8 @@ public sealed class AlexaSkillInvocationClient : BaseClient, IAlexaSkillInvocati
     {
         PropertyNamingPolicy = null, // 👈 important
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        TypeInfoResolver = JsonTypeInfoResolver.Combine(SmapiModelContext.Default, DelegatingModelTypeInfoResolver.Instance),
     })
     {
     }

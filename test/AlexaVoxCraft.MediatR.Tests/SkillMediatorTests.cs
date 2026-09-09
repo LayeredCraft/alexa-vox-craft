@@ -1,11 +1,25 @@
 using Compono.XunitV3;
+using AlexaVoxCraft.MediatR.Attributes;
+using AlexaVoxCraft.MediatR.Response;
 using AlexaVoxCraft.MediatR.Tests.TestKit;
 using AlexaVoxCraft.MediatR.DI;
+using AlexaVoxCraft.MediatR.Wrappers;
 using AlexaVoxCraft.Model.Request;
+using AlexaVoxCraft.Model.Request.Type;
+using AlexaVoxCraft.Model.Response;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace AlexaVoxCraft.MediatR.Tests;
 
+// Send_WithKeyedRegistrationForRequestType_DispatchesViaKeyedServicePath below is the first
+// SkillMediatorTests case that dispatches through a real registered handler, which makes
+// RequestHandlerWrapperImpl emit real Activity spans on the shared "AlexaVoxCraft" ActivitySource -
+// the same source OtelPerformanceLoggingBehaviorTests/OtelRequestHandlerWrapperTests listen to and
+// assert against with ContainSingle(). Joining their collection serializes against them so their
+// process-wide ActivityListener doesn't capture spans from an unrelated, concurrently-running test.
+[Collection("DiagnosticsConfig Tests")]
 public class SkillMediatorTests : TestBase
 {
     [Theory]
@@ -142,5 +156,58 @@ public class SkillMediatorTests : TestBase
         // The exception thrown when trying to create the wrapper for unsupported request types
         exception.Should().BeOfType<InvalidOperationException>();
         exception.Should().BeOfType<InvalidOperationException>().Subject.Message.Should().Contain("Handler was not found for request of type");
+    }
+
+    [Fact]
+    public async Task Send_WithKeyedRegistrationForRequestType_DispatchesViaKeyedServicePath()
+    {
+        // Proves the keyed-DI bridge (ADR-0001, plan 0003 Task Group 5): SkillMediator.Send must try
+        // GetKeyedService<RequestHandlerWrapper>(requestType) before falling back to the
+        // MakeGenericType-based ConcurrentDictionary cache. Registers the keyed factory manually here
+        // (production code emits the equivalent call from InterceptorEmitter.EmitHandlerRegistrations)
+        // and asserts it - not the fallback path - is what actually produced the wrapper.
+        var keyedFactoryInvoked = false;
+        var expectedResponse = new SkillResponse { Response = new ResponseBody() };
+
+        var services = new ServiceCollection();
+        services.AddSingleton<Microsoft.Extensions.Logging.ILogger<SkillMediator>>(NullLogger<SkillMediator>.Instance);
+        services.AddTransient<IRequestHandler<LaunchRequest>>(_ => new StubLaunchHandler(expectedResponse));
+        services.AddKeyedSingleton<RequestHandlerWrapper>(typeof(LaunchRequest), (_, _) =>
+        {
+            keyedFactoryInvoked = true;
+            return new RequestHandlerWrapperImpl<LaunchRequest>();
+        });
+
+        var skillRequest = new SkillRequest
+        {
+            Request = new LaunchRequest(),
+            Context = new Context
+            {
+                System = new AlexaSystem { Application = new Application { ApplicationId = "amzn1.ask.skill.keyed-test" } }
+            }
+        };
+        services.AddSingleton<IHandlerInput>(new StubHandlerInput(skillRequest));
+
+        var serviceProvider = services.BuildServiceProvider();
+        var configuration = Options.Create(new SkillServiceConfiguration { SkillId = "amzn1.ask.skill.keyed-test" });
+        var mediator = new SkillMediator(serviceProvider, configuration);
+
+        var response = await mediator.Send(skillRequest, CancellationToken);
+
+        keyedFactoryInvoked.Should().BeTrue();
+        response.Should().BeSameAs(expectedResponse);
+    }
+
+    private sealed class StubHandlerInput(SkillRequest requestEnvelope) : IHandlerInput
+    {
+        public SkillRequest RequestEnvelope { get; } = requestEnvelope;
+        public IAttributesManager AttributesManager => null!;
+        public IResponseBuilder ResponseBuilder => null!;
+    }
+
+    private sealed class StubLaunchHandler(SkillResponse response) : IRequestHandler<LaunchRequest>
+    {
+        public Task<bool> CanHandle(IHandlerInput input, CancellationToken cancellationToken = default) => Task.FromResult(true);
+        public Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken = default) => Task.FromResult(response);
     }
 }

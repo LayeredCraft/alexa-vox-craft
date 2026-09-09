@@ -6,7 +6,9 @@ using AlexaVoxCraft.Model.Apl.DataStore;
 using AlexaVoxCraft.Model.Apl.DataStore.PackageManager;
 using AlexaVoxCraft.Model.Apl.Gestures;
 using AlexaVoxCraft.Model.Apl.JsonConverter;
+using AlexaVoxCraft.Model.Apl.Serialization;
 using AlexaVoxCraft.Model.Apl.VectorGraphics;
+using AlexaVoxCraft.Model.Serialization;
 
 namespace AlexaVoxCraft.Model.Apl;
 
@@ -14,6 +16,7 @@ public static class APLSupport
 {
     public static void Add()
     {
+        AlexaJsonOptions.RegisterPackageTypeInfoResolver(AplModelContext.Default);
         RenderDocumentDirective.AddSupport();
         ExecuteCommandsDirective.AddSupport();
         SendIndexListDataDirective.AddSupport();

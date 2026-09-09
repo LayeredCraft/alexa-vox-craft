@@ -368,6 +368,10 @@ steps:
       SmapiClient__RefreshToken: $(SMAPI_REFRESH_TOKEN)
 ```
 
+## Native AOT
+
+SMAPI's default serialization is Native-AOT-safe out of the box, independent of whether any SMAPI DI extension has run - `InteractionModelBuilder.ToJson()` works standalone, with no DI container required. `AlexaSkillInvocationClient.InvokeAsync<TRequest, TResponse>`'s open `TRequest`/`TResponse` type parameters follow the same rule as everywhere else in AlexaVoxCraft: types AlexaVoxCraft doesn't already own need your own registered `JsonSerializerContext` - see [Native AOT support](../components/native-aot.md).
+
 ## Token Management
 
 The SMAPI Developer Client automatically handles token refresh. Access tokens are cached and refreshed when they expire (with a small buffer to prevent edge cases). You don't need to manage tokens manually.

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <IsAotCompatible>true</IsAotCompatible>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -14,6 +15,16 @@
         <PackageReference Include="LayeredCraft.StructuredLogging"/>
         <PackageReference Include="Microsoft.Extensions.Http"/>
         <PackageReference Include="Microsoft.Extensions.Logging"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="AlexaVoxCraft.Smapi" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Http.TestKit" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.InSkillPurchasing" />
     </ItemGroup>
 
 </Project>

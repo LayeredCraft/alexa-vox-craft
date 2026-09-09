@@ -15,14 +15,14 @@ public sealed record ProductResponse([property: JsonPropertyName("inSkillProduct
 public sealed record Product(
     [property: JsonPropertyName("productId")] string ProductId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("type"), JsonConverter(typeof(JsonStringEnumConverter))] ProductType Type,
+    [property: JsonPropertyName("type"), JsonConverter(typeof(JsonStringEnumConverter<ProductType>))] ProductType Type,
     [property: JsonPropertyName("summary")] string Summary,
-    [property: JsonPropertyName("purchasable"), JsonConverter(typeof(JsonStringEnumConverter))] Purchasable Purchasable,
-    [property: JsonPropertyName("entitled"), JsonConverter(typeof(JsonStringEnumConverter))] Entitled Entitled,
-    [property: JsonPropertyName("entitlementReason"), JsonConverter(typeof(JsonStringEnumConverter))] EntitlementReason EntitlementReason,
+    [property: JsonPropertyName("purchasable"), JsonConverter(typeof(JsonStringEnumConverter<Purchasable>))] Purchasable Purchasable,
+    [property: JsonPropertyName("entitled"), JsonConverter(typeof(JsonStringEnumConverter<Entitled>))] Entitled Entitled,
+    [property: JsonPropertyName("entitlementReason"), JsonConverter(typeof(JsonStringEnumConverter<EntitlementReason>))] EntitlementReason EntitlementReason,
     [property: JsonPropertyName("referenceName")] string ReferenceName,
     [property: JsonPropertyName("activeEntitlementCount")] int ActiveEntitlementCount,
-    [property: JsonPropertyName("purchaseMode"), JsonConverter(typeof(JsonStringEnumConverter))] PurchaseMode PurchaseMode)
+    [property: JsonPropertyName("purchaseMode"), JsonConverter(typeof(JsonStringEnumConverter<PurchaseMode>))] PurchaseMode PurchaseMode)
 {
     [JsonPropertyName("startTime")] public DateTimeOffset StartTime { get; set; }
 

@@ -19,4 +19,16 @@ public class AlexaSwipeToActionTests : TestBase<AlexaSwipeToActionTests>
 
         await TestHelper.VerifySerializedObject(control, AlexaJson, "AlexaSwipeToAction");
     }
+
+    [Fact]
+    public async Task AlexaSwipeToAction_WithComponentSlot_Serializes()
+    {
+        var control = new AlexaSwipeToAction
+        {
+            PrimaryText = "Swipe me",
+            ComponentSlot = new APLValue<APLComponent>(new Container())
+        };
+
+        await TestHelper.VerifySerializedObject(control, AlexaJson, "AlexaSwipeToAction_WithComponentSlot");
+    }
 }

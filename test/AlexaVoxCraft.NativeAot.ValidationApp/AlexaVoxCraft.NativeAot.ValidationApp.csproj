@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!-- Single-TFM native AOT validation app - overrides test/Directory.Build.props' multi-target list. -->
+        <TargetFrameworks></TargetFrameworks>
+        <TargetFramework>net9.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <LangVersion>latest</LangVersion>
+
+        <!-- Reproduces the exact failure mode a real AOT-published consumer hits (research §11 step 1). -->
+        <PublishAot>true</PublishAot>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <EnableAotAnalyzer>true</EnableAotAnalyzer>
+        <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+
+        <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
+        <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
+        <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor" />
+    </ItemGroup>
+
+    <!-- Not a test project - remove the Xunit/AwesomeAssertions global usings test/Directory.Build.props adds. -->
+    <ItemGroup>
+        <Using Remove="Xunit" />
+        <Using Remove="AwesomeAssertions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Local dev / source-tree consumption: an ordinary ProjectReference to AlexaVoxCraft.MediatR
+             does NOT pull in its interceptor generator as an analyzer for this compilation - that only
+             happens automatically for a packaged NuGet consumer (via the "analyzers/dotnet/cs" pack
+             path). Source-tree consumers (this app, and samples/Sample.Generated.Function) must
+             reference the generator project directly as an Analyzer. Confirmed empirically: without
+             this, AddSkillMediator silently falls back to ServiceRegistrar's reflection-based assembly
+             scanning, which breaks handler construction under a published Native AOT binary. -->
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Only real, public-API-facing packages - no test-infra packages (Compono.*, xunit, etc.),
+             per plan 0003 Task Group 7: this binary's failures must be attributable unambiguously to
+             AlexaVoxCraft's own code. -->
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Http\AlexaVoxCraft.Http.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.InSkillPurchasing\AlexaVoxCraft.InSkillPurchasing.csproj" />
+    </ItemGroup>
+
+</Project>
