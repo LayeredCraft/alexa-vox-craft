@@ -1,0 +1,53 @@
+name: Native AOT Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions: write-all
+
+jobs:
+  native-aot-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+            11.0.x
+
+      - name: Restore
+        run: dotnet restore AlexaVoxCraft.slnx
+
+      - name: Build in-scope packages (Release, trim/AOT analyzers on)
+        run: |
+          for project in \
+            src/AlexaVoxCraft.Model/AlexaVoxCraft.Model.csproj \
+            src/AlexaVoxCraft.Model.Apl/AlexaVoxCraft.Model.Apl.csproj \
+            src/AlexaVoxCraft.Model.InSkillPurchasing/AlexaVoxCraft.Model.InSkillPurchasing.csproj \
+            src/AlexaVoxCraft.MediatR/AlexaVoxCraft.MediatR.csproj \
+            src/AlexaVoxCraft.MediatR.Lambda/AlexaVoxCraft.MediatR.Lambda.csproj \
+            src/AlexaVoxCraft.Lambda/AlexaVoxCraft.Lambda.csproj \
+            src/AlexaVoxCraft.Http/AlexaVoxCraft.Http.csproj \
+            src/AlexaVoxCraft.InSkillPurchasing/AlexaVoxCraft.InSkillPurchasing.csproj \
+            src/AlexaVoxCraft.Smapi/AlexaVoxCraft.Smapi.csproj \
+          ; do
+            echo "::group::$project"
+            dotnet build "$project" -c Release -f net9.0
+            echo "::endgroup::"
+          done
+
+      - name: Publish Native AOT validation app (linux-x64, matching Lambda's provided.al2023)
+        run: |
+          dotnet publish test/AlexaVoxCraft.NativeAot.ValidationApp/AlexaVoxCraft.NativeAot.ValidationApp.csproj \
+            -r linux-x64 -c Release
+
+      - name: Execute the published native binary
+        run: |
+          ./test/AlexaVoxCraft.NativeAot.ValidationApp/bin/Release/net9.0/linux-x64/publish/AlexaVoxCraft.NativeAot.ValidationApp
