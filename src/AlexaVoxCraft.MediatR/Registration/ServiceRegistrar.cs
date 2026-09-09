@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.Attributes.Persistence;
 using AlexaVoxCraft.MediatR.DI;
@@ -11,6 +12,14 @@ namespace AlexaVoxCraft.MediatR.Registration;
 
 public static class ServiceRegistrar
 {
+    // This is the reflection-based assembly-scanning fallback (ADR-0001: not Native-AOT-supported).
+    // The generator-interceptor path (the supported, AOT-safe way to call AddSkillMediator) never calls
+    // this method - only the base, non-intercepted AddSkillMediator extension does, when the interceptor
+    // didn't run (pre-8.0.400 SDK or EnableMediatRGeneratorInterceptor=false). Annotated so a consumer who
+    // calls this method directly - bypassing AddSkillMediator entirely - gets a compile-time warning under
+    // trim/AOT instead of silently shipping a reflection path that breaks at runtime.
+    [RequiresUnreferencedCode("Uses reflection-based assembly scanning to discover and register handlers. Not supported under Native AOT/trimming - use the generator-interceptor path (AddSkillMediator with the interceptor enabled) instead.")]
+    [RequiresDynamicCode("Uses Type.MakeGenericType to close open generic handler implementations. Not supported under Native AOT - use the generator-interceptor path (AddSkillMediator with the interceptor enabled) instead.")]
     public static void AddSkillMediatorClasses(this IServiceCollection services, SkillServiceConfiguration settings)
     {
         var assembliesToScan = settings.AssembliesToRegister.Distinct().ToArray();
