@@ -231,9 +231,14 @@ internal static class InterceptorEmitter
     // is RequiresUnreferencedCode/RequiresDynamicCode - not Native AOT/trim safe (Issue #191). This
     // generator already has full compile-time knowledge of SkillServiceConfiguration's fixed shape, so
     // it emits direct property reads instead of delegating to the reflection-based binder. Semantics
-    // matched to ConfigurationBinder.Bind's default (defaultValueIfNotFound: false): a missing/empty key
-    // leaves the target property at whatever value it already had (its declared default, or a value
-    // already set by a prior settingsAction call), never overwritten with an implicit default.
+    // matched to ConfigurationBinder.Bind's default (defaultValueIfNotFound: false): a genuinely missing
+    // key (section[key] is null) leaves the target property at whatever value it already had (its
+    // declared default, or a value already set by a prior settingsAction call), never overwritten with
+    // an implicit default. A key that IS present but holds an empty/malformed scalar value is NOT
+    // treated as missing - it is handed to Enum.Parse/int.Parse and allowed to throw, exactly like
+    // ConfigurationBinder.Bind did (verified: config.Bind(target) on a POCO with Lifetime="" throws
+    // InvalidOperationException, not a silent no-op) - so a malformed config value still fails loudly
+    // instead of the interceptor silently keeping SkillServiceConfiguration's compiled-in default.
     private static void EmitConfigurationBindingHelper(StringBuilder sb)
     {
         sb.AppendLine("    private static void BindSkillServiceConfiguration(IConfigurationSection section, AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration target)");
@@ -257,13 +262,13 @@ internal static class InterceptorEmitter
         sb.AppendLine("        }");
         sb.AppendLine();
         sb.AppendLine("        var lifetime = section[\"Lifetime\"];");
-        sb.AppendLine("        if (!string.IsNullOrEmpty(lifetime))");
+        sb.AppendLine("        if (lifetime is not null)");
         sb.AppendLine("        {");
         sb.AppendLine("            target.Lifetime = Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(lifetime, ignoreCase: true);");
         sb.AppendLine("        }");
         sb.AppendLine();
         sb.AppendLine("        var cancellationTimeoutBufferMilliseconds = section[\"CancellationTimeoutBufferMilliseconds\"];");
-        sb.AppendLine("        if (!string.IsNullOrEmpty(cancellationTimeoutBufferMilliseconds))");
+        sb.AppendLine("        if (cancellationTimeoutBufferMilliseconds is not null)");
         sb.AppendLine("        {");
         sb.AppendLine("            target.CancellationTimeoutBufferMilliseconds = int.Parse(cancellationTimeoutBufferMilliseconds, CultureInfo.InvariantCulture);");
         sb.AppendLine("        }");

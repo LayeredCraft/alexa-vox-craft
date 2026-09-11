@@ -12,7 +12,29 @@
         <!-- Required for Compono.TestDoubles - without it, Compono.Generators never emits a
              double for any interface regardless of the UseGeneratedTestDoubles() runtime call. -->
         <ComponoGeneratedTestDoubles>true</ComponoGeneratedTestDoubles>
+        <!-- Referencing AlexaVoxCraft.MediatR.Generators as an analyzer below is not sufficient by
+             itself for a source-tree ProjectReference consumer (CLAUDE.md/ADR-0001's documented caveat -
+             a packaged NuGet consumer gets all of this for free from AlexaVoxCraft.MediatR.props/.targets,
+             which are not imported here). Three things are required together, or the generator silently
+             emits nothing and every AddSkillMediator(configuration, ...) call below falls through to the
+             hand-written ServiceCollectionExtensions fallback path instead - confirmed the hard way:
+             ConfigurationBindingTests originally appeared to validate interceptor binding while actually
+             exercising the fallback the whole time, because this property was missing.
+             1) EnableMediatRGeneratorInterceptor=true: AlexaVoxCraftDiGenerator.Initialize reads this via
+                build_property.EnableMediatRGeneratorInterceptor and requires TryGetValue to succeed - an
+                absent property (not just "false") disables interception entirely, since a missing
+                property makes the generator's own `TryGetValue(...) && ...` check short-circuit false.
+             2) The matching CompilerVisibleProperty entry below, or the generator can't see the property.
+             3) InterceptorsNamespaces/InterceptorsPreviewNamespaces including "AlexaVoxCraft.Generated" -
+                otherwise the compiler silently ignores the emitted [InterceptsLocation] attributes. -->
+        <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
+        <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
+        <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
     </PropertyGroup>
+
+    <ItemGroup>
+        <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor" />
+    </ItemGroup>
 
     <ItemGroup>
         <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>

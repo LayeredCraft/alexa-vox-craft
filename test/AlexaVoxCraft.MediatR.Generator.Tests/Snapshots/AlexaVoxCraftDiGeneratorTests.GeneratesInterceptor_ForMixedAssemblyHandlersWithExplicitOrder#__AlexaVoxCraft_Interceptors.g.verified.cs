@@ -76,13 +76,13 @@ file static class AlexaVoxCraftInterceptors
         }
 
         var lifetime = section["Lifetime"];
-        if (!string.IsNullOrEmpty(lifetime))
+        if (lifetime is not null)
         {
             target.Lifetime = Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(lifetime, ignoreCase: true);
         }
 
         var cancellationTimeoutBufferMilliseconds = section["CancellationTimeoutBufferMilliseconds"];
-        if (!string.IsNullOrEmpty(cancellationTimeoutBufferMilliseconds))
+        if (cancellationTimeoutBufferMilliseconds is not null)
         {
             target.CancellationTimeoutBufferMilliseconds = int.Parse(cancellationTimeoutBufferMilliseconds, CultureInfo.InvariantCulture);
         }

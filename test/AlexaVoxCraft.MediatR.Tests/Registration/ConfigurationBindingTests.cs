@@ -73,6 +73,45 @@ public sealed class ConfigurationBindingTests
         options.CancellationTimeoutBufferMilliseconds.Should().Be(250);
     }
 
+    // Regression test for a review finding on this PR: a key that IS present but holds an empty/
+    // malformed scalar value must not be treated the same as a genuinely missing key. The original
+    // ConfigurationBinder.Bind threw for this (verified empirically: config.Bind(target) with
+    // Lifetime="" throws InvalidOperationException) - the reflection-free interceptor replacement must
+    // preserve that fail-loudly behavior, not silently fall back to SkillServiceConfiguration's default.
+    [Fact]
+    public void AddSkillMediator_WithEmptyLifetimeValue_ThrowsInsteadOfSilentlyKeepingDefault()
+    {
+        var services = new ServiceCollection();
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["SkillConfiguration:Lifetime"] = ""
+            })
+            .Build();
+
+        var act = () => services.AddSkillMediator(configuration,
+            cfg => cfg.RegisterServicesFromAssemblyContaining<ConfigurationBindingTests>());
+
+        act.Should().Throw<Exception>();
+    }
+
+    [Fact]
+    public void AddSkillMediator_WithEmptyCancellationTimeoutBufferMillisecondsValue_ThrowsInsteadOfSilentlyKeepingDefault()
+    {
+        var services = new ServiceCollection();
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["SkillConfiguration:CancellationTimeoutBufferMilliseconds"] = ""
+            })
+            .Build();
+
+        var act = () => services.AddSkillMediator(configuration,
+            cfg => cfg.RegisterServicesFromAssemblyContaining<ConfigurationBindingTests>());
+
+        act.Should().Throw<Exception>();
+    }
+
     [Fact]
     public void AddSkillMediator_WithSettingsActionAfterConfiguration_SettingsActionValuesWin()
     {
