@@ -235,10 +235,14 @@ internal static class InterceptorEmitter
     // key (section[key] is null) leaves the target property at whatever value it already had (its
     // declared default, or a value already set by a prior settingsAction call), never overwritten with
     // an implicit default. A key that IS present but holds an empty/malformed scalar value is NOT
-    // treated as missing - it is handed to Enum.Parse/int.Parse and allowed to throw, exactly like
-    // ConfigurationBinder.Bind did (verified: config.Bind(target) on a POCO with Lifetime="" throws
-    // InvalidOperationException, not a silent no-op) - so a malformed config value still fails loudly
-    // instead of the interceptor silently keeping SkillServiceConfiguration's compiled-in default.
+    // treated as missing - it is handed to Enum.Parse/int.Parse and allowed to throw, wrapped by
+    // ParseScalarConfigurationValue into the exact same InvalidOperationException shape
+    // ConfigurationBinder.Bind itself throws for a malformed scalar (verified empirically:
+    // config.Bind(target) on a POCO with Lifetime="" throws InvalidOperationException("Failed to convert
+    // configuration value at '{path}' to type '{type}'.", innerException) - not a raw
+    // FormatException/ArgumentException, and not a silent no-op) - so an interceptor-enabled consumer's
+    // startup error handling that catches InvalidOperationException around AddSkillMediator sees the
+    // same exception shape a fallback-path consumer would.
     private static void EmitConfigurationBindingHelper(StringBuilder sb)
     {
         sb.AppendLine("    private static void BindSkillServiceConfiguration(IConfigurationSection section, AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration target)");
@@ -264,13 +268,31 @@ internal static class InterceptorEmitter
         sb.AppendLine("        var lifetime = section[\"Lifetime\"];");
         sb.AppendLine("        if (lifetime is not null)");
         sb.AppendLine("        {");
-        sb.AppendLine("            target.Lifetime = Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(lifetime, ignoreCase: true);");
+        sb.AppendLine("            target.Lifetime = ParseScalarConfigurationValue(lifetime, section.GetSection(\"Lifetime\"), static v => Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(v, ignoreCase: true));");
         sb.AppendLine("        }");
         sb.AppendLine();
         sb.AppendLine("        var cancellationTimeoutBufferMilliseconds = section[\"CancellationTimeoutBufferMilliseconds\"];");
         sb.AppendLine("        if (cancellationTimeoutBufferMilliseconds is not null)");
         sb.AppendLine("        {");
-        sb.AppendLine("            target.CancellationTimeoutBufferMilliseconds = int.Parse(cancellationTimeoutBufferMilliseconds, CultureInfo.InvariantCulture);");
+        sb.AppendLine("            target.CancellationTimeoutBufferMilliseconds = ParseScalarConfigurationValue(cancellationTimeoutBufferMilliseconds, section.GetSection(\"CancellationTimeoutBufferMilliseconds\"), static v => int.Parse(v, CultureInfo.InvariantCulture));");
+        sb.AppendLine("        }");
+        sb.AppendLine("    }");
+        sb.AppendLine();
+        // Mirrors ConfigurationBinder's own scalar-conversion wrapping exactly (verified empirically:
+        // config.Bind(target) with an empty/malformed Lifetime or CancellationTimeoutBufferMilliseconds
+        // throws InvalidOperationException("Failed to convert configuration value at '{path}' to type
+        // '{type.FullName}'.", innerException), not a raw FormatException/ArgumentException) - so an
+        // interceptor-enabled consumer's startup error handling that catches InvalidOperationException
+        // around AddSkillMediator sees the same exception shape as a fallback-path consumer.
+        sb.AppendLine("    private static T ParseScalarConfigurationValue<T>(string value, IConfigurationSection valueSection, Func<string, T> parse)");
+        sb.AppendLine("    {");
+        sb.AppendLine("        try");
+        sb.AppendLine("        {");
+        sb.AppendLine("            return parse(value);");
+        sb.AppendLine("        }");
+        sb.AppendLine("        catch (Exception ex)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            throw new InvalidOperationException($\"Failed to convert configuration value at '{valueSection.Path}' to type '{typeof(T).FullName}'.\", ex);");
         sb.AppendLine("        }");
         sb.AppendLine("    }");
         sb.AppendLine();

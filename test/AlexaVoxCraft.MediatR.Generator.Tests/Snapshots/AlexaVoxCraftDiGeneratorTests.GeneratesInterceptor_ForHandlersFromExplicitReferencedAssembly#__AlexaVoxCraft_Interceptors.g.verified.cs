@@ -77,13 +77,25 @@ file static class AlexaVoxCraftInterceptors
         var lifetime = section["Lifetime"];
         if (lifetime is not null)
         {
-            target.Lifetime = Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(lifetime, ignoreCase: true);
+            target.Lifetime = ParseScalarConfigurationValue(lifetime, section.GetSection("Lifetime"), static v => Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(v, ignoreCase: true));
         }
 
         var cancellationTimeoutBufferMilliseconds = section["CancellationTimeoutBufferMilliseconds"];
         if (cancellationTimeoutBufferMilliseconds is not null)
         {
-            target.CancellationTimeoutBufferMilliseconds = int.Parse(cancellationTimeoutBufferMilliseconds, CultureInfo.InvariantCulture);
+            target.CancellationTimeoutBufferMilliseconds = ParseScalarConfigurationValue(cancellationTimeoutBufferMilliseconds, section.GetSection("CancellationTimeoutBufferMilliseconds"), static v => int.Parse(v, CultureInfo.InvariantCulture));
+        }
+    }
+
+    private static T ParseScalarConfigurationValue<T>(string value, IConfigurationSection valueSection, Func<string, T> parse)
+    {
+        try
+        {
+            return parse(value);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to convert configuration value at '{valueSection.Path}' to type '{typeof(T).FullName}'.", ex);
         }
     }
 

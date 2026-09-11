@@ -75,11 +75,19 @@ public sealed class ConfigurationBindingTests
 
     // Regression test for a review finding on this PR: a key that IS present but holds an empty/
     // malformed scalar value must not be treated the same as a genuinely missing key. The original
-    // ConfigurationBinder.Bind threw for this (verified empirically: config.Bind(target) with
-    // Lifetime="" throws InvalidOperationException) - the reflection-free interceptor replacement must
-    // preserve that fail-loudly behavior, not silently fall back to SkillServiceConfiguration's default.
+    // ConfigurationBinder.Bind threw InvalidOperationException("Failed to convert configuration value
+    // at '{path}' to type '{type}'.", innerException) for this (verified empirically) - a second review
+    // pass on this PR pointed out that a bare Throw<Exception>() masks whether the interceptor
+    // reproduces that outer wrapper shape, or leaks a raw FormatException/ArgumentException that would
+    // observably differ from the fallback path and could break a consumer's startup error handling that
+    // catches InvalidOperationException specifically around AddSkillMediator. Assert the outer exception
+    // type and message exactly. The inner exception's concrete type is our own (Enum.Parse/int.Parse),
+    // not ConfigurationBinder's private converter internals - verified empirically which BCL exception
+    // each actually throws (ArgumentException for Enum.Parse, FormatException for int.Parse) rather than
+    // assuming; asserted here so a future change to the parse call is caught, not to claim byte-identical
+    // parity with ConfigurationBinder's own (intentionally unreplicated) inner exception shape.
     [Fact]
-    public void AddSkillMediator_WithEmptyLifetimeValue_ThrowsInsteadOfSilentlyKeepingDefault()
+    public void AddSkillMediator_WithEmptyLifetimeValue_ThrowsInvalidOperationExceptionMatchingConfigurationBinderShape()
     {
         var services = new ServiceCollection();
         var configuration = new ConfigurationBuilder()
@@ -92,11 +100,13 @@ public sealed class ConfigurationBindingTests
         var act = () => services.AddSkillMediator(configuration,
             cfg => cfg.RegisterServicesFromAssemblyContaining<ConfigurationBindingTests>());
 
-        act.Should().Throw<Exception>();
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Failed to convert configuration value at 'SkillConfiguration:Lifetime' to type 'Microsoft.Extensions.DependencyInjection.ServiceLifetime'.")
+            .WithInnerException<ArgumentException>();
     }
 
     [Fact]
-    public void AddSkillMediator_WithEmptyCancellationTimeoutBufferMillisecondsValue_ThrowsInsteadOfSilentlyKeepingDefault()
+    public void AddSkillMediator_WithEmptyCancellationTimeoutBufferMillisecondsValue_ThrowsInvalidOperationExceptionMatchingConfigurationBinderShape()
     {
         var services = new ServiceCollection();
         var configuration = new ConfigurationBuilder()
@@ -109,7 +119,9 @@ public sealed class ConfigurationBindingTests
         var act = () => services.AddSkillMediator(configuration,
             cfg => cfg.RegisterServicesFromAssemblyContaining<ConfigurationBindingTests>());
 
-        act.Should().Throw<Exception>();
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Failed to convert configuration value at 'SkillConfiguration:CancellationTimeoutBufferMilliseconds' to type 'System.Int32'.")
+            .WithInnerException<FormatException>();
     }
 
     [Fact]
