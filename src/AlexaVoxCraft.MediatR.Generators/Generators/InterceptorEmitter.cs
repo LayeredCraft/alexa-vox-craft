@@ -22,6 +22,7 @@ internal static class InterceptorEmitter
         sb.AppendLine("{");
         sb.AppendLine("using System;");
         sb.AppendLine("using System.Diagnostics;");
+        sb.AppendLine("using System.Globalization;");
         sb.AppendLine("using System.Runtime.CompilerServices;");
         sb.AppendLine("using Microsoft.Extensions.Configuration;");
         sb.AppendLine("using Microsoft.Extensions.DependencyInjection;");
@@ -45,13 +46,13 @@ internal static class InterceptorEmitter
         sb.AppendLine("    {");
         sb.AppendLine("        // Build effective configuration");
         sb.AppendLine("        var cfg = new AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration();");
-        sb.AppendLine("        configuration.GetSection(sectionName).Bind(cfg);");
+        sb.AppendLine("        BindSkillServiceConfiguration(configuration.GetSection(sectionName), cfg);");
         sb.AppendLine("        settingsAction?.Invoke(cfg);");
         sb.AppendLine();
         sb.AppendLine("        // Register configuration with DI to enable IOptions<SkillServiceConfiguration>");
         sb.AppendLine("        services.Configure<AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration>(opt =>");
         sb.AppendLine("        {");
-        sb.AppendLine("            configuration.GetSection(sectionName).Bind(opt);");
+        sb.AppendLine("            BindSkillServiceConfiguration(configuration.GetSection(sectionName), opt);");
         sb.AppendLine("            settingsAction?.Invoke(opt);");
         sb.AppendLine("        });");
         sb.AppendLine();
@@ -67,6 +68,9 @@ internal static class InterceptorEmitter
 
         sb.AppendLine("        return services;");
         sb.AppendLine("    }");
+        sb.AppendLine();
+
+        EmitConfigurationBindingHelper(sb);
 
         sb.AppendLine("}");
         sb.AppendLine("}");
@@ -219,6 +223,51 @@ internal static class InterceptorEmitter
         var typeName = model.PersistenceAdapter.Value.Type.FullyQualifiedName;
         sb.AppendLine($"        services.TryAddSingleton<AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter, {typeName}>();");
 
+        sb.AppendLine();
+    }
+
+    // Reflection-free replacement for ConfigurationBinder.Bind(IConfiguration, object) against
+    // AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration. ConfigurationBinder.Bind's runtime overload
+    // is RequiresUnreferencedCode/RequiresDynamicCode - not Native AOT/trim safe (Issue #191). This
+    // generator already has full compile-time knowledge of SkillServiceConfiguration's fixed shape, so
+    // it emits direct property reads instead of delegating to the reflection-based binder. Semantics
+    // matched to ConfigurationBinder.Bind's default (defaultValueIfNotFound: false): a missing/empty key
+    // leaves the target property at whatever value it already had (its declared default, or a value
+    // already set by a prior settingsAction call), never overwritten with an implicit default.
+    private static void EmitConfigurationBindingHelper(StringBuilder sb)
+    {
+        sb.AppendLine("    private static void BindSkillServiceConfiguration(IConfigurationSection section, AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration target)");
+        sb.AppendLine("    {");
+        sb.AppendLine("        var customUserAgent = section[\"CustomUserAgent\"];");
+        sb.AppendLine("        if (customUserAgent is not null)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.CustomUserAgent = customUserAgent;");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+        sb.AppendLine("        var skillId = section[\"SkillId\"];");
+        sb.AppendLine("        if (skillId is not null)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.SkillId = skillId;");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+        sb.AppendLine("        var defaultVoiceName = section[\"DefaultVoiceName\"];");
+        sb.AppendLine("        if (defaultVoiceName is not null)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.DefaultVoiceName = defaultVoiceName;");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+        sb.AppendLine("        var lifetime = section[\"Lifetime\"];");
+        sb.AppendLine("        if (!string.IsNullOrEmpty(lifetime))");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.Lifetime = Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(lifetime, ignoreCase: true);");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+        sb.AppendLine("        var cancellationTimeoutBufferMilliseconds = section[\"CancellationTimeoutBufferMilliseconds\"];");
+        sb.AppendLine("        if (!string.IsNullOrEmpty(cancellationTimeoutBufferMilliseconds))");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.CancellationTimeoutBufferMilliseconds = int.Parse(cancellationTimeoutBufferMilliseconds, CultureInfo.InvariantCulture);");
+        sb.AppendLine("        }");
+        sb.AppendLine("    }");
         sb.AppendLine();
     }
 

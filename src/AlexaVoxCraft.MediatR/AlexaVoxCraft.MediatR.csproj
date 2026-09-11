@@ -5,6 +5,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
+        <!-- AddSkillMediator's non-generated fallback path (ServiceCollectionExtensions.cs) binds
+             SkillServiceConfiguration via ConfigurationBinder.Bind at two statically-known call sites.
+             This generator intercepts those calls with reflection-free, source-generated binding code
+             instead (Issue #191) - unlike AlexaVoxCraft.MediatR.Generators' own emitted interceptor,
+             which Roslyn generators cannot see or rewrite, so it stays hand-written (InterceptorEmitter). -->
+        <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
 
         <PackageId>AlexaVoxCraft.MediatR</PackageId>
         <Title>AlexaVoxCraft.MediatR</Title>

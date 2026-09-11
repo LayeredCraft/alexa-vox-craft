@@ -37,6 +37,15 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+        <!-- A source-tree ProjectReference to AlexaVoxCraft.MediatR alone does not pull in its
+             interceptor generator as an analyzer (CLAUDE.md). This project reference is required so
+             this project's own AddSkillMediator(configuration, ...) call sites are actually intercepted,
+             letting ConfigurationBindingTests exercise the real generated interceptor's configuration
+             binding (Issue #191, docs/plans/0004-...md Task Group 2) rather than the hand-written
+             fallback path. -->
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
     </ItemGroup>
 
 </Project>

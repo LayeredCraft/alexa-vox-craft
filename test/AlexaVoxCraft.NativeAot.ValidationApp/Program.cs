@@ -1,4 +1,5 @@
 using System.Net;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Http.Clients;
@@ -14,6 +15,8 @@ using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Serialization;
 using AlexaVoxCraft.NativeAot.ValidationApp;
+using AlexaVoxCraft.Smapi;
+using AlexaVoxCraft.Smapi.Auth;
 using AlexaVoxCraft.Smapi.Builders.InteractionModel;
 using AlexaVoxCraft.Smapi.Clients;
 using AlexaVoxCraft.Smapi.Models.Invocation;
@@ -21,12 +24,27 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 var failures = new List<string>();
 void Check(string name, bool ok)
 {
     Console.WriteLine(ok ? $"PASS: {name}" : $"FAIL: {name}");
     if (!ok) failures.Add(name);
+}
+
+// Loads one of the trusted, realistic Alexa request fixtures embedded from the JIT test suites'
+// Examples/ directories (see the csproj) - not a new, validator-only payload. Embedded rather than
+// read from disk: the published native binary has no dependency on CI's working directory this way
+// (docs/research/2026-09-11-...md §8).
+string LoadFixture(string fileName)
+{
+    var assembly = Assembly.GetExecutingAssembly();
+    var resourceName = $"{assembly.GetName().Name}.Examples.{fileName}";
+    using var stream = assembly.GetManifestResourceStream(resourceName)
+        ?? throw new InvalidOperationException($"Embedded fixture resource '{resourceName}' not found.");
+    using var reader = new StreamReader(stream);
+    return reader.ReadToEnd();
 }
 
 void CheckException<TException>(string name, Action act) where TException : Exception
@@ -222,22 +240,147 @@ void CheckException<TException>(string name, Action act) where TException : Exce
 }
 
 // ---------------------------------------------------------------------------
-// Scenario 8: Lambda boundary - the real AlexaLambdaSerializer, not just JSON calls in isolation.
+// Scenario 8: Lambda boundary - the real AlexaLambdaSerializer, deserializing the same trusted
+// LaunchRequest/IntentRequest fixtures the JIT test suites trust (not a hand-built object), proving
+// reuse of a realistic payload through the real production entry point.
 // ---------------------------------------------------------------------------
 {
     var serializer = new AlexaLambdaSerializer(NullLogger<AlexaLambdaSerializer>.Instance, AlexaJsonOptions.DefaultOptions);
-    var payload = new SkillRequest
+
+    using (var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LoadFixture("LaunchRequest.json"))))
     {
-        Request = new LaunchRequest { Type = "LaunchRequest" },
-        Context = new Context { System = new AlexaSystem { Application = new Application { ApplicationId = "a" } } }
-    };
+        var launch = serializer.Deserialize<SkillRequest>(stream);
+        Check("AlexaLambdaSerializer.Deserialize<SkillRequest> on real LaunchRequest fixture",
+            launch?.Request is LaunchRequest);
+    }
 
-    using var stream = new MemoryStream();
-    serializer.Serialize(payload, stream);
-    stream.Position = 0;
-    var roundTripped = serializer.Deserialize<SkillRequest>(stream);
+    using (var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LoadFixture("IntentRequest.json"))))
+    {
+        var intent = serializer.Deserialize<SkillRequest>(stream);
+        Check("AlexaLambdaSerializer.Deserialize<SkillRequest> on real IntentRequest fixture",
+            intent?.Request is IntentRequest);
+    }
 
-    Check("AlexaLambdaSerializer round-trips SkillRequest", roundTripped?.Request is LaunchRequest);
+    using (var outStream = new MemoryStream())
+    {
+        var payload = new SkillRequest
+        {
+            Request = new LaunchRequest { Type = "LaunchRequest" },
+            Context = new Context { System = new AlexaSystem { Application = new Application { ApplicationId = "a" } } }
+        };
+        serializer.Serialize(payload, outStream);
+        outStream.Position = 0;
+        var roundTripped = serializer.Deserialize<SkillRequest>(outStream);
+        Check("AlexaLambdaSerializer round-trips a constructed SkillResponse", roundTripped?.Request is LaunchRequest);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Scenario 9: APL Lambda boundary regression proof (Issue #190) - the real AlexaLambdaSerializer
+// deserializing the real, trusted APLSkillRequest fixtures the JIT AplSkillRequestTests already
+// trust, exercising the exact call trivia-platform's Lambda made when it crashed
+// (AlexaLambdaSerializer.Deserialize<APLSkillRequest>). APLSupport.Add() was already called by
+// Scenario 2, matching real consumer startup order (APLSupport.Add() before the first request) -
+// not repeated here as a validation-only shortcut. Dispatches through the real ISkillMediator.Send
+// afterward, then serializes a response back out through the same serializer.
+// ---------------------------------------------------------------------------
+{
+    var serializer = new AlexaLambdaSerializer(NullLogger<AlexaLambdaSerializer>.Instance, AlexaJsonOptions.DefaultOptions);
+
+    APLSkillRequest? DeserializeAplFixture(string fileName)
+    {
+        using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LoadFixture(fileName)));
+        return serializer.Deserialize<APLSkillRequest>(stream);
+    }
+
+    var userTouch = DeserializeAplFixture("UserTouchRequest.json");
+    Check("AlexaLambdaSerializer.Deserialize<APLSkillRequest> on real UserTouchRequest fixture",
+        userTouch?.Request is UserEventRequest);
+
+    var userEventAnswer = DeserializeAplFixture("APLUserEvent_Answer.json");
+    Check("AlexaLambdaSerializer.Deserialize<APLSkillRequest> on real APLUserEvent_Answer fixture (Viewport/AplVisualContext)",
+        userEventAnswer?.Request is UserEventRequest
+        && userEventAnswer.Context.Viewport is not null
+        && userEventAnswer.Context.AplVisualContext is not null);
+
+    if (userTouch is not null)
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Skill:SkillId"] = userTouch.Context.System.Application.ApplicationId
+            })
+            .Build();
+
+        var services = new ServiceCollection();
+        services.AddSkillMediator(configuration, cfg =>
+        {
+            cfg.SkillId = userTouch.Context.System.Application.ApplicationId;
+            cfg.RegisterServicesFromAssemblyContaining<UserEventHandler>();
+        });
+        services.AddScoped<SkillRequestFactory>(sp => () => userTouch);
+        services.AddLogging(b => b.AddConsole());
+
+        using var provider = services.BuildServiceProvider();
+        using var scope = provider.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<ISkillMediator>();
+        var response = mediator.Send(userTouch, CancellationToken.None).GetAwaiter().GetResult();
+
+        Check("ISkillMediator.Send dispatches the deserialized APLSkillRequest's UserEventRequest",
+            response.Response?.OutputSpeech is SsmlOutputSpeech ssml
+            && ssml.Ssml.Contains("hello from the native AOT validation app's APL handler"));
+
+        using var responseStream = new MemoryStream();
+        serializer.Serialize(response, responseStream);
+        Check("AlexaLambdaSerializer serializes the resulting SkillResponse", responseStream.Length > 0);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Scenario 10: Smapi configuration-binding runtime path (Issue #191 coverage gap) - both
+// AddSmapiDeveloperClient(IConfiguration, ...) and AddSkillInvocationClient(IConfiguration, ...), each
+// with its own real IConfiguration/ServiceCollection (so one call's bound values can't mask the
+// other's), bound via AlexaVoxCraft.Smapi.csproj's EnableConfigurationBindingGenerator rather than
+// reflection-based ConfigurationBinder.Bind. Neither was exercised by this app before.
+// ---------------------------------------------------------------------------
+{
+    var configuration = new ConfigurationBuilder()
+        .AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["SmapiClient:ClientId"] = "validation-client-id",
+            ["SmapiClient:ClientSecret"] = "validation-client-secret",
+            ["SmapiClient:RefreshToken"] = "validation-refresh-token"
+        })
+        .Build();
+
+    var services = new ServiceCollection();
+    services.AddSmapiDeveloperClient(configuration);
+
+    using var provider = services.BuildServiceProvider();
+    var options = provider.GetRequiredService<IOptions<SmapiDeveloperAccessTokenOptions>>().Value;
+
+    Check("AddSmapiDeveloperClient(IConfiguration) binds SmapiDeveloperAccessTokenOptions",
+        options is { ClientId: "validation-client-id", ClientSecret: "validation-client-secret", RefreshToken: "validation-refresh-token" });
+}
+
+{
+    var configuration = new ConfigurationBuilder()
+        .AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["InvocationClient:ClientId"] = "validation-invocation-client-id",
+            ["InvocationClient:ClientSecret"] = "validation-invocation-client-secret",
+            ["InvocationClient:RefreshToken"] = "validation-invocation-refresh-token"
+        })
+        .Build();
+
+    var services = new ServiceCollection();
+    services.AddSkillInvocationClient(configuration);
+
+    using var provider = services.BuildServiceProvider();
+    var options = provider.GetRequiredService<IOptions<SmapiDeveloperAccessTokenOptions>>().Value;
+
+    Check("AddSkillInvocationClient(IConfiguration) binds SmapiDeveloperAccessTokenOptions",
+        options is { ClientId: "validation-invocation-client-id", ClientSecret: "validation-invocation-client-secret", RefreshToken: "validation-invocation-refresh-token" });
 }
 
 Console.WriteLine();
