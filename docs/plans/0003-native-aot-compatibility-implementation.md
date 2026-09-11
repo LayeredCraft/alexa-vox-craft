@@ -899,6 +899,21 @@ test-infra dependency — see the ISP/Http bullet above); whether one monolithic
 smaller ones better serves clear failure attribution (the ADR does not mandate a specific project count,
 only the scenario coverage).
 
+**Addendum (2026-09-11, docs/plans/0004-native-aot-runtime-fixes-and-validation.md Task Group 5):** the
+APL bullet above (step 4) named `UserEventRequest` as the type to deserialize for APL coverage — but
+`UserEventRequest` is a polymorphic dispatch target, not the actual public entry-point type a consumer
+deserializes an incoming request into (`APLSkillRequest`, the type `AlexaSkillFunction<APLSkillRequest,
+SkillResponse>` and `AlexaLambdaSerializer.Deserialize<T>` are instantiated with per
+`samples/Sample.Apl.Function`). `APLSkillRequest` never appeared in this plan or in ADR-0001's own
+examples. The implemented validation app (`test/AlexaVoxCraft.NativeAot.ValidationApp`) additionally
+substituted a response-direction `RenderDocumentDirective` round-trip for this bullet's specified
+request-direction deserialize, so even the (insufficient) spec above was not fully implemented. Both gaps
+together are why the `APLSkillRequest` metadata omission (Issue #190) shipped undetected; see
+`docs/research/2026-09-11-native-aot-runtime-validation-gaps.md` §4-§5 for the full reconstruction. Kept
+here, unedited above, as the historical record of what this plan actually specified — future validation-
+scenario specs should name the real public entry-point type a consumer's serializer call site uses, not
+an inner/derived type it happens to produce.
+
 ---
 
 ## Task Group 8 — Analyzers / `IsAotCompatible` decisions

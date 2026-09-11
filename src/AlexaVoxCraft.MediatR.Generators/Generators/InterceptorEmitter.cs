@@ -22,6 +22,7 @@ internal static class InterceptorEmitter
         sb.AppendLine("{");
         sb.AppendLine("using System;");
         sb.AppendLine("using System.Diagnostics;");
+        sb.AppendLine("using System.Globalization;");
         sb.AppendLine("using System.Runtime.CompilerServices;");
         sb.AppendLine("using Microsoft.Extensions.Configuration;");
         sb.AppendLine("using Microsoft.Extensions.DependencyInjection;");
@@ -45,13 +46,13 @@ internal static class InterceptorEmitter
         sb.AppendLine("    {");
         sb.AppendLine("        // Build effective configuration");
         sb.AppendLine("        var cfg = new AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration();");
-        sb.AppendLine("        configuration.GetSection(sectionName).Bind(cfg);");
+        sb.AppendLine("        BindSkillServiceConfiguration(configuration.GetSection(sectionName), cfg);");
         sb.AppendLine("        settingsAction?.Invoke(cfg);");
         sb.AppendLine();
         sb.AppendLine("        // Register configuration with DI to enable IOptions<SkillServiceConfiguration>");
         sb.AppendLine("        services.Configure<AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration>(opt =>");
         sb.AppendLine("        {");
-        sb.AppendLine("            configuration.GetSection(sectionName).Bind(opt);");
+        sb.AppendLine("            BindSkillServiceConfiguration(configuration.GetSection(sectionName), opt);");
         sb.AppendLine("            settingsAction?.Invoke(opt);");
         sb.AppendLine("        });");
         sb.AppendLine();
@@ -67,6 +68,9 @@ internal static class InterceptorEmitter
 
         sb.AppendLine("        return services;");
         sb.AppendLine("    }");
+        sb.AppendLine();
+
+        EmitConfigurationBindingHelper(sb);
 
         sb.AppendLine("}");
         sb.AppendLine("}");
@@ -219,6 +223,78 @@ internal static class InterceptorEmitter
         var typeName = model.PersistenceAdapter.Value.Type.FullyQualifiedName;
         sb.AppendLine($"        services.TryAddSingleton<AlexaVoxCraft.MediatR.Attributes.Persistence.IPersistenceAdapter, {typeName}>();");
 
+        sb.AppendLine();
+    }
+
+    // Reflection-free replacement for ConfigurationBinder.Bind(IConfiguration, object) against
+    // AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration. ConfigurationBinder.Bind's runtime overload
+    // is RequiresUnreferencedCode/RequiresDynamicCode - not Native AOT/trim safe (Issue #191). This
+    // generator already has full compile-time knowledge of SkillServiceConfiguration's fixed shape, so
+    // it emits direct property reads instead of delegating to the reflection-based binder. Semantics
+    // matched to ConfigurationBinder.Bind's default (defaultValueIfNotFound: false): a genuinely missing
+    // key (section[key] is null) leaves the target property at whatever value it already had (its
+    // declared default, or a value already set by a prior settingsAction call), never overwritten with
+    // an implicit default. A key that IS present but holds an empty/malformed scalar value is NOT
+    // treated as missing - it is handed to Enum.Parse/int.Parse and allowed to throw, wrapped by
+    // ParseScalarConfigurationValue into the exact same InvalidOperationException shape
+    // ConfigurationBinder.Bind itself throws for a malformed scalar (verified empirically:
+    // config.Bind(target) on a POCO with Lifetime="" throws InvalidOperationException("Failed to convert
+    // configuration value at '{path}' to type '{type}'.", innerException) - not a raw
+    // FormatException/ArgumentException, and not a silent no-op) - so an interceptor-enabled consumer's
+    // startup error handling that catches InvalidOperationException around AddSkillMediator sees the
+    // same exception shape a fallback-path consumer would.
+    private static void EmitConfigurationBindingHelper(StringBuilder sb)
+    {
+        sb.AppendLine("    private static void BindSkillServiceConfiguration(IConfigurationSection section, AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration target)");
+        sb.AppendLine("    {");
+        sb.AppendLine("        var customUserAgent = section[\"CustomUserAgent\"];");
+        sb.AppendLine("        if (customUserAgent is not null)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.CustomUserAgent = customUserAgent;");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+        sb.AppendLine("        var skillId = section[\"SkillId\"];");
+        sb.AppendLine("        if (skillId is not null)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.SkillId = skillId;");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+        sb.AppendLine("        var defaultVoiceName = section[\"DefaultVoiceName\"];");
+        sb.AppendLine("        if (defaultVoiceName is not null)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.DefaultVoiceName = defaultVoiceName;");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+        sb.AppendLine("        var lifetime = section[\"Lifetime\"];");
+        sb.AppendLine("        if (lifetime is not null)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.Lifetime = ParseScalarConfigurationValue(lifetime, section.GetSection(\"Lifetime\"), static v => Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(v, ignoreCase: true));");
+        sb.AppendLine("        }");
+        sb.AppendLine();
+        sb.AppendLine("        var cancellationTimeoutBufferMilliseconds = section[\"CancellationTimeoutBufferMilliseconds\"];");
+        sb.AppendLine("        if (cancellationTimeoutBufferMilliseconds is not null)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            target.CancellationTimeoutBufferMilliseconds = ParseScalarConfigurationValue(cancellationTimeoutBufferMilliseconds, section.GetSection(\"CancellationTimeoutBufferMilliseconds\"), static v => int.Parse(v, CultureInfo.InvariantCulture));");
+        sb.AppendLine("        }");
+        sb.AppendLine("    }");
+        sb.AppendLine();
+        // Mirrors ConfigurationBinder's own scalar-conversion wrapping exactly (verified empirically:
+        // config.Bind(target) with an empty/malformed Lifetime or CancellationTimeoutBufferMilliseconds
+        // throws InvalidOperationException("Failed to convert configuration value at '{path}' to type
+        // '{type.FullName}'.", innerException), not a raw FormatException/ArgumentException) - so an
+        // interceptor-enabled consumer's startup error handling that catches InvalidOperationException
+        // around AddSkillMediator sees the same exception shape as a fallback-path consumer.
+        sb.AppendLine("    private static T ParseScalarConfigurationValue<T>(string value, IConfigurationSection valueSection, Func<string, T> parse)");
+        sb.AppendLine("    {");
+        sb.AppendLine("        try");
+        sb.AppendLine("        {");
+        sb.AppendLine("            return parse(value);");
+        sb.AppendLine("        }");
+        sb.AppendLine("        catch (Exception ex)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            throw new InvalidOperationException($\"Failed to convert configuration value at '{valueSection.Path}' to type '{typeof(T).FullName}'.\", ex);");
+        sb.AppendLine("        }");
+        sb.AppendLine("    }");
         sb.AppendLine();
     }
 

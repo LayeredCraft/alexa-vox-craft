@@ -5,6 +5,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
+        <!-- AddSmapiDeveloperClient/AddSkillInvocationClient bind SmapiDeveloperAccessTokenOptions via
+             ConfigurationBinder.Bind at two statically-known call sites (ServiceCollectionExtensions.cs).
+             This generator intercepts those calls with reflection-free, source-generated binding code
+             instead (Issue #191). -->
+        <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
 
         <PackageId>AlexaVoxCraft.Smapi</PackageId>
         <Title>AlexaVoxCraft.Smapi</Title>

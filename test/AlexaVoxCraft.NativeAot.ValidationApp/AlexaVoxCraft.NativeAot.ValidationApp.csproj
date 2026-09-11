@@ -58,4 +58,18 @@
         <ProjectReference Include="..\..\src\AlexaVoxCraft.InSkillPurchasing\AlexaVoxCraft.InSkillPurchasing.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <!-- Reuse the same trusted, realistic Alexa request fixtures the JIT test suites already trust
+             (docs/research/2026-09-11-native-aot-runtime-validation-gaps.md §8; docs/plans/0004-...md
+             Task Group 3) instead of inventing new simplified payloads. Embedded (not CopyToOutputDirectory
+             content) because the CI workflow executes the published native binary with the repo root as
+             its working directory, not the publish output folder - a relative-path file load would not
+             resolve there, while an embedded resource is compiled into the assembly and has no dependency
+             on publish layout or working directory. -->
+        <EmbeddedResource Include="..\AlexaVoxCraft.Model.Tests\Examples\Requests\LaunchRequest.json" Link="Examples\LaunchRequest.json" />
+        <EmbeddedResource Include="..\AlexaVoxCraft.Model.Tests\Examples\Requests\IntentRequest.json" Link="Examples\IntentRequest.json" />
+        <EmbeddedResource Include="..\AlexaVoxCraft.Model.Apl.Tests\Examples\Requests\UserTouchRequest.json" Link="Examples\UserTouchRequest.json" />
+        <EmbeddedResource Include="..\AlexaVoxCraft.Model.Apl.Tests\Examples\Requests\APLUserEvent_Answer.json" Link="Examples\APLUserEvent_Answer.json" />
+    </ItemGroup>
+
 </Project>

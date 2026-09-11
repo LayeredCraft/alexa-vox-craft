@@ -18,6 +18,10 @@
         <InternalsVisibleTo Include="AlexaVoxCraft.Smapi" />
         <InternalsVisibleTo Include="AlexaVoxCraft.Model.Tests" />
         <InternalsVisibleTo Include="AlexaVoxCraft.Model.Legacy.Tests" />
+        <!-- AplModelContextRootTypeCompletenessTests (AlexaVoxCraft.Model.Apl.Tests) checks ModelContext's
+             root-type registration too, since SkillRequest is owned there (Issue #190 follow-up,
+             docs/plans/0004-...md Task Group 4). -->
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.Apl.Tests" />
     </ItemGroup>
 
 </Project>

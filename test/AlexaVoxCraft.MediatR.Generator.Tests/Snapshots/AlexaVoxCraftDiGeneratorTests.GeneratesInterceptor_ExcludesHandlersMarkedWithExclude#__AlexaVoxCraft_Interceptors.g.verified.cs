@@ -17,6 +17,7 @@ namespace AlexaVoxCraft.Generated
 {
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,13 +34,13 @@ file static class AlexaVoxCraftInterceptors
     {
         // Build effective configuration
         var cfg = new AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration();
-        configuration.GetSection(sectionName).Bind(cfg);
+        BindSkillServiceConfiguration(configuration.GetSection(sectionName), cfg);
         settingsAction?.Invoke(cfg);
 
         // Register configuration with DI to enable IOptions<SkillServiceConfiguration>
         services.Configure<AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration>(opt =>
         {
-            configuration.GetSection(sectionName).Bind(opt);
+            BindSkillServiceConfiguration(configuration.GetSection(sectionName), opt);
             settingsAction?.Invoke(opt);
         });
 
@@ -54,5 +55,51 @@ file static class AlexaVoxCraftInterceptors
 
         return services;
     }
+
+    private static void BindSkillServiceConfiguration(IConfigurationSection section, AlexaVoxCraft.MediatR.DI.SkillServiceConfiguration target)
+    {
+        var customUserAgent = section["CustomUserAgent"];
+        if (customUserAgent is not null)
+        {
+            target.CustomUserAgent = customUserAgent;
+        }
+
+        var skillId = section["SkillId"];
+        if (skillId is not null)
+        {
+            target.SkillId = skillId;
+        }
+
+        var defaultVoiceName = section["DefaultVoiceName"];
+        if (defaultVoiceName is not null)
+        {
+            target.DefaultVoiceName = defaultVoiceName;
+        }
+
+        var lifetime = section["Lifetime"];
+        if (lifetime is not null)
+        {
+            target.Lifetime = ParseScalarConfigurationValue(lifetime, section.GetSection("Lifetime"), static v => Enum.Parse<Microsoft.Extensions.DependencyInjection.ServiceLifetime>(v, ignoreCase: true));
+        }
+
+        var cancellationTimeoutBufferMilliseconds = section["CancellationTimeoutBufferMilliseconds"];
+        if (cancellationTimeoutBufferMilliseconds is not null)
+        {
+            target.CancellationTimeoutBufferMilliseconds = ParseScalarConfigurationValue(cancellationTimeoutBufferMilliseconds, section.GetSection("CancellationTimeoutBufferMilliseconds"), static v => int.Parse(v, CultureInfo.InvariantCulture));
+        }
+    }
+
+    private static T ParseScalarConfigurationValue<T>(string value, IConfigurationSection valueSection, Func<string, T> parse)
+    {
+        try
+        {
+            return parse(value);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to convert configuration value at '{valueSection.Path}' to type '{typeof(T).FullName}'.", ex);
+        }
+    }
+
 }
 }

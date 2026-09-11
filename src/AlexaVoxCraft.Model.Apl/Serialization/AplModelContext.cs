@@ -199,6 +199,7 @@ namespace AlexaVoxCraft.Model.Apl.Serialization;
 [JsonSerializable(typeof(WatchObjectCommand))]
 [JsonSerializable(typeof(RenderDocumentDirective))]
 [JsonSerializable(typeof(UpdateIndexListDataDirective))]
+[JsonSerializable(typeof(APLSkillRequest))]
 [JsonSerializable(typeof(UserEventRequest))]
 [JsonSerializable(typeof(LoadIndexListDataRequest))]
 [JsonSerializable(typeof(LoadTokenListDataRequest))]
