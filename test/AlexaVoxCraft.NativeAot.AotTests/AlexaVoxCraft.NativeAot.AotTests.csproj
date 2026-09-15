@@ -1,0 +1,120 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- Real xUnit v3 Native AOT test project, replacing AlexaVoxCraft.NativeAot.ValidationApp's
+         bespoke Check()-based console app. Uses Compono/Compono.XunitV3.Aot (compono repo's
+         ADR-0066/PLAN-0066/ADR-0067/PLAN-0067 - Phase 2 profile support) so ordinary
+         [Theory]+[Compose]/[Compose<TProfile>]/[Compose<TProfile, TConfig>] tests can be published
+         and executed as a real Native AOT binary - individually named/failing tests instead of a
+         single Check(name, ok) accumulator. See docs/plans/0003-native-aot-compatibility-implementation.md
+         Task Group 7 for the original console-app design this replaces, and the compono repo's
+         RESEARCH/ADR-0067 for why this conversion waited for Phase 2 (100% of this repo's real
+         [Compose] usage in the JIT test suite is [Compose<LambdaTestProfile>] - Phase 1 alone
+         couldn't express that shape here). -->
+
+    <PropertyGroup>
+        <!-- Single-TFM native AOT test project - overrides test/Directory.Build.props' multi-target
+             list, matching the old ValidationApp's own net9.0 choice (unchanged: no reason to move
+             TFMs as part of this conversion). -->
+        <TargetFrameworks></TargetFrameworks>
+        <TargetFramework>net9.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- Deliberately NOT IsTestProject=true, matching the app this replaces: test/Directory.Build.props
+             unconditionally adds the JIT-mode xunit.v3.mtp-v2 PackageReference whenever IsTestProject
+             is true, which would conflict (CS0433) with xunit.v3.aot.mtp-v2 below - the exact hazard
+             ADR-0066/AGENTS.md warns about. TestingPlatformDotnetTestSupport/UseMicrosoftTestingPlatformRunner
+             alone are sufficient for `dotnet test` to discover and run this MTP-executable project. -->
+        <LangVersion>latest</LangVersion>
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+
+        <!-- Reproduces the exact failure mode a real AOT-published consumer hits (research §11 step 1,
+             preserved from the app this replaces). -->
+        <PublishAot>true</PublishAot>
+        <IsAotCompatible>true</IsAotCompatible>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <EnableAotAnalyzer>true</EnableAotAnalyzer>
+        <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+
+        <EnableMediatRGeneratorInterceptor>true</EnableMediatRGeneratorInterceptor>
+        <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);AlexaVoxCraft.Generated</InterceptorsPreviewNamespaces>
+        <InterceptorsNamespaces>$(InterceptorsNamespaces);AlexaVoxCraft.Generated</InterceptorsNamespaces>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <CompilerVisibleProperty Include="EnableMediatRGeneratorInterceptor" />
+    </ItemGroup>
+
+    <!-- Not a JIT test project - remove the Xunit/AwesomeAssertions global usings
+         test/Directory.Build.props adds unconditionally (these would resolve to xunit.v3.mtp-v2's
+         Xunit namespace if that package were present; this project's own `using Xunit;` for
+         [Theory]/[Fact]/etc. instead resolves to xunit.v3.aot.mtp-v2's types). Preserved unchanged
+         from the app this replaces. -->
+    <ItemGroup>
+        <Using Remove="Xunit" />
+        <Using Remove="AwesomeAssertions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Root this assembly so the AOT/trim analyzers evaluate every reachable member, including
+             everything the MediatR interceptor generator and Compono.Generators emit into it. -->
+        <TrimmerRootAssembly Include="AlexaVoxCraft.NativeAot.AotTests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Local dev / source-tree consumption: an ordinary ProjectReference to AlexaVoxCraft.MediatR
+             does NOT pull in its interceptor generator as an analyzer for this compilation - only a
+             packaged NuGet consumer gets that automatically (the "analyzers/dotnet/cs" pack path).
+             Preserved unchanged from the app this replaces. -->
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Generators\AlexaVoxCraft.MediatR.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Http\AlexaVoxCraft.Http.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.InSkillPurchasing\AlexaVoxCraft.InSkillPurchasing.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- xUnit v3's real, officially-supported Native AOT package family (compono RESEARCH-0031/0032) -
+             never the reflection-mode xunit.v3.mtp-v2/xunit.v3.extensibility.core. Cannot be combined
+             with Compono.XunitV3/xunit.v3.mtp-v2 in the same project (CS0433) - this project
+             deliberately references none of the JIT-mode test packages the rest of test/ uses. -->
+        <PackageReference Include="xunit.v3.aot.mtp-v2" />
+        <!-- Compono/Compono.XunitV3.Aot/Compono.Http - version managed centrally by
+             Directory.Packages.props, bumped solution-wide to the 1.3.0-preview.112 lockstep line
+             (LayeredCraft/compono#140, ADR-0067/PLAN-0067 - Phase 2 profile support). -->
+        <PackageReference Include="Compono" />
+        <PackageReference Include="Compono.XunitV3.Aot" />
+        <PackageReference Include="Compono.Http" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Reuse the same trusted, realistic Alexa request fixtures the JIT test suites already trust
+             (docs/research/2026-09-11-native-aot-runtime-validation-gaps.md §8; docs/plans/0004-...md
+             Task Group 3) instead of inventing new simplified payloads. Embedded (not
+             CopyToOutputDirectory content) because the CI workflow executes the published native
+             binary with the repo root as its working directory, not the publish output folder - a
+             relative-path file load would not resolve there, while an embedded resource is compiled
+             into the assembly and has no dependency on publish layout or working directory. -->
+        <EmbeddedResource Include="..\AlexaVoxCraft.Model.Tests\Examples\Requests\LaunchRequest.json" Link="Examples\LaunchRequest.json" />
+        <EmbeddedResource Include="..\AlexaVoxCraft.Model.Tests\Examples\Requests\IntentRequest.json" Link="Examples\IntentRequest.json" />
+        <EmbeddedResource Include="..\AlexaVoxCraft.Model.Apl.Tests\Examples\Requests\UserTouchRequest.json" Link="Examples\UserTouchRequest.json" />
+        <EmbeddedResource Include="..\AlexaVoxCraft.Model.Apl.Tests\Examples\Requests\APLUserEvent_Answer.json" Link="Examples\APLUserEvent_Answer.json" />
+    </ItemGroup>
+
+    <!-- Only write generated files to disk in Debug builds (nice for inspection) -->
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    </PropertyGroup>
+
+</Project>

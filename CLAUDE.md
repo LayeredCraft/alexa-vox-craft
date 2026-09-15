@@ -56,11 +56,30 @@ public class Function : AlexaSkillFunction<SkillRequest, SkillResponse>
 
 All in-scope runtime packages (`AlexaVoxCraft.Model`, `.Model.Apl`, `.Model.InSkillPurchasing`, `.MediatR`,
 `.MediatR.Lambda`, `.Lambda`, `.Http`, `.InSkillPurchasing`, `.Smapi`) are `IsAotCompatible=true` and
-validated end to end by a rooted, continuously-CI-run Native AOT application
-(`test/AlexaVoxCraft.NativeAot.ValidationApp`, gated by `.github/workflows/native-aot-validation.yaml`).
-See ADR-0001 (`docs/adr/0001-native-aot-compatibility.md`) and plan 0003
+validated end to end by a rooted, continuously-CI-run real xUnit v3 Native AOT test project
+(`test/AlexaVoxCraft.NativeAot.AotTests`, using [Compono.XunitV3.Aot](https://github.com/LayeredCraft/compono)
+for AOT-safe, profile-based test composition - `[Compose<TProfile>]`/`[Compose<TProfile, TConfig>]`,
+gated by `.github/workflows/native-aot-validation.yaml`. Replaced the original bespoke
+`AlexaVoxCraft.NativeAot.ValidationApp` console app once Compono.XunitV3.Aot's Phase 2 profile support
+shipped (LayeredCraft/compono#140) - see that project's own file-level comments for the design
+rationale. See ADR-0001 (`docs/adr/0001-native-aot-compatibility.md`) and plan 0003
 (`docs/plans/0003-native-aot-compatibility-implementation.md`) for the full architecture and
 implementation history; consumer-facing guidance is in `docs/components/native-aot.md`.
+
+Native AOT publish succeeds with zero IL warnings originating from the AOT test project itself -
+confirmed by reconstructing and publishing the old `AlexaVoxCraft.NativeAot.ValidationApp` from git
+history with identical settings and comparing warning-for-warning: both produced the same 96 IL
+warnings before the conversion's own JSON-serialization call sites were migrated to
+`JsonSerializer`'s `JsonTypeInfo<T>`-based overloads (removing the 28 attributable to test code
+without any suppression). The remaining 68 warnings (IL2026/IL3050/IL2070/IL2090) originate in
+pre-existing `AlexaVoxCraft` production code and are unchanged from the previous validation
+application's own baseline - they are not new, and are not caused by this test project. Do not
+describe a Native AOT publish here as "clean" or "warning-free" without specifying which of these two
+categories a given warning count belongs to. The IL2070/IL2090 pair specifically (`EnumParser.cs`,
+`EnumHelper.cs` - `Type`/generic-parameter reflection calls without matching
+`DynamicallyAccessedMembers` annotations) is a distinct, legitimate finding from the
+resolver-chain-uncertainty IL2026/IL3050 pattern the JSON warnings represent - it was investigated and
+intentionally deferred as separate follow-up work, not fixed as part of the AOT test conversion.
 
 Key internal mechanics (not part of any public contract, useful when touching this area):
 - `AlexaJsonOptions`'s resolver chain: `ModelContext` (Model) → package-owned contexts
