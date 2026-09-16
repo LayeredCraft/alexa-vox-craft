@@ -42,12 +42,16 @@ public sealed class SmapiTests
             }
         }, AlexaJsonTypeInfo.For<SkillInvocationResponse<GameState>>());
 
-        var handler = new TestHttpHandler();
+        using var handler = new TestHttpHandler();
         handler.OnPost("/v2/skills/skill-id/stages/development/invocations")
             .RespondText(responseBody, "application/json");
 
+        using var httpClient = new HttpClient(handler, disposeHandler: false)
+        {
+            BaseAddress = new Uri("https://api.amazonalexa.com/")
+        };
         var invocationClient = new AlexaSkillInvocationClient(
-            new HttpClient(handler) { BaseAddress = new Uri("https://api.amazonalexa.com/") },
+            httpClient,
             NullLogger<AlexaSkillInvocationClient>.Instance);
 
         var invocationResult = await invocationClient.InvokeAsync<GameState, GameState>(
@@ -55,7 +59,7 @@ public sealed class SmapiTests
 
         var body = invocationResult?.Result?.SkillExecutionInfo?.InvocationResponse?.Body;
         Assert.NotNull(body);
-        Assert.Equal(7, body.Score);
+        Assert.Equal(7, body!.Score);
         Assert.Equal("smapi", body.Level);
     }
 }

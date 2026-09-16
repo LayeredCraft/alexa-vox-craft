@@ -13,11 +13,14 @@ public sealed class IspHttpTests
     [Fact]
     public async Task InSkillPurchasingClient_GetProductsAsync_UsesAotSafeDefaultResolver()
     {
-        var handler = new TestHttpHandler();
+        using var handler = new TestHttpHandler();
         handler.OnGet("/v1/users/~current/skills/~current/inSkillProducts")
             .RespondText("""{"inSkillProducts":[],"isTruncated":false}""", "application/json");
 
-        var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://api.amazonalexa.com/") };
+        using var httpClient = new HttpClient(handler, disposeHandler: false)
+        {
+            BaseAddress = new Uri("https://api.amazonalexa.com/")
+        };
         var ispClient = new InSkillPurchasingClient(httpClient, NullLogger<InSkillPurchasingClient>.Instance);
 
         var products = await ispClient.GetProductsAsync(cancellationToken: CancellationToken.None);
