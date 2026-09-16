@@ -96,7 +96,7 @@ If you construct an `AlexaVoxCraft.Http`-based client (or any SMAPI client) with
 
 ## Verifying your own skill
 
-The same shape this repository uses to validate itself (`test/AlexaVoxCraft.NativeAot.ValidationApp` in this repository's source) is a reasonable template: a small console entry point exercising your handlers and serialization paths, published with:
+The same shape this repository uses to validate itself (`test/AlexaVoxCraft.NativeAot.AotTests` in this repository's source - a real xUnit v3 Native AOT test project using [Compono.XunitV3.Aot](https://github.com/LayeredCraft/compono) for AOT-safe test composition) is a reasonable template: exercise your handlers and serialization paths as independently named, independently failing tests (or, just as validly, a small console entry point doing the same thing without a test framework at all), published with:
 
 ```xml
 <PublishAot>true</PublishAot>
@@ -107,6 +107,8 @@ The same shape this repository uses to validate itself (`test/AlexaVoxCraft.Nati
 ```
 
 then published (`dotnet publish -r linux-x64 -p:PublishAot=true`, matching AWS Lambda's `provided.al2023` runtime) and actually executed - not just built - to confirm your own handlers and types work end to end.
+
+If your own test/validation code calls `JsonSerializer.Serialize<T>(value, options)`/`Deserialize<T>(json, options)` directly against `AlexaJsonOptions.DefaultOptions` (or your own `JsonSerializerOptions`), expect the trim/AOT analyzer to flag those call sites with IL2026/IL3050 even when the resolver chain genuinely covers `T` - the analyzer can't prove that statically. Prefer `options.GetTypeInfo(typeof(T))` cast to `JsonTypeInfo<T>`, then one of `JsonSerializer`'s `JsonTypeInfo<T>`-accepting overloads, to avoid the warning without a suppression - see `test/AlexaVoxCraft.NativeAot.AotTests/AlexaJsonTypeInfo.cs` for the pattern this repository's own validation uses.
 
 ### Source-tree note for interceptor-based DI registration
 

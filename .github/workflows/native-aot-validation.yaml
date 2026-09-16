@@ -44,11 +44,11 @@ jobs:
             echo "::endgroup::"
           done
 
-      - name: Publish Native AOT validation app (linux-x64, matching Lambda's provided.al2023)
+      - name: Publish Native AOT test project (linux-x64, matching Lambda's provided.al2023)
         run: |
-          dotnet publish test/AlexaVoxCraft.NativeAot.ValidationApp/AlexaVoxCraft.NativeAot.ValidationApp.csproj \
+          dotnet publish test/AlexaVoxCraft.NativeAot.AotTests/AlexaVoxCraft.NativeAot.AotTests.csproj \
             -r linux-x64 -c Release
 
       - name: Execute the published native binary
         run: |
-          ./test/AlexaVoxCraft.NativeAot.ValidationApp/bin/Release/net9.0/linux-x64/publish/AlexaVoxCraft.NativeAot.ValidationApp
+          ./test/AlexaVoxCraft.NativeAot.AotTests/bin/Release/net9.0/linux-x64/publish/AlexaVoxCraft.NativeAot.AotTests
