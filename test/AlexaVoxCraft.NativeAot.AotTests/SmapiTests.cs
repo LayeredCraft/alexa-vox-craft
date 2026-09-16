@@ -57,9 +57,8 @@ public sealed class SmapiTests
         var invocationResult = await invocationClient.InvokeAsync<GameState, GameState>(
             "skill-id", "development", new GameState { Score = 1, Level = "start" }, ct: CancellationToken.None);
 
-        var body = invocationResult?.Result?.SkillExecutionInfo?.InvocationResponse?.Body;
-        Assert.NotNull(body);
-        Assert.Equal(7, body!.Score);
+        var body = Assert.IsType<GameState>(invocationResult?.Result?.SkillExecutionInfo?.InvocationResponse?.Body);
+        Assert.Equal(7, body.Score);
         Assert.Equal("smapi", body.Level);
     }
 }

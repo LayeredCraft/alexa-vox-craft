@@ -4,6 +4,7 @@ using AlexaVoxCraft.MediatR;
 using AlexaVoxCraft.MediatR.DI;
 using AlexaVoxCraft.MinimalLambda;
 using AlexaVoxCraft.MinimalLambda.Extensions;
+using AlexaVoxCraft.NativeAot.TestFixture;
 using AlexaVoxCraft.Model.Request;
 using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
@@ -68,28 +69,6 @@ public sealed class MinimalLambdaHostTests
             AmbientRequest.Current = null;
         }
     }
-}
-
-/// <summary>
-/// Deliberately has no parameterless constructor. The required probe verifies that DI selected and
-/// invoked the public constructor, rather than merely allowing the mediator dependency to resolve.
-/// </summary>
-public sealed class TestHostHandler(ISkillMediator mediator, HostActivationProbe probe)
-    : ILambdaHandler<SkillRequest, SkillResponse>
-{
-    public async Task<SkillResponse> HandleAsync(
-        SkillRequest request,
-        ILambdaContext context,
-        CancellationToken cancellationToken)
-    {
-        probe.WasUsed = true;
-        return await mediator.Send(request, cancellationToken);
-    }
-}
-
-public sealed class HostActivationProbe
-{
-    public bool WasUsed { get; set; }
 }
 
 public sealed class NativeAotLambdaContext : ILambdaContext

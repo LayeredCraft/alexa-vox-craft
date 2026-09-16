@@ -13,8 +13,9 @@ public sealed class MediatorTests
 {
     [Theory]
     [Compose<MediatorProfile, MediatorSkillId>("amzn1.ask.skill.validation")]
-    public async Task SkillMediator_Send_DispatchesViaGeneratedHandler(ISkillMediator mediator)
+    public async Task SkillMediator_Send_DispatchesViaGeneratedHandler(MediatorTestScope mediatorScope)
     {
+        using var _ = mediatorScope;
         var skillRequest = new SkillRequest
         {
             Request = new LaunchRequest { Type = "LaunchRequest" },
@@ -25,9 +26,16 @@ public sealed class MediatorTests
         };
         AmbientRequest.Current = skillRequest;
 
-        var response = await mediator.Send(skillRequest, CancellationToken.None);
+        try
+        {
+            var response = await mediatorScope.Mediator.Send(skillRequest, CancellationToken.None);
 
-        var ssml = Assert.IsType<SsmlOutputSpeech>(response.Response?.OutputSpeech);
-        Assert.Contains("hello from the native AOT test project", ssml.Ssml);
+            var ssml = Assert.IsType<SsmlOutputSpeech>(response.Response?.OutputSpeech);
+            Assert.Contains("hello from the native AOT test project", ssml.Ssml);
+        }
+        finally
+        {
+            AmbientRequest.Current = null;
+        }
     }
 }

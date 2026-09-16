@@ -28,20 +28,7 @@ public sealed class SmapiDeveloperClientProfile(SmapiCredentials credentials) : 
 {
     public void Configure(CompositionBuilder builder)
     {
-        var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["SmapiClient:ClientId"] = credentials.ClientId,
-                ["SmapiClient:ClientSecret"] = credentials.ClientSecret,
-                ["SmapiClient:RefreshToken"] = credentials.RefreshToken
-            })
-            .Build();
-
-        var services = new ServiceCollection();
-        services.AddSmapiDeveloperClient(configuration);
-        var provider = services.BuildServiceProvider();
-
-        builder.Register(() => provider.GetRequiredService<IOptions<SmapiDeveloperAccessTokenOptions>>());
+        builder.Register(() => SmapiOptionsProvider.CreateDeveloperClient(credentials));
     }
 }
 
@@ -49,21 +36,58 @@ public sealed class SkillInvocationClientProfile(SmapiCredentials credentials) :
 {
     public void Configure(CompositionBuilder builder)
     {
-        var configuration = new ConfigurationBuilder()
+        builder.Register(() => SmapiOptionsProvider.CreateSkillInvocationClient(credentials));
+    }
+}
+
+/// <summary>
+/// Owns the DI container used to validate source-generated SMAPI configuration binding. Profiles
+/// register the configured instance; the public constructor exists only for Compono's compile-time
+/// plan generation and must never be used at runtime.
+/// </summary>
+public sealed class SmapiOptionsProvider : IDisposable
+{
+    private readonly ServiceProvider? _provider;
+
+    public SmapiOptionsProvider() =>
+        throw new InvalidOperationException("SmapiOptionsProvider must be supplied by its composition profile.");
+
+    private SmapiOptionsProvider(ServiceProvider provider)
+    {
+        _provider = provider;
+        Options = provider.GetRequiredService<IOptions<SmapiDeveloperAccessTokenOptions>>();
+    }
+
+    public IOptions<SmapiDeveloperAccessTokenOptions> Options { get; } = null!;
+
+    public static SmapiOptionsProvider CreateDeveloperClient(SmapiCredentials credentials) =>
+        Create(CreateConfiguration("SmapiClient", credentials), static (services, configuration) =>
+            services.AddSmapiDeveloperClient(configuration));
+
+    public static SmapiOptionsProvider CreateSkillInvocationClient(SmapiCredentials credentials) =>
+        Create(CreateConfiguration("InvocationClient", credentials), static (services, configuration) =>
+            services.AddSkillInvocationClient(configuration));
+
+    public void Dispose() => _provider?.Dispose();
+
+    private static SmapiOptionsProvider Create(
+        IConfiguration configuration,
+        Action<IServiceCollection, IConfiguration> registerClient)
+    {
+        var services = new ServiceCollection();
+        registerClient(services, configuration);
+        return new SmapiOptionsProvider(services.BuildServiceProvider());
+    }
+
+    private static IConfigurationRoot CreateConfiguration(string section, SmapiCredentials credentials) =>
+        new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                ["InvocationClient:ClientId"] = credentials.ClientId,
-                ["InvocationClient:ClientSecret"] = credentials.ClientSecret,
-                ["InvocationClient:RefreshToken"] = credentials.RefreshToken
+                [$"{section}:ClientId"] = credentials.ClientId,
+                [$"{section}:ClientSecret"] = credentials.ClientSecret,
+                [$"{section}:RefreshToken"] = credentials.RefreshToken
             })
             .Build();
-
-        var services = new ServiceCollection();
-        services.AddSkillInvocationClient(configuration);
-        var provider = services.BuildServiceProvider();
-
-        builder.Register(() => provider.GetRequiredService<IOptions<SmapiDeveloperAccessTokenOptions>>());
-    }
 }
 
 public sealed class SmapiConfigBindingTests
@@ -71,20 +95,22 @@ public sealed class SmapiConfigBindingTests
     [Theory]
     [Compose<SmapiDeveloperClientProfile, SmapiCredentials>(
         "validation-client-id", "validation-client-secret", "validation-refresh-token")]
-    public void AddSmapiDeveloperClient_BindsOptions_FromConfiguration(IOptions<SmapiDeveloperAccessTokenOptions> options)
+    public void AddSmapiDeveloperClient_BindsOptions_FromConfiguration(SmapiOptionsProvider optionsProvider)
     {
-        Assert.Equal("validation-client-id", options.Value.ClientId);
-        Assert.Equal("validation-client-secret", options.Value.ClientSecret);
-        Assert.Equal("validation-refresh-token", options.Value.RefreshToken);
+        using var _ = optionsProvider;
+        Assert.Equal("validation-client-id", optionsProvider.Options.Value.ClientId);
+        Assert.Equal("validation-client-secret", optionsProvider.Options.Value.ClientSecret);
+        Assert.Equal("validation-refresh-token", optionsProvider.Options.Value.RefreshToken);
     }
 
     [Theory]
     [Compose<SkillInvocationClientProfile, SmapiCredentials>(
         "validation-invocation-client-id", "validation-invocation-client-secret", "validation-invocation-refresh-token")]
-    public void AddSkillInvocationClient_BindsOptions_FromConfiguration(IOptions<SmapiDeveloperAccessTokenOptions> options)
+    public void AddSkillInvocationClient_BindsOptions_FromConfiguration(SmapiOptionsProvider optionsProvider)
     {
-        Assert.Equal("validation-invocation-client-id", options.Value.ClientId);
-        Assert.Equal("validation-invocation-client-secret", options.Value.ClientSecret);
-        Assert.Equal("validation-invocation-refresh-token", options.Value.RefreshToken);
+        using var _ = optionsProvider;
+        Assert.Equal("validation-invocation-client-id", optionsProvider.Options.Value.ClientId);
+        Assert.Equal("validation-invocation-client-secret", optionsProvider.Options.Value.ClientSecret);
+        Assert.Equal("validation-invocation-refresh-token", optionsProvider.Options.Value.RefreshToken);
     }
 }

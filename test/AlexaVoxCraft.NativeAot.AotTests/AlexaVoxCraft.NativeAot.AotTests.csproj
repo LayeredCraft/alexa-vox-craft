@@ -75,6 +75,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <!-- This deliberately unrooted assembly models the consumer-owned handler supplied to
+             AddAlexaSkillHost. Its public constructor is retained only through the API's DAM
+             contract, so the native test genuinely detects a missing contract. -->
+        <ProjectReference Include="..\AlexaVoxCraft.NativeAot.TestFixture\AlexaVoxCraft.NativeAot.TestFixture.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />

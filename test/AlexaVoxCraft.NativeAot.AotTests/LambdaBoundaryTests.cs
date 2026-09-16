@@ -116,8 +116,9 @@ public sealed class AplLambdaBoundaryTests
 
     [Theory]
     [Compose<MediatorProfile, MediatorSkillId>("amzn1.ask.skill.54b58c306f70c433")]
-    public async Task Mediator_DispatchesDeserializedAplSkillRequest_AndSerializesResponse(ISkillMediator mediator)
+    public async Task Mediator_DispatchesDeserializedAplSkillRequest_AndSerializesResponse(MediatorTestScope mediatorScope)
     {
+        using var _ = mediatorScope;
         var serializer = new AlexaLambdaSerializer(NullLogger<AlexaLambdaSerializer>.Instance, AlexaJsonOptions.DefaultOptions);
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(EmbeddedFixture.Load("UserTouchRequest.json")));
         var userTouch = serializer.Deserialize<APLSkillRequest>(stream);
@@ -125,13 +126,20 @@ public sealed class AplLambdaBoundaryTests
 
         AmbientRequest.Current = userTouch;
 
-        var response = await mediator.Send(userTouch, CancellationToken.None);
+        try
+        {
+            var response = await mediatorScope.Mediator.Send(userTouch, CancellationToken.None);
 
-        var ssml = Assert.IsType<SsmlOutputSpeech>(response.Response?.OutputSpeech);
-        Assert.Contains("hello from the native AOT test project's APL handler", ssml.Ssml);
+            var ssml = Assert.IsType<SsmlOutputSpeech>(response.Response?.OutputSpeech);
+            Assert.Contains("hello from the native AOT test project's APL handler", ssml.Ssml);
 
-        using var responseStream = new MemoryStream();
-        serializer.Serialize(response, responseStream);
-        Assert.True(responseStream.Length > 0);
+            using var responseStream = new MemoryStream();
+            serializer.Serialize(response, responseStream);
+            Assert.True(responseStream.Length > 0);
+        }
+        finally
+        {
+            AmbientRequest.Current = null;
+        }
     }
 }

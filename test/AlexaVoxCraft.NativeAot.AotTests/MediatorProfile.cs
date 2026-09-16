@@ -49,26 +49,44 @@ public sealed class MediatorProfile(MediatorSkillId skillId) : ICompositionProfi
 {
     public void Configure(CompositionBuilder builder)
     {
+        builder.Register(() => new MediatorTestScope(skillId.Value));
+    }
+}
+
+/// <summary>
+/// Owns the real service provider and scope required for one mediator scenario. Tests dispose this
+/// harness after use, ensuring the profile's DI resources cannot outlive the test invocation.
+/// </summary>
+public sealed class MediatorTestScope : IDisposable
+{
+    private readonly ServiceProvider _provider;
+    private readonly IServiceScope _scope;
+
+    public MediatorTestScope(string skillId)
+    {
         var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?> { ["Skill:SkillId"] = skillId.Value })
+            .AddInMemoryCollection(new Dictionary<string, string?> { ["Skill:SkillId"] = skillId })
             .Build();
 
         var services = new ServiceCollection();
         services.AddSkillMediator(configuration, cfg =>
         {
-            cfg.SkillId = skillId.Value;
+            cfg.SkillId = skillId;
             cfg.RegisterServicesFromAssemblyContaining<LaunchHandler>();
         });
         services.AddScoped<SkillRequestFactory>(_ => () => AmbientRequest.Current);
         services.AddLogging(b => b.AddConsole());
 
-        // Deliberately not disposed here - the scope must outlive Configure() for the composed
-        // ISkillMediator to remain usable for the rest of the test body. It's reclaimed with the
-        // rest of the profile instance once the test (and this profile instance created for it)
-        // goes out of scope.
-        var provider = services.BuildServiceProvider();
-        var scope = provider.CreateScope();
+        _provider = services.BuildServiceProvider();
+        _scope = _provider.CreateScope();
+        Mediator = _scope.ServiceProvider.GetRequiredService<ISkillMediator>();
+    }
 
-        builder.Register(() => scope.ServiceProvider.GetRequiredService<ISkillMediator>());
+    public ISkillMediator Mediator { get; }
+
+    public void Dispose()
+    {
+        _scope.Dispose();
+        _provider.Dispose();
     }
 }
