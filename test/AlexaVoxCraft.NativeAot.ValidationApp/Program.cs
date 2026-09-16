@@ -4,6 +4,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Http.Clients;
 using AlexaVoxCraft.InSkillPurchasing.Clients;
+using AlexaVoxCraft.Lambda.Abstractions;
+using AlexaVoxCraft.MinimalLambda;
+using AlexaVoxCraft.MinimalLambda.Extensions;
 using AlexaVoxCraft.MediatR;
 using AlexaVoxCraft.MediatR.Attributes;
 using AlexaVoxCraft.MediatR.DI;
@@ -15,6 +18,7 @@ using AlexaVoxCraft.Model.Request.Type;
 using AlexaVoxCraft.Model.Response;
 using AlexaVoxCraft.Model.Serialization;
 using AlexaVoxCraft.NativeAot.ValidationApp;
+using Amazon.Lambda.Core;
 using AlexaVoxCraft.Smapi;
 using AlexaVoxCraft.Smapi.Auth;
 using AlexaVoxCraft.Smapi.Builders.InteractionModel;
@@ -383,6 +387,63 @@ void CheckException<TException>(string name, Action act) where TException : Exce
         options is { ClientId: "validation-invocation-client-id", ClientSecret: "validation-invocation-client-secret", RefreshToken: "validation-invocation-refresh-token" });
 }
 
+// ---------------------------------------------------------------------------
+// Scenario 11: MinimalLambda host integration. This is the real production
+// AddAlexaSkillHost -> HandlerDelegate -> ActivatorUtilities consumer-handler
+// activation path that a Native AOT Lightsaber deployment exposed.
+// ---------------------------------------------------------------------------
+{
+    const string skillId = "amzn1.ask.skill.54b58c306f70c433";
+    var configuration = new ConfigurationBuilder()
+        .AddInMemoryCollection(new Dictionary<string, string?> { ["Skill:SkillId"] = skillId })
+        .Build();
+
+    var services = new ServiceCollection();
+    services.AddLogging(b => b.AddConsole());
+    services.AddSingleton<HostActivationProbe>();
+    services.AddSkillMediator(configuration, cfg =>
+    {
+        cfg.SkillId = skillId;
+        cfg.RegisterServicesFromAssemblyContaining<LaunchHandler>();
+    });
+    services.AddAlexaSkillHost<TestHostHandler, SkillRequest, SkillResponse>();
+    services.AddScoped<SkillRequestFactory>(_ => () => HostRequest.Current);
+
+    using var provider = services.BuildServiceProvider();
+    using var scope = provider.CreateScope();
+
+    var serializer = scope.ServiceProvider.GetRequiredService<ILambdaSerializer>();
+    using var requestStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(LoadFixture("LaunchRequest.json")));
+    var request = serializer.Deserialize<SkillRequest>(requestStream);
+    HostRequest.Current = request;
+
+    try
+    {
+        var handler = scope.ServiceProvider.GetRequiredService<HandlerDelegate<SkillRequest, SkillResponse>>();
+        var response = AlexaHandler.Invoke(request!, handler, TestLambdaContext.Instance, CancellationToken.None)
+            .GetAwaiter()
+            .GetResult();
+
+        var probe = scope.ServiceProvider.GetRequiredService<HostActivationProbe>();
+        using var responseStream = new MemoryStream();
+        serializer.Serialize(response, responseStream);
+
+        Check("AddAlexaSkillHost activates constructor-injected handler and dispatches real LaunchRequest",
+            request?.Request is LaunchRequest
+            && probe.WasUsed
+            && response.Response?.OutputSpeech is SsmlOutputSpeech
+            && responseStream.Length > 0);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"FAIL: AddAlexaSkillHost activates constructor-injected handler and dispatches real LaunchRequest ({ex.GetType().Name}: {ex.Message})");
+        failures.Add("AddAlexaSkillHost activates constructor-injected handler and dispatches real LaunchRequest");
+    }
+    finally
+    {
+        HostRequest.Current = null;
+    }
+}
 Console.WriteLine();
 Console.WriteLine(failures.Count == 0
     ? $"ALL SCENARIOS PASSED"
@@ -422,3 +483,51 @@ public sealed class UnregisteredValidationPoco
 [JsonSerializable(typeof(SkillExecutionInfo<GameState>))]
 [JsonSerializable(typeof(InvocationResponseInfo<GameState>))]
 internal partial class ValidationAppContext : JsonSerializerContext;
+
+file static class HostRequest
+{
+    [ThreadStatic]
+    private static SkillRequest? _current;
+    public static SkillRequest? Current { get => _current; set => _current = value; }
+}
+
+public sealed class TestHostHandler(ISkillMediator mediator, HostActivationProbe probe)
+    : ILambdaHandler<SkillRequest, SkillResponse>
+{
+    public async Task<SkillResponse> HandleAsync(
+        SkillRequest request,
+        ILambdaContext context,
+        CancellationToken cancellationToken)
+    {
+        probe.WasUsed = true;
+        return await mediator.Send(request, cancellationToken);
+    }
+}
+
+public sealed class HostActivationProbe
+{
+    public bool WasUsed { get; set; }
+}
+
+public sealed class TestLambdaContext : ILambdaContext
+{
+    public static TestLambdaContext Instance { get; } = new();
+    public string AwsRequestId => "native-aot-host-boundary";
+    public IClientContext ClientContext => null!;
+    public string FunctionName => "NativeAotHostBoundary";
+    public string FunctionVersion => "1";
+    public ICognitoIdentity Identity => null!;
+    public string InvokedFunctionArn => "arn:aws:lambda:us-east-1:123456789012:function:NativeAotHostBoundary";
+    public ILambdaLogger Logger => NullLambdaLogger.Instance;
+    public string LogGroupName => "native-aot-host-boundary";
+    public string LogStreamName => "native-aot-host-boundary";
+    public int MemoryLimitInMB => 512;
+    public TimeSpan RemainingTime => TimeSpan.FromMinutes(1);
+}
+
+public sealed class NullLambdaLogger : ILambdaLogger
+{
+    public static NullLambdaLogger Instance { get; } = new();
+    public void Log(string message) { }
+    public void LogLine(string message) { }
+}
