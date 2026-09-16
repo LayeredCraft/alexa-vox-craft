@@ -79,6 +79,7 @@
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.MinimalLambda\AlexaVoxCraft.MinimalLambda.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Http\AlexaVoxCraft.Http.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Smapi\AlexaVoxCraft.Smapi.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.InSkillPurchasing\AlexaVoxCraft.InSkillPurchasing.csproj" />

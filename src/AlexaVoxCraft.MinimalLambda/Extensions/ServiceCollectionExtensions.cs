@@ -1,4 +1,5 @@
-﻿using AlexaVoxCraft.Lambda.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using AlexaVoxCraft.Lambda.Abstractions;
 using AlexaVoxCraft.Lambda.Serialization;
 using AlexaVoxCraft.MediatR;
 using AlexaVoxCraft.Model.Request;
@@ -35,7 +36,10 @@ public static class ServiceCollectionExtensions
         /// After calling this method, use <c>app.MapHandler(AlexaHandler.Invoke&lt;TRequest, TResponse&gt;)</c>
         /// on the built Lambda application to complete the handler configuration.
         /// </remarks>
-        public IServiceCollection AddAlexaSkillHost<THandler, TRequest, TResponse>()
+        public IServiceCollection AddAlexaSkillHost<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] THandler,
+            TRequest,
+            TResponse>()
             where THandler : ILambdaHandler<TRequest, TResponse>
         {
             services.AddSingleton(AlexaJsonOptions.DefaultOptions);
