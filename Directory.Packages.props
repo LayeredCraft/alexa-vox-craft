@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup Label="AWS Lambda">
     <PackageVersion Include="Amazon.Lambda.Core" Version="3.3.0" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.2.0" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.2.1" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="3.0.1" />
   </ItemGroup>
   <ItemGroup Label="LayeredCraft">
@@ -79,17 +79,17 @@
   </ItemGroup>
   <ItemGroup Label="Verify">
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="32.0.0" />
+    <PackageVersion Include="Verify.XunitV3" Version="32.0.1" />
   </ItemGroup>
   <ItemGroup Label="Testing">
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.0" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.1" />
     <!-- xUnit v3's real, officially-supported Native AOT package family (compono RESEARCH-0031/0032) -
          used only by test/AlexaVoxCraft.NativeAot.AotTests, never combined with xunit.v3.mtp-v2 above
          in the same project (CS0433). -->
-    <PackageVersion Include="xunit.v3.aot.mtp-v2" Version="4.0.0" />
+    <PackageVersion Include="xunit.v3.aot.mtp-v2" Version="4.0.1" />
   </ItemGroup>
   <!-- Compono ecosystem migration (PLAN-0051, LayeredCraft/compono) - the
        HTTP-testing-touched projects (AlexaVoxCraft.Smapi.Tests, AlexaVoxCraft.InSkillPurchasing.Tests)
@@ -104,20 +104,20 @@
        consumer in this repo moves together rather than pinning one package to a different preview
        than its siblings. -->
   <ItemGroup Label="Compono">
-    <PackageVersion Include="Compono" Version="1.3.0-preview.112" />
-    <PackageVersion Include="Compono.XunitV3" Version="1.3.0-preview.112" />
-    <PackageVersion Include="Compono.XunitV3.Aot" Version="1.3.0-preview.112" />
-    <PackageVersion Include="Compono.Http" Version="1.3.0-preview.112" />
-    <PackageVersion Include="Compono.TestDoubles" Version="1.3.0-preview.112" />
-    <PackageVersion Include="Compono.Bogus" Version="1.3.0-preview.112" />
-    <PackageVersion Include="Compono.Logging" Version="1.3.0-preview.112" />
-    <PackageVersion Include="Compono.Options" Version="1.3.0-preview.112" />
+    <PackageVersion Include="Compono" Version="1.3.1" />
+    <PackageVersion Include="Compono.XunitV3" Version="1.3.1" />
+    <PackageVersion Include="Compono.XunitV3.Aot" Version="1.3.1" />
+    <PackageVersion Include="Compono.Http" Version="1.3.1" />
+    <PackageVersion Include="Compono.TestDoubles" Version="1.3.1" />
+    <PackageVersion Include="Compono.Bogus" Version="1.3.1" />
+    <PackageVersion Include="Compono.Logging" Version="1.3.1" />
+    <PackageVersion Include="Compono.Options" Version="1.3.1" />
   </ItemGroup>
   <ItemGroup Label="Reference Assemblies">
-    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.11" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.11" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.11" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.11" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.12" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.12" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.12" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.12" />
   </ItemGroup>
   <ItemGroup Label="Utilities">
     <PackageVersion Include="MinimalLambda" Version="2.7.0" />
