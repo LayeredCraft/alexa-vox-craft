@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using AlexaVoxCraft.Model.Apl;
 using AlexaVoxCraft.Model.Apl.Audio;
@@ -40,6 +41,17 @@ namespace AlexaVoxCraft.Model.Apl.Serialization;
 // APLValueCollectionConverterFactory's closed dispatch tables that wasn't already a root above -
 // AplModelContextCompletenessTests (test/AlexaVoxCraft.NativeAot.AotTests) enforces this list stays in
 // sync with those two tables by reflecting over them directly, so this doesn't silently regress again.
+//
+// List<APLComponent> is a separate case from the APLValue<T>/APLValueCollection<T> dispatch tables
+// above: it's what CustomComponent's inherited (APLComponent's) [JsonExtensionData]
+// Dictionary<string, object> Properties bag holds when a consumer nests real APLComponent objects
+// under a custom property key - the documented way to build a custom container-like component. That
+// dictionary's values are written via AlexaVoxCraft.Model.Serialization.ObjectConverter, which
+// object-erases the same way, but isn't reachable from either factory's dispatch table (it's not an
+// APLValue<T>/APLValueCollection<T> instantiation), so AplModelContextCompletenessTests' reflection
+// can't find this one - it's covered by a direct repro instead
+// (AplModelContextCoverageTests.Serialize_CustomComponent_WithListOfAPLComponentInProperties_RoundTrips).
+[JsonSerializable(typeof(List<APLComponent>))]
 [JsonSerializable(typeof(APLDisplay))]
 [JsonSerializable(typeof(APLGradient))]
 [JsonSerializable(typeof(APLTransform))]

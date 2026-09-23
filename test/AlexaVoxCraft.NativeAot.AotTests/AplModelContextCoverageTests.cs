@@ -69,5 +69,32 @@ public sealed class AplModelContextCoverageTests
 
         Assert.Contains("\"best-fill\"", json);
     }
+
+    [Fact]
+    public void Serialize_CustomComponent_WithListOfAPLComponentInProperties_RoundTrips()
+    {
+        // The originally-reported List<APLComponent> gap: CustomComponent (an AlexaVoxCraft-owned type,
+        // meant precisely for consumers to add vendor-extension properties) inherits APLComponent's
+        // [JsonExtensionData] Dictionary<string, object> Properties bag. Nesting real APLComponent
+        // objects under a custom property key - the documented way to build a custom container-like
+        // component - stores them as a raw List<APLComponent>, which never goes through
+        // APLValueCollection<T> (that's Container/Pager/Sequence/etc.'s own Items, not this). The
+        // dictionary value is object-erased the same way APLValue<T>/APLValueCollection<T> are, so it
+        // needs the same kind of explicit root - but List<APLComponent> isn't a key in either factory's
+        // dispatch table (this isn't an APLValue<T>/APLValueCollection<T> instantiation), so
+        // AplModelContextCompletenessTests' reflection-based audit can't find this one; it has to be
+        // covered by this direct repro instead.
+        var custom = new CustomComponent("CustomContainer")
+        {
+            Properties = new Dictionary<string, object>
+            {
+                ["items"] = new List<APLComponent> { new Text("nested") }
+            }
+        };
+
+        var json = JsonSerializer.Serialize<APLComponent>(custom, AlexaJsonTypeInfo.For<APLComponent>());
+
+        Assert.Contains("\"nested\"", json);
+    }
 }
 
