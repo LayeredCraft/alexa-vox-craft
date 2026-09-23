@@ -26,6 +26,63 @@ namespace AlexaVoxCraft.Model.Apl.Serialization;
 // under src/AlexaVoxCraft.Model.Apl/JsonConverter, since BasePolymorphicConverter.Read dispatches via
 // JsonSerializer.Deserialize(json, runtimeType, options) - every such runtime target needs an explicit
 // entry here, not just the types that happen to appear as RegisterTypeInfo<T> calls.
+//
+// Issue #198: that assembly strategy only reaches component/command *classes*, because it walks
+// RegisterTypeInfo<T>() calls and polymorphic-converter DerivedTypes dictionaries - neither of which
+// enum-valued or plain-class-valued APLValue<T>/APLValueCollection<T> targets pass through.
+// APLValueConverter<T>.Write and APLValueCollectionConverter<T>.Write (JsonConverter/JsonConverter.cs)
+// both erase to `object` before their inner JsonSerializer.Serialize call (via
+// `value.GetValue()`/a `protected virtual object OutputArrayItem(T value)`), which resolves JsonTypeInfo
+// by the value's *runtime* type - so every T that's a plain enum or a class without its own root here
+// needs an explicit entry, even though it's never the declared type of any property. The enum/class
+// entries below are every non-"known" (i.e. not a BCL primitive/Uri, which the source generator resolves
+// without an explicit root) type key in APLValueConverterFactory's and
+// APLValueCollectionConverterFactory's closed dispatch tables that wasn't already a root above -
+// AplModelContextCompletenessTests (test/AlexaVoxCraft.NativeAot.AotTests) enforces this list stays in
+// sync with those two tables by reflecting over them directly, so this doesn't silently regress again.
+[JsonSerializable(typeof(APLDisplay))]
+[JsonSerializable(typeof(APLGradient))]
+[JsonSerializable(typeof(APLTransform))]
+[JsonSerializable(typeof(APLValue<int?>))]
+[JsonSerializable(typeof(AVGParameter))]
+[JsonSerializable(typeof(AVGParameterType))]
+[JsonSerializable(typeof(AVGScaleType))]
+[JsonSerializable(typeof(AlexaImageAlignment))]
+[JsonSerializable(typeof(AlexaImageAspectRatio))]
+[JsonSerializable(typeof(BlendMode))]
+[JsonSerializable(typeof(ContainerWrap))]
+[JsonSerializable(typeof(ContentDirection))]
+[JsonSerializable(typeof(ControlMediaCommand))]
+[JsonSerializable(typeof(DocumentBackgroundColor))]
+[JsonSerializable(typeof(DrawOrder))]
+[JsonSerializable(typeof(HighlightMode))]
+[JsonSerializable(typeof(ItemAlignment))]
+[JsonSerializable(typeof(KeyboardType))]
+[JsonSerializable(typeof(LayoutDirection))]
+[JsonSerializable(typeof(MetadataPosition))]
+[JsonSerializable(typeof(NoiseKind))]
+[JsonSerializable(typeof(ProgressBarType))]
+[JsonSerializable(typeof(RatingGraphicType))]
+[JsonSerializable(typeof(RatingSlotMode))]
+[JsonSerializable(typeof(RepeatMode))]
+[JsonSerializable(typeof(Scale))]
+[JsonSerializable(typeof(ScrollDirection))]
+[JsonSerializable(typeof(SelectorStrategy))]
+[JsonSerializable(typeof(SetPagePosition))]
+[JsonSerializable(typeof(SliderSize))]
+[JsonSerializable(typeof(SliderType))]
+[JsonSerializable(typeof(Snap))]
+[JsonSerializable(typeof(SpeechContentType))]
+[JsonSerializable(typeof(StrokeLineCap))]
+[JsonSerializable(typeof(StrokeLineJoin))]
+[JsonSerializable(typeof(SubmitKeyType))]
+[JsonSerializable(typeof(SwipeAction))]
+[JsonSerializable(typeof(SwipeDirection))]
+[JsonSerializable(typeof(TextOverflow))]
+[JsonSerializable(typeof(TextTrack))]
+[JsonSerializable(typeof(TickHandler))]
+[JsonSerializable(typeof(TimeTextDirection))]
+[JsonSerializable(typeof(VisibilityChangeHandler))]
 [JsonSerializable(typeof(APLADocument))]
 [JsonSerializable(typeof(APLAMultiChildComponent))]
 [JsonSerializable(typeof(APLAbsoluteDimensionValue))]

@@ -102,7 +102,14 @@ Key internal mechanics (not part of any public contract, useful when touching th
 - APL's `APLValueConverterFactory`/`APLValueCollectionConverterFactory` dispatch via a closed
   `Dictionary<Type, Func<JsonConverter>>` keyed by the closed `APLValue<T>`/`APLValueCollection<T>`
   instantiation - no `MakeGenericType`/`Activator.CreateInstance`. New `APLValue<T>`/`APLValueCollection<T>`
-  properties must add an entry to both the dictionary and `AplModelContext`.
+  properties must add an entry to both the dictionary and `AplModelContext`. This was already the stated
+  rule before issue #198 (a real deployed-Lambda Native AOT failure) found that most of the existing
+  dictionary entries had never actually gotten the `AplModelContext` half of it - both converters'
+  `Write` methods erase to `object` before their inner `JsonSerializer.Serialize` call, so every T needs
+  an explicit root even though it's never a property's *declared* type.
+  `AlexaVoxCraft.NativeAot.AotTests/AplModelContextCompletenessTests` now enforces this by reflecting
+  over both dictionaries directly and asserting `AlexaJsonOptions.DefaultOptions.GetTypeInfo(T)` resolves
+  for each entry, so a future T missing its `AplModelContext` root fails CI instead of shipping.
 - A source-tree `ProjectReference` to `AlexaVoxCraft.MediatR` does **not** pull in its interceptor
   generator as an analyzer (only a packaged NuGet reference does, via the `analyzers/dotnet/cs` pack
   path) - any new source-tree consumer project (samples, the validation app) needs its own direct
