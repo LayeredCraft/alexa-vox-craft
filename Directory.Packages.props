@@ -3,8 +3,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup Label="AWS Lambda">
-    <PackageVersion Include="Amazon.Lambda.Core" Version="3.3.0" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.2.3" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="3.4.0" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.3.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="3.0.1" />
   </ItemGroup>
   <ItemGroup Label="LayeredCraft">
@@ -32,7 +32,7 @@
   </ItemGroup>
   <ItemGroup Label="Microsoft">
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.401" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.402" />
   </ItemGroup>
   <!-- Microsoft.Extensions.* packages ship parallel stable and preview build lines.
        Pin each per-TargetFramework with bounded ranges so Dependabot can raise
@@ -83,13 +83,13 @@
   </ItemGroup>
   <ItemGroup Label="Testing">
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.2" />
     <!-- xUnit v3's real, officially-supported Native AOT package family (compono RESEARCH-0031/0032) -
          used only by test/AlexaVoxCraft.NativeAot.AotTests, never combined with xunit.v3.mtp-v2 above
          in the same project (CS0433). -->
-    <PackageVersion Include="xunit.v3.aot.mtp-v2" Version="4.0.1" />
+    <PackageVersion Include="xunit.v3.aot.mtp-v2" Version="4.0.2" />
   </ItemGroup>
   <!-- Compono ecosystem migration (PLAN-0051, LayeredCraft/compono) - the
        HTTP-testing-touched projects (AlexaVoxCraft.Smapi.Tests, AlexaVoxCraft.InSkillPurchasing.Tests)
