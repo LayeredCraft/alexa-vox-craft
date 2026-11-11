@@ -79,7 +79,7 @@
   </ItemGroup>
   <ItemGroup Label="Verify">
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="32.0.1" />
+    <PackageVersion Include="Verify.XunitV3" Version="33.3.4" />
   </ItemGroup>
   <ItemGroup Label="Testing">
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
