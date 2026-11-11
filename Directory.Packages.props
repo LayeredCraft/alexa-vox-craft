@@ -114,10 +114,10 @@
     <PackageVersion Include="Compono.Options" Version="1.3.2" />
   </ItemGroup>
   <ItemGroup Label="Reference Assemblies">
-    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.13" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.13" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.13" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.13" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.14" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.14" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.14" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.14" />
   </ItemGroup>
   <ItemGroup Label="Utilities">
     <PackageVersion Include="MinimalLambda" Version="2.7.0" />
