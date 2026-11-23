@@ -34,12 +34,18 @@ public sealed class HTMLTransformer
     /// <summary>Creates a transformer that converts the text at <paramref name="inputPath"/> to speech.</summary>
     /// <param name="inputPath">The non-empty source path to convert.</param>
     /// <param name="outputName">An optional output path; when omitted the source value is replaced.</param>
-    public static HTMLTransformer TextToSpeech(string inputPath, string? outputName = null) =>
-        throw new NotImplementedException();
+    public static HTMLTransformer TextToSpeech(string inputPath, string? outputName = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(inputPath);
+        return new HTMLTransformer("textToSpeech", inputPath, outputName);
+    }
 
     /// <summary>Creates a transformer that converts the SSML at <paramref name="inputPath"/> to speech.</summary>
     /// <param name="inputPath">The non-empty source path to convert.</param>
     /// <param name="outputName">An optional output path; when omitted the source value is replaced.</param>
-    public static HTMLTransformer SsmlToSpeech(string inputPath, string? outputName = null) =>
-        throw new NotImplementedException();
+    public static HTMLTransformer SsmlToSpeech(string inputPath, string? outputName = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(inputPath);
+        return new HTMLTransformer("ssmlToSpeech", inputPath, outputName);
+    }
 }
