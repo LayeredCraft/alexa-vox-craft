@@ -18,7 +18,7 @@ public sealed class StartDirective : IDirective
     /// <param name="request">The resource the web app loads.</param>
     /// <param name="configuration">The start configuration; defaults to a 30 second timeout when null.</param>
     /// <param name="data">Optional initial data for the web app; must be a JSON object when present.</param>
-    /// <param name="transformers">Optional transformers applied to the document.</param>
+    /// <param name="transformers">Optional transformers that convert text or SSML inside the data payload into speech.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="request"/> is null.</exception>
     /// <exception cref="ArgumentException">Thrown when <paramref name="data"/> is present but not a JSON object.</exception>
     public StartDirective(
@@ -74,7 +74,7 @@ public sealed class StartDirective : IDirective
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public JsonElement? Data { get; }
 
-    /// <summary>Gets the optional transformers; omitted from the wire when null.</summary>
+    /// <summary>Gets the optional transformers that convert text or SSML inside the data payload into speech; omitted from the wire when null.</summary>
     [JsonPropertyName("transformers")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<HTMLTransformer>? Transformers { get; }
@@ -85,7 +85,7 @@ public sealed class StartDirective : IDirective
     /// <param name="data">The initial data for the web app.</param>
     /// <param name="dataTypeInfo">The source-generated metadata for <typeparamref name="TData"/>.</param>
     /// <param name="configuration">The start configuration; defaults to a 30 second timeout when null.</param>
-    /// <param name="transformers">Optional transformers applied to the document.</param>
+    /// <param name="transformers">Optional transformers that convert text or SSML inside the data payload into speech.</param>
     public static StartDirective Create<TData>(
         StartRequest request,
         TData data,

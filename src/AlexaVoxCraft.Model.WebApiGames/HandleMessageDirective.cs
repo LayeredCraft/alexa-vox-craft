@@ -16,7 +16,7 @@ public sealed class HandleMessageDirective : IDirective
 
     /// <summary>Initializes a new handle-message directive.</summary>
     /// <param name="message">The message payload; must be a JSON object.</param>
-    /// <param name="transformers">Optional transformers applied to the document.</param>
+    /// <param name="transformers">Optional transformers that convert text or SSML inside the message payload into speech.</param>
     /// <exception cref="ArgumentException">Thrown when <paramref name="message"/> is not a JSON object.</exception>
     public HandleMessageDirective(JsonElement message, IEnumerable<HTMLTransformer>? transformers = null)
         : this(message, Materialize(transformers))
@@ -50,7 +50,7 @@ public sealed class HandleMessageDirective : IDirective
     [JsonPropertyName("message")]
     public JsonElement Message { get; }
 
-    /// <summary>Gets the optional transformers; omitted from the wire when null.</summary>
+    /// <summary>Gets the optional transformers that convert text or SSML inside the message payload into speech; omitted from the wire when null.</summary>
     [JsonPropertyName("transformers")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<HTMLTransformer>? Transformers { get; }
@@ -59,7 +59,7 @@ public sealed class HandleMessageDirective : IDirective
     /// <typeparam name="TMessage">The message payload type.</typeparam>
     /// <param name="message">The message to deliver.</param>
     /// <param name="messageTypeInfo">The source-generated metadata for <typeparamref name="TMessage"/>.</param>
-    /// <param name="transformers">Optional transformers applied to the document.</param>
+    /// <param name="transformers">Optional transformers that convert text or SSML inside the message payload into speech.</param>
     public static HandleMessageDirective Create<TMessage>(
         TMessage message,
         JsonTypeInfo<TMessage> messageTypeInfo,

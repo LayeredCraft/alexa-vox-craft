@@ -10,8 +10,8 @@ public sealed class StartConfiguration
 {
     /// <summary>Initializes a new configuration with the given timeout in seconds.</summary>
     /// <param name="timeoutInSeconds">
-    /// The number of seconds Alexa waits for the web app to signal readiness. Defaults to 30; values
-    /// above 300 are rejected. No minimum is enforced.
+    /// The number of seconds the web app can run without user interaction. Defaults to 30; values above
+    /// 300 are rejected. No minimum is enforced.
     /// </param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="timeoutInSeconds"/> is greater than 300.</exception>
     public StartConfiguration(int timeoutInSeconds = 30)
@@ -20,7 +20,7 @@ public sealed class StartConfiguration
         TimeoutInSeconds = timeoutInSeconds;
     }
 
-    /// <summary>Gets the timeout, in seconds, that Alexa waits for the web app to signal readiness.</summary>
+    /// <summary>Gets the number of seconds the web app can run without user interaction.</summary>
     [JsonPropertyName("timeoutInSeconds")]
     public int TimeoutInSeconds { get; }
 }
