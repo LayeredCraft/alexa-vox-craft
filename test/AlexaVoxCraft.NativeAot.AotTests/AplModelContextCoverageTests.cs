@@ -22,7 +22,7 @@ public sealed class AplModelContextCoverageTests
     [Fact]
     public void Serialize_Image_WithScale_RoundTrips()
     {
-        var image = new Image { Scale = AlexaVoxCraft.Model.Apl.Components.Scale.BestFill };
+        var image = new Image { Scale = new APLValue<AlexaVoxCraft.Model.Apl.Components.Scale?>(AlexaVoxCraft.Model.Apl.Components.Scale.BestFill) };
 
         var json = JsonSerializer.Serialize<APLComponent>(image, AlexaJsonTypeInfo.For<APLComponent>());
 
@@ -32,7 +32,7 @@ public sealed class AplModelContextCoverageTests
     [Fact]
     public void Serialize_SetPage_WithSetPagePosition_RoundTrips()
     {
-        var command = new SetPage { Value = 1, Position = SetPagePosition.Relative };
+        var command = new SetPage { Value = new APLValue<int>(1), Position = SetPagePosition.Relative };
 
         var json = JsonSerializer.Serialize<APLCommand>(command, AlexaJsonTypeInfo.For<APLCommand>());
 
@@ -45,7 +45,7 @@ public sealed class AplModelContextCoverageTests
         // APLDisplay lives on APLComponent itself, not a specific component subclass - any component
         // on a document that sets it (or any document rendered for a device whose supportedInterfaces
         // causes a Display value to be written) hits this, regardless of which components it uses.
-        var text = new Text("hi") { Display = APLDisplay.Normal };
+        var text = new Text("hi") { Display = new APLValue<APLDisplay>(APLDisplay.Normal) };
 
         var json = JsonSerializer.Serialize<APLComponent>(text, AlexaJsonTypeInfo.For<APLComponent>());
 
@@ -61,7 +61,7 @@ public sealed class AplModelContextCoverageTests
         // while real deployed traffic did not).
         var document = new APLDocument
         {
-            MainTemplate = new Layout(new Image { Scale = AlexaVoxCraft.Model.Apl.Components.Scale.BestFill })
+            MainTemplate = new Layout(new Image { Scale = new APLValue<AlexaVoxCraft.Model.Apl.Components.Scale?>(AlexaVoxCraft.Model.Apl.Components.Scale.BestFill) })
         };
         var directive = new RenderDocumentDirective(document);
 
