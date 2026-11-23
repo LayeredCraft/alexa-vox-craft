@@ -22,6 +22,10 @@ namespace AlexaVoxCraft.MediatR.Tests.WebApiGames;
 /// <see cref="AlexaVoxCraft.Model.WebApiGames.WebApiGamesSupport.Add"/> (run once in
 /// <see cref="TestModuleInitializer"/>); there is no fake model serializer and no separate mediator.
 /// </summary>
+// Dispatching through the real SkillMediator emits Activity spans on the shared "AlexaVoxCraft"
+// ActivitySource, so it joins the same collection as SkillMediatorTests/OtelPerformanceLoggingBehaviorTests
+// to serialize against their process-wide ActivityListener.
+[Collection("DiagnosticsConfig Tests")]
 public sealed class WebApiGamesDispatchTests : TestBase
 {
     private const string SkillId = "amzn1.ask.skill.0123456789";
