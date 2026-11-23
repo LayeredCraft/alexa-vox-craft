@@ -11,6 +11,7 @@
 - **📊 Session Management**: Robust session attribute handling with typed attribute serialization
 - **🔧 Pipeline Behaviors**: Request/response interceptors for cross-cutting concerns like logging and validation
 - **💰 In-Skill Purchasing**: Full ISP support with buy/upsell/cancel directives and entitlement checks
+- **🎮 Web API for Games**: `Alexa.Presentation.HTML` Start/HandleMessage directives, Message requests and HTML capability detection - see [Web API for Games](docs/components/web-api-for-games.md)
 - **🧪 Testing Support**: Comprehensive tests using explicit fixtures, focused fakes, and Compono-based composition
 
 ## 📦 Packages
@@ -27,6 +28,7 @@
 | **AlexaVoxCraft.Smapi**             | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi)                        | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Smapi.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Smapi/)                               |
 | **AlexaVoxCraft.Model.InSkillPurchasing** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.InSkillPurchasing) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.InSkillPurchasing/) |
 | **AlexaVoxCraft.InSkillPurchasing** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.InSkillPurchasing) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.InSkillPurchasing.svg)](https://www.nuget.org/packages/AlexaVoxCraft.InSkillPurchasing/)         |
+| **AlexaVoxCraft.Model.WebApiGames** | [![NuGet](https://img.shields.io/nuget/v/AlexaVoxCraft.Model.WebApiGames.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.WebApiGames) | [![Downloads](https://img.shields.io/nuget/dt/AlexaVoxCraft.Model.WebApiGames.svg)](https://www.nuget.org/packages/AlexaVoxCraft.Model.WebApiGames/) |
 
 [![Build Status](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml/badge.svg)](https://github.com/LayeredCraft/alexa-vox-craft/actions/workflows/build.yaml)
 
@@ -48,13 +50,16 @@ dotnet add package AlexaVoxCraft.Observability
 # In-Skill Purchasing support (optional)
 dotnet add package AlexaVoxCraft.InSkillPurchasing
 
+# Web API for Games (HTML) support (optional)
+dotnet add package AlexaVoxCraft.Model.WebApiGames
+
 # CloudWatch-compatible JSON logging (optional)
 dotnet add package LayeredCraft.Logging.CompactJsonFormatter
 ```
 
 ### Requirements
 
-Supported target frameworks: **.NET 8.0**, **.NET 9.0**, **.NET 10.0**.
+Supported target frameworks: **.NET 8.0**, **.NET 9.0**, **.NET 10.0**, **.NET 11.0**.
 
 ⚠️ **SDK Version Required**: To use source-generated dependency injection with interceptors, you must use at least version **8.0.400** of the .NET SDK. This ships with **Visual Studio 2022 version 17.11** or higher.
 

@@ -16,13 +16,14 @@ AlexaVoxCraft is a modular C# .NET library for building Amazon Alexa skills usin
 
 ### Core Components
 
-The solution publishes 11 NuGet packages (every `src/` project except
+The solution publishes 12 NuGet packages (every `src/` project except
 `AlexaVoxCraft.MediatR.Generators`, which ships inside the `AlexaVoxCraft.MediatR` package as its
 analyzer):
 
 - **AlexaVoxCraft.Model**: Base Alexa skill models (requests, responses, directives)
 - **AlexaVoxCraft.Model.Apl**: Comprehensive APL components and document support
 - **AlexaVoxCraft.Model.InSkillPurchasing**: In-skill purchasing request/response models
+- **AlexaVoxCraft.Model.WebApiGames**: Web API for Games (`Alexa.Presentation.HTML`) directives, Message request and capability check
 - **AlexaVoxCraft.MediatR**: Core MediatR integration for request handling patterns
 - **AlexaVoxCraft.MediatR.Lambda**: AWS Lambda hosting with middleware
 - **AlexaVoxCraft.Lambda**: Lambda hosting abstractions and serialization
@@ -64,7 +65,7 @@ public class Function : AlexaSkillFunction<SkillRequest, SkillResponse>
 
 ### Native AOT Compatibility
 
-All in-scope runtime packages (`AlexaVoxCraft.Model`, `.Model.Apl`, `.Model.InSkillPurchasing`, `.MediatR`,
+All in-scope runtime packages (`AlexaVoxCraft.Model`, `.Model.Apl`, `.Model.InSkillPurchasing`, `.Model.WebApiGames`, `.MediatR`,
 `.MediatR.Lambda`, `.Lambda`, `.Http`, `.InSkillPurchasing`, `.Smapi`) are `IsAotCompatible=true` and
 validated end to end by a rooted, continuously-CI-run real xUnit v3 Native AOT test project
 (`test/AlexaVoxCraft.NativeAot.AotTests`, using [Compono.XunitV3.Aot](https://github.com/LayeredCraft/compono)
@@ -93,7 +94,7 @@ intentionally deferred as separate follow-up work, not fixed as part of the AOT 
 
 Key internal mechanics (not part of any public contract, useful when touching this area):
 - `AlexaJsonOptions`'s resolver chain: `ModelContext` (Model) → package-owned contexts
-  (`AplModelContext`, `InSkillPurchasingModelContext`, `SmapiModelContext`,
+  (`AplModelContext`, `InSkillPurchasingModelContext`, `WebApiGamesModelContext`, `SmapiModelContext`,
   `InSkillPurchasingClientModelContext`) registered via the internal
   `RegisterPackageTypeInfoResolver` → consumer resolvers via the public `RegisterTypeInfoResolver` →
   JIT reflection fallback (present only when `JsonSerializer.IsReflectionEnabledByDefault`).
@@ -328,7 +329,7 @@ public class MyExceptionHandler : IExceptionHandler
 
 ## Project Structure
 
-- `/src/`: Library source code (11 NuGet packages plus the bundled MediatR source generator)
+- `/src/`: Library source code (12 NuGet packages plus the bundled MediatR source generator)
 - `/samples/`: Working example skills (basic, APL, ISP, generated and host-based)
 - `/test/`: Unit tests with extensive JSON example files, plus the Native AOT test project
 - **Multi-targeting**: library and test projects target .NET 8.0, 9.0, 10.0 and 11.0
