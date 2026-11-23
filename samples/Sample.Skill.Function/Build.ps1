@@ -9,7 +9,7 @@ Set-Location -Path $scriptDir
 
 # Execute the commands
 dotnet restore
-dotnet lambda package --configuration release --framework net9.0 --output-package bin/release/net9.0/basic-skill.zip
+dotnet lambda package --configuration release --framework net10.0 --output-package bin/release/net10.0/basic-skill.zip
 
 # Reset to the original location
 Set-Location -Path $originalLocation
