@@ -113,6 +113,7 @@ nav:
     - Pipeline Behaviors: components/pipeline-behaviors.md
     - Source Generators: components/source-generation.md
     - In-Skill Purchasing: components/in-skill-purchasing.md
+    - Web API for Games: components/web-api-for-games.md
   - SMAPI:
     - Developer Client: smapi/developer-client.md
   - Examples: examples/index.md

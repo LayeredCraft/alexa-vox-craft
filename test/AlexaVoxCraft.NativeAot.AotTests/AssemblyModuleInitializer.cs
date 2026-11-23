@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using AlexaVoxCraft.Model.Apl;
 using AlexaVoxCraft.Model.Serialization;
+using AlexaVoxCraft.Model.WebApiGames;
 
 namespace AlexaVoxCraft.NativeAot.AotTests;
 
@@ -22,6 +23,7 @@ internal static class AssemblyModuleInitializer
     internal static void Initialize()
     {
         APLSupport.Add();
+        WebApiGamesSupport.Add();
         AlexaJsonOptions.RegisterTypeInfoResolver(ValidationAppContext.Default);
     }
 }

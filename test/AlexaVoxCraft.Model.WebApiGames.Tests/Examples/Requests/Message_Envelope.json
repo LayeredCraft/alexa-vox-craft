@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": true,
+    "sessionId": "amzn1.echo-api.session.0123456789",
+    "application": {
+      "applicationId": "amzn1.ask.skill.0123456789"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.0123456789"
+    }
+  },
+  "context": {
+    "System": {
+      "apiAccessToken": "token",
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "application": {
+        "applicationId": "amzn1.ask.skill.0123456789"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.0123456789"
+      },
+      "device": {
+        "deviceId": "device-1",
+        "supportedInterfaces": {
+          "Alexa.Presentation.HTML": {}
+        }
+      }
+    }
+  },
+  "request": {
+    "type": "Alexa.Presentation.HTML.Message",
+    "requestId": "amzn1.echo-api.request.0123456789",
+    "timestamp": "2024-05-01T12:00:00Z",
+    "locale": "en-US",
+    "message": {
+      "action": "start",
+      "level": 3,
+      "tags": [
+        "a",
+        "b"
+      ]
+    }
+  }
+}

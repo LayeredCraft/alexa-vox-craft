@@ -14,12 +14,12 @@ AlexaVoxCraft automatically generates dependency injection registration code at 
 
 ## Requirements
 
-⚠️ **SDK Version Required**: To use source-generated dependency injection with interceptors, you must use at least version **8.0.400** of the .NET SDK. This ships with **Visual Studio 2022 version 17.11** or higher.
+⚠️ **SDK Version Required**: AlexaVoxCraft targets .NET 10 and .NET 11, so you need at least the **.NET 10 SDK** (10.0.100; the **.NET 11 SDK** to target net11.0). Both include the C# interceptor support that source-generated dependency injection uses.
 
 Check your SDK version:
 ```bash
 dotnet --version
-# Should show 8.0.400 or higher
+# Should show 10.0.100 or higher
 ```
 
 ## How It Works
@@ -313,7 +313,6 @@ services.AddSkillMediator(context.Configuration, cfg =>
 
 **When to Disable:**
 - Debugging generator issues
-- Using .NET SDK version < 8.0.400
 - Need dynamic handler registration at runtime
 - Testing custom registration scenarios
 
@@ -498,7 +497,7 @@ public class AnswerHandler : IRequestHandler<IntentRequest> { }
 **Symptoms**: Runtime registration still being used, no compile-time interception.
 
 **Solutions**:
-1. Verify .NET SDK version: `dotnet --version` (must be 8.0.400+)
+1. Verify .NET SDK version: `dotnet --version` (must be 10.0.100 or later)
 2. Check `<EnableMediatRGeneratorInterceptor>` is not set to `false`
 3. Ensure you're calling the extension method, not a custom method
 4. Clean and rebuild: `dotnet clean && dotnet build`
@@ -524,7 +523,7 @@ public class AnswerHandler : IRequestHandler<IntentRequest> { }
 **Symptoms**: CS errors about interceptors, method signatures.
 
 **Solutions**:
-1. Update to .NET SDK 8.0.400+ (interceptors require C# 12)
+1. Update to the .NET 10 SDK or later (interceptors require C# 12 or later)
 2. Ensure `<LangVersion>12</LangVersion>` or higher in csproj
 3. Check Visual Studio is version 17.11 or higher
 4. Try deleting `bin/` and `obj/` folders, then rebuild

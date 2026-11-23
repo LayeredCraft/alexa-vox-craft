@@ -16,7 +16,7 @@ namespace AlexaVoxCraft.MediatR.Generator.Tests;
 
 /// <summary>
 /// Utilities to compile one or more source files in-memory and run your incremental generator.
-/// Uses <c>#if NET8_0/NET9_0/NET10_0</c> to select the correct BCL reference set.
+/// Uses <c>#if NET10_0/NET11_0</c> to select the correct BCL reference set.
 /// </summary>
 internal sealed class GeneratorTestHelpers
 {
@@ -182,17 +182,13 @@ internal sealed class GeneratorTestHelpers
     /// </summary>
     private static IEnumerable<MetadataReference> GetBclReferences()
     {
-#if NET8_0
-        return Net80.References.All;
-#elif NET9_0
-        return Net90.References.All;
-#elif NET10_0
+#if NET10_0
         return Net100.References.All;
 #elif NET11_0
         return Net110.References.All;
 #else
         // Fallback so the file still compiles if a new TFM is added.
-        return Net90.References.All;
+        return Net110.References.All;
 #endif
     }
 

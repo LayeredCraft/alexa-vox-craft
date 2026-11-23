@@ -13,10 +13,10 @@
 
     <PropertyGroup>
         <!-- Single-TFM native AOT test project - overrides test/Directory.Build.props' multi-target
-             list, matching the old ValidationApp's own net9.0 choice (unchanged: no reason to move
-             TFMs as part of this conversion). -->
+             list. Runs on net11.0, the supported GA framework for Native AOT validation (net8.0/
+             net9.0 support was discontinued in M1; see #211). -->
         <TargetFrameworks></TargetFrameworks>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -81,6 +81,10 @@
         <ProjectReference Include="..\AlexaVoxCraft.NativeAot.TestFixture\AlexaVoxCraft.NativeAot.TestFixture.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
+        <!-- Web API for Games reflection-disabled validation (Issue #213): directive/request
+             serialization, MessageRequest typed payloads, generated mediator dispatch and
+             WebApiGamesModelContext completeness. -->
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.WebApiGames\AlexaVoxCraft.Model.WebApiGames.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MinimalLambda\AlexaVoxCraft.MinimalLambda.csproj" />
