@@ -18,8 +18,6 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
-            8.0.x
-            9.0.x
             10.0.x
             11.0.x
 
@@ -41,7 +39,7 @@ jobs:
             src/AlexaVoxCraft.Smapi/AlexaVoxCraft.Smapi.csproj \
           ; do
             echo "::group::$project"
-            dotnet build "$project" -c Release -f net9.0
+            dotnet build "$project" -c Release -f net11.0
             echo "::endgroup::"
           done
 
@@ -52,4 +50,4 @@ jobs:
 
       - name: Execute the published native binary
         run: |
-          ./test/AlexaVoxCraft.NativeAot.AotTests/bin/Release/net9.0/linux-x64/publish/AlexaVoxCraft.NativeAot.AotTests
+          ./test/AlexaVoxCraft.NativeAot.AotTests/bin/Release/net11.0/linux-x64/publish/AlexaVoxCraft.NativeAot.AotTests

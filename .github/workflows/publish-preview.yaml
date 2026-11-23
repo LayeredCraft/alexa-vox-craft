@@ -18,8 +18,6 @@ jobs:
     with:
       solution: AlexaVoxCraft.slnx
       dotnetVersion: |
-        8.0.x
-        9.0.x
         10.0.x
         11.0.x
       hasTests: true
