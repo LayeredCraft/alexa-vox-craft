@@ -1,4 +1,3 @@
-// Isolated-process registration probe skeleton. Behavior is added by its own Red -> Green cycle;
-// this file only establishes that the project builds and can be launched as a child process.
-Console.WriteLine("WebApiGames registration probe scaffold");
-return 0;
+// Isolated-process registration probe shell. Behavior is added by its own Red -> Green cycle.
+Console.Error.WriteLine("PROBE NOT IMPLEMENTED");
+return 1;
