@@ -17,6 +17,7 @@ public static class HTMLInterface
         /// <see langword="false"/> when the request, its context, system, device or supported-interfaces
         /// map is null. Only the presence of the key is inspected, never its value shape.
         /// </summary>
-        public bool HTMLSupported() => throw new NotImplementedException();
+        public bool HTMLSupported() =>
+            request?.Context?.System?.Device?.SupportedInterfaces?.ContainsKey(InterfaceName) == true;
     }
 }
