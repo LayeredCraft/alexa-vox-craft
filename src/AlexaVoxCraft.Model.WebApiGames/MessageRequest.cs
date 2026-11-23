@@ -15,11 +15,23 @@ public sealed class MessageRequest : AlexaVoxCraft.Model.Request.Type.Request
 
     /// <summary>Gets the message payload; <see cref="JsonValueKind.Undefined"/> when the request had no message.</summary>
     [JsonPropertyName("message")]
-    public JsonElement Message => throw new NotImplementedException();
+    [JsonInclude]
+    public JsonElement Message { get; private set; }
 
     /// <summary>Deserializes the message payload using the caller-supplied metadata.</summary>
     /// <typeparam name="TMessage">The payload type.</typeparam>
     /// <param name="typeInfo">The source-generated metadata for <typeparamref name="TMessage"/>.</param>
     /// <exception cref="InvalidOperationException">Thrown when the request carried no message.</exception>
-    public TMessage? GetMessage<TMessage>(JsonTypeInfo<TMessage> typeInfo) => throw new NotImplementedException();
+    /// <exception cref="JsonException">Thrown when the payload does not match <typeparamref name="TMessage"/>.</exception>
+    public TMessage? GetMessage<TMessage>(JsonTypeInfo<TMessage> typeInfo)
+    {
+        ArgumentNullException.ThrowIfNull(typeInfo);
+
+        if (Message.ValueKind == JsonValueKind.Undefined)
+        {
+            throw new InvalidOperationException("The message request did not carry a message payload.");
+        }
+
+        return Message.Deserialize(typeInfo);
+    }
 }

@@ -15,7 +15,7 @@ public sealed class MessageRequestTests : TestBase<MessageRequestTests>
         request.Type.Should().Be("Alexa.Presentation.HTML.Message");
         request.RequestId.Should().Be("amzn1.echo-api.request.0123456789");
         request.Locale.Should().Be("en-US");
-        request.Timestamp.Should().Be(new DateTime(2024, 5, 1, 12, 0, 0, DateTimeKind.Utc));
+        request.Timestamp.ToUniversalTime().Should().Be(new DateTime(2024, 5, 1, 12, 0, 0, DateTimeKind.Utc));
         request.Message.GetProperty("action").GetString().Should().Be("start");
         request.Message.GetProperty("level").GetInt32().Should().Be(3);
     }
