@@ -16,10 +16,20 @@ AlexaVoxCraft is a modular C# .NET library for building Amazon Alexa skills usin
 
 ### Core Components
 
+The solution publishes 11 NuGet packages (every `src/` project except
+`AlexaVoxCraft.MediatR.Generators`, which ships inside the `AlexaVoxCraft.MediatR` package as its
+analyzer):
+
 - **AlexaVoxCraft.Model**: Base Alexa skill models (requests, responses, directives)
 - **AlexaVoxCraft.Model.Apl**: Comprehensive APL components and document support
+- **AlexaVoxCraft.Model.InSkillPurchasing**: In-skill purchasing request/response models
 - **AlexaVoxCraft.MediatR**: Core MediatR integration for request handling patterns
 - **AlexaVoxCraft.MediatR.Lambda**: AWS Lambda hosting with middleware
+- **AlexaVoxCraft.Lambda**: Lambda hosting abstractions and serialization
+- **AlexaVoxCraft.MinimalLambda**: Hosting on MinimalLambda
+- **AlexaVoxCraft.Http**: Shared HTTP client base for Alexa service clients
+- **AlexaVoxCraft.InSkillPurchasing**: In-skill purchasing service client
+- **AlexaVoxCraft.Smapi**: Skill Management API client
 - **AlexaVoxCraft.Observability**: Opt-in OpenTelemetry instrumentation package
 
 ### Request Handling Pattern
@@ -66,16 +76,16 @@ rationale. See ADR-0001 (`docs/adr/0001-native-aot-compatibility.md`) and plan 0
 (`docs/plans/0003-native-aot-compatibility-implementation.md`) for the full architecture and
 implementation history; consumer-facing guidance is in `docs/components/native-aot.md`.
 
-Native AOT publish succeeds with zero IL warnings originating from the AOT test project itself -
-confirmed by reconstructing and publishing the old `AlexaVoxCraft.NativeAot.ValidationApp` from git
-history with identical settings and comparing warning-for-warning: both produced the same 96 IL
-warnings before the conversion's own JSON-serialization call sites were migrated to
-`JsonSerializer`'s `JsonTypeInfo<T>`-based overloads (removing the 28 attributable to test code
-without any suppression). The remaining 68 warnings (IL2026/IL3050/IL2070/IL2090) originate in
-pre-existing `AlexaVoxCraft` production code and are unchanged from the previous validation
-application's own baseline - they are not new, and are not caused by this test project. Do not
-describe a Native AOT publish here as "clean" or "warning-free" without specifying which of these two
-categories a given warning count belongs to. The IL2070/IL2090 pair specifically (`EnumParser.cs`,
+Native AOT publish succeeds with zero IL warnings originating from the AOT test project itself. The
+measured baseline (`main` `d07c5af`, SDK 11.0.100, `dotnet publish -r osx-arm64 -c Release` of
+`test/AlexaVoxCraft.NativeAot.AotTests`) is **72 ILC warnings** (IL2026/IL3050/IL2070/IL2090), all
+originating in pre-existing `AlexaVoxCraft` production code. They are accepted historical
+exceptions dating from #188 (Native AOT compatibility), not caused by the test project; the exact
+location-level listing is recorded in issue #214. (Before the AOT test conversion migrated its own
+JSON call sites to `JsonTypeInfo<T>`-based overloads, the old validation app produced 96; the 28
+attributable to test code were removed without any suppression.) Do not describe a Native AOT
+publish here as "clean" or "warning-free" without specifying which category a given warning count
+belongs to. The IL2070/IL2090 pair specifically (`EnumParser.cs`,
 `EnumHelper.cs` - `Type`/generic-parameter reflection calls without matching
 `DynamicallyAccessedMembers` annotations) is a distinct, legitimate finding from the
 resolver-chain-uncertainty IL2026/IL3050 pattern the JSON warnings represent - it was investigated and
@@ -118,24 +128,33 @@ Key internal mechanics (not part of any public contract, useful when touching th
 ## Development Commands
 
 ### Build and Test
+The SDK is pinned in `global.json`, which also selects Microsoft.Testing.Platform (MTP) as the
+`dotnet test` runner, so `dotnet test` takes MTP options (`--solution`, `--project`), not legacy
+VSTest flags.
+
 ```bash
-# Build the entire solution
-dotnet build AlexaVoxCraft.sln
+# Restore dependencies
+dotnet restore AlexaVoxCraft.slnx
 
-# Run all tests
-dotnet test
+# Build the entire solution (all target frameworks)
+dotnet build AlexaVoxCraft.slnx -c Release --no-incremental
+dotnet build AlexaVoxCraft.slnx -c Debug --no-incremental
 
-# Run tests for specific project
-dotnet test test/AlexaVoxCraft.Model.Tests/
+# Run all tests (every test project, every target framework)
+dotnet test --solution AlexaVoxCraft.slnx -c Release
+
+# Run tests for a specific project
+dotnet test --project test/AlexaVoxCraft.Model.Tests/AlexaVoxCraft.Model.Tests.csproj
+
+# Publish and run the Native AOT test suite (net9.0; CI uses linux-x64)
+dotnet publish test/AlexaVoxCraft.NativeAot.AotTests/AlexaVoxCraft.NativeAot.AotTests.csproj -r <rid> -c Release
+./test/AlexaVoxCraft.NativeAot.AotTests/bin/Release/net9.0/<rid>/publish/AlexaVoxCraft.NativeAot.AotTests
 
 # Clean build artifacts
-dotnet clean
-
-# Restore dependencies
-dotnet restore
+dotnet clean AlexaVoxCraft.slnx
 
 # Pack NuGet packages
-dotnet pack
+dotnet pack AlexaVoxCraft.slnx -c Release
 ```
 
 ### Lambda Development
@@ -174,112 +193,88 @@ Use `aws-lambda-tools-defaults.json` in skill projects to configure Lambda packa
 
 ## Release and Versioning
 
-This project uses automated versioning and publishing through GitHub Actions with the LayeredCraft devops templates.
+Publishing is automated by GitHub Actions using the LayeredCraft devops templates
+(`.github/workflows/*.yaml`, reusable workflows from `LayeredCraft/devops-templates`).
 
-### Versioning Strategy
+### Version Source
 
-**Version Source**: `Directory.Build.props` contains the `<VersionPrefix>` property:
-- Stable releases: `4.0.0`, `4.1.0`, `5.0.0`
-- Preview releases: `4.1.0-preview`, `5.0.0-beta`
+The published version is resolved by **Release Drafter** (`.github/release-drafter.yml`) from the
+labels of the pull requests merged since the last release. The PR title check enforces Conventional
+Commits titles, and the autolabeler maps them to labels:
 
-**Final Version Format**: GitHub Actions appends the run number to create unique versions:
-- Example: `VersionPrefix: 4.0.0` → Published as `4.0.0.73` (where 73 is the GitHub run number)
-- Example: `VersionPrefix: 4.1.0-preview` → Published as `4.1.0-preview.85`
+- `breaking-change` (a `!` after the type, e.g. `feat!:`) → major
+- `type: feat` (`feat:`) → minor
+- `type: fix`, `type: docs`, `type: refactor`, `type: test`, `type: chore`, `type: ci`,
+  `type: revert` → patch (also the default)
+
+`<VersionPrefix>` in `Directory.Build.props` is **not** used for published versions; do not edit it
+to cut a release.
 
 ### Release Process
 
-#### Creating a Stable Release
-1. Update `Directory.Build.props`: Remove `-preview` or `-beta` suffix
-   ```xml
-   <VersionPrefix>4.0.0</VersionPrefix>  <!-- Was: 4.0.0-preview -->
-   ```
-2. Commit and push to `main` branch
-3. GitHub Actions automatically handles the rest
-
-#### Creating a Preview Release  
-1. Update `Directory.Build.props`: Add or keep `-preview` suffix
-   ```xml
-   <VersionPrefix>4.1.0-preview</VersionPrefix>
-   ```
-2. Commit and push to `main` branch
-3. NuGet packages published with preview designation
-
-### CI/CD Pipeline
-
-**Reusable Workflow**: `LayeredCraft/devops-templates/.github/workflows/package-build.yaml@v6.1`
-
-**Build Triggers**:
-- Push to branches: `main`, `beta`, `release/*`
-- Push to tags: `v*`
-- Manual workflow dispatch
-
-**Automated Actions on Release**:
-1. Build solution in Release configuration
-2. Run all tests (using Microsoft.Testing.Platform with `dotnet run`)
-3. Pack NuGet packages with version `{VersionPrefix}.{RunNumber}`
-4. Publish to NuGet.org (automatically skips duplicates)
-5. Create Git tag: `v{version}.{run_number}` (e.g., `v4.0.0.73`)
-6. Generate GitHub release with auto-generated release notes
+- **Preview**: every push to `main` (each merged PR), except changes only under `docs/**` or
+  `README.md`, runs `publish-preview.yaml`. It builds and tests the solution and pushes **all**
+  packages to NuGet.org as `<resolved version>-preview.<run number>` (for example
+  `8.1.0-preview.<run>` after a `feat:` PR). Merging a PR to `main` is therefore a package
+  publication.
+- **Stable**: publishing a GitHub release (from the Release Drafter draft) runs
+  `publish-release.yaml`, which builds, tests and pushes all packages with the release version.
+- Pull requests run **PR Build** (`pr-build.yaml`, MTP runner, all SDKs 8.0–11.0),
+  **Native AOT Validation** (`native-aot-validation.yaml`) and the PR title check; nothing is
+  published from a pull request or feature branch.
 
 ### Package Configuration
 
 All packages inherit settings from `Directory.Build.props`:
-- **License**: Apache-2.0 (SPDX identifier)
-- **Repository**: GitHub URL with SourceLink integration  
+- **License**: Apache-2.0 (SPDX identifier); third-party attributions in `NOTICE` and `licenses/`
+- **Repository**: GitHub URL with SourceLink integration
 - **Symbols**: Automatic `.snupkg` symbol packages for debugging
-- **Metadata**: Author, project URL, repository type
+- **Metadata**: Author, project URL, repository type, README and icon
 
-### Branch Strategy
-
-- **`main`**: Primary development branch, triggers automatic releases
-- **`beta`**: Beta releases (if used)
-- **`release/*`**: Maintenance releases for specific versions
-- **Feature branches**: No automatic publishing (safe for development)
-
-### Version History Examples
-
-Recent releases follow this pattern:
-```
-v4.0.0-preview.72  ← Preview release
-v3.2.1.71          ← Stable release  
-v3.2.0.70          ← Stable release
-v3.2.0-preview.69  ← Preview release
-```
+All packages are published together with the same version.
 
 ### Breaking Changes and Semantic Versioning
 
-- **Major version** (4.0.0): Breaking changes requiring code updates
-- **Minor version** (4.1.0): New features, backward compatible
-- **Patch version**: Not used (handled by run numbers)
-- **Preview suffix**: Pre-release versions for testing
-
-### NuGet Publishing Notes
-
-- Packages are published to NuGet.org automatically
-- Duplicate uploads are skipped (no manual intervention needed)
-- All 6 packages in the solution are published together with same version
-- Symbol packages enable step-through debugging of library code
+- **Major**: breaking changes requiring consumer code updates
+- **Minor**: new features, backward compatible
+- **Patch**: fixes and maintenance
+- Public API changes must be additive unless a major version is intended.
 
 ## Testing Architecture
 
-- **xUnit v3 with Microsoft.Testing.Platform**: Primary testing framework (use `dotnet run` not `dotnet test`)
-- **AutoFixture**: Property-based testing with generated test data via TestKit
+- **xUnit v3 on Microsoft.Testing.Platform**: every JIT test project uses `xunit.v3.mtp-v2` and runs
+  through `dotnet test` with the MTP runner selected in `global.json` (see Development Commands).
+  Test projects target net8.0/net9.0/net10.0/net11.0 (`test/Directory.Build.props`).
+- **Compono**: the test-composition and test-double framework (source-generated; no AutoFixture).
+  All Compono packages are pinned in lockstep in `Directory.Packages.props`; never mix versions.
 - **AwesomeAssertions**: Fluent assertion library (same API as FluentAssertions but different package)
-- **TestKit Infrastructure**: Centralized testing utilities and specimen builders
+- **Verify** (`Verify.XunitV3`, `Verify.SourceGenerators`): snapshot tests for serialized models and
+  generator output (`Snapshots/` folders; `*.received.*` files are never committed)
 - **JSON Examples**: Extensive test data files for deserialization validation
 - **Serialization Tests**: Round-trip validation of System.Text.Json converters
 - **APL Component Tests**: Comprehensive APL document and component validation
+- **Native AOT tests**: `test/AlexaVoxCraft.NativeAot.AotTests` is a net9.0 rooted executable using the
+  separate `xunit.v3.aot.mtp-v2` + `Compono.XunitV3.Aot` family with reflection-based JSON disabled.
+  Never reference `xunit.v3.mtp-v2`/`Compono.XunitV3` in that project (CS0433), or the AOT family in
+  the JIT test projects.
 
-### TestKit Components
-- **ModelAutoDataAttribute**: AutoFixture configuration for Model tests
-- **CardSpecimenBuilder**: Generates realistic card objects with Alexa constraints
-- **JsonTestExtensions**: Round-trip serialization validation utilities
-- **TestLoggerCustomization**: Structured logging testing with proper freezing behavior
+### Compono conventions
+- Reusable setup lives in small, concern-named composition profiles (`ICompositionProfile`) under each
+  test project's `TestKit/` folder (for example `MediatRTestProfile`, `LambdaTestProfile`,
+  `SmapiHttpTestProfile`), applied with `[Compose<TProfile>]`.
+- Use `Compono.TestDoubles` (`UseGeneratedTestDoubles()`) for interface doubles, `Compono.Http` for
+  HTTP clients, `Compono.Logging` for observable `ILogger<T>` output and `Compono.Options` for
+  `IOptions<T>`. Add a Compono integration package only when a test needs it.
+- Compose incidental values; keep behavior-defining values (wire field names, discriminators,
+  boundaries, fixture JSON) as visible literals.
+- Custom fakes or harnesses only where Compono lacks the capability; say why in the file (for
+  example `FakeDelegates.cs`: Compono.TestDoubles does not generate delegate doubles).
 
 ### Testing Notes
 - Use `AwesomeAssertions` package, NOT `FluentAssertions` (same API, different package)
-- Run tests with `dotnet run` due to Microsoft.Testing.Platform integration
-- Use `[Theory]` with `[ModelAutoData]` for property-based testing with generated data
+- Run tests with `dotnet test --solution`/`--project` (MTP runner); `dotnet run` on a test project
+  also works for ad hoc runs
+- Propagate `TestContext.Current.CancellationToken` into async calls in tests
 
 ## Logging Configuration
 
@@ -333,10 +328,11 @@ public class MyExceptionHandler : IExceptionHandler
 
 ## Project Structure
 
-- `/src/`: Library source code (6 NuGet packages)
-- `/samples/`: Working example skills (basic and APL)
-- `/test/`: Unit tests with extensive JSON example files
-- **Multi-targeting**: Supports .NET 8.0 and .NET 9.0
+- `/src/`: Library source code (11 NuGet packages plus the bundled MediatR source generator)
+- `/samples/`: Working example skills (basic, APL, ISP, generated and host-based)
+- `/test/`: Unit tests with extensive JSON example files, plus the Native AOT test project
+- **Multi-targeting**: library and test projects target .NET 8.0, 9.0, 10.0 and 11.0
+  (`AlexaVoxCraft.MediatR.Generators` targets netstandard2.0; the Native AOT test project net9.0)
 - **Lambda Optimized**: ReadyToRun publishing, ICU bundling, self-contained deployment options
 
 ## Key Features
@@ -357,23 +353,46 @@ public class MyExceptionHandler : IExceptionHandler
 - When creating new components, examine existing similar components for patterns
 - Prefer sealed classes when possible for better performance and design clarity
 
+## Engineering Rules
+- **Test-first (Red → Green → Refactor) for every behavior-bearing change**: write the test first,
+  run it and observe it fail for the intended behavioral reason against compiling production code
+  (a compile error or missing type is not Red), then make the minimal change that passes, then
+  refactor while staying green. Bug fixes start with a reproducing regression test. Documentation,
+  configuration-only and warning-only changes are exempt but must say so and be validated
+  structurally (build, tests, inspection).
+- **Zero ordinary C# compiler (CS) warnings** for every target framework, in Release and Debug and in
+  the Native AOT publish.
+- **Zero new warnings of any category** compared with the accepted analyzer/AOT baseline (the IL
+  trim/AOT and SYSLIB config-binding warnings from #188, listed in #214). Compare diagnostics by code,
+  project, target framework, location and message, not by count.
+- **No suppression shortcuts**: no `NoWarn`, `#pragma warning disable`, `[SuppressMessage]`,
+  `[UnconditionalSuppressMessage]`, lowered warning levels, disabled analyzers or dropped target
+  frameworks to make a build pass. Repository-wide `TreatWarningsAsErrors` is not enabled while the
+  accepted analyzer warnings remain. Do not rewrite existing converters only to remove accepted
+  warnings.
+- **Public API compatibility**: changes to published packages are additive unless a major version
+  is intended; keep every supported target framework.
+- **Native AOT compatibility**: in-scope packages stay `IsAotCompatible=true`; new runtime-dispatched
+  serialization types are rooted in the owning package's source-generated context and covered by the
+  Native AOT test project; no reflection-only fallbacks on AOT paths.
+
 ## Testing Guidelines
-- Always use AutoFixture with TestKit for new Model tests
+- Use Compono (profiles under `TestKit/`) for test composition and doubles; never AutoFixture
 - Use `AwesomeAssertions` for assertions (same API as FluentAssertions)
-- Create property-based tests with `[Theory]` and `[ModelAutoData]`
-- Validate both object constraints AND round-trip serialization
-- Use `dotnet run` instead of `dotnet test` for Microsoft.Testing.Platform projects
+- Validate both object constraints AND round-trip serialization through `AlexaJsonOptions`
+- Assert wire JSON (field names, discriminators, value kinds, omitted members) against literal
+  fixtures, not only self-round-trips
+- Use `dotnet test` (MTP runner via `global.json`)
 
 ## Random Number Generation Guidelines
 - **Application Code**: Use `Random.Shared.Next()` for performance
-- **Test Specimen Builders**: Use `context.Create<int>()` for determinism and reproducible tests
-- **Test Determinism**: Configure AutoFixture with seeds when needed for consistent CI/CD results
-- **Property-Based Testing**: Prefer controlled randomness over true randomness for reliable test outcomes
+- **Tests**: Let Compono compose incidental values; use literals for values that define the behavior
+  under test, so results stay deterministic and reproducible in CI
 
 ## Git and Development Workflow
 - Always use descriptive commit messages following conventional commit style
 - Include `🤖 Generated with [Claude Code](https://claude.ai/code)` and `Co-Authored-By: Claude <noreply@anthropic.com>` in commits
-- Create branches with descriptive names (e.g., `feature/migrate-model-tests-autofixture`)
+- Create branches with descriptive names (e.g., `feat/web-api-for-games`)
 - When creating PRs, include comprehensive summary of changes and test coverage improvements
 
 ## Security and Best Practices
@@ -382,16 +401,8 @@ public class MyExceptionHandler : IExceptionHandler
 - Always follow security best practices for Alexa skill development
 - Validate input constraints according to Alexa specifications
 
-## Testing Migration Strategy
-- When migrating existing tests to AutoFixture:
-  1. Preserve JSON deserialization tests that validate converters
-  2. Replace static object creation tests with property-based AutoFixture tests
-  3. Add constraint validation for Alexa-specific business rules
-  4. Ensure round-trip serialization testing
-  5. Create appropriate specimen builders in TestKit
-
 ## Model Testing Patterns
-- Use CardSpecimenBuilder for card types
+- Preserve JSON deserialization tests that validate converters
 - Generate realistic test data that meets Alexa constraints
 - Validate both object structure AND serialization behavior
 - Test edge cases and constraint violations
