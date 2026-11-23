@@ -48,13 +48,11 @@ public sealed class WebApiGamesModelContextCompletenessTests
             "WebApiGamesModelContext.");
     }
 
-    [DynamicDependency(DynamicallyAccessedMemberTypes.NonPublicFields, typeof(DirectiveConverter))]
     private static IEnumerable<Type> DirectiveDispatchTargets() =>
         GetFieldValue(typeof(DirectiveConverter), "_directiveDerivedTypes")
             .OfType<Type>()
             .Where(t => t.Assembly == typeof(StartDirective).Assembly);
 
-    [DynamicDependency(DynamicallyAccessedMemberTypes.NonPublicFields, typeof(RequestConverter))]
     private static IEnumerable<Type> RequestDispatchTargets() =>
         GetFieldValue(typeof(RequestConverter), "RequestTypeResolvers")
             .OfType<IRequestTypeResolver>()
@@ -64,13 +62,12 @@ public sealed class WebApiGamesModelContextCompletenessTests
             .Where(t => t.Assembly == typeof(MessageRequest).Assembly);
 
     // Test-time-only reflection over two specific, hand-maintained private fields to build this test's
-    // input set (mirrors AplModelContextCompletenessTests.GetDictionaryKeys). Under real Native AOT
-    // publish the trimmer would otherwise remove these fields since nothing else references them by name;
-    // the DynamicDependency attributes on the two callers above preserve them explicitly - accurate, not
-    // a workaround, because this reflection is intentional and its two targets are fixed.
-    [UnconditionalSuppressMessage(
-        "Trimming", "IL2070", Justification = "Test-only reflection over a fixed, known field name.")]
-    private static IEnumerable<object?> GetFieldValue(Type declaringType, string fieldName)
+    // input set. Rather than suppress the trimmer's IL2070 finding, the declaringType parameter carries
+    // the same NonPublicFields annotation Type.GetField requires, and every caller passes a typeof(...)
+    // constant - so the analyzer is satisfied and the trimmer preserves the fields the reflection needs.
+    private static IEnumerable<object?> GetFieldValue(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicFields)] Type declaringType,
+        string fieldName)
     {
         var field = declaringType.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static)
             ?? throw new InvalidOperationException(
