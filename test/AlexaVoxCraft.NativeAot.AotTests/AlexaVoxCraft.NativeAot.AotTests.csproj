@@ -81,6 +81,10 @@
         <ProjectReference Include="..\AlexaVoxCraft.NativeAot.TestFixture\AlexaVoxCraft.NativeAot.TestFixture.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
+        <!-- Web API for Games reflection-disabled validation (Issue #213): directive/request
+             serialization, MessageRequest typed payloads, generated mediator dispatch and
+             WebApiGamesModelContext completeness. -->
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.WebApiGames\AlexaVoxCraft.Model.WebApiGames.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR.Lambda\AlexaVoxCraft.MediatR.Lambda.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MinimalLambda\AlexaVoxCraft.MinimalLambda.csproj" />

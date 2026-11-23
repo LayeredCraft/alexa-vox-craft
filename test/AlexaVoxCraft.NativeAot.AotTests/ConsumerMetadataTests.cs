@@ -16,6 +16,20 @@ public sealed class GameState
 }
 
 /// <summary>
+/// The typed payload of a Web API for Games <c>Alexa.Presentation.HTML.Message</c> request (Issue #213),
+/// read back through <c>MessageRequest.GetMessage&lt;T&gt;</c> with this project's own source-generated
+/// metadata.
+/// </summary>
+public sealed class GameMessage
+{
+    [JsonPropertyName("action")]
+    public string? Action { get; set; }
+
+    [JsonPropertyName("level")]
+    public int Level { get; set; }
+}
+
+/// <summary>
 /// Deliberately never added to <see cref="ValidationAppContext"/>'s <c>[JsonSerializable]</c> list -
 /// the one type in this project that must always fail to serialize under reflection-disabled AOT,
 /// proving the failure is clear and immediate rather than a silent fallback.
@@ -26,6 +40,7 @@ public sealed class UnregisteredValidationPoco
 }
 
 [JsonSerializable(typeof(GameState))]
+[JsonSerializable(typeof(GameMessage))]
 [JsonSerializable(typeof(SkillInvocationResponse<GameState>))]
 [JsonSerializable(typeof(SkillInvocationRequest<GameState>))]
 [JsonSerializable(typeof(SkillInvocationBody<GameState>))]
