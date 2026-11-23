@@ -1,0 +1,23 @@
+{
+  "type": "Alexa.Presentation.HTML.Start",
+  "request": {
+    "uri": "https://example.com/game",
+    "method": "GET",
+    "headers": {
+      "X-Token": "abc"
+    }
+  },
+  "configuration": {
+    "timeoutInSeconds": 300
+  },
+  "data": {
+    "level": 3
+  },
+  "transformers": [
+    {
+      "transformer": "textToSpeech",
+      "inputPath": "card/title",
+      "outputName": "spokenTitle"
+    }
+  ]
+}

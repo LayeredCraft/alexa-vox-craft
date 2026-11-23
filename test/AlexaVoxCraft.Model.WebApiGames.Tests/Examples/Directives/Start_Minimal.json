@@ -1,0 +1,10 @@
+{
+  "type": "Alexa.Presentation.HTML.Start",
+  "request": {
+    "uri": "https://example.com/game",
+    "method": "GET"
+  },
+  "configuration": {
+    "timeoutInSeconds": 30
+  }
+}
