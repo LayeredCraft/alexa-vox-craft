@@ -41,12 +41,25 @@ public sealed class RegistrationProbeTests
 
     private static string LocateProbeAssembly()
     {
-        var baseDirectory = new DirectoryInfo(AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar));
-        var targetFramework = baseDirectory.Name;
-        var configuration = baseDirectory.Parent!.Name;
-        var testProjectDirectory = baseDirectory.Parent!.Parent!.Parent!.FullName;
+        const string probeFileName = "RegistrationProbe.dll";
+        var baseDirectory = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
-        return Path.Combine(
-            testProjectDirectory, "RegistrationProbe", "bin", configuration, targetFramework, "RegistrationProbe.dll");
+        // Shared-output layout (CI): every project is written to a common <publish>/<tfm>/ directory, so
+        // the probe sits next to the test assembly.
+        var adjacentProbe = Path.Join(baseDirectory, probeFileName);
+        if (File.Exists(adjacentProbe))
+        {
+            return adjacentProbe;
+        }
+
+        // Default local layout: the test assembly is under <testProject>/bin/<configuration>/<tfm>/ and the
+        // probe under <testProject>/RegistrationProbe/bin/<configuration>/<tfm>/. Path.Join never drops an
+        // earlier argument when a later one is rooted.
+        var baseDirectoryInfo = new DirectoryInfo(baseDirectory);
+        var targetFramework = baseDirectoryInfo.Name;
+        var configuration = baseDirectoryInfo.Parent!.Name;
+        var testProjectDirectory = baseDirectoryInfo.Parent!.Parent!.Parent!.FullName;
+
+        return Path.Join(testProjectDirectory, "RegistrationProbe", "bin", configuration, targetFramework, probeFileName);
     }
 }
