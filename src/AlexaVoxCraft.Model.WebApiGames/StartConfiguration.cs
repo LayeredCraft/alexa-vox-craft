@@ -14,9 +14,13 @@ public sealed class StartConfiguration
     /// above 300 are rejected. No minimum is enforced.
     /// </param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="timeoutInSeconds"/> is greater than 300.</exception>
-    public StartConfiguration(int timeoutInSeconds = 30) => throw new NotImplementedException();
+    public StartConfiguration(int timeoutInSeconds = 30)
+    {
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(timeoutInSeconds, 300);
+        TimeoutInSeconds = timeoutInSeconds;
+    }
 
     /// <summary>Gets the timeout, in seconds, that Alexa waits for the web app to signal readiness.</summary>
     [JsonPropertyName("timeoutInSeconds")]
-    public int TimeoutInSeconds => throw new NotImplementedException();
+    public int TimeoutInSeconds { get; }
 }
