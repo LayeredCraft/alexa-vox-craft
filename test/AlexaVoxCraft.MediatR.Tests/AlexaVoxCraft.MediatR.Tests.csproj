@@ -59,6 +59,10 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\AlexaVoxCraft.MediatR\AlexaVoxCraft.MediatR.csproj" />
         <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+        <!-- Web API for Games dispatch proof (Issue #213): lets this project's own generator-intercepted
+             AddSkillMediator call site register a typed IRequestHandler<MessageRequest> and deserialize
+             real Web API for Games JSON through AlexaJsonOptions. -->
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.WebApiGames\AlexaVoxCraft.Model.WebApiGames.csproj" />
         <!-- A source-tree ProjectReference to AlexaVoxCraft.MediatR alone does not pull in its
              interceptor generator as an analyzer (CLAUDE.md). This project reference is required so
              this project's own AddSkillMediator(configuration, ...) call sites are actually intercepted,
