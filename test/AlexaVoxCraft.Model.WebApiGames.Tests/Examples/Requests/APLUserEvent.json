@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "context": {
+    "System": {
+      "apiAccessToken": "token",
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "application": {
+        "applicationId": "amzn1.ask.skill.0123456789"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.0123456789"
+      },
+      "device": {
+        "deviceId": "device-1",
+        "supportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "1.9"
+            }
+          }
+        }
+      }
+    }
+  },
+  "request": {
+    "type": "Alexa.Presentation.APL.UserEvent",
+    "requestId": "amzn1.echo-api.request.0123456789",
+    "timestamp": "2024-05-01T12:00:00Z",
+    "locale": "en-US",
+    "arguments": [
+      "selectCategory",
+      "general"
+    ],
+    "components": {}
+  }
+}
