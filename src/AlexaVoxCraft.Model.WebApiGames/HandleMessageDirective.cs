@@ -23,11 +23,14 @@ public sealed class HandleMessageDirective : IDirective
     {
     }
 
-    // Deserialization entry point: parameter types match the property types exactly, as required by
-    // System.Text.Json's parameterized-constructor binding. Private so it never competes with the
-    // public constructor overloads at consumer call sites.
+    /// <summary>Initializes a new handle-message directive from an already-materialized transformer list.</summary>
+    /// <remarks>
+    /// Deserialization entry point. System.Text.Json's parameterized-constructor binding requires the
+    /// parameter types to match the property types exactly, so this constructor takes
+    /// <see cref="IReadOnlyList{T}"/> rather than the public constructor's <see cref="IEnumerable{T}"/>.
+    /// </remarks>
     [JsonConstructor]
-    private HandleMessageDirective(JsonElement message, IReadOnlyList<HTMLTransformer>? transformers)
+    public HandleMessageDirective(JsonElement message, IReadOnlyList<HTMLTransformer>? transformers)
     {
         if (message.ValueKind != JsonValueKind.Object)
         {

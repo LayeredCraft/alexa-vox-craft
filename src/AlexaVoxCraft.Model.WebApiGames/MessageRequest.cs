@@ -13,10 +13,18 @@ public sealed class MessageRequest : AlexaVoxCraft.Model.Request.Type.Request
     /// <summary>The request type discriminator value.</summary>
     public const string RequestType = "Alexa.Presentation.HTML.Message";
 
-    /// <summary>Gets the message payload; <see cref="JsonValueKind.Undefined"/> when the request had no message.</summary>
+    private JsonElement _message;
+
+    /// <summary>
+    /// Gets or sets the message payload; <see cref="JsonValueKind.Undefined"/> when the request had no
+    /// message. The element is cloned on assignment so it remains valid after the source document is disposed.
+    /// </summary>
     [JsonPropertyName("message")]
-    [JsonInclude]
-    public JsonElement Message { get; private set; }
+    public JsonElement Message
+    {
+        get => _message;
+        set => _message = value.ValueKind == JsonValueKind.Undefined ? value : value.Clone();
+    }
 
     /// <summary>Deserializes the message payload using the caller-supplied metadata.</summary>
     /// <typeparam name="TMessage">The payload type.</typeparam>

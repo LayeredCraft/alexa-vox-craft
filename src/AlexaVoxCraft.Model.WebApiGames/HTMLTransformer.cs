@@ -4,13 +4,24 @@ namespace AlexaVoxCraft.Model.WebApiGames;
 
 /// <summary>
 /// A Web API for Games transformer that rewrites part of the HTML document before it is presented.
-/// Instances are created through the <see cref="TextToSpeech"/> and <see cref="SsmlToSpeech"/> factories.
+/// Prefer the <see cref="TextToSpeech"/> and <see cref="SsmlToSpeech"/> factories over the constructor.
 /// </summary>
 public sealed class HTMLTransformer
 {
+    /// <summary>Initializes a new transformer.</summary>
+    /// <param name="transformer">The transformer kind; one of <c>textToSpeech</c> or <c>ssmlToSpeech</c>.</param>
+    /// <param name="inputPath">The non-empty source path.</param>
+    /// <param name="outputName">An optional output path.</param>
+    /// <remarks>
+    /// Public because System.Text.Json's source generator on .NET 8/9/10 only honors public constructors;
+    /// see the deviation note in the final report. Prefer the factories.
+    /// </remarks>
     [JsonConstructor]
-    private HTMLTransformer(string transformer, string inputPath, string? outputName)
+    public HTMLTransformer(string transformer, string inputPath, string? outputName)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(transformer);
+        ArgumentException.ThrowIfNullOrWhiteSpace(inputPath);
+
         Transformer = transformer;
         InputPath = inputPath;
         OutputName = outputName;
