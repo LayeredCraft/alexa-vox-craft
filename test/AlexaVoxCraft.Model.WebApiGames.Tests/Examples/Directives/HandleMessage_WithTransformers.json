@@ -1,0 +1,12 @@
+{
+  "type": "Alexa.Presentation.HTML.HandleMessage",
+  "message": {
+    "level": 3
+  },
+  "transformers": [
+    {
+      "transformer": "ssmlToSpeech",
+      "inputPath": "card/body"
+    }
+  ]
+}
