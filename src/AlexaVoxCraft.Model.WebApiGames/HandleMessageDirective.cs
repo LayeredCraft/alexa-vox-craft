@@ -17,21 +17,39 @@ public sealed class HandleMessageDirective : IDirective
     /// <summary>Initializes a new handle-message directive.</summary>
     /// <param name="message">The message payload; must be a JSON object.</param>
     /// <param name="transformers">Optional transformers applied to the document.</param>
-    public HandleMessageDirective(JsonElement message, IEnumerable<HTMLTransformer>? transformers = null) =>
-        throw new NotImplementedException();
+    /// <exception cref="ArgumentException">Thrown when <paramref name="message"/> is not a JSON object.</exception>
+    public HandleMessageDirective(JsonElement message, IEnumerable<HTMLTransformer>? transformers = null)
+        : this(message, Materialize(transformers))
+    {
+    }
+
+    // Deserialization entry point: parameter types match the property types exactly, as required by
+    // System.Text.Json's parameterized-constructor binding. Private so it never competes with the
+    // public constructor overloads at consumer call sites.
+    [JsonConstructor]
+    private HandleMessageDirective(JsonElement message, IReadOnlyList<HTMLTransformer>? transformers)
+    {
+        if (message.ValueKind != JsonValueKind.Object)
+        {
+            throw new ArgumentException("The handle-message payload must be a JSON object.", nameof(message));
+        }
+
+        Message = message.Clone();
+        Transformers = transformers is { Count: > 0 } ? transformers : null;
+    }
 
     /// <inheritdoc />
     [JsonPropertyName("type")]
-    public string Type => throw new NotImplementedException();
+    public string Type => DirectiveType;
 
     /// <summary>Gets the message payload.</summary>
     [JsonPropertyName("message")]
-    public JsonElement Message => throw new NotImplementedException();
+    public JsonElement Message { get; }
 
     /// <summary>Gets the optional transformers; omitted from the wire when null.</summary>
     [JsonPropertyName("transformers")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public IReadOnlyList<HTMLTransformer>? Transformers => throw new NotImplementedException();
+    public IReadOnlyList<HTMLTransformer>? Transformers { get; }
 
     /// <summary>Creates a handle-message directive whose payload is serialized with the caller-supplied metadata.</summary>
     /// <typeparam name="TMessage">The message payload type.</typeparam>
@@ -41,5 +59,22 @@ public sealed class HandleMessageDirective : IDirective
     public static HandleMessageDirective Create<TMessage>(
         TMessage message,
         JsonTypeInfo<TMessage> messageTypeInfo,
-        IEnumerable<HTMLTransformer>? transformers = null) => throw new NotImplementedException();
+        IEnumerable<HTMLTransformer>? transformers = null)
+    {
+        ArgumentNullException.ThrowIfNull(messageTypeInfo);
+
+        var element = JsonSerializer.SerializeToElement(message, messageTypeInfo);
+        return new HandleMessageDirective(element, transformers);
+    }
+
+    private static IReadOnlyList<HTMLTransformer>? Materialize(IEnumerable<HTMLTransformer>? transformers)
+    {
+        if (transformers is null)
+        {
+            return null;
+        }
+
+        var materialized = transformers.ToArray();
+        return materialized.Length > 0 ? materialized : null;
+    }
 }
