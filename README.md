@@ -59,14 +59,14 @@ dotnet add package LayeredCraft.Logging.CompactJsonFormatter
 
 ### Requirements
 
-Supported target frameworks: **.NET 8.0**, **.NET 9.0**, **.NET 10.0**, **.NET 11.0**.
+Supported target frameworks: **.NET 10.0** and **.NET 11.0**. Support for .NET 8.0 and .NET 9.0 ended with this release (Microsoft ended their support on November 10, 2026).
 
-⚠️ **SDK Version Required**: To use source-generated dependency injection with interceptors, you must use at least version **8.0.400** of the .NET SDK. This ships with **Visual Studio 2022 version 17.11** or higher.
+⚠️ **SDK Version Required**: AlexaVoxCraft targets .NET 10 and .NET 11, so you need at least the **.NET 10 SDK** (10.0.100; the **.NET 11 SDK** to target net11.0). Both include the C# interceptor support that source-generated dependency injection uses.
 
 ```bash
 # Check your SDK version
 dotnet --version
-# Should show 8.0.400 or higher
+# Should show 10.0.100 or higher
 ```
 
 ### Create a Basic Skill

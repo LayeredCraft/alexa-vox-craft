@@ -147,9 +147,9 @@ dotnet test --solution AlexaVoxCraft.slnx -c Release
 # Run tests for a specific project
 dotnet test --project test/AlexaVoxCraft.Model.Tests/AlexaVoxCraft.Model.Tests.csproj
 
-# Publish and run the Native AOT test suite (net9.0; CI uses linux-x64)
+# Publish and run the Native AOT test suite (net11.0; CI uses linux-x64)
 dotnet publish test/AlexaVoxCraft.NativeAot.AotTests/AlexaVoxCraft.NativeAot.AotTests.csproj -r <rid> -c Release
-./test/AlexaVoxCraft.NativeAot.AotTests/bin/Release/net9.0/<rid>/publish/AlexaVoxCraft.NativeAot.AotTests
+./test/AlexaVoxCraft.NativeAot.AotTests/bin/Release/net11.0/<rid>/publish/AlexaVoxCraft.NativeAot.AotTests
 
 # Clean build artifacts
 dotnet clean AlexaVoxCraft.slnx
@@ -245,7 +245,7 @@ All packages are published together with the same version.
 
 - **xUnit v3 on Microsoft.Testing.Platform**: every JIT test project uses `xunit.v3.mtp-v2` and runs
   through `dotnet test` with the MTP runner selected in `global.json` (see Development Commands).
-  Test projects target net8.0/net9.0/net10.0/net11.0 (`test/Directory.Build.props`).
+  Test projects target net10.0/net11.0 (`test/Directory.Build.props`).
 - **Compono**: the test-composition and test-double framework (source-generated; no AutoFixture).
   All Compono packages are pinned in lockstep in `Directory.Packages.props`; never mix versions.
 - **AwesomeAssertions**: Fluent assertion library (same API as FluentAssertions but different package)
@@ -254,7 +254,7 @@ All packages are published together with the same version.
 - **JSON Examples**: Extensive test data files for deserialization validation
 - **Serialization Tests**: Round-trip validation of System.Text.Json converters
 - **APL Component Tests**: Comprehensive APL document and component validation
-- **Native AOT tests**: `test/AlexaVoxCraft.NativeAot.AotTests` is a net9.0 rooted executable using the
+- **Native AOT tests**: `test/AlexaVoxCraft.NativeAot.AotTests` is a net11.0 rooted executable using the
   separate `xunit.v3.aot.mtp-v2` + `Compono.XunitV3.Aot` family with reflection-based JSON disabled.
   Never reference `xunit.v3.mtp-v2`/`Compono.XunitV3` in that project (CS0433), or the AOT family in
   the JIT test projects.
@@ -332,8 +332,8 @@ public class MyExceptionHandler : IExceptionHandler
 - `/src/`: Library source code (12 NuGet packages plus the bundled MediatR source generator)
 - `/samples/`: Working example skills (basic, APL, ISP, generated and host-based)
 - `/test/`: Unit tests with extensive JSON example files, plus the Native AOT test project
-- **Multi-targeting**: library and test projects target .NET 8.0, 9.0, 10.0 and 11.0
-  (`AlexaVoxCraft.MediatR.Generators` targets netstandard2.0; the Native AOT test project net9.0)
+- **Multi-targeting**: library and test projects target .NET 10.0 and 11.0 (.NET 8.0/9.0 are no longer supported)
+  (`AlexaVoxCraft.MediatR.Generators` targets netstandard2.0; the Native AOT test project net11.0)
 - **Lambda Optimized**: ReadyToRun publishing, ICU bundling, self-contained deployment options
 
 ## Key Features

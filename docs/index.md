@@ -37,12 +37,12 @@ dotnet add package AlexaVoxCraft.Observability
 
 ### Requirements
 
-⚠️ **SDK Version Required**: To use source-generated dependency injection with interceptors, you must use at least version **8.0.400** of the .NET SDK. This ships with **Visual Studio 2022 version 17.11** or higher.
+⚠️ **SDK Version Required**: AlexaVoxCraft targets .NET 10 and .NET 11, so you need at least the **.NET 10 SDK** (10.0.100; the **.NET 11 SDK** to target net11.0). Both include the C# interceptor support that source-generated dependency injection uses.
 
 ```bash
 # Check your SDK version
 dotnet --version
-# Should show 8.0.400 or higher
+# Should show 10.0.100 or higher
 ```
 
 ## Quick Start - Building a Trivia Skill
@@ -199,8 +199,8 @@ See the [Examples](examples/index.md) section for the complete implementation.
 
 ## Runtime Requirements
 
-- **.NET 8.0**, **.NET 9.0**, or **.NET 10.0**
-- **.NET SDK 8.0.400+** for source generation (VS 2022 17.11+)
+- **.NET 10.0** or **.NET 11.0**
+- **.NET 10 SDK** or later (the .NET 11 SDK for net11.0)
 - **AWS Lambda Runtime** (provided.al2023)
 - **Amazon Alexa Developer Account**
 - **AWS CLI** configured with appropriate permissions

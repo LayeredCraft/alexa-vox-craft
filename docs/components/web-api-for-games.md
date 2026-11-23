@@ -25,7 +25,7 @@ JSON messages with it through the types below.
 dotnet add package AlexaVoxCraft.Model.WebApiGames
 ```
 
-The package depends only on `AlexaVoxCraft.Model` and targets .NET 8.0, 9.0, 10.0 and 11.0.
+The package depends only on `AlexaVoxCraft.Model` and targets .NET 10.0 and 11.0.
 
 ## Registration
 
