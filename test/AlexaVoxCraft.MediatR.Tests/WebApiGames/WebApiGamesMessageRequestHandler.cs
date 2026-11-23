@@ -28,7 +28,8 @@ public sealed class WebApiGamesMessageRequestHandler : IRequestHandler<MessageRe
     public async Task<SkillResponse> Handle(IHandlerInput input, CancellationToken cancellationToken = default)
     {
         var request = (MessageRequest)input.RequestEnvelope.Request;
-        var payload = request.GetMessage(WebApiGamesMessageJsonContext.Default.MessagePayload);
+        var payload = request.GetMessage(WebApiGamesMessageJsonContext.Default.MessagePayload)
+            ?? throw new InvalidOperationException("The handle-message request carried no message payload.");
 
         if (payload.Action == "start")
         {
