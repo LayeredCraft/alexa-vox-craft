@@ -32,12 +32,13 @@ public sealed class StartDirective : IDirective
 
     /// <summary>Initializes a new start directive from an already-materialized transformer list.</summary>
     /// <remarks>
-    /// Deserialization entry point. System.Text.Json's parameterized-constructor binding requires the
-    /// parameter types to match the property types exactly, so this constructor takes
-    /// <see cref="IReadOnlyList{T}"/> rather than the public constructor's <see cref="IEnumerable{T}"/>.
+    /// Internal deserialization entry point. System.Text.Json's parameterized-constructor binding requires
+    /// the parameter types to match the property types exactly, so this overload takes
+    /// <see cref="IReadOnlyList{T}"/> rather than the <see cref="IEnumerable{T}"/> accepted by the public
+    /// constructor.
     /// </remarks>
     [JsonConstructor]
-    public StartDirective(
+    internal StartDirective(
         StartRequest request,
         StartConfiguration? configuration,
         JsonElement? data,

@@ -12,12 +12,9 @@ public sealed class HTMLTransformer
     /// <param name="transformer">The transformer kind; one of <c>textToSpeech</c> or <c>ssmlToSpeech</c>.</param>
     /// <param name="inputPath">The non-empty source path.</param>
     /// <param name="outputName">An optional output path.</param>
-    /// <remarks>
-    /// Public because System.Text.Json's source generator on .NET 8/9/10 only honors public constructors;
-    /// see the deviation note in the final report. Prefer the factories.
-    /// </remarks>
+    /// <remarks>Internal deserialization entry point; the factories are the public creation API.</remarks>
     [JsonConstructor]
-    public HTMLTransformer(string transformer, string inputPath, string? outputName)
+    internal HTMLTransformer(string transformer, string inputPath, string? outputName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(transformer);
         ArgumentException.ThrowIfNullOrWhiteSpace(inputPath);
