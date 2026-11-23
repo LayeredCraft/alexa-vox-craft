@@ -13,19 +13,29 @@ public sealed class StartRequest
     /// <param name="headers">Optional headers sent to the web app.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="uri"/> is null.</exception>
     /// <exception cref="ArgumentException">Thrown when <paramref name="uri"/> is not an absolute HTTPS URI.</exception>
-    public StartRequest(Uri uri, IReadOnlyDictionary<string, string>? headers = null) =>
-        throw new NotImplementedException();
+    public StartRequest(Uri uri, IReadOnlyDictionary<string, string>? headers = null)
+    {
+        ArgumentNullException.ThrowIfNull(uri);
+
+        if (!uri.IsAbsoluteUri || !string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new ArgumentException("The start request URI must be an absolute HTTPS URI.", nameof(uri));
+        }
+
+        Uri = uri;
+        Headers = headers;
+    }
 
     /// <summary>Gets the absolute HTTPS URI of the web app entry point.</summary>
     [JsonPropertyName("uri")]
-    public Uri Uri => throw new NotImplementedException();
+    public Uri Uri { get; }
 
     /// <summary>Gets the HTTP method; always <c>GET</c>.</summary>
     [JsonPropertyName("method")]
-    public string Method => throw new NotImplementedException();
+    public string Method => "GET";
 
     /// <summary>Gets the optional headers sent to the web app; omitted from the wire when null.</summary>
     [JsonPropertyName("headers")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public IReadOnlyDictionary<string, string>? Headers => throw new NotImplementedException();
+    public IReadOnlyDictionary<string, string>? Headers { get; }
 }
