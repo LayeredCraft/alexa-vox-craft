@@ -13,10 +13,10 @@
 
     <PropertyGroup>
         <!-- Single-TFM native AOT test project - overrides test/Directory.Build.props' multi-target
-             list, matching the old ValidationApp's own net9.0 choice (unchanged: no reason to move
-             TFMs as part of this conversion). -->
+             list. Runs on net11.0, the supported GA framework for Native AOT validation (net8.0/
+             net9.0 support was discontinued in M1; see #211). -->
         <TargetFrameworks></TargetFrameworks>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
