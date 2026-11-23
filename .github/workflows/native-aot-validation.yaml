@@ -32,6 +32,7 @@ jobs:
             src/AlexaVoxCraft.Model/AlexaVoxCraft.Model.csproj \
             src/AlexaVoxCraft.Model.Apl/AlexaVoxCraft.Model.Apl.csproj \
             src/AlexaVoxCraft.Model.InSkillPurchasing/AlexaVoxCraft.Model.InSkillPurchasing.csproj \
+            src/AlexaVoxCraft.Model.WebApiGames/AlexaVoxCraft.Model.WebApiGames.csproj \
             src/AlexaVoxCraft.MediatR/AlexaVoxCraft.MediatR.csproj \
             src/AlexaVoxCraft.MediatR.Lambda/AlexaVoxCraft.MediatR.Lambda.csproj \
             src/AlexaVoxCraft.Lambda/AlexaVoxCraft.Lambda.csproj \
