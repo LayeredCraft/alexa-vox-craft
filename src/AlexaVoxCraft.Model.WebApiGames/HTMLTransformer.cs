@@ -8,6 +8,7 @@ namespace AlexaVoxCraft.Model.WebApiGames;
 /// </summary>
 public sealed class HTMLTransformer
 {
+    [JsonConstructor]
     private HTMLTransformer(string transformer, string inputPath, string? outputName)
     {
         Transformer = transformer;

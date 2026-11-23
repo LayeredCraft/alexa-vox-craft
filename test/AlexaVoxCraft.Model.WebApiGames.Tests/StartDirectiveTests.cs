@@ -82,13 +82,13 @@ public sealed class StartDirectiveTests : TestBase<StartDirectiveTests>
     [Fact]
     public void DataSurvivesSourceDocumentDisposal()
     {
-        JsonElement element;
+        StartDirective directive;
         using (var doc = JsonDocument.Parse("""{"level":9}"""))
         {
-            element = doc.RootElement;
+            // The constructor clones the element, so the directive must remain valid once the source
+            // JsonDocument is disposed.
+            directive = new StartDirective(new StartRequest(GameUri), data: doc.RootElement);
         }
-
-        var directive = new StartDirective(new StartRequest(GameUri), data: element);
 
         var json = TestHelper.Serialize(directive);
 
