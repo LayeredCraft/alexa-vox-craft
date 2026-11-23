@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsAotCompatible>true</IsAotCompatible>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>AlexaVoxCraft.Model.WebApiGames</PackageId>
+        <Title>AlexaVoxCraft.Model.WebApiGames</Title>
+        <Description>Model objects for the Alexa Web API for Games (Alexa.Presentation.HTML), including the HTML interface capability check, Start and HandleMessage directives, transformer values and the inbound Message request.</Description>
+        <PackageTags>alexa;web-api-for-games;html;presentation;directives;models;voxcraft</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.WebApiGames.Tests" />
+    </ItemGroup>
+
+</Project>

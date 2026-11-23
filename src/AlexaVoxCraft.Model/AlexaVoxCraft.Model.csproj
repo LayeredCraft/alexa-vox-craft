@@ -15,6 +15,7 @@
     <ItemGroup>
         <InternalsVisibleTo Include="AlexaVoxCraft.Model.Apl" />
         <InternalsVisibleTo Include="AlexaVoxCraft.Model.InSkillPurchasing" />
+        <InternalsVisibleTo Include="AlexaVoxCraft.Model.WebApiGames" />
         <InternalsVisibleTo Include="AlexaVoxCraft.Smapi" />
         <InternalsVisibleTo Include="AlexaVoxCraft.Model.Tests" />
         <InternalsVisibleTo Include="AlexaVoxCraft.Model.Legacy.Tests" />

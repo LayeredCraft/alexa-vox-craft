@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsTestProject>true</IsTestProject>
+        <IsPackable>false</IsPackable>
+        <LangVersion>default</LangVersion>
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions" />
+        <PackageReference Include="Compono" />
+        <PackageReference Include="Compono.XunitV3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- RegistrationProbe is a standalone console process with its own project; its sources and
+             its build output must never be compiled or embedded by the test project. -->
+        <Compile Remove="RegistrationProbe/**" />
+        <None Remove="RegistrationProbe/**" />
+        <EmbeddedResource Remove="RegistrationProbe/**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Embed all JSON fixtures under Examples/ -->
+        <EmbeddedResource Include="Examples\**\*.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="xunit.runner.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- The isolated-process registration proof launches this project as a child process in the
+             same configuration the tests were built in. -->
+        <AssemblyMetadata Include="WebApiGamesRegistrationProbeProject" Value="$(MSBuildProjectDirectory)/RegistrationProbe/RegistrationProbe.csproj" />
+        <AssemblyMetadata Include="WebApiGamesRegistrationProbeConfiguration" Value="$(Configuration)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.InSkillPurchasing\AlexaVoxCraft.Model.InSkillPurchasing.csproj" />
+        <ProjectReference Include="..\..\src\AlexaVoxCraft.Model.WebApiGames\AlexaVoxCraft.Model.WebApiGames.csproj" />
+        <ProjectReference Include="RegistrationProbe\RegistrationProbe.csproj" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+</Project>

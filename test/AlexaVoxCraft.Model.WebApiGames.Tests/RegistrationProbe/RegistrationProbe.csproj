@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- test/Directory.Build.props injects these global usings for test projects; this probe is
+             a non-test console process and does not reference either package. -->
+        <Using Remove="Xunit" />
+        <Using Remove="AwesomeAssertions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\AlexaVoxCraft.Model\AlexaVoxCraft.Model.csproj" />
+        <ProjectReference Include="..\..\..\src\AlexaVoxCraft.Model.Apl\AlexaVoxCraft.Model.Apl.csproj" />
+        <ProjectReference Include="..\..\..\src\AlexaVoxCraft.Model.InSkillPurchasing\AlexaVoxCraft.Model.InSkillPurchasing.csproj" />
+        <ProjectReference Include="..\..\..\src\AlexaVoxCraft.Model.WebApiGames\AlexaVoxCraft.Model.WebApiGames.csproj" />
+    </ItemGroup>
+
+</Project>
