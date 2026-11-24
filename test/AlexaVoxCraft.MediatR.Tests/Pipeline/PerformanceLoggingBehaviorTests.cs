@@ -154,6 +154,39 @@ public class PerformanceLoggingBehaviorTests : TestBase
         logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Successfully processed Alexa skill request").Once();
     }
 
+    [Theory]
+    [Compose<MediatRTestProfile>]
+    public async Task Handle_DoesNotIncludeUserIdInLoggingScope(
+        ILogger<PerformanceLoggingBehavior> logger,
+        PerformanceLoggingBehavior behavior,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse)
+    {
+        // Arrange
+        const string userId = "amzn1.ask.account.USER-ID-SENTINEL";
+        var skillRequest = TestHelper.ForRequest(TestHelper.IntentRequest("TestIntent"));
+        skillRequest.Session.SessionId = "amzn1.echo-api.session.test-session";
+        skillRequest.Session.User = new User { UserId = userId };
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
+        next.Returns(Task.FromResult(expectedResponse));
+
+        // Act
+        await behavior.Handle(handlerInput, CancellationToken, next);
+
+        // Assert
+        var scopeProperties = logger.GetCapturedEntries()
+            .SelectMany(e => e.Scopes)
+            .OfType<IEnumerable<KeyValuePair<string, object?>>>()
+            .SelectMany(scope => scope)
+            .ToList();
+
+        scopeProperties.Select(p => p.Key).Should()
+            .Contain(["RequestType", "IntentName", "SessionId", "ApplicationId", "RequestId"]);
+        scopeProperties.Should().NotContain(p => p.Key == "UserId");
+        scopeProperties.Should().NotContain(p => Equals(p.Value, userId));
+    }
+
     [Fact]
     public void Constructor_WithNullLogger_ThrowsArgumentNullException()
     {

@@ -26,7 +26,6 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
         var requestType = request.Type;
         var intentName = request is IntentRequest intentRequest ? intentRequest.Intent.Name : null;
         var sessionId = input.RequestEnvelope.Session?.SessionId;
-        var userId = input.RequestEnvelope.Session?.User?.UserId;
         var applicationId = input.RequestEnvelope.Context.System.Application.ApplicationId;
         var requestId = request.RequestId;
         var locale = request.Locale ?? "unknown";
@@ -67,11 +66,12 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
             span?.SetTag(AlexaSemanticAttributes.SessionId, CreateSessionHash(sessionId));
         }
 
-        using var scope = _logger.BeginScope<string, string?, string?, string?, string, string>(
+        // The raw Alexa UserId is a persistent per-user identifier (personal data); it is
+        // deliberately excluded from the scope so providers that render scopes never log it.
+        using var scope = _logger.BeginScope<string, string?, string?, string, string>(
             "RequestType", requestType,
             "IntentName", intentName,
             "SessionId", sessionId,
-            "UserId", userId,
             "ApplicationId", applicationId,
             "RequestId", requestId);
 
