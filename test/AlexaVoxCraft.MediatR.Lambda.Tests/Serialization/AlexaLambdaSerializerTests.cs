@@ -179,18 +179,6 @@ public class AlexaLambdaSerializerTests : TestBase
     }
 
     [Theory, Compose<LambdaTestProfile>]
-    public void Deserialize_WithDebugLogging_LogsRawInput(SkillRequest skillRequest)
-    {
-        _testLogger.MinimumLogLevel = LogLevel.Debug;
-        var json = JsonSerializer.Serialize(skillRequest, AlexaJsonOptions.DefaultOptions);
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
-
-        _serializer.Deserialize<SkillRequest>(stream);
-
-        _testLogger.HasLogEntry(LogLevel.Debug, "Raw JSON Input").Should().BeTrue();
-    }
-
-    [Theory, Compose<LambdaTestProfile>]
     public void Serialize_WithDebugLogging_LogsRawOutput(SkillResponse skillResponse)
     {
         _testLogger.MinimumLogLevel = LogLevel.Debug;

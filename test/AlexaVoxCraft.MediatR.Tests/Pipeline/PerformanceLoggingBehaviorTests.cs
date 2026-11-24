@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using Compono;
 using Compono.Logging;
 using Compono.XunitV3;
@@ -152,6 +154,71 @@ public class PerformanceLoggingBehaviorTests : TestBase
         logger.GetCapturedEntries().Count(e => e.LogLevel == LogLevel.Debug).Should().Be(2);
         logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Processing Alexa skill request").Once();
         logger.Verify().AtLevel(LogLevel.Debug).WithMessageContaining("Successfully processed Alexa skill request").Once();
+    }
+
+    [Theory]
+    [Compose<MediatRTestProfile>]
+    public async Task Handle_DoesNotIncludeUserIdInLoggingScope(
+        ILogger<PerformanceLoggingBehavior> logger,
+        PerformanceLoggingBehavior behavior,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse)
+    {
+        // Arrange
+        const string userId = "amzn1.ask.account.USER-ID-SENTINEL";
+        var skillRequest = TestHelper.ForRequest(TestHelper.IntentRequest("TestIntent"));
+        skillRequest.Session.SessionId = "amzn1.echo-api.session.test-session";
+        skillRequest.Session.User = new User { UserId = userId };
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
+        next.Returns(Task.FromResult(expectedResponse));
+
+        // Act
+        await behavior.Handle(handlerInput, CancellationToken, next);
+
+        // Assert
+        var scopeProperties = logger.GetCapturedEntries()
+            .SelectMany(e => e.Scopes)
+            .OfType<IEnumerable<KeyValuePair<string, object?>>>()
+            .SelectMany(scope => scope)
+            .ToList();
+
+        scopeProperties.Select(p => p.Key).Should()
+            .Contain(["RequestType", "IntentName", "SessionId", "ApplicationId", "RequestId"]);
+        scopeProperties.Should().NotContain(p => p.Key == "UserId");
+        scopeProperties.Should().NotContain(p => Equals(p.Value, userId));
+    }
+
+    [Theory]
+    [Compose<MediatRTestProfile>]
+    public async Task Handle_LogsHashedSessionIdInLoggingScope(
+        ILogger<PerformanceLoggingBehavior> logger,
+        PerformanceLoggingBehavior behavior,
+        [Shared] IHandlerInput handlerInput,
+        [Shared] FakeRequestHandlerDelegate next,
+        SkillResponse expectedResponse)
+    {
+        // Arrange
+        const string sessionId = "amzn1.echo-api.session.SESSION-ID-SENTINEL";
+        var expectedHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(sessionId)))[..32];
+        var skillRequest = TestHelper.ForRequest(TestHelper.IntentRequest("TestIntent"));
+        skillRequest.Session.SessionId = sessionId;
+        handlerInput.Configure().RequestEnvelope().Returns(skillRequest);
+        next.Returns(Task.FromResult(expectedResponse));
+
+        // Act
+        await behavior.Handle(handlerInput, CancellationToken, next);
+
+        // Assert
+        var sessionValues = logger.GetCapturedEntries()
+            .SelectMany(e => e.Scopes)
+            .OfType<IEnumerable<KeyValuePair<string, object?>>>()
+            .SelectMany(scope => scope)
+            .Where(p => p.Key == "SessionId")
+            .Select(p => p.Value)
+            .ToList();
+
+        sessionValues.Should().NotBeEmpty().And.OnlyContain(v => Equals(v, expectedHash));
     }
 
     [Fact]

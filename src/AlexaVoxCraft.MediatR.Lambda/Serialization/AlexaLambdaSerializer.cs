@@ -44,10 +44,8 @@ public sealed class AlexaLambdaSerializer : ILambdaSerializer
 
             _logger.Debug("Deserialized {RequestType} payload ({PayloadSize} bytes)", typeName, streamLength);
 
-            if (_logger.IsEnabled(LogLevel.Debug))
-            {
-                _logger.Debug("📥 Raw JSON Input: {@RawRequest}", obj);
-            }
+            // The raw request is never logged: it carries Alexa authentication tokens
+            // (apiAccessToken, user/person accessToken, consentToken) and user identifiers.
 
             span?.SetStatus(ActivityStatusCode.Ok);
             return obj;
