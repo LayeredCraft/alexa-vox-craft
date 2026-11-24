@@ -20,6 +20,7 @@
         <PackageReference Include="Compono" />
         <PackageReference Include="Compono.XunitV3" />
         <PackageReference Include="Compono.Bogus" />
+        <PackageReference Include="Compono.Logging" />
         <PackageReference Include="AwesomeAssertions" />
     </ItemGroup>
 

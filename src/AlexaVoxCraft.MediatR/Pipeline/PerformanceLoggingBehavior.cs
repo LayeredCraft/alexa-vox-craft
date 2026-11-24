@@ -68,10 +68,11 @@ public class PerformanceLoggingBehavior : IPipelineBehavior
 
         // The raw Alexa UserId is a persistent per-user identifier (personal data); it is
         // deliberately excluded from the scope so providers that render scopes never log it.
+        // SessionId is logged only as the same hash the request span records, for correlation.
         using var scope = _logger.BeginScope<string, string?, string?, string, string>(
             "RequestType", requestType,
             "IntentName", intentName,
-            "SessionId", sessionId,
+            "SessionId", sessionId is null ? null : CreateSessionHash(sessionId),
             "ApplicationId", applicationId,
             "RequestId", requestId);
 
