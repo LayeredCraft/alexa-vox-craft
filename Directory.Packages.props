@@ -54,8 +54,8 @@
     <PackageVersion Include="Microsoft.Extensions.Options" Version="[11.0.0, 12.0.0)" />
   </ItemGroup>
   <ItemGroup Label="Roslyn / Source Generators">
-    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.9.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.12.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.12.0" />
   </ItemGroup>
   <ItemGroup Label="Verify">
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
